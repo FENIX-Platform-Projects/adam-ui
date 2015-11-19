@@ -1,0 +1,203 @@
+/* Doc Repo */
+
+.doc-repo-holder{
+
+  line-height: 20px;
+
+
+  .list-group{
+    border: 1px solid $fenix-light-hr;
+    margin-bottom: 40px;
+    padding: 10px;
+  }
+
+  .list-group-item{
+    @include fx-border-radius(0);
+    border-top-color:transparent;
+    border-left-color:transparent;
+    border-right-color:transparent;
+    border-bottom-color:transparent;
+    margin-bottom: 0;
+  }
+
+  .list-group-item.item-line{
+    border-bottom-color:$fenix-light-hr;
+
+    &:last-child{
+      border-bottom-color:transparent;
+    }
+
+  }
+
+  .list-group-item:first-child{
+
+    @include fx-border-radius(0);
+  }
+
+  .list-group-item:last-child{
+
+    @include fx-border-radius(0);
+    padding-bottom: 20px;
+  }
+
+  .panel-default{
+    border: none;
+    margin: 0;
+    @include fx-noshadow;
+
+  .panel-heading{
+    background-color: transparent;
+    border-color: transparent;
+
+
+    a{
+      color: $fenix-text;
+
+      &:link,
+      &:visited,
+      &:hover,
+      &:focus,
+      &:active {
+        text-decoration: none;
+        color: $fenix-text;
+
+      }
+
+      small{
+        text-transform: none;
+        color: $fenix-text;
+        font-weight: 400;
+      }
+    }
+
+
+
+  }
+
+  }
+
+
+}
+
+
+.doc-title {
+  font-size: 14px;
+  margin: 0;
+  margin-bottom: 10px;
+
+  a,
+  a:link,
+  a:visited,
+  a:hover,
+  a:focus,
+  a:active {
+    text-decoration: none;
+    color: $fenix-text;
+    cursor: default;
+  }
+}
+
+
+
+.category-list{
+
+  li {
+    padding: 6px 15px;
+    border-bottom: 1px solid $fenix-light-hr;
+
+    a{
+
+
+      color:$fenix-text;
+      text-transform: uppercase;
+      font-size: 10px;
+      font-weight: 500;
+      position:relative;
+
+      &.active{
+        color: $custom-color8;
+      }
+
+
+      &.active:before{
+        content: '';
+        position: absolute;
+        height: 15px;
+        width: 15px;
+        background-image: url(../../src/css/img/arrow-right-on.svg);
+        background-position: -16px 32px;
+        left: -18px;
+        top: -1px;
+        display: block;
+
+
+      }
+
+      &:hover:before{
+        content: '';
+        position: absolute;
+        height: 15px;
+        width: 15px;
+        background-image: url(../../src/css/img/arrow-right-on.svg);
+        background-position: -16px 32px;
+        left: -18px;
+        top: -1px;
+        display: block;
+
+
+      }
+
+      &active{
+
+        color: $custom-color8;
+
+      }
+
+      &:hover{
+        text-decoration: none;
+        color:  $custom-color8;
+
+      }
+
+    }
+  }
+}
+
+.pub-order{
+  position: relative;
+  top: 5px;
+}
+
+.field-title{
+  font-size: 10px;
+  font-weight: 500;
+  display: inline-block;
+  width: 90px;
+}
+
+.file-type{
+  //font-size: 24px;
+}
+
+
+
+
+.doc-repo-sorter{
+
+  .dropdown-menu-right{
+    border: 1px solid $fenix-light-hr;
+    margin: 0;
+  }
+
+}
+
+.repo-search{
+  .btn{
+    height: 25px;
+  }
+
+
+}
+
+
+

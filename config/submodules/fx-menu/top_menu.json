@@ -1,0 +1,82 @@
+{
+  "items": [
+    {
+      "attrs": {
+        "id": "home",
+        "class": "home-menu-item"
+      },
+      "target": "#home",
+      "label": {
+        "EN": "Home"
+      }
+    },
+      {
+          "attrs": {
+              "id": "browse"
+          },
+          "target": "#browse",
+          "label": {
+              "EN": "Browse Data"
+          }
+      },
+    {
+      "attrs": {
+        "id": "datamgmt"
+      },
+      "a_attrs": {
+        "rel": "external"
+      },
+      "target": "datamgmt.html",
+      "label": {
+        "EN": "Data Management"
+      }
+    },
+    {
+      "attrs": {
+        "id": "analysis"
+      },
+      "target": "#analysis",
+      "label": {
+        "EN": "Download"
+      }
+    },
+    {
+      "attrs": {
+        "id": "domains"
+      },
+      "target": "#domains",
+      "label": {
+        "EN": "Compare"
+      }
+    },
+    {
+      "attrs": {
+        "id": "methods"
+      },
+      "target": "#methods",
+      "label": {
+        "EN": "Methods and Standards"
+      }
+    }
+  ],
+  "rightItems": [
+    {
+      "attrs": {
+        "id": "login"
+      },
+      "label": {
+        "EN": "LOGIN"
+      }
+    },
+    {
+      "attrs": {
+        "id": "logout"
+      },
+      "label": {
+        "EN": "LOGOUT"
+      }
+    }
+  ],
+  "type": "static-top"
+
+}

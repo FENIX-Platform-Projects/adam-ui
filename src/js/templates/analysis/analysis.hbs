@@ -1,0 +1,107 @@
+<h1 class="flude-analysis-title">{{title}}</h1>
+
+<div class="compare-wrapper">
+    <h1 class="compare-title">{{ compare_btn }}</h1>
+
+    <div class="toggle-wrapper">
+        <input type="checkbox" name="toggle" id="toggle-side-faostat">
+        <label for="toggle-side-faostat"></label>
+    </div>
+
+</div>
+
+<br>
+<br>
+<br>
+
+<div class="row">
+
+    <div id="side-flude" class="col-xs-12">
+
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="obj-box-header"><h1>{{title_flude}}</h1>
+                    <a class="btn btn-default whole-btn" href="http://fenixrepo.fao.org/cdn/data/flude/download/BULK.zip"  role="button"
+                                                                        target="_blank">{{ download_bulk_btn }}</a>
+                </div>
+                <div class="obj-box">
+                    <div class='fx-filter-label'>Choose Topic</div>
+                    <div id="flude-topic-selector" class="flude-topic-selector"></div>
+                    <a id="flude-download-btn" class="btn btn-default" href="" role="button"
+                       target="_blank">{{ download_btn }}</a>
+                    <br>
+
+                    <h2 class="filter-opener-flude"> {{ filter }}</h2>
+
+                    <div id="filter-flude" class="filter-container">
+                    </div>
+                    <button id="filter-submit-btn-flude" class="btn btn-default"> {{filter_btn}}</button>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <div class="col-xs-12">
+                <h1 class="flude-analysis-title-results">Results</h1>
+
+                <div id="flude-topic-content">
+                    dashboard
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Initially hidden-->
+    <div id="side-faostat" class="col-xs-6">
+
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="obj-box-header"><h1>{{title_faostat}}</h1></div>
+                <div class="obj-box box-faostat">
+
+
+                    <div class='fx-filter-label'>Choose Topic</div>
+                    <div id="faostat-topic-selector"></div>
+                    <br>
+
+                    <h2 class="filter-opener-faostat"> {{ filter }}</h2>
+
+                    <div id="filter-faostat" class="filter-container"></div>
+                    <button id="filter-submit-btn-faostat" class="btn btn-default">{{filter_btn}} </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+
+
+                <div id="filter-container-faostat">
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <h1 class="flude-analysis-title-results">Results</h1>
+
+                <div id="faostat-topic-content">
+                    dashboard
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+
+</div>

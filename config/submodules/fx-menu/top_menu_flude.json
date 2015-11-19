@@ -1,0 +1,41 @@
+{
+  "items": [
+    {
+      "attrs": {
+        "id": "analysis"
+      },
+      "target": "#analysis",
+      "label": {
+        "EN": "Analysis"
+      }
+    },
+    {
+      "attrs": {
+        "id": "download"
+      },
+      "target": "#download",
+      "label": {
+        "EN": "Download"
+      }
+    }
+  ],
+  "rightItems": [
+    {
+      "attrs": {
+        "id": "fra-home"
+      },
+      "a_attrs": {
+        "rel": "external",
+        "target" : "_blank"
+      },
+      "target": "http://fenixapps2.fao.org/fra2015",
+      "label": {
+        "EN": "FRA Home"
+      }
+    }
+  ],
+  "type": "static-top",
+  "brand": {
+    "target": "#"
+  }
+}

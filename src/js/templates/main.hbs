@@ -1,0 +1,20 @@
+/*global requirejs*/
+requirejs.config({{{ config }}});
+
+//Start the application with the dynamically configured requireJS context
+// Bootstrap the application
+require([
+    'application',
+    'routes',
+    'config/Config',
+    'domReady!'
+    ], function (Application, routes, C) {
+
+    var app = new Application({
+        routes: routes,
+        controllerSuffix: C.CHAPLINJS_CONTROLLER_SUFFIX,
+        root: C.CHAPLINJS_PROJECT_ROOT,
+        pushState: C.CHAPLINJS_PUSH_STATE,
+        scrollTo: C.CHAPLINJS_SCROLL_TO
+    });
+});

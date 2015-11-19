@@ -1,0 +1,24 @@
+<h1{{isI18n title}}</h1>
+<hr>
+
+<div class="row">
+
+    <div class="col-lg-12">
+
+        <!-- Modules -->
+        <div class="container">
+        {{#grouped_each 2 modules}}
+            <div class="row">
+            {{#each this }}
+                <div class="col-xs-6">
+                     <h2>{{i18n title}}</h2>
+                     <a href={{isI18n link}}><img class="img-responsive" src="{{ img}}"></a>
+                     <br/><p>{{{i18n body}}}</p>
+                </div>
+            {{/each}}
+            </div>
+        {{/grouped_each}}
+        </div>
+    </div>
+</div>
+
