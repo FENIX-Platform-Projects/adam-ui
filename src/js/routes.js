@@ -10,6 +10,8 @@ define(function () {
         match('home', 'analysis#show');
         match('browse', 'browse#show');
         match('browse/:filter', 'browse#show');
+        match('analyze', 'analyze#show');
+        match('analyze/:filter', 'analyze#show');
         //match('login', 'login#show');
         match('analysis', 'analysis#show');
         match('*anything', '404#show');
