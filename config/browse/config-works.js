@@ -18,22 +18,40 @@ define(function () {
 
             filter: [
                 {
-                    "type": "distinct",
-                    "uid": "FLUDE_TOPIC_6",
-                    "column": "indicator",
+                    "type": "codelist",
                     "containerType": "baseContainer",
-                    "title": "Indicator",
-                    "defaultCodes": ["SoilWatProt"],
+                    "title": "Sector",
                     "components": [
                         {
+                            "uid": "crs_sectors",
+                            "version": "2015",
                             "type": "codelist",
+                            "name": "sectorcode",
                             "componentType": "dropDownList-FENIX",
                             "lang": "EN",
-                            "uid" : "FLUDE_INDICATORS",
-                            "title": {"EN": "Distinct"},
-                            // name is the ID output in tehe filter getValues()
-                            "name": "indicator",
-                            "config": {
+                            "title": {"EN": "Codelist"},
+
+                            config: {
+                                "defaultsource": []
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "codelist",
+                    "containerType": "baseContainer",
+                    "title": "Sub-Sector",
+                    "components": [
+                        {
+                            "uid": "crs_purposes",
+                            "version": "2015",
+                            "type": "codelist",
+                            "name": "purposecode",
+                            "componentType": "dropDownList-FENIX",
+                            "lang": "EN",
+                            "title": {"EN": "Codelist"},
+
+                            config: {
                                 "defaultsource": []
                             }
                         }
@@ -42,14 +60,72 @@ define(function () {
                 {
                     "type": "static",
                     "containerType": "baseContainer",
-                    "title": "Year",
+                    "title": "From",
                     "components": [
                         {
                             "type": "time",
                             "componentType": "dropDownList-FENIX",
                             "lang": "EN",
                             "title": {"EN": "Year"},
+                            "name": "year1",
+                            config: {
+                                "defaultsource": [
+                                    {"value": "2015", "label": "2015", "selected": true},
+                                    {"value": "2010", "label": "2010", "selected": false},
+                                    {"value": "2005", "label": "2005", "selected": false},
+                                    {"value": "2000", "label": "2000", "selected": false},
+                                    {"value": "1990", "label": "1990", "selected": false}
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "static",
+                    "containerType": "baseContainer",
+                    "components": [
+                        {
+                            "type": "time",
                             "name": "year",
+                            "componentType": "dropDownList-FENIX",
+                            "lang": "EN",
+                            "title": {"EN": "Year"},
+                            "config": {
+                                "from" : {
+                                    "title":  {"EN": "To"},
+                                    "defaultsource": [
+                                        {"value": "2015", "label": "2015", "selected": true},
+                                        {"value": "2010", "label": "2010", "selected": false},
+                                        {"value": "2005", "label": "2005", "selected": false},
+                                        {"value": "2000", "label": "2000", "selected": false},
+                                        {"value": "1990", "label": "1990", "selected": false}
+                                    ]
+                                },
+                                "to" : {
+                                    "title":  {"EN": "From"},
+                                    "defaultsource": [
+                                        {"value": "2015", "label": "2015", "selected": true},
+                                        {"value": "2010", "label": "2010", "selected": false},
+                                        {"value": "2005", "label": "2005", "selected": false},
+                                        {"value": "2000", "label": "2000", "selected": false},
+                                        {"value": "1990", "label": "1990", "selected": false}
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "static",
+                    "containerType": "baseContainer",
+                    "title": "To",
+                    "components": [
+                        {
+                            "type": "time",
+                            "componentType": "dropDownList-FENIX",
+                            "lang": "EN",
+                            "title": {"EN": "Year"},
+                            "name": "year2",
                             config: {
                                 "defaultsource": [
                                     {"value": "2015", "label": "2015", "selected": true},
@@ -65,22 +141,19 @@ define(function () {
                 {
                     "type": "codelist",
                     "containerType": "baseContainer",
-                    "title": "Domains",
+                    "title": "Flow",
                     "components": [
                         {
-                            "uid": "FLUDE_DOMAINS",
+                            "uid": "crs_flow_amounts",
+                            "version": "2015",
                             "type": "codelist",
-                            "name": "domain",
+                            "name": "sectorcode",
                             "componentType": "dropDownList-FENIX",
                             "lang": "EN",
                             "title": {"EN": "Codelist"},
 
                             config: {
-                                "defaultsource": [
-                                    //{"value": null, "label": "All", "selected": true},
-                                    //{"value": null, "label": "All", "selected": true, "removeFilter": true},
-                                ],
-                                "enableMultiselection": true
+                                "defaultsource": []
                             }
                         }
                     ]
@@ -88,41 +161,19 @@ define(function () {
                 {
                     "type": "codelist",
                     "containerType": "baseContainer",
-                    "title": "Incomes",
+                    "title": "Channel of Delivery",
                     "components": [
                         {
-                            "uid": "FLUDE_INCOMES",
+                            "uid": "crs_channel",
+                            "version": "2015",
                             "type": "codelist",
+                            "name": "sectorcode",
                             "componentType": "dropDownList-FENIX",
                             "lang": "EN",
                             "title": {"EN": "Codelist"},
-                            "name": "incomes",
+
                             config: {
-                                "defaultsource": [
-                                    //{"value": null, "label": "All", "selected": true},
-                                ],
-                                "enableMultiselection": true
-                            }
-                        }
-                    ]
-                },
-                {
-                    "type": "codelist",
-                    "containerType": "baseContainer",
-                    "title": "Subregions",
-                    "components": [
-                        {
-                            "uid": "FLUDE_SUBREGIONS",
-                            "type": "codelist",
-                            "componentType": "dropDownList-FENIX",
-                            "lang": "EN",
-                            "title": {"EN": "Codelist"},
-                            "name": "subregion",
-                            config: {
-                                "defaultsource": [
-                                    //{"value": null, "label": "All", "selected": true},
-                                ],
-                                "enableMultiselection": true
+                                "defaultsource": []
                             }
                         }
                     ]
