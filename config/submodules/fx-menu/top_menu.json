@@ -21,6 +21,15 @@
       },
     {
       "attrs": {
+        "id": "analyze"
+      },
+      "target": "#analyze",
+      "label": {
+        "EN": "Analyze Data"
+      }
+    },
+    {
+      "attrs": {
         "id": "datamgmt"
       },
       "a_attrs": {
