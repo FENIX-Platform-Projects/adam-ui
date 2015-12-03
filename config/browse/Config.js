@@ -942,6 +942,7 @@ define(function () {
                     "type": "distinct",
                     "uid": "FLUDE_TOPIC_1",
                     "column": "indicator",
+                    "class" : "myCustomClass myOtherClass",
                     "containerType": "baseContainer",
                     "title": "Indicator",
                     "defaultCodes": ["Forest"],
@@ -955,9 +956,9 @@ define(function () {
                             // name is the ID output in tehe filter getValues()
                             "name": "indicator",
                             "config": {
+                                "onlyValueText" : true,
                                 "defaultsource": []
                             }
-
                         }
                     ]
                 },

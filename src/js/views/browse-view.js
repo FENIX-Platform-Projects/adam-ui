@@ -12,7 +12,7 @@ define([
     'config/Events',
     'config/Config',
     'text!config/browse/flude-topics.json',
-    'config/browse/config',
+    'config/browse/Config',
     'fx-filter/Fx-filter-configuration-creator',
     'handlebars',
     'lib/utils',

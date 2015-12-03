@@ -1,9 +1,14 @@
 /*global require*/
 
-var projectRoot = "http://localhost:8080";
-//var projectRoot = "http://www.fao.org/fenixrepo/cdn/projects/flude/1.0.0";
+//develop
+var pathProjectRoot = ".";
+var projectRoot = "../..";
+//var projectRoot = "http://localhost:8080";
 
-//var projectRoot = "//fenixrepo.fao.org/cdn/projects/flude/1.0.0";
+//distribution
+//var projectRoot = "http://www.fao.org/fenixrepo/cdn/projects/flude/1.0.0",
+//var projectRoot = "//fenixrepo.fao.org/cdn/projects/flude/1.0.0",
+//pathProjectRoot = projectRoot;
 
 require.config({
     config: {
@@ -14,15 +19,15 @@ require.config({
         }
     },
     paths : {
-        compilerPaths : projectRoot + '/submodules/fenix-ui-common/js/Compiler',
+        compilerPaths : pathProjectRoot + '/submodules/fenix-ui-common/js/Compiler',
         //compilerPaths : './submodules/fenix-ui-common/js/Compiler',
-        commonPaths : projectRoot + '/submodules/fenix-ui-common/js/paths',
-        menuPaths: projectRoot + '/submodules/fenix-ui-menu/js/paths',
-        dashboardPaths :projectRoot + '/submodules/fenix-ui-dashboard/src/js/paths',
-        chartPaths :projectRoot + '/submodules/fenix-ui-chart-creator/src/js/paths',
-        mapPaths :projectRoot + '/submodules/fenix-ui-map-creator/src/js/paths',
-        tablePaths : projectRoot + '/submodules/fenix-ui-table-creator/src/js/paths',
-        filterPaths :projectRoot + '/submodules/fenix-ui-filter/src/js/paths'
+        commonPaths : pathProjectRoot + '/submodules/fenix-ui-common/js/paths',
+        menuPaths: pathProjectRoot + '/submodules/fenix-ui-menu/js/paths',
+        dashboardPaths :pathProjectRoot + '/submodules/fenix-ui-dashboard/src/js/paths',
+        chartPaths :pathProjectRoot + '/submodules/fenix-ui-chart-creator/src/js/paths',
+        mapPaths :pathProjectRoot + '/submodules/fenix-ui-map-creator/src/js/paths',
+        tablePaths : pathProjectRoot + '/submodules/fenix-ui-table-creator/src/js/paths',
+        filterPaths :pathProjectRoot + '/submodules/fenix-ui-filter/src/js/paths'
     }
 });
 
@@ -78,7 +83,7 @@ require([
                 },
 
                 // The path where your JavaScripts are located
-                baseUrl: projectRoot + '/src/js',
+                baseUrl: pathProjectRoot + '/src/js',
 
                 // Specify the paths of vendor libraries
                 paths: {
