@@ -3,12 +3,9 @@ define([
     'chaplin',
     'controllers/base/controller',
     'views/browse-view',
-    'views/breadcrumb-list-view',
-    'models/breadcrumb',
-    'models/breadcrumb-list',
     'rsvp',
     'globals/AuthManager'
-], function (Chaplin, Controller, View, BreadcrumbListView, BreadcrumbModel, BreadcrumbList, RSVP, AuthManager) {
+], function (Chaplin, Controller, View, RSVP, AuthManager) {
     'use strict';
 
     var BrowseController = Controller.extend({
@@ -44,24 +41,10 @@ define([
             // USE fx-menu: for breadcrumbs
             //FM.prototype.addItemsToBreadcrumb = function (path);
 
-
-
-            //var breadcrumbModel = new BreadcrumbModel({name : 'Browse Data ',link : '#browse'});
-            //var breadcrumbModel2 = new BreadcrumbModel({name : 'By '+params.filter,link : '#browse/'+params.filter});
-
-            //var breadcrumbList = new BreadcrumbList([breadcrumbModel, breadcrumbModel2]);
-
-           // this.breadcrumbListView = new BreadcrumbListView(
-             //   {
-               //     region: 'main',
-                //    collection:  breadcrumbList
-               // }
-           // );
-
             this.view = new View({
                 region: 'main',
                 filter: params.filter,
-               breadcrumb: 'Browse Data / '+params.filter
+                page: Backbone.history.fragment
             });
         }
     });
