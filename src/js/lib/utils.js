@@ -59,6 +59,11 @@ define([
         return obj[requirejs.s.contexts._.config.i18n.locale.toUpperCase()];
     };
 
+    utils.getLocale = function () {
+        return requirejs.s.contexts._.config.i18n.locale.toUpperCase();
+    };
+
+
     utils.sortArray = function (prop, arr) {
         prop = prop.split('.');
         var len = prop.length;
@@ -75,6 +80,19 @@ define([
             }
         });
         return arr;
+    };
+
+    utils.createMenuBreadcrumbItem = function (label, id, target) {
+        var self = this;
+        var item = null;
+
+        if (typeof id !== 'undefined') {
+            item = {};
+            item = {attrs: {id: id}, target: "#"+ target, label: {}};
+            item["label"][self.getLocale()] = label;
+        }
+
+        return item;
     };
 
     return utils;
