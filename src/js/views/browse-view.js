@@ -5,21 +5,23 @@ define([
     'fx-filter/start',
     'text!templates/browse/browse.hbs',
     'text!templates/browse/dashboard.hbs',
-    'text!templates/browse/options.hbs',
+    'text!templates/common/modules.hbs',
     'i18n!nls/browse',
     'i18n!nls/topics-flude',
-    'i18n!nls/modules',
+    'i18n!nls/browse-modules',
     'config/Events',
     'config/Config',
     'text!config/browse/flude-topics.json',
     'config/browse/config',
     'fx-filter/Fx-filter-configuration-creator',
     'handlebars',
+    'lib/utils',
     'amplify',
     'select2',
     'jstree',
     'highcharts-export'
-], function (View, Dashboard, Filter, template, browseByDashboardTemplate, browseByOptionsTemplate, i18nLabels, topicFludeLabels, moduleLabels, E, C, FludeTopics, TopicFludeConfig, FilterConfCreator, Handlebars) {
+
+], function (View, Dashboard, Filter, template, browseByDashboardTemplate, modulesTemplate, i18nLabels, topicFludeLabels, moduleLabels, E, C, FludeTopics, TopicFludeConfig, FilterConfCreator, Handlebars, Utils) {
 
     'use strict';
 
@@ -53,9 +55,7 @@ define([
 
         initialize: function (params) {
             this.browse_type = params.filter;
-
-
-            console.log(this.breadcrumb);
+            this.page = params.page;
 
             View.prototype.initialize.call(this, arguments);
         },
@@ -69,7 +69,7 @@ define([
             View.prototype.attach.call(this, arguments);
 
             //update State
-            amplify.publish(E.STATE_CHANGE, {menu: 'browse'});
+            amplify.publish(E.STATE_CHANGE, {menu: 'browse', breadcrumb: this._initMenuBreadcrumbItem()});
 
             this._initVariables();
 
@@ -77,14 +77,18 @@ define([
 
             this._bindEventListeners();
 
-           // this.template = this.getTemplateFunction();
-            //this.template({browse_by: "Hello"});
-
-            // var html = this.options.template({browse_by: "Hello"});
-
-            //this.$el.html(this.html);
-
             this.browse_type ? this._showFludeTopic(this.browse_type) :  this._displayBrowseOptions() ;
+        },
+
+        _initMenuBreadcrumbItem: function() {
+            var label = "";
+            var self = this;
+
+            if (typeof self.browse_type !== 'undefined') {
+               label = i18nLabels[self.browse_type];
+            }
+
+            return Utils.createMenuBreadcrumbItem(label, self.browse_type, self.page);
         },
 
         _initVariables: function () {
@@ -115,6 +119,9 @@ define([
 
                 var filter = {};
                 var values = self.filterFlude.getValues();
+
+                console.log(values);
+
                 // TODO: funzione per distruggere dashboard e ricrearla con gli items giusti:
                 /*
                  var filteredConfig = self._getFilteredConfig(values, self.$faostatDashboardConfig);
@@ -135,6 +142,7 @@ define([
 
 
         _showFludeTopic: function (topic) {
+            console.log("_showFludeTopic = "+ topic);
 
             var self = this;
 
@@ -168,6 +176,8 @@ define([
 
         _renderFludeComponents: function (topic) {
 
+            console.log("_renderFludeComponents = "+ topic);
+
             var config = TopicFludeConfig[topic];
 
             if (!config || !config.dashboard || !config.filter) {
@@ -177,9 +187,9 @@ define([
 
             var filterConfig = config.filter;
 
-            this._renderFludeFilter(filterConfig);
+           this._renderFludeFilter(filterConfig);
 
-            this._renderFludeDashboard(config.dashboard);
+           // this._renderFludeDashboard(config.dashboard);
 
 
         },
@@ -220,7 +230,8 @@ define([
 
             this.filterConfCreator.getConfiguration(config)
                 .then(function (c) {
-
+                    console.log("====================== GET CONFIG ===============");
+                    console.log(c);
                     self.filterFlude = new Filter();
 
                     self.filterFlude.init({
@@ -237,7 +248,7 @@ define([
         },
 
         _displayBrowseOptions: function () {
-            var template = Handlebars.compile(browseByOptionsTemplate),
+            var template = Handlebars.compile(modulesTemplate),
                 html = template({modules: moduleLabels["modules"]});
 
            this.$el.html(html);
