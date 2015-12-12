@@ -16,29 +16,33 @@ define([
     'fx-filter/Fx-filter-configuration-creator',
     'handlebars',
     'lib/utils',
+    'q',
     'amplify',
     'select2',
     'jstree',
     'highcharts-export'
 
-], function (View, Dashboard, Filter, template, browseByDashboardTemplate, modulesTemplate, i18nLabels, topicFludeLabels, moduleLabels, E, C, FludeTopics, TopicFludeConfig, FilterConfCreator, Handlebars, Utils) {
+], function (View, Dashboard, Filter, template, browseByDashboardTemplate, modulesTemplate, i18nLabels, topicFludeLabels, moduleLabels, E, C, FludeTopics, BrowseConfig, FilterConfCreator, Handlebars, Utils, Q) {
 
     'use strict';
 
     var s = {
-        TOPIC_SELECTOR_FLUDE: "#flude-topic-selector",
-        TOPIC_CONTENT_FLUDE: "#flude-topic-content",
-        FILTER_OPENER_FLUDE: ".filter-opener-flude",
-        FILTER_CONTAINER_FLUDE: "#filter-container-flude",
-        FILTER_FLUDE: "filter-flude",
-        FILTER_SUBMIT_FLUDE: "#filter-submit-btn-flude",
+        css_classes: {
+            TOPIC_SELECTOR_BROWSE: "#browse-topic-selector",
+            TOPIC_CONTENT_BROWSE: "#browse-topic-content",
+            FILTER_OPENER_BROWSE: ".filter-opener-browse",
+            FILTER_CONTAINER_BROWSE: "#filter-container-browse",
+            FILTER_BROWSE: "filter-browse",
+            FILTER_SUBMIT_BROWSE: "#filter-submit-btn-browse",
 
-        SIDE_FLUDE: "#side-flude",
+            SIDE_BROWSE: "#side-browse",
 
-
-        DASHBOARD_FLUDE_CONTAINER: '#dashboard-flude-container'
-
-
+            DASHBOARD_BROWSE_CONTAINER: '#dashboard-adam-container'
+        },
+        events: {
+            SECTOR_LIST_CHANGE: 'fx.filter.list.change.sectorcode',
+            FLOW_LIST_CHANGE: 'fx.filter.list.change.flowcode'
+        }
     };
 
     var BrowseView = View.extend({
@@ -56,6 +60,8 @@ define([
         initialize: function (params) {
             this.browse_type = params.filter;
             this.page = params.page;
+
+
 
             View.prototype.initialize.call(this, arguments);
         },
@@ -75,9 +81,9 @@ define([
 
             this._initComponents();
 
-            this._bindEventListeners();
+            this.browse_type ? this._showBrowseTopic(this.browse_type) :  this._displayBrowseOptions() ;
 
-            this.browse_type ? this._showFludeTopic(this.browse_type) :  this._displayBrowseOptions() ;
+            this._bindEventListeners();
         },
 
         _initMenuBreadcrumbItem: function() {
@@ -93,15 +99,15 @@ define([
 
         _initVariables: function () {
 
-            this.$topicSelectorFlude = this.$el.find(s.TOPIC_SELECTOR_FLUDE);
-            this.$topicContentFlude = this.$el.find(s.TOPIC_CONTENT_FLUDE);
+            this.$topicSelectorFlude = this.$el.find(s.css_classes.TOPIC_SELECTOR_BROWSE);
+            this.$topicContentFlude = this.$el.find(s.css_classes.TOPIC_CONTENT_BROWSE);
 
-            this.$filterOpenerFlude = this.$el.find(s.FILTER_OPENER_FLUDE);
-            this.$filterContainerFlude = this.$el.find(s.FILTER_CONTAINER_FLUDE);
+            this.$filterOpenerFlude = this.$el.find(s.css_classes.FILTER_OPENER_BROWSE);
+            this.$filterContainerFlude = this.$el.find(s.css_classes.FILTER_CONTAINER_BROWSE);
 
-            this.$filterSubmitFlude = this.$el.find(s.FILTER_SUBMIT_FLUDE);
+            this.$filterSubmitBrowse = this.$el.find(s.css_classes.FILTER_SUBMIT_BROWSE);
 
-            this.$sideFlude = this.$el.find(s.SIDE_FLUDE);
+            this.$sideFlude = this.$el.find(s.css_classes.SIDE_BROWSE);
 
 
 
@@ -109,16 +115,60 @@ define([
 
         _bindEventListeners: function () {
 
-            var self = this;
+            amplify.subscribe(s.events.SECTOR_LIST_CHANGE, this, this._onSectorChange);
+
+            amplify.subscribe(s.events.FLOW_LIST_CHANGE, this, this._onFlowChange);
+
+         /**   $('body').on(defaultOptions.events.LIST_CHANGE,
+                function (event, data){
+
+                    if(data.name === 'tablename'){
+
+                        if(data.event.val){
+                            console.log("DATASET SELECTED: "+data.event.val);
+                        }
+                    } else {
+                    if(data.event.val){
+
+                     var filter = data.eventConfig.filter;
+                    filter.codes.push(data.event.val);
+                    data.config.filter = filter;   // reset the base filter
+
+                    var obj =  {};
+                    obj.components = [];
+                    obj.components.push(data);
+
+                    Q.all([
+                        self.filterConfCreator._createCodelistHierarchyPromiseData(obj)
+                    ]).spread(function(result1) {
+
+                         var result = [];
+                         var children = self._getPropByString(result1[0], "children");
+
+                          _.each(children, function (d) {
+
+                              result.push({"id": d.code, "text": d.title[Utils.getLocale()]});
+                              //result.push({"value": d.code, "label": d.title[self.o.lang], "selected": self._checkDefaultCodes(conf, d.code)});
+                           });
+
+
+                          self.filterBrowse.setDomain( data.eventConfig.target, result);
+
+
+                    });
+                    }
+
+                    }
+            });  **/
 
             this.$topicSelectorFlude.on("change", function (e) {
-                self._onFludeTopicChange(e.val);
+                self._onBrowseTopicChange(e.val);
             });
 
-            this.$filterSubmitFlude.on('click', function (e, data) {
+            this.$filterSubmitBrowse.on('click', function (e, data) {
 
                 var filter = {};
-                var values = self.filterFlude.getValues();
+                var values = self.filterBrowse.getValues();
 
                 console.log(values);
 
@@ -130,19 +180,67 @@ define([
                  */
 
                 // TODO: it's an array
-                self.fludeDashboard.filter([values]);
+                self.browseDashboard.filter([values]);
             });
 
         },
 
-        _onFludeTopicChange: function (topic) {
-            this._showFludeTopic(topic);
+        _onSectorChange: function (s) {
+            var self = this;
+
+            if(s.value){
+               var pcfilter= _.find(this.filterConfig, function(obj){
+                           return obj.components[0].name === 'purposecode';
+                });
+
+                var filter =   pcfilter.components[0].config.filter;
+                filter.codes = [];
+                filter.codes.push(s.value);
+                delete filter["level"];
+
+                pcfilter.components[0].config.filter = filter;
+
+                Q.all([
+                    self.filterConfCreator._createCodelistHierarchyPromiseData(pcfilter)
+                ]).spread(function(result1) {
+
+                    var result = [];
+                    var children = self._getPropByString(result1[0], "children");
+
+                    _.each(children, function (d) {
+                        result.push({"id": d.code, "text": d.title[Utils.getLocale()]});
+                    });
+
+                    result.sort(function(a, b){
+                            if (a.text < b.text)
+                                return -1;
+                            if (a.text > b.text)
+                                return 1;
+                            return 0;
+                    });
+
+                    self.filterBrowse.setDomain("purposecode", result);
+
+                });
+
+            }
+        },
+
+        _onFlowChange: function (s) {
+            console.log("ON FLOW CHANGE");
+            if(s.event.val){
+                console.log("_onFlowChange: "+s.event.val);
+            }
+        },
+
+        _onBrowseTopicChange: function (topic) {
+            this._showBrowseTopic(topic);
         },
 
 
 
-        _showFludeTopic: function (topic) {
-            console.log("_showFludeTopic = "+ topic);
+        _showBrowseTopic: function (topic) {
+            console.log("_showBrowseTopic = "+ topic);
 
             var self = this;
 
@@ -155,7 +253,7 @@ define([
 
 
 
-            this._renderFludeComponents(topic);
+            this._renderBrowseComponents(topic);
 
         },
 
@@ -174,20 +272,20 @@ define([
 
         },
 
-        _renderFludeComponents: function (topic) {
+        _renderBrowseComponents: function (topic) {
 
-            console.log("_renderFludeComponents = "+ topic);
+            console.log("_renderBrowseComponents = "+ topic);
 
-            var config = TopicFludeConfig[topic];
+            var config = BrowseConfig[topic];
 
             if (!config || !config.dashboard || !config.filter) {
                 alert(" HERE Impossible to find configuration for topic: " + topic);
                 return;
             }
 
-            var filterConfig = config.filter;
+            this.filterConfig = config.filter;
 
-           this._renderFludeFilter(filterConfig);
+           this._renderBrowseFilter(this.filterConfig);
 
            // this._renderFludeDashboard(config.dashboard);
 
@@ -203,26 +301,26 @@ define([
         },
 
 
-        _renderFludeDashboard: function (config) {
+        _renderBrowseDashboard: function (config) {
 
-            if (this.fludeDashboard && this.fludeDashboard.destroy) {
-                this.fludeDashboard.destroy();
+            if (this.browseDashboard && this.browseDashboard.destroy) {
+                this.browseDashboard.destroy();
             }
 
             console.log(config);
 
-            this.fludeDashboard = new Dashboard({
+            this.browseDashboard = new Dashboard({
 
                 //Ignored if layout = injected
-                container: s.DASHBOARD_FLUDE_CONTAINER,
+                container: s.css_classes.DASHBOARD_BROWSE_CONTAINER,
                 layout: "injected"
             });
 
-            this.fludeDashboard.render(config);
+            this.browseDashboard.render(config);
 
         },
 
-        _renderFludeFilter: function (config) {
+        _renderBrowseFilter: function (config) {
 
             var self = this;
 
@@ -232,16 +330,16 @@ define([
                 .then(function (c) {
                     console.log("====================== GET CONFIG ===============");
                     console.log(c);
-                    self.filterFlude = new Filter();
+                    self.filterBrowse = new Filter();
 
-                    self.filterFlude.init({
-                        container: s.FILTER_FLUDE,
+                    self.filterBrowse.init({
+                        container: s.css_classes.FILTER_BROWSE,
                         layout: 'fluidGrid'
                     });
 
                     var adapterMap = {};
 
-                    self.filterFlude.add(c, adapterMap);
+                    self.filterBrowse.add(c, adapterMap);
 
                 });
 
@@ -252,11 +350,37 @@ define([
                 html = template({modules: moduleLabels["modules"]});
 
            this.$el.html(html);
-        }
+        },
+
+       _getPropByString: function(obj, propString) {
+        if (!propString)
+            return obj;
+
+           var prop, candidate;
+
+           prop = propString;
+           candidate = obj[prop];
+
+            if (candidate !== undefined) {
+                obj = candidate;
+                if(obj.hasOwnProperty(prop)) {
+                   this._getPropByString(obj, prop);
+                }
+            }
+
+        return obj;
+    },
+
+       _compare: function(a, b){
+            if (a.label < b.label)
+                return -1;
+             if (a.label > b.label)
+                return 1;
+           return 0;
+       }
 
 
-
-    });
+   });
 
     return BrowseView;
 });
