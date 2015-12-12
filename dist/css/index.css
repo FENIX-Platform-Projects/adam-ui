@@ -7183,12 +7183,12 @@ a {
 
 .fx-sandbox {
   /* TEMPORARY */ }
-  .fx-sandbox h1.flude-analysis-title {
+  .fx-sandbox h1.browse-title {
     color: white;
     display: inline-block; }
-  .fx-sandbox h2.filter-opener-flude, .fx-sandbox h2.filter-opener-faostat {
+  .fx-sandbox h2.filter-opener-adam, .fx-sandbox h2.filter-opener-faostat {
     margin-top: 10px; }
-  .fx-sandbox .flude-topic-selector {
+  .fx-sandbox .adam-topic-selector {
     width: calc(100% - 250px) !important; }
   .fx-sandbox .home-logo {
     background-image: url(../../src/css/img/flude-logo.jpg);
