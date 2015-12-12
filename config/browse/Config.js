@@ -139,7 +139,7 @@ define(function () {
                             "version": "2015",
                             "type": "codelist",
                             "name": "channelcode",
-                            "componentType": "linkedDropDownList-FENIX",
+                            "componentType": "dropDownList-FENIX",
                             "lang": "EN",
                             "title": {"EN": "Codelist"},
 
