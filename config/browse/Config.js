@@ -18,23 +18,60 @@ define(function () {
 
             filter: [
                 {
-                    "type": "static",
+                    "type": "codelist-hierarchy",
                     "containerType": "baseContainer",
-                    "title": "Year",
+                    "title": "Sector",
                     "components": [
                         {
-                            "type": "time",
+                            "uid": "crs_dac",
+                            "version": "2015",
+                            "type": "codelist",
                             "componentType": "dropDownList-FENIX",
                             "lang": "EN",
-                            "name": "year",
+                            "title": {"EN": "Codelist"},
+                            "name": "sectorcode",
                             config: {
                                 "defaultsource": [
-                                    {"value": "2015", "label": "2015", "selected": true},
-                                    {"value": "2010", "label": "2010", "selected": false},
-                                    {"value": "2005", "label": "2005", "selected": false},
-                                    {"value": "2000", "label": "2000", "selected": false},
-                                    {"value": "1990", "label": "1990", "selected": false}
-                                ]
+                                    //{"value": null, "label": "All", "selected": true},
+                                ],
+                                "defaultcodes": ['9999'],
+                                "onlyValueText": false,
+                                "enableMultiselection": false,
+                                "filter": {
+                                    "uid": "crs_dac",
+                                    "version": "2015",
+                                    "level" : 1,
+                                    "levels":3
+                                }
+                            }
+
+                        }
+                    ]
+                },
+                {
+                    "type": "codelist-hierarchy",
+                    "containerType": "baseContainer",
+                    "title": "Sub Sector",
+                    "components": [
+                        {
+                            "uid": "crs_dac",
+                            "version": "2015",
+                            "type": "codelist",
+                            "componentType": "dropDownList-FENIX",
+                            "lang": "EN",
+                            "title": {"EN": "Codelist"},
+                            "name": "purposecode",
+                            config: {
+                                "defaultsource": [
+                                    //{"value": null, "label": "All", "selected": true},
+                                ],
+                                "onlyValueText": true,
+                                "filter": {
+                                    "uid": "crs_dac",
+                                    "version": "2015",
+                                    "level" : 3,
+                                    "levels":3
+                                }
                             }
                         }
                     ]
@@ -44,51 +81,131 @@ define(function () {
                     "containerType": "baseContainer",
                     "components": [
                         {
-                            "type": "time",
-                            "name": "yearx",
-                            "componentType": "range-FENIX",
+                            "type": "range",
+                            "name": "year",
+                            "componentType": "timeRangeLists-FENIX",
                             "lang": "EN",
                             "title": {"EN": "Year"},
                             "config": {
                                 "from" : {
-                                    "title":  {"EN": "To"},
+                                    "title":  {"EN": "From"},
                                     "defaultsource": [
                                         {"value": "2000", "label": "2000", "selected": true},
-                                        {"value": "2001", "label": "2010", "selected": false},
-                                        {"value": "2002", "label": "2005", "selected": false},
-                                        {"value": "2003", "label": "1990", "selected": false},
-                                        {"value": "2004", "label": "2015", "selected": false},
-                                        {"value": "2005", "label": "2010", "selected": false},
+                                        {"value": "2001", "label": "2001", "selected": false},
+                                        {"value": "2002", "label": "2002", "selected": false},
+                                        {"value": "2003", "label": "2003", "selected": false},
+                                        {"value": "2004", "label": "2004", "selected": false},
+                                        {"value": "2005", "label": "2005", "selected": false},
+                                        {"value": "2006", "label": "2006", "selected": false},
+                                        {"value": "2007", "label": "2007", "selected": false},
+                                        {"value": "2008", "label": "2008", "selected": false},
+                                        {"value": "2009", "label": "2009", "selected": false},
+                                        {"value": "2010", "label": "2010", "selected": false},
+                                        {"value": "2011", "label": "2011", "selected": false},
+                                        {"value": "2012", "label": "2012", "selected": false},
+                                        {"value": "2013", "label": "2013", "selected": false}
                                     ]
                                 },
                                 "to" : {
-                                    "title":  {"EN": "From"},
+                                    "title":  {"EN": "To"},
                                     "defaultsource": [
                                         {"value": "2013", "label": "2013", "selected": true},
                                         {"value": "2012", "label": "2012", "selected": false},
                                         {"value": "2011", "label": "2011", "selected": false},
                                         {"value": "2010", "label": "2010", "selected": false},
-                                        {"value": "2009", "label": "2009", "selected": false}
+                                        {"value": "2009", "label": "2009", "selected": false},
+                                        {"value": "2008", "label": "2008", "selected": false},
+                                        {"value": "2007", "label": "2007", "selected": false},
+                                        {"value": "2006", "label": "2006", "selected": false},
+                                        {"value": "2005", "label": "2005", "selected": false},
+                                        {"value": "2004", "label": "2004", "selected": false},
+                                        {"value": "2003", "label": "2003", "selected": false},
+                                        {"value": "2002", "label": "2002", "selected": false},
+                                        {"value": "2001", "label": "2001", "selected": false},
+                                        {"value": "2000", "label": "2000", "selected": false}
                                     ]
                                 }
                             }
                         }
                     ]
-                }
+                },
+                {
+                    "type": "codelist-hierarchy",
+                    "containerType": "baseContainer",
+                    "title": "Channel of Delivery",
+                    "components": [
+                        {
+                            "uid": "crs_channels",
+                            "version": "2015",
+                            "type": "codelist",
+                            "name": "channelcode",
+                            "componentType": "linkedDropDownList-FENIX",
+                            "lang": "EN",
+                            "title": {"EN": "Codelist"},
+
+                            config: {
+                                "defaultsource": [],
+                                "onlyValueText": true,
+                                "filter": {
+                                    "uid": "crs_channels",
+                                    "version": "2015",
+                                    "level" : 3,
+                                    "levels":3
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "codelist",
+                    "containerType": "baseContainer",
+                    "title": "Flow",
+                    "components": [
+                        {
+                            "uid": "crs_flow_amounts",
+                            "version": "2015",
+                            "type": "codelist",
+                            "name": "uid",
+                            "componentType": "dropDownList-FENIX",
+                            "lang": "EN",
+                            "title": {"EN": "Codelist"},
+                            config: {
+                                "defaultsource": [],
+                                "defaultcodes": ['usd_commitment'],
+                                "removeFilter": true
+                            }
+                        }
+                    ]
+                },
             ],
 
             dashboard: {
                 //data cube's uid
-                uid: "FLUDE_TOPIC_6",
+                uid: "usd_commitment",
 
                 //data base filter
-                filter: [],
+                filter: [  {
+                    "name": "filter",
+                    "parameters": {
+                        "rows": {     // ROWS = WHERE
+                            "flowcode": {
+                                "codes": [
+                                    {
+                                        "uid": "crs_flow_types",
+                                        "version": "2015",
+                                        "codes": [ "10_12", "10_11", "10_13", "10_19"
+                                        ]   //ODA
+                                    }
+                                ]
+                            }
+                        }
+                        //, "columns" = SELECT COLUMNS
+                    }
+                }],
 
                 //bridge configuration
                 bridge: {
-
                     type: "d3p"
-
                 },
 
                 /*
@@ -100,63 +217,18 @@ define(function () {
                 items: [
                     {
                         id: 'item-1',
-                        type: 'map',
-                        class: "fx-map-chart",
-                        //needed if layout = injected
-                        container: "#item-1",
-                        config: {
-                            container: "#item-1" ,
-                            leaflet: {
-                                zoomControl: false,
-                                attributionControl: true,
-                                scrollWheelZoom: false,
-                                minZoom: 2
-                            }
-                        },
-                        // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['indicator', 'year', 'domain', 'incomes', 'subregion'],
-                        filter: [
-                            {
-                                "name": "filter",
-                                "parameters": {
-                                    "rows": {
-                                        "year": {
-                                            "time": [
-                                                {
-                                                    "from": 2010,
-                                                    "to": 2010
-                                                }
-                                            ]
-                                        },
-                                        "indicator": {
-                                            "codes": [
-                                                {
-                                                    "uid": "FLUDE_INDICATORS",
-                                                    "codes": [
-                                                        "SoilWatProt"
-                                                    ]
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        id: 'item-2',
                         type: 'chart',
                         class: "fx-timeseries-ecample",
                         //needed if layout = injected
                         container: "#item-2",
                         config: {
-                            container: "#item-2",
+                            container: "#item-1",
                             adapter: {
                                 type: "standard",
-                                xDimensions: 'time',
-                                yDimensions: 'element',
+                                xDimensions: 'year',
+                                yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['country']
+                                seriesDimensions: ['sectorcode']
                             },
                             template: {
                                 //"title": "Top 25..."
@@ -164,16 +236,16 @@ define(function () {
                             creator: {
                                 chartObj: {
                                     chart: {
-                                        type: "column"
+                                        type: "timeseries"
                                     },
                                     tooltip: {
-                                        valueSuffix: ' 1000 HA'
+                                        valueSuffix: ' USD Mil'
                                     }
                                 }
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['indicator', 'year', 'domain', 'incomes', 'subregion'],
+                        allowedFilter: ['sectorcode', 'purposecode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -182,751 +254,39 @@ define(function () {
                                         "year": {
                                             "time": [
                                                 {
-                                                    "from": 1990,
-                                                    "to": 2010
+                                                    "from": 2000,
+                                                    "to": 2013
                                                 }
                                             ]
                                         },
-                                        "indicator": {
+                                        "sectorcode": {
                                             "codes": [
                                                 {
-                                                    "uid": "FLUDE_INDICATORS",
+                                                    "uid": "crs_sectors",
                                                     "codes": [
-                                                        "SoilWatProt"
+                                                        "600"
                                                     ]
                                                 }
                                             ]
                                         }
                                     }
                                 }
-                            },
-                            {
-                                "name": "order",
-                                "parameters": {
-                                    "value": "DESC"
-                                }
-                            },
-                            {
-                                "name": "page",
-                                "parameters": {
-                                    "perPage": 25,
-                                    "page": 1
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        id: 'item-3',
-                        type: 'chart',
-                        class: "fx-timeseries-ecample",
-                        //needed if layout = injected
-                        container: "#item-3",
-                        config: {
-                            container: "#item-3",
-                            adapter: {
-                                type: "standard",
-                                xDimensions: 'year',
-                                yDimensions: 'indicator',
-                                valueDimensions: 'value',
-                                seriesDimensions: ['region']
-                            },
-                            template: {},
-                            creator: {
-                                chartObj: {
-                                    chart: {
-                                        type: "column"
-                                    },
-                                    tooltip: {
-                                        valueSuffix: ' 1000 HA'
-                                    }
-                                }
-                            }
-                        },
-                        // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['indicator'],
-                        filter: [
-                            {
-                                "name": "filter",
-                                "parameters": {
-                                    "rows": {
-                                        "year": {
-                                            "time": [
-                                                {
-                                                    "from": 1990,
-                                                    "to": 2010
-                                                }
-                                            ]
-                                        },
-                                        "indicator": {
-                                            "codes": [
-                                                {
-                                                    "uid": "FLUDE_INDICATORS",
-                                                    "codes": [
-                                                        "SoilWatProt"
-                                                    ]
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            },
-                            {
-                                "name": "group",
-                                "parameters": {
-                                    "by": [
-                                        "region", "year", "indicator"
-                                    ],
-                                    "aggregations": [
-                                        {
-                                            "columns": ["value"],
-                                            "rule": "AVG"
-                                        },
-                                        {
-                                            "columns": ["um"],
-                                            "rule": "FIRST"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                "name": "order",
-                                "parameters": {
-                                    "region": "ASC",
-                                    "year": "ASC"
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        id: 'item-4',
-                        type: 'chart',
-                        class: "fx-timeseries-ecample",
-                        //needed if layout = injected
-                        container: "#item-4",
-                        config: {
-                            container: "#item-4",
-                            adapter: {
-                                type: "pie",
-                                valueDimensions: 'value',
-                                seriesDimensions: ['region']
-                            },
-                            template: {},
-                            creator: {
-                                chartObj: {
-                                    chart: {
-                                        plotBackgroundColor: null,
-                                        plotBorderWidth: null,
-                                        plotShadow: false,
-                                        type: 'pie'
-                                    },
-                                    title: {
-                                        //text: 'Browser market shares January, 2015 to May, 2015'
-                                    },
-                                    tooltip: {
-                                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                                    },
-                                    plotOptions: {
-                                        pie: {
-                                            allowPointSelect: true,
-                                            cursor: 'pointer',
-                                            dataLabels: {
-                                                enabled: true
-                                            },
-                                            showInLegend: true
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['indicator', 'year'],
-                        filter: [
-                            {
-                                "name": "filter",
-                                "parameters": {
-                                    "rows": {
-                                        "year": {
-                                            "time": [
-                                                {
-                                                    "from": 2010,
-                                                    "to": 2010
-                                                }
-                                            ]
-                                        },
-                                        "indicator": {
-                                            "codes": [
-                                                {
-                                                    "uid": "FLUDE_INDICATORS",
-                                                    "codes": [
-                                                        "SoilWatProt"
-                                                    ]
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            },
-                            {
-                                "name": "group",
-                                "parameters": {
-                                    "by": [
-                                        "region", "indicator"
-                                    ],
-                                    "aggregations": [
-                                        {
-                                            "columns": ["value"],
-                                            "rule": "AVG"
-                                        },
-                                        {
-                                            "columns": ["um"],
-                                            "rule": "FIRST"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                "name": "order",
-                                "parameters": {
-                                    "region": "ASC"
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        id: 'item-5',
-                        type: 'chart',
-                        class: "fx-timeseries-ecample",
-                        //needed if layout = injected
-                        container: "#item-5",
-                        config: {
-                            container: "#item-5",
-                            adapter: {
-                                type: "standard",
-                                xDimensions: 'year',
-                                yDimensions: 'indicator',
-                                valueDimensions: 'value',
-                                seriesDimensions: ['subregion']
-                            },
-                            template: {},
-                            creator: {
-                                chartObj: {
-                                    chart: {
-                                        type: "column"
-                                    },
-                                    tooltip: {
-                                        valueSuffix: ' 1000 HA'
-                                    }
-                                }
-                            }
-                        },
-                        // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['indicator'],
-                        filter: [
-                            {
-                                "name": "filter",
-                                "parameters": {
-                                    "rows": {
-                                        "year": {
-                                            "time": [
-                                                {
-                                                    "from": 1990,
-                                                    "to": 2010
-                                                }
-                                            ]
-                                        },
-                                        "indicator": {
-                                            "codes": [
-                                                {
-                                                    "uid": "FLUDE_INDICATORS",
-                                                    "codes": [
-                                                        "SoilWatProt"
-                                                    ]
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            },
-                            {
-                                "name": "group",
-                                "parameters": {
-                                    "by": [
-                                        "subregion", "year", "indicator"
-                                    ],
-                                    "aggregations": [
-                                        {
-                                            "columns": ["value"],
-                                            "rule": "AVG"
-                                        },
-                                        {
-                                            "columns": ["um"],
-                                            "rule": "FIRST"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                "name": "order",
-                                "parameters": {
-                                    "subregion": "ASC",
-                                    "year": "ASC"
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        id: 'item-6',
-                        type: 'chart',
-                        class: "fx-timeseries-ecample",
-                        //needed if layout = injected
-                        container: "#item-6",
-                        config: {
-                            container: "#item-6",
-                            adapter: {
-                                type: "pie",
-                                valueDimensions: 'value',
-                                seriesDimensions: ['subregion']
-                            },
-                            template: {},
-                            creator: {
-                                chartObj: {
-                                    chart: {
-                                        plotBackgroundColor: null,
-                                        plotBorderWidth: null,
-                                        plotShadow: false,
-                                        type: 'pie'
-                                    },
-                                    title: {
-                                        //text: 'Browser market shares January, 2015 to May, 2015'
-                                    },
-                                    tooltip: {
-                                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                                    },
-                                    plotOptions: {
-                                        pie: {
-                                            allowPointSelect: true,
-                                            cursor: 'pointer',
-                                            dataLabels: {
-                                                enabled: true
-                                            },
-                                            showInLegend: true
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['indicator', 'year'],
-                        filter: [
-                            {
-                                "name": "filter",
-                                "parameters": {
-                                    "rows": {
-                                        "year": {
-                                            "time": [
-                                                {
-                                                    "from": 2010,
-                                                    "to": 2010
-                                                }
-                                            ]
-                                        },
-                                        "indicator": {
-                                            "codes": [
-                                                {
-                                                    "uid": "FLUDE_INDICATORS",
-                                                    "codes": [
-                                                        "SoilWatProt"
-                                                    ]
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            },
-                            {
-                                "name": "group",
-                                "parameters": {
-                                    "by": [
-                                        "subregion", "indicator"
-                                    ],
-                                    "aggregations": [
-                                        {
-                                            "columns": ["value"],
-                                            "rule": "AVG"
-                                        },
-                                        {
-                                            "columns": ["um"],
-                                            "rule": "FIRST"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                "name": "order",
-                                "parameters": {
-                                    "subregion": "ASC"
-                                }
-                            }
-                        ]
-                    },
-
-                    {
-                        id: 'item-7',
-                        type: 'chart',
-                        class: "fx-timeseries-ecample",
-                        //needed if layout = injected
-                        container: "#item-7",
-                        config: {
-                            container: "#item-7",
-                            adapter: {
-                                type: "standard",
-                                xDimensions: 'year',
-                                yDimensions: 'indicator',
-                                valueDimensions: 'value',
-                                seriesDimensions: ['domain']
-                            },
-                            template: {},
-                            creator: {
-                                chartObj: {
-                                    chart: {
-                                        type: "column"
-                                    },
-                                    tooltip: {
-                                        valueSuffix: ' 1000 HA'
-                                    }
-                                }
-                            }
-                        },
-                        // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['indicator'],
-                        filter: [
-                            {
-                                "name": "filter",
-                                "parameters": {
-                                    "rows": {
-                                        "year": {
-                                            "time": [
-                                                {
-                                                    "from": 1990,
-                                                    "to": 2010
-                                                }
-                                            ]
-                                        },
-                                        "indicator": {
-                                            "codes": [
-                                                {
-                                                    "uid": "FLUDE_INDICATORS",
-                                                    "codes": [
-                                                        "SoilWatProt"
-                                                    ]
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            },
-                            {
-                                "name": "group",
-                                "parameters": {
-                                    "by": [
-                                        "domain", "year", "indicator"
-                                    ],
-                                    "aggregations": [
-                                        {
-                                            "columns": ["value"],
-                                            "rule": "AVG"
-                                        },
-                                        {
-                                            "columns": ["um"],
-                                            "rule": "FIRST"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                "name": "order",
-                                "parameters": {
-                                    "domain": "ASC",
-                                    "year": "ASC"
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        id: 'item-8',
-                        type: 'chart',
-                        class: "fx-timeseries-ecample",
-                        //needed if layout = injected
-                        container: "#item-8",
-                        config: {
-                            container: "#item-8",
-                            adapter: {
-                                type: "pie",
-                                valueDimensions: 'value',
-                                seriesDimensions: ['domain']
-                            },
-                            template: {},
-                            creator: {
-                                chartObj: {
-                                    chart: {
-                                        plotBackgroundColor: null,
-                                        plotBorderWidth: null,
-                                        plotShadow: false,
-                                        type: 'pie'
-                                    },
-                                    title: {
-                                        //text: 'Browser market shares January, 2015 to May, 2015'
-                                    },
-                                    tooltip: {
-                                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                                    },
-                                    plotOptions: {
-                                        pie: {
-                                            allowPointSelect: true,
-                                            cursor: 'pointer',
-                                            dataLabels: {
-                                                enabled: true
-                                            },
-                                            showInLegend: true
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['indicator', 'year'],
-                        filter: [
-                            {
-                                "name": "filter",
-                                "parameters": {
-                                    "rows": {
-                                        "year": {
-                                            "time": [
-                                                {
-                                                    "from": 2010,
-                                                    "to": 2010
-                                                }
-                                            ]
-                                        },
-                                        "indicator": {
-                                            "codes": [
-                                                {
-                                                    "uid": "FLUDE_INDICATORS",
-                                                    "codes": [
-                                                        "SoilWatProt"
-                                                    ]
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            },
-                            {
-                                "name": "group",
-                                "parameters": {
-                                    "by": [
-                                        "domain", "indicator"
-                                    ],
-                                    "aggregations": [
-                                        {
-                                            "columns": ["value"],
-                                            "rule": "AVG"
-                                        },
-                                        {
-                                            "columns": ["um"],
-                                            "rule": "FIRST"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                "name": "order",
-                                "parameters": {
-                                    "domain": "ASC"
-                                }
-                            }
-                        ]
-                    },
-
-                    {
-                        id: 'item-9',
-                        type: 'chart',
-                        class: "fx-timeseries-ecample",
-                        //needed if layout = injected
-                        container: "#item-9",
-                        config: {
-                            container: "#item-9",
-                            adapter: {
-                                type: "standard",
-                                xDimensions: 'year',
-                                yDimensions: 'indicator',
-                                valueDimensions: 'value',
-                                seriesDimensions: ['incomes']
-                            },
-                            template: {},
-                            creator: {
-                                chartObj: {
-                                    chart: {
-                                        type: "column"
-                                    },
-                                    tooltip: {
-                                        valueSuffix: ' 1000 HA'
-                                    }
-                                }
-                            }
-                        },
-                        // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['indicator'],
-                        filter: [
-                            {
-                                "name": "filter",
-                                "parameters": {
-                                    "rows": {
-                                        "year": {
-                                            "time": [
-                                                {
-                                                    "from": 1990,
-                                                    "to": 2010
-                                                }
-                                            ]
-                                        },
-                                        "indicator": {
-                                            "codes": [
-                                                {
-                                                    "uid": "FLUDE_INDICATORS",
-                                                    "codes": [
-                                                        "SoilWatProt"
-                                                    ]
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            },
-                            {
-                                "name": "group",
-                                "parameters": {
-                                    "by": [
-                                        "incomes", "year", "indicator"
-                                    ],
-                                    "aggregations": [
-                                        {
-                                            "columns": ["value"],
-                                            "rule": "AVG"
-                                        },
-                                        {
-                                            "columns": ["um"],
-                                            "rule": "FIRST"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                "name": "order",
-                                "parameters": {
-                                    "incomes": "ASC",
-                                    "year": "ASC"
-                                }
-                            }
-                        ]
-                    },
-
-                    {
-                        id: 'item-10',
-                        type: 'chart',
-                        class: "fx-timeseries-ecample",
-                        //needed if layout = injected
-                        container: "#item-10",
-                        config: {
-                            container: "#item-10",
-                            adapter: {
-                                type: "pie",
-                                valueDimensions: 'value',
-                                seriesDimensions: ['incomes']
-                            },
-                            template: {},
-                            creator: {
-                                chartObj: {
-                                    chart: {
-                                        plotBackgroundColor: null,
-                                        plotBorderWidth: null,
-                                        plotShadow: false,
-                                        type: 'pie'
-                                    },
-                                    title: {
-                                        //text: 'Browser market shares January, 2015 to May, 2015'
-                                    },
-                                    tooltip: {
-                                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                                    },
-                                    plotOptions: {
-                                        pie: {
-                                            allowPointSelect: true,
-                                            cursor: 'pointer',
-                                            dataLabels: {
-                                                enabled: true
-                                            },
-                                            showInLegend: true
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['indicator', 'year'],
-                        filter: [
-                            {
-                                "name": "filter",
-                                "parameters": {
-                                    "rows": {
-                                        "year": {
-                                            "time": [
-                                                {
-                                                    "from": 2010,
-                                                    "to": 2010
-                                                }
-                                            ]
-                                        },
-                                        "indicator": {
-                                            "codes": [
-                                                {
-                                                    "uid": "FLUDE_INDICATORS",
-                                                    "codes": [
-                                                        "SoilWatProt"
-                                                    ]
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            },
-                            {
-                                "name": "group",
-                                "parameters": {
-                                    "by": [
-                                        "incomes", "indicator"
-                                    ],
-                                    "aggregations": [
-                                        {
-                                            "columns": ["value"],
-                                            "rule": "AVG"
-                                        },
-                                        {
-                                            "columns": ["um"],
-                                            "rule": "FIRST"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                "name": "order",
-                                "parameters": {
-                                    "incomes": "ASC"
-                                }
-                            }
+                            }//,
+                            //{
+                            //    "name": "order",
+                             //   "parameters": {
+                              //      "value": "DESC"
+                              //  }
+                          //  },
+                           // {
+                           //     "name": "page",
+                            //    "parameters": {
+                             //       "perPage": 25,  //top 25
+                            //        "page": 1
+                             //   }
+                           // }
                         ]
                     }
-
 
                 ]
             }
