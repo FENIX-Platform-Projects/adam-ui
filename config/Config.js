@@ -3,10 +3,12 @@ define(function () {
 
         'use strict';
 
-    //var CODELIST_PREFIX = 'http://fenixservices.fao.org/d3s/msd/resources/data/uid/'
-    var CODELIST_PREFIX = 'http://fenix.fao.org/d3s/msd/resources/'
 
-        return {
+        var CODELIST_PREFIX = 'http://fenix.fao.org/d3s_dev/msd/resources/'
+
+
+
+    return {
 
             //Chaplin JS configuration
             CHAPLINJS_CONTROLLER_SUFFIX: '-controller',
@@ -48,10 +50,14 @@ define(function () {
 
             DOWNLOAD_FILE_SYSTEM_ROOT : 'http://fenixrepo.fao.org/cdn/data/adam/download/',
 
-            SERVER : "http://www.fao.org/fenixrepo/external/lprapp16/"
-		//SERVER : "http://fenixrepo.fao.org/external/lprapp16/"
-            //SERVER : "http://fenix.fao.org/"
-            //SERVER : "http://lprapp16.fao.org/"
+            //D3S_CODELIST_URL:( C.SERVICE_BASE_ADDRESS || DC.SERVICE_BASE_ADDRESS) + "/resources/",
+
+            CODELIST_POSTFIX : "/resources/",
+
+           SERVER : "http://fenix.fao.org/",
+
+
+            CODELIST_SERVICE: "d3s_dev/msd"
 
         };
     });
