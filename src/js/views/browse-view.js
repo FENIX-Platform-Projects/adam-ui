@@ -12,7 +12,7 @@ define([
     'config/Events',
     'config/Config',
     'text!config/browse/flude-topics.json',
-    'config/browse/Config',
+    'config/browse/config',
     'fx-filter/Fx-filter-configuration-creator',
     'handlebars',
     'lib/utils',
@@ -210,9 +210,17 @@ define([
                         var result = [];
                         var children = self._getPropByString(result1[0], "children");
 
+                        console.log("=============== RESULT ============");
+                        console.log(children);
+
                         _.each(children, function (d) {
+                            console.log("=============== LOOP ============");
+                            console.log(d);
                             result.push({"id": d.code, "text": d.title[Utils.getLocale()]});
                         });
+
+                        console.log("=============== RESULT SIZE ============");
+                        console.log(result.length);
 
                         result.sort(function(a, b){
                                 if (a.text < b.text)
@@ -221,6 +229,11 @@ define([
                                     return 1;
                                 return 0;
                         });
+
+                        console.log("=============== RESULT ============");
+                        console.log(result);
+
+
 
                         self.filterBrowse.setDomain("purposecode", result);
 
@@ -362,12 +375,18 @@ define([
            prop = propString;
            candidate = obj[prop];
 
-            if (candidate !== undefined) {
+           console.log("=============== CANDIDATE ============");
+           console.log(candidate);
+
+            if (candidate) {
                 obj = candidate;
                 if(obj.hasOwnProperty(prop)) {
                    this._getPropByString(obj, prop);
                 }
             }
+
+           console.log("=============== OBJ ============");
+           console.log(obj);
 
         return obj;
     },
