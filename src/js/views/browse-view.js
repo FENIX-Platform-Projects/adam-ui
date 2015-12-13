@@ -115,6 +115,8 @@ define([
 
         _bindEventListeners: function () {
 
+            var self = this;
+
             amplify.subscribe(s.events.SECTOR_LIST_CHANGE, this, this._onSectorChange);
 
             amplify.subscribe(s.events.FLOW_LIST_CHANGE, this, this._onFlowChange);
@@ -330,7 +332,7 @@ define([
             this.filterConfCreator.getConfiguration(config)
                 .then(function (c) {
                     console.log("====================== GET CONFIG ===============");
-                    console.log(c);
+
                     self.filterBrowse = new Filter();
 
                     self.filterBrowse.init({
