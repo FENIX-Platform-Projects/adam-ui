@@ -210,17 +210,9 @@ define([
                         var result = [];
                         var children = self._getPropByString(result1[0], "children");
 
-                        console.log("=============== RESULT ============");
-                        console.log(children);
-
                         _.each(children, function (d) {
-                            console.log("=============== LOOP ============");
-                            console.log(d);
-                            result.push({"id": d.code, "text": d.title[Utils.getLocale()]});
+                             result.push({"id": d.code, "text": d.title[Utils.getLocale()]});
                         });
-
-                        console.log("=============== RESULT SIZE ============");
-                        console.log(result.length);
 
                         result.sort(function(a, b){
                                 if (a.text < b.text)
@@ -229,10 +221,6 @@ define([
                                     return 1;
                                 return 0;
                         });
-
-                        console.log("=============== RESULT ============");
-                        console.log(result);
-
 
 
                         self.filterBrowse.setDomain("purposecode", result);
