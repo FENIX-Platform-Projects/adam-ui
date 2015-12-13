@@ -190,39 +190,40 @@ define([
 
             if(s.value){
                var pcfilter= _.find(this.filterConfig, function(obj){
-                           return obj.components[0].name === 'purposecode';
+                   return obj.components[0].name === 'purposecode';
                 });
 
-                var filter =   pcfilter.components[0].config.filter;
-                filter.codes = [];
-                filter.codes.push(s.value);
-                delete filter["level"];
+                if(pcfilter){
+                    var filter =   pcfilter.components[0].config.filter;
+                    filter.codes = [];
+                    filter.codes.push(s.value);
+                    delete filter["level"];
 
-                pcfilter.components[0].config.filter = filter;
+                    pcfilter.components[0].config.filter = filter;
 
-                Q.all([
-                    self.filterConfCreator._createCodelistHierarchyPromiseData(pcfilter)
-                ]).spread(function(result1) {
+                    Q.all([
+                        self.filterConfCreator._createCodelistHierarchyPromiseData(pcfilter)
+                    ]).spread(function(result1) {
 
-                    var result = [];
-                    var children = self._getPropByString(result1[0], "children");
+                        var result = [];
+                        var children = self._getPropByString(result1[0], "children");
 
-                    _.each(children, function (d) {
-                        result.push({"id": d.code, "text": d.title[Utils.getLocale()]});
+                        _.each(children, function (d) {
+                            result.push({"id": d.code, "text": d.title[Utils.getLocale()]});
+                        });
+
+                        result.sort(function(a, b){
+                                if (a.text < b.text)
+                                    return -1;
+                                if (a.text > b.text)
+                                    return 1;
+                                return 0;
+                        });
+
+                        self.filterBrowse.setDomain("purposecode", result);
+
                     });
-
-                    result.sort(function(a, b){
-                            if (a.text < b.text)
-                                return -1;
-                            if (a.text > b.text)
-                                return 1;
-                            return 0;
-                    });
-
-                    self.filterBrowse.setDomain("purposecode", result);
-
-                });
-
+                }
             }
         },
 
