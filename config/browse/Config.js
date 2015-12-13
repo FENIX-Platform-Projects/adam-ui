@@ -25,7 +25,9 @@ define(function () {
                         {
                             "uid": "crs_dac",
                             "version": "2015",
-                            "type": "codelist",
+                            "levels": 3,
+                            "level": 1,
+                            "type": "codelist-hierarchy",
                             "componentType": "dropDownList-FENIX",
                             "lang": "EN",
                             "title": {"EN": "Codelist"},
@@ -56,7 +58,9 @@ define(function () {
                         {
                             "uid": "crs_dac",
                             "version": "2015",
-                            "type": "codelist",
+                            "type": "codelist-hierarchy",
+                            "levels": 3,
+                            "level": 3,
                             "componentType": "dropDownList-FENIX",
                             "lang": "EN",
                             "title": {"EN": "Codelist"},
@@ -137,7 +141,9 @@ define(function () {
                         {
                             "uid": "crs_channels",
                             "version": "2015",
-                            "type": "codelist",
+                            "levels":3,
+                            "level": 3,
+                            "type": "codelist-hierarchy",
                             "name": "channelcode",
                             "componentType": "dropDownList-FENIX",
                             "lang": "EN",
@@ -193,11 +199,13 @@ define(function () {
                                     {
                                         "uid": "crs_flow_types",
                                         "version": "2015",
+                                        "levels": 2,
                                         "codes": [ "10_12", "10_11", "10_13", "10_19"
                                         ]   //ODA
                                     }
                                 ]
                             }
+
                         }
                         //, "columns" = SELECT COLUMNS
                     }
@@ -220,7 +228,7 @@ define(function () {
                         type: 'chart',
                         class: "fx-timeseries-ecample",
                         //needed if layout = injected
-                        container: "#item-2",
+                        container: "#item-1",
                         config: {
                             container: "#item-1",
                             adapter: {
@@ -265,7 +273,8 @@ define(function () {
                                                     "uid": "crs_sectors",
                                                     "codes": [
                                                         "600"
-                                                    ]
+                                                    ],
+                                                    "levels":3
                                                 }
                                             ]
                                         }
