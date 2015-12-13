@@ -290,7 +290,7 @@ define([
 
            this._renderBrowseFilter(this.filterConfig);
 
-           // this._renderFludeDashboard(config.dashboard);
+           this._renderBrowseDashboard(config.dashboard);
 
 
         },
@@ -310,7 +310,6 @@ define([
                 this.browseDashboard.destroy();
             }
 
-            console.log(config);
 
             this.browseDashboard = new Dashboard({
 
@@ -331,7 +330,6 @@ define([
 
             this.filterConfCreator.getConfiguration(config)
                 .then(function (c) {
-                    console.log("====================== GET CONFIG ===============");
 
                     self.filterBrowse = new Filter();
 
