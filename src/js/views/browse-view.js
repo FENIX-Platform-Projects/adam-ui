@@ -12,7 +12,7 @@ define([
     'config/Events',
     'config/Config',
     'text!config/browse/flude-topics.json',
-    'config/browse/config',
+    'config/browse/Config',
     'fx-filter/Fx-filter-configuration-creator',
     'handlebars',
     'lib/utils',
@@ -363,18 +363,12 @@ define([
            prop = propString;
            candidate = obj[prop];
 
-           console.log("=============== CANDIDATE ============");
-           console.log(candidate);
-
             if (candidate) {
                 obj = candidate;
                 if(obj.hasOwnProperty(prop)) {
                    this._getPropByString(obj, prop);
                 }
             }
-
-           console.log("=============== OBJ ============");
-           console.log(obj);
 
         return obj;
     },

@@ -199,6 +199,7 @@ define(function () {
                                     {
                                         "uid": "crs_flow_types",
                                         "version": "2015",
+                                        "level": 2,
                                         "levels": 2,
                                         "codes": [ "10_12", "10_11", "10_13", "10_19"
                                         ]   //ODA
@@ -274,6 +275,7 @@ define(function () {
                                                     "codes": [
                                                         "600"
                                                     ],
+                                                    "level": 1,
                                                     "levels":3
                                                 }
                                             ]
