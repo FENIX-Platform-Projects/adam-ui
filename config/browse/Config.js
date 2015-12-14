@@ -25,8 +25,6 @@ define(function () {
                         {
                             "uid": "crs_dac",
                             "version": "2015",
-                            "levels": 3,
-                            "level": 1,
                             "type": "codelist-hierarchy",
                             "componentType": "dropDownList-FENIX",
                             "lang": "EN",
@@ -59,8 +57,6 @@ define(function () {
                             "uid": "crs_dac",
                             "version": "2015",
                             "type": "codelist-hierarchy",
-                            "levels": 3,
-                            "level": 3,
                             "componentType": "dropDownList-FENIX",
                             "lang": "EN",
                             "title": {"EN": "Codelist"},
@@ -88,6 +84,7 @@ define(function () {
                             "type": "range",
                             "name": "year",
                             "componentType": "timeRangeLists-FENIX",
+                            "class" : "timeRangeList",
                             "lang": "EN",
                             "title": {"EN": "Year"},
                             "config": {
@@ -141,8 +138,6 @@ define(function () {
                         {
                             "uid": "crs_channels",
                             "version": "2015",
-                            "levels":3,
-                            "level": 3,
                             "type": "codelist-hierarchy",
                             "name": "channelcode",
                             "componentType": "dropDownList-FENIX",
@@ -165,7 +160,7 @@ define(function () {
                 {
                     "type": "codelist",
                     "containerType": "baseContainer",
-                    "title": "Flow",
+                    "title": "Official Development Assistance (ODA)",
                     "components": [
                         {
                             "uid": "crs_flow_amounts",
@@ -187,7 +182,7 @@ define(function () {
 
             dashboard: {
                 //data cube's uid
-                uid: "usd_commitment",
+                uid: "adam_usd_commitment",
 
                 //data base filter
                 filter: [  {
@@ -199,8 +194,6 @@ define(function () {
                                     {
                                         "uid": "crs_flow_types",
                                         "version": "2015",
-                                        "level": 2,
-                                        "levels": 2,
                                         "codes": [ "10_12", "10_11", "10_13", "10_19"
                                         ]   //ODA
                                     }
@@ -245,7 +238,10 @@ define(function () {
                             creator: {
                                 chartObj: {
                                     chart: {
-                                        type: "timeseries"
+                                        type: "line"
+                                    },
+                                    subtitle: {
+                                        text: ''
                                     },
                                     tooltip: {
                                         valueSuffix: ' USD Mil'
@@ -259,7 +255,7 @@ define(function () {
                             {
                                 "name": "filter",
                                 "parameters": {
-                                    "rows": {
+                                     "rows": {
                                         "year": {
                                             "time": [
                                                 {
@@ -275,21 +271,37 @@ define(function () {
                                                     "version": "2015",
                                                     "codes": [
                                                         "600"
-                                                    ],
-                                                    "level": 1,
-                                                    "levels":3
+                                                    ]
                                                 }
                                             ]
                                         }
                                     }
                                 }
-                            }//,
-                            //{
-                            //    "name": "order",
-                             //   "parameters": {
-                              //      "value": "DESC"
-                              //  }
-                          //  },
+                            },
+                            {
+                                "name": "group",
+                                "parameters": {
+                                    "by": [
+                                        "sectorcode", "year"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": ["value"],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitname"],
+                                            "rule": "FIRST"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "order",
+                                "parameters": {
+                                    "year": "ASC"
+                                }
+                            }
                            // {
                            //     "name": "page",
                             //    "parameters": {
