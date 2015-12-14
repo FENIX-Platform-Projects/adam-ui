@@ -272,6 +272,7 @@ define(function () {
                                             "codes": [
                                                 {
                                                     "uid": "crs_sectors",
+                                                    "version": "2015",
                                                     "codes": [
                                                         "600"
                                                     ],
