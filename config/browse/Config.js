@@ -240,6 +240,9 @@ define(function () {
                                     chart: {
                                         type: "line"
                                     },
+                                    xAxis : {
+                                     type: 'datetime'
+                                    },
                                     subtitle: {
                                         text: ''
                                     },
@@ -310,8 +313,103 @@ define(function () {
                              //   }
                            // }
                         ]
-                    }
+                    },
+                    {
+                        id: 'item-2',
+                        type: 'chart',
+                        class: "fx-timeseries-ecample",
+                        //needed if layout = injected
+                        container: "#item-2",
+                        config: {
+                            container: "#item-2",
+                            adapter: {
+                                type: "standard",
+                                xDimensions: 'donorcode',
+                                yDimensions: 'unitname',
+                                valueDimensions: 'value',
+                                seriesDimensions: ['donorcode']
+                            },
+                            template: {
+                                //"title": "Top 25..."
+                            },
+                            creator: {
+                                chartObj: {
+                                    chart: {
+                                        type: "column"
+                                    },
+                                    subtitle: {
+                                        text: ''
+                                    },
+                                    tooltip: {
+                                        valueSuffix: ' USD Mil'
 
+                                    }
+
+                                }
+                            }
+                        },
+                        // for now it takes the id, TODO: add uid as well
+                        allowedFilter: ['sectorcode', 'purposecode', 'year', 'channelcode'],
+                        filter: [
+                            {
+                                "name": "filter",
+                                "parameters": {
+                                    "rows": {
+                                        "year": {
+                                            "time": [
+                                                {
+                                                    "from": 2000,
+                                                    "to": 2013
+                                                }
+                                            ]
+                                        },
+                                        "sectorcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_sectors",
+                                                    "version": "2015",
+                                                    "codes": [
+                                                        "600"
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "name": "group",
+                                "parameters": {
+                                    "by": [
+                                        "donorcode"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": ["value"],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitname"],
+                                            "rule": "FIRST"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "order",
+                                "parameters": {
+                                    "value": "DESC"
+                                }
+                            },
+                            {
+                                "name": "page",
+                                "parameters": {
+                                  "perPage": 10,  //top 20
+                                   "page": 1
+                               }
+                            }
+                        ]
+                    }
                 ]
             }
         },
