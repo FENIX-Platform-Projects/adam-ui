@@ -41,8 +41,10 @@ define([
         },
         events: {
             SECTOR_LIST_CHANGE: 'fx.filter.list.change.sectorcode',
-            FLOW_LIST_CHANGE: 'fx.filter.list.change.flowcode'
-        }
+            UID_LIST_CHANGE: 'fx.filter.list.change.uid'
+        },
+        datasetChanged: false,
+        datasetType: {"uid": "usd_commitment"}
     };
 
     var BrowseView = View.extend({
@@ -60,7 +62,8 @@ define([
         initialize: function (params) {
             this.browse_type = params.filter;
             this.page = params.page;
-
+            this.datasetChanged = s.datasetChanged;
+            this.datasetType = s.datasetType;
 
 
             View.prototype.initialize.call(this, arguments);
@@ -119,49 +122,7 @@ define([
 
             amplify.subscribe(s.events.SECTOR_LIST_CHANGE, this, this._onSectorChange);
 
-            amplify.subscribe(s.events.FLOW_LIST_CHANGE, this, this._onFlowChange);
-
-         /**   $('body').on(defaultOptions.events.LIST_CHANGE,
-                function (event, data){
-
-                    if(data.name === 'tablename'){
-
-                        if(data.event.val){
-                            console.log("DATASET SELECTED: "+data.event.val);
-                        }
-                    } else {
-                    if(data.event.val){
-
-                     var filter = data.eventConfig.filter;
-                    filter.codes.push(data.event.val);
-                    data.config.filter = filter;   // reset the base filter
-
-                    var obj =  {};
-                    obj.components = [];
-                    obj.components.push(data);
-
-                    Q.all([
-                        self.filterConfCreator._createCodelistHierarchyPromiseData(obj)
-                    ]).spread(function(result1) {
-
-                         var result = [];
-                         var children = self._getPropByString(result1[0], "children");
-
-                          _.each(children, function (d) {
-
-                              result.push({"id": d.code, "text": d.title[Utils.getLocale()]});
-                              //result.push({"value": d.code, "label": d.title[self.o.lang], "selected": self._checkDefaultCodes(conf, d.code)});
-                           });
-
-
-                          self.filterBrowse.setDomain( data.eventConfig.target, result);
-
-
-                    });
-                    }
-
-                    }
-            });  **/
+            amplify.subscribe(s.events.UID_LIST_CHANGE, this, this._onDatasetChange);
 
             this.$topicSelectorFlude.on("change", function (e) {
                 self._onBrowseTopicChange(e.val);
@@ -171,18 +132,16 @@ define([
 
                 var filter = {};
                 var values = self.filterBrowse.getValues();
-
                 console.log(values);
 
-                // TODO: funzione per distruggere dashboard e ricrearla con gli items giusti:
-                /*
-                 var filteredConfig = self._getFilteredConfig(values, self.$faostatDashboardConfig);
-                 self._renderFaostatDashboard(filteredConfig);
-                 self.fludeDashboard.filter([values]);
-                 */
+                // Update Dashboard Config and Rebuild if uid changed
+                if(self.datasetChanged){
+                   self.dashboardConfig.uid =  self.datasetType.uid;
+                   self._rebuildBrowseDashboard(self.dashboardConfig, [values]);
+                } else {
+                    self.browseDashboard.filter([values]);
+                }
 
-                // TODO: it's an array
-                self.browseDashboard.filter([values]);
             });
 
         },
@@ -230,10 +189,16 @@ define([
             }
         },
 
-        _onFlowChange: function (s) {
-            console.log("ON FLOW CHANGE");
-            if(s.event.val){
-                console.log("_onFlowChange: "+s.event.val);
+        _onDatasetChange: function (data) {
+            if(data.value){
+                if(this.dashboardConfig)  {
+                    if(data.value !== this.dashboardConfig.uid) {
+                        this.datasetChanged = true;
+                        this.datasetType.uid = data.value;
+                    }
+                    else
+                        this.datasetChanged = false;
+                }
             }
         },
 
@@ -244,8 +209,6 @@ define([
 
 
         _showBrowseTopic: function (topic) {
-            console.log("_showBrowseTopic = "+ topic);
-
             var self = this;
 
             //Inject HTML
@@ -277,9 +240,6 @@ define([
         },
 
         _renderBrowseComponents: function (topic) {
-
-            console.log("_renderBrowseComponents = "+ topic);
-
             var config = BrowseConfig[topic];
 
             if (!config || !config.dashboard || !config.filter) {
@@ -287,11 +247,12 @@ define([
                 return;
             }
 
-            this.filterConfig = config.filter;
+           this.filterConfig = config.filter;
+           this.dashboardConfig = config.dashboard;
 
-           this._renderBrowseFilter(this.filterConfig);
+            this._renderBrowseFilter(this.filterConfig);
 
-           this._renderBrowseDashboard(config.dashboard);
+           this._renderBrowseDashboard(this.dashboardConfig);
 
 
         },
@@ -320,6 +281,24 @@ define([
             });
 
             this.browseDashboard.render(config);
+
+        },
+
+        _rebuildBrowseDashboard: function (config, filter) {
+
+            if (this.browseDashboard && this.browseDashboard.destroy) {
+                this.browseDashboard.destroy();
+            }
+
+
+            this.browseDashboard = new Dashboard({
+
+                //Ignored if layout = injected
+                container: s.css_classes.DASHBOARD_BROWSE_CONTAINER,
+                layout: "injected"
+            });
+
+            this.browseDashboard.rebuild(config, filter);
 
         },
 
