@@ -409,7 +409,111 @@ define(function () {
                                }
                             }
                         ]
+                    },
+                    {
+                        id: 'item-3',
+                        type: 'chart',
+                        class: "fx-timeseries-ecample",
+                        //needed if layout = injected
+                        container: "#item-3",
+                        config: {
+                            container: "#item-3",
+                            adapter: {
+                                type: "pie",
+                                valueDimensions: 'value',
+                                seriesDimensions: ['channelcode']
+                            },
+                            template: {},
+                            creator: {
+                                chartObj: {
+                                    chart: {
+                                        plotBackgroundColor: null,
+                                        plotBorderWidth: null,
+                                        plotShadow: false,
+                                        type: 'pie'
+                                    },
+                                    title: {
+                                        //text: 'Browser market shares January, 2015 to May, 2015'
+                                    },
+                                    tooltip: {
+                                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                                    },
+                                    plotOptions: {
+                                        pie: {
+                                            allowPointSelect: true,
+                                            cursor: 'pointer',
+                                            dataLabels: {
+                                                enabled: true
+                                            },
+                                            showInLegend: true
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        // for now it takes the id, TODO: add uid as well
+                        allowedFilter: ['sectorcode', 'purposecode', 'year', 'channelcode'],
+                        filter: [
+                            {
+                                "name": "filter",
+                                "parameters": {
+                                    "rows": {
+                                        "year": {
+                                            "time": [
+                                                {
+                                                    "from": 2000,
+                                                    "to": 2013
+                                                }
+                                            ]
+                                        },
+                                        "sectorcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_sectors",
+                                                    "version": "2015",
+                                                    "codes": [
+                                                        "600"
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "name": "group",
+                                "parameters": {
+                                    "by": [
+                                        "channelcode"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": ["value"],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitname"],
+                                            "rule": "FIRST"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "order",
+                                "parameters": {
+                                    "value": "DESC"
+                                }
+                            },
+                            {
+                                "name": "page",
+                                "parameters": {
+                                    "perPage": 10,  //top 20
+                                    "page": 1
+                                }
+                            }
+                        ]
                     }
+
                 ]
             }
         },
