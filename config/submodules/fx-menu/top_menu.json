@@ -30,14 +30,11 @@
     },
     {
       "attrs": {
-        "id": "datamgmt"
+        "id": "profiles"
       },
-      "a_attrs": {
-        "rel": "external"
-      },
-      "target": "datamgmt.html",
+      "target": "#profiles",
       "label": {
-        "EN": "Data Management"
+        "EN": "Profiles"
       }
     },
     {
@@ -51,20 +48,14 @@
     },
     {
       "attrs": {
-        "id": "domains"
+        "id": "datamgmt"
       },
-      "target": "#domains",
-      "label": {
-        "EN": "Compare"
-      }
-    },
-    {
-      "attrs": {
-        "id": "methods"
+      "a_attrs": {
+        "rel": "external"
       },
-      "target": "#methods",
+      "target": "datamgmt.html",
       "label": {
-        "EN": "Methods and Standards"
+        "EN": "Data Management"
       }
     }
   ],
