@@ -87,6 +87,8 @@ require([
 
                 // Specify the paths of vendor libraries
                 paths: {
+
+                    loglevel: '{FENIX_CDN}/js/loglevel/1.4.0/loglevel',
                     /* 'jquery-private': "{FENIX_CDN}/js/jquery/2.1.1/jquery.min",*/
                     bootstrap: "{FENIX_CDN}/js/bootstrap/3.3.4/js/bootstrap.min",
                     underscore: "{FENIX_CDN}/js/underscore/1.7.0/underscore.min",

@@ -6,31 +6,37 @@
 
 .fx-sandbox{
 
+
   padding: 0 5px;
-  @import '../../src/css/fx-boot/bootstrap';
-
-  /* Fenix Utils*/
-  @import '../../submodules/fenix-ui-common/css/fenix-style-no-variables';
-
-  /* Base */
-  @import '../../src/css/theme/default';
-
-  /* Components */
-  @import '../../src/css/components/breadcrumbs';
-  @import '../../src/css/components/fao-footer';
-  @import '../../src/css/components/fao-topmenu';
-  @import '../../src/css/components/form';
-  @import '../../src/css/components/jstree';
-  @import '../../src/css/components/submenu';
-
-  /* Typo3 */
-  //@import '../../src/css/theme/typo3-compatibility';
-
-  /* Pages */
-  @import '../../src/css/pages/home';
-
 }
 
+
+
+
+
+
+
+@import '../../src/css/fx-boot/bootstrap';
+
+/* Fenix Utils*/
+@import '../../submodules/fenix-ui-common/css/fenix-style-no-variables';
+
+/* Base */
+@import '../../src/css/theme/default';
+
+/* Components */
+@import '../../src/css/components/breadcrumbs';
+@import '../../src/css/components/fao-footer';
+@import '../../src/css/components/fao-topmenu';
+@import '../../src/css/components/form';
+@import '../../src/css/components/jstree';
+@import '../../src/css/components/submenu';
+
+/* Typo3 */
+@import '../../src/css/theme/typo3-compatibility';
+
+/* Pages */
+@import '../../src/css/pages/home';
 body{
   background-color: $fenix-light-bg;
   font-family:  "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif;
