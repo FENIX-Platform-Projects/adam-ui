@@ -34,7 +34,7 @@ define(function () {
                                 "defaultsource": [
                                     //{"value": null, "label": "All", "selected": true},
                                 ],
-                                "defaultcodes": ['9999'],
+                                "defaultcodes": ['600'],
                                 "onlyValueText": false,
                                 "enableMultiselection": false,
                                 "filter": {
@@ -217,7 +217,7 @@ define(function () {
                 metadata: {},
 
                 items: [
-                    {
+                   {
                         id: 'item-1',
                         type: 'chart',
                         class: "fx-timeseries-ecample",
@@ -432,17 +432,30 @@ define(function () {
                                         plotShadow: false,
                                         type: 'pie'
                                     },
+                                    subtitle: {
+                                        text: ''
+                                    },
                                     title: {
                                         //text: 'Browser market shares January, 2015 to May, 2015'
                                     },
                                     tooltip: {
+                                        style: {width: '200px', whiteSpace: 'normal'},
                                         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                                    },
+                                    legend: {
+                                       labelFormatter: function(){return this.name.slice(0, 25)+ '...'}
                                     },
                                     plotOptions: {
                                         pie: {
                                             allowPointSelect: true,
                                             cursor: 'pointer',
                                             dataLabels: {
+                                               formatter: function(){
+                                                var words = this.point.name.slice(0, 60)+ '...';
+
+                                                return words;
+
+                                               },
                                                 enabled: true
                                             },
                                             showInLegend: true
@@ -502,13 +515,6 @@ define(function () {
                                 "name": "order",
                                 "parameters": {
                                     "value": "DESC"
-                                }
-                            },
-                            {
-                                "name": "page",
-                                "parameters": {
-                                    "perPage": 10,  //top 20
-                                    "page": 1
                                 }
                             }
                         ]
