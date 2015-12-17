@@ -1,0 +1,173 @@
+<div class="row">
+
+    <div class="col-xs-4">
+
+        <!-- Country Selector -->
+        <div class="amis-selector">
+
+            <div class="selector-header">
+                <h2>{{ sel_heading_country }}</h2>
+            </div>
+
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="#countries" aria-controls="countries" role="tab"
+                       data-toggle="tab">{{sel_country_tab_countries}}</a>
+                </li>
+                <li role="presentation">
+                    <a href="#regions" aria-controls="regions" role="tab"
+                       data-toggle="tab">{{sel_country_tab_regions}}</a>
+                </li>
+                <li role="presentation">
+                    <a href="#regional-aggregation" aria-controls="regional-aggregation" role="tab"
+                       data-toggle="tab">{{sel_country_tab_regional_aggregation}}</a>
+                </li>
+
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="countries">
+
+                    <div class="selector-content" data-selector="country-country">
+                        <input data-role="filter" type="text" class="form-control" placeholder="{{search_placeholder}}">
+                        <div data-role="tree"></div>
+                    </div>
+                    <div class="selector-footer">
+                        <button data-role="clear" class="btn btn-danger pull-right">{{ clear_all_btn }}</button>
+                    </div>
+
+                </div>
+                <div role="tabpanel" class="tab-pane" id="regions">
+                    <div class="selector-content" data-selector="country-region">
+                        <input data-role="filter" type="text" class="form-control" placeholder="{{search_placeholder}}">
+                        <div data-role="tree"></div>
+                    </div>
+                    <div class="selector-footer">
+                        <button data-role="clear" class="btn btn-danger pull-right">{{ clear_all_btn }}</button>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="regional-aggregation">
+                    <div class="selector-content" data-selector="country-region">
+                        <input data-role="filter" type="text" class="form-control" placeholder="{{search_placeholder}}">
+                        <div data-role="tree"></div>
+                    </div>
+                    <div class="selector-footer">
+                        <button data-role="clear" class="btn btn-danger pull-right">{{ clear_all_btn }}</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-xs-4">
+
+        <!-- Donor Selector -->
+        <div class="amis-selector" data-selector="donor">
+
+            <div class="selector-header">
+                <h2>{{ sel_heading_donor }}</h2>
+            </div>
+            <div class="selector-content">
+                <input data-role="filter" type="text" class="form-control" placeholder="{{search_placeholder}}">
+                <div data-role="tree"></div>
+            </div>
+            <div class="selector-footer">
+                <button data-role="clear" class="btn btn-danger pull-right">{{ clear_all_btn }}</button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-xs-4">
+
+        <!-- ODA Selector -->
+        <div class="amis-selector">
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <h2>{{ sel_heading_oda }}</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h2>{{ sel_heading_year }}</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h2>{{ sel_heading_compare_by }}</h2>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-xs-4">
+        <!-- Channel of delivery Selector -->
+        <div class="amis-selector" data-selector="delivery">
+
+            <div class="selector-header">
+                <h2>{{ sel_heading_channel_of_delivery }}</h2>
+            </div>
+            <div class="selector-content">
+                <input data-role="filter" type="text" class="form-control" placeholder="{{search_placeholder}}">
+                <div data-role="tree"></div>
+            </div>
+            <div class="selector-footer">
+                <button data-role="clear" class="btn btn-danger pull-right">{{ clear_all_btn }}</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-xs-4">
+
+        <!-- sector Selector -->
+        <div class="amis-selector" data-selector="sector">
+
+            <div class="selector-header">
+                <h2>{{ sel_heading_sector }}</h2>
+            </div>
+            <div class="selector-content">
+                <input data-role="filter" type="text" class="form-control" placeholder="{{search_placeholder}}">
+                <div data-role="tree"></div>
+            </div>
+            <div class="selector-footer">
+                <button data-role="clear" class="btn btn-danger pull-right">{{ clear_all_btn }}</button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-xs-4">
+
+        <!-- Seb-Sector Selector -->
+        <div class="amis-selector" data-selector="sub-sector">
+
+            <div class="selector-header">
+                <h2>{{ sel_heading_sub_sector }}</h2>
+            </div>
+            <div class="selector-content">
+                <input data-role="filter" type="text" class="form-control" placeholder="{{search_placeholder}}">
+                <div data-role="tree"></div>
+            </div>
+            <div class="selector-footer">
+                <button data-role="clear" class="btn btn-danger pull-right">{{ clear_all_btn }}</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
