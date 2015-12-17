@@ -1,11 +1,13 @@
 /*global define, amplify*/
 define([
+    'jquery',
     'views/base/view',
     'text!templates/home/home.hbs',
     'config/Events',
     'fx-m-c/start',
-    'amplify'
-], function (View, template, E, MapCreator) {
+    'amplify',
+    'select2'
+], function ($, View, template, E, MapCreator) {
 
     'use strict';
 
@@ -42,7 +44,7 @@ define([
 
         _renderDropdown : function () {
 
-            this.$el.find(s.DROPDOWN_CONTAINER).on('change', function () {
+            this.$el.find(s.DROPDOWN_CONTAINER).select2().on('change', function () {
 
                window.open(this.value, '_blank');
 
@@ -63,7 +65,7 @@ define([
 
                     self.mapCreator.addLayer(model, { colorramp: 'Greens' });
                     self.mapCreator.addCountryBoundaries();
-                    self.mapCreator.addCountryLabels();
+                    //self.mapCreator.addCountryLabels();
                 });
 
             });
