@@ -16,7 +16,7 @@ $standard-text-bold : normal normal 500 14px/normal "FrutigerLTW02-45Light",Aria
 $standard-text-big : normal normal 300 16px/normal "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif; ;
 
 $fx-text-h1: normal normal 300 18px/normal "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif; ;
-$fx-text-h2: normal normal 300 14px/normal "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif; ;
+$fx-text-h2: normal normal 300 16px/normal "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif; ;
 $fx-text-h3: normal normal 500 12px/normal "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif; ;
 $fx-text-h4: normal normal 300 11px/normal "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif; ;
 
@@ -26,7 +26,7 @@ $fx-text-smalltitle-bold: normal normal 700 10px/normal "FrutigerLTW02-45Light",
 
 // Fenix Colors
 $fenix-standard-blue: rgba(53, 166, 220, 1);
-$fx-cool-blue: #2395ab;
+$fx-cool-blue: #2686ba;
 
 
 $fx-secondary-color: desaturate( $fx-cool-blue, 50% );
@@ -37,7 +37,7 @@ $fx-main-color-darker: darken($fx-cool-blue, 20%); // Ideal for hovers
 
 
 
-$fenix-text: #666666;
+$fenix-text: #333333;
 $fenix-secondary-text: #999999;
 
 $fenix-light-gray: #dddddd;
