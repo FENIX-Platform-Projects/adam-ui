@@ -7,7 +7,8 @@ define({
     "reset_btn" : "Reset",
     "clear_all_btn" : "Clear All",
     "search_placeholder" : "Filter",
-    "sel_heading_country": "Select a country / region",
+
+    "sel_heading_country": "Country / Region",
     "sel_heading_donor": "Donor",
     "sel_heading_oda": "Official Development Assistance (ODA)",
     "sel_heading_year" :"Year",
@@ -22,10 +23,8 @@ define({
     "year_form" : "From",
     "year_to" : "To",
 
-    "compare_by_country" : "Country/Region",
-    "compare_by_delivery" : "Delivery",
-    "compare_by_partner" : "Resource Partner",
-    "compare_by_sector" : "Sector",
-    "compare_by_sub_sector" : "Sub-Sector"
+    "compare_as" : "Compare as",
+    "kind_chart" : "Chart",
+    "kind_table" : "Table"
 
 });
