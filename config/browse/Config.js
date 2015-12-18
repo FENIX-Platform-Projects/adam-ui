@@ -1027,8 +1027,10 @@ define(function () {
                                         text: ''
                                     },
                                     tooltip: {
-                                        valueSuffix: ' USD Mil'
-
+                                        formatter: function(){
+                                            return '<b>' +this.x + ': ' + '</b><br/>' +
+                                                Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
+                                        }
                                     }
 
                                 }
