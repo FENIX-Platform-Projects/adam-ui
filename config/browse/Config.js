@@ -293,9 +293,14 @@ define(function () {
                                             "rule": "SUM"
                                         },
                                         {
+                                            "columns": ["unitcode"],
+                                            "rule": "FIRST"
+                                        },
+                                        {
                                             "columns": ["unitname"],
                                             "rule": "FIRST"
                                         }
+
                                     ]
                                 }
                             },
@@ -389,9 +394,14 @@ define(function () {
                                             "rule": "SUM"
                                         },
                                         {
+                                            "columns": ["unitcode"],
+                                            "rule": "FIRST"
+                                        },
+                                        {
                                             "columns": ["unitname"],
                                             "rule": "FIRST"
                                         }
+
                                     ]
                                 }
                             },
@@ -443,7 +453,14 @@ define(function () {
                                         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
                                     },
                                     legend: {
-                                       labelFormatter: function(){return this.name.slice(0, 25)+ '...'}
+                                       labelFormatter: function(){
+                                        //  var words = this.name.split(/\s+/).slice(1,5);
+                                          // for
+
+
+                                           return this.name.slice(0, 25)+ '...'
+                                       }
+                                        //s.split(/\s+/).slice(1,3);
                                     },
                                     plotOptions: {
                                         pie: {
@@ -503,6 +520,10 @@ define(function () {
                                         {
                                             "columns": ["value"],
                                             "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "FIRST"
                                         },
                                         {
                                             "columns": ["unitname"],
@@ -842,6 +863,10 @@ define(function () {
                                             "rule": "SUM"
                                         },
                                         {
+                                            "columns": ["unitcode"],
+                                            "rule": "FIRST"
+                                        },
+                                        {
                                             "columns": ["unitname"],
                                             "rule": "FIRST"
                                         }
@@ -936,6 +961,10 @@ define(function () {
                                         {
                                             "columns": ["value"],
                                             "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "FIRST"
                                         },
                                         {
                                             "columns": ["unitname"],
@@ -1043,6 +1072,10 @@ define(function () {
                                         {
                                             "columns": ["value"],
                                             "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "FIRST"
                                         },
                                         {
                                             "columns": ["unitname"],
@@ -1170,6 +1203,10 @@ define(function () {
                                         {
                                             "columns": ["value"],
                                             "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "FIRST"
                                         },
                                         {
                                             "columns": ["unitname"],
