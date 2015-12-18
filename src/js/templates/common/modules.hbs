@@ -1,15 +1,12 @@
 <div class="row">
-    <div class="col-xs-12">
         <!-- Modules -->
         {{#grouped_each 2 modules}}
             {{#each this }}
-                <div class="col-xs-6">
+                <div class="col-sm-6">
                      <h2>{{i18n header}}</h2>
                      <p><a href={{isI18n link}}>{{i18n title}}</a></p>
                      <p class= 'text-justify'>{{{i18n body}}}</p>
                 </div>
             {{/each}}
         {{/grouped_each}}
-    </div>
 </div>
-
