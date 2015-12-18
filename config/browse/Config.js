@@ -247,7 +247,11 @@ define(function () {
                                         text: ''
                                     },
                                     tooltip: {
-                                        valueSuffix: ' USD Mil'
+                                        formatter: function(){
+                                            return '<b>' +this.x + ': ' +
+                                                this.series.name +  '</b><br/>' +
+                                                Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
+                                        }
                                     }
                                 }
                             }
@@ -346,8 +350,10 @@ define(function () {
                                         text: ''
                                     },
                                     tooltip: {
-                                        valueSuffix: ' USD Mil'
-
+                                        formatter: function(){
+                                            return '<b>' +this.x + ': ' + '</b><br/>' +
+                                                Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
+                                        }
                                     }
 
                                 }
@@ -450,7 +456,7 @@ define(function () {
                                     },
                                     tooltip: {
                                         style: {width: '200px', whiteSpace: 'normal'},
-                                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                                        pointFormat: '<b>{point.percentage:.2f}%</b>'
                                     },
                                     legend: {
                                        labelFormatter: function(){
@@ -806,7 +812,11 @@ define(function () {
                                         text: ''
                                     },
                                     tooltip: {
-                                        valueSuffix: ' USD Mil'
+                                        formatter: function(){
+                                            return '<b>' +this.x + ': ' +
+                                                this.series.name +  '</b><br/>' +
+                                                Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
+                                        }
                                     }
                                 }
                             }
@@ -915,8 +925,10 @@ define(function () {
                                         text: ''
                                     },
                                     tooltip: {
-                                        valueSuffix: ' USD Mil'
-
+                                        formatter: function(){
+                                            return '<b>' +this.x + ': ' + '</b><br/>' +
+                                                Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
+                                        }
                                     }
 
                                 }
@@ -1129,7 +1141,7 @@ define(function () {
                                     },
                                     tooltip: {
                                         style: {width: '200px', whiteSpace: 'normal'},
-                                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                                        pointFormat: '<b>{point.percentage:.2f}%</b>'
                                     },
                                     legend: {
                                         labelFormatter: function(){return this.name.slice(0, 25)+ '...'}
@@ -1589,7 +1601,7 @@ define(function () {
                                         //text: 'Browser market shares January, 2015 to May, 2015'
                                     },
                                     tooltip: {
-                                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                                        pointFormat: '{series.name}: <b>{point.percentage:.2f}%</b>'
                                     },
                                     plotOptions: {
                                         pie: {
@@ -1930,7 +1942,7 @@ define(function () {
                                         //text: 'Browser market shares January, 2015 to May, 2015'
                                     },
                                     tooltip: {
-                                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                                        pointFormat: '{series.name}: <b>{point.percentage:.2f}%</b>'
                                     },
                                     plotOptions: {
                                         pie: {
