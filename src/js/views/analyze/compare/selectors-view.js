@@ -65,7 +65,9 @@ define([
 
         _initVariables: function () {
 
-            this.selectors = Object.keys(AC);
+            this.selectors = AC;
+
+            this.selectorsId = Object.keys(this.selectors);
 
             this.trees = [];
             this.dropdown = [];
@@ -76,11 +78,11 @@ define([
             this.treeContainers = {};
             this.dropdownContainers = {};
 
-            _.each(this.selectors, _.bind(function (k){
+            _.each(this.selectorsId, _.bind(function (k){
 
-                if (AC.hasOwnProperty(k)) {
+                if ( this.selectors.hasOwnProperty(k)) {
 
-                    var s = AC[k];
+                    var s = this.selectors[k];
 
                     if (!s.hasOwnProperty('selector')) {
                         alert(k + "does not have a valid configuration");
@@ -155,7 +157,7 @@ define([
         _createPromise: function (cl) {
 
             var self = this,
-                body = AC[cl].cl;
+                body = this.selectors[cl].cl;
 
             return Q($.ajax({
                 url: GC.SERVER + GC.CODES_POSTFIX,
@@ -199,7 +201,7 @@ define([
 
                 var rawCl = amplify.store.sessionStorage(cl),
                     data = this._buildTreeModel(rawCl),
-                    conf = AC[cl];
+                    conf = this.selectors[cl];
 
                 this._renderTree({id: cl, data: data, conf: conf});
 
@@ -209,7 +211,7 @@ define([
             _.each(this.dropdown, _.bind(function (cl) {
 
                 var rawCl = amplify.store.sessionStorage(cl),
-                    conf = AC[cl];
+                    conf = this.selectors[cl];
 
                 this._renderDropdown({
                     id: cl,
@@ -228,6 +230,7 @@ define([
             _.each(fxResource, function (item) {
                 data.push({
                     id: item.code,
+                    //TODO no multi language
                     text: item.title.EN
                 });
             });

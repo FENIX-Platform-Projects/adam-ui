@@ -185,8 +185,9 @@ define([
 
         _query: function (body) {
 
+            //TODO no multi language
             return Q($.ajax({
-                url: GC.SERVER + GC.D3P_POSTFIX,
+                url: GC.SERVER + GC.D3P_POSTFIX + this.currentRequest.selection.oda + "/language=EN",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify(body),
