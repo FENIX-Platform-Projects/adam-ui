@@ -84,9 +84,10 @@ define([
 
             this._initComponents();
 
+            this._bindEventListeners();
+
             this.browse_type ? this._showBrowseTopic(this.browse_type) :  this._displayBrowseOptions() ;
 
-            this._bindEventListeners();
         },
 
         _initMenuBreadcrumbItem: function() {
@@ -134,11 +135,49 @@ define([
                 var values = self.filterBrowse.getValues();
                 console.log(values);
 
+
                 // Update Dashboard Config and Rebuild if uid changed
-                if(self.datasetChanged){
-                   self.dashboardConfig.uid =  self.datasetType.uid;
-                   self._rebuildBrowseDashboard(self.dashboardConfig, [values]);
-                } else {
+                if(self.datasetChanged) {
+                    self.dashboardConfig.uid = self.datasetType.uid;
+                    self._rebuildBrowseDashboard(self.dashboardConfig, [values]);
+                    //} else if(self.filterBrowse.){  // IF FAO-Related Sectors
+                    //self.browseDashboard.filter([values]);
+                    //}
+                }
+                else {
+                    var ob = self._getObjectByValue('9999',values);
+
+                    if(ob){
+                      // Update values setting sector to null
+
+                      if(self._hasNoSelections('purposecode', values)){
+                          // Add array of purpose codes to values
+                          // get all codes in purposecode select box
+                          var comp = self.filterBrowse.getDomain("purposecode");
+
+                          if(comp){
+
+                             var codes = [];
+                             values['purposecode'] = {};
+                             values['purposecode'].codes = [];
+                             values['purposecode'].codes[0] = $.extend(true, {}, ob);
+
+                              $.each(comp.options.source, function( index, value ) {
+                                  codes.push(value.id);
+                              });
+
+                              values['purposecode'].codes[0].codes = codes;
+                              values['purposecode'].codes[0].uid = 'crs_purposes';
+                          }
+
+                          console.log("FAO selected but no purpose codes");
+                      }
+                        console.log("FAO selected AT least 1 purpose code");
+
+                        values['sectorcode'] = {};
+                        values['sectorcode'].removeFilter = true;
+                    }
+
                     self.browseDashboard.filter([values]);
                 }
 
@@ -148,6 +187,7 @@ define([
 
         _onSectorChange: function (s) {
             var self = this;
+            console.log("================== _onSectorChange");
 
             if(s.value){
                var pcfilter= _.find(this.filterConfig, function(obj){
@@ -199,6 +239,26 @@ define([
                     else
                         this.datasetChanged = false;
                 }
+            }
+        },
+
+        _getObjectByValue: function (id, data){
+                var allChildren = _.flatten(_.pluck(data,'codes'));
+
+                var childHasValue = _.find(allChildren,function(child){
+                    if(child)   {
+                        if (child.codes[0] == id){
+                            return child;
+                        }
+                    }
+                });
+
+                return childHasValue;
+        },
+
+        _hasNoSelections: function (id, data){
+            if( _.has(data, id)){
+                return _.has(data[id], 'removeFilter');
             }
         },
 
