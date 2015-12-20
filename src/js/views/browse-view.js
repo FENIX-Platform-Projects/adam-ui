@@ -13,6 +13,7 @@ define([
     'config/Config',
     'text!config/browse/flude-topics.json',
     'config/browse/Config',
+    'config/browse/Config-fao-sectors',
     'fx-filter/Fx-filter-configuration-creator',
     'handlebars',
     'lib/utils',
@@ -22,7 +23,7 @@ define([
     'jstree',
     'highcharts-export'
 
-], function (View, Dashboard, Filter, template, browseByDashboardTemplate, modulesTemplate, i18nLabels, topicFludeLabels, moduleLabels, E, C, FludeTopics, BrowseConfig, FilterConfCreator, Handlebars, Utils, Q) {
+], function (View, Dashboard, Filter, template, browseByDashboardTemplate, modulesTemplate, i18nLabels, topicFludeLabels, moduleLabels, E, C, FludeTopics, BrowseConfig, BrowseFaoSectorsConfig, FilterConfCreator, Handlebars, Utils, Q) {
 
     'use strict';
 
@@ -133,54 +134,150 @@ define([
 
                 var filter = {};
                 var values = self.filterBrowse.getValues();
+                var sectorcodeObj = self._getObjectByValue('9999',values);
                 console.log(values);
-
 
                 // Update Dashboard Config and Rebuild if uid changed
                 if(self.datasetChanged) {
                     self.dashboardConfig.uid = self.datasetType.uid;
-                    self._rebuildBrowseDashboard(self.dashboardConfig, [values]);
-                    //} else if(self.filterBrowse.){  // IF FAO-Related Sectors
-                    //self.browseDashboard.filter([values]);
-                    //}
+                    self.dashboardFAOConfig.uid = self.datasetType.uid;
+
+                    if(sectorcodeObj)   {
+                        self._updateConfigurationsWithFaoRelatedSectors2(values, sectorcodeObj);
+                        self._rebuildBrowseDashboard(self.dashboardFAOConfig, [values]);
+                    }
+                    else
+                      self._rebuildBrowseDashboard(self.dashboardConfig, [values]);
+
                 }
                 else {
-                    var ob = self._getObjectByValue('9999',values);
-
-                    if(ob){
-                      // Update values setting sector to null
-
-                      if(self._hasNoSelections('purposecode', values)){
-                          // Add array of purpose codes to values
-                          // get all codes in purposecode select box
-                          var comp = self.filterBrowse.getDomain("purposecode");
-
-                          if(comp){
-
-                             var codes = [];
-                             values['purposecode'] = {};
-                             values['purposecode'].codes = [];
-                             values['purposecode'].codes[0] = $.extend(true, {}, ob);
-
-                              $.each(comp.options.source, function( index, value ) {
-                                  codes.push(value.id);
-                              });
-
-                              values['purposecode'].codes[0].codes = codes;
-                              values['purposecode'].codes[0].uid = 'crs_purposes';
-                          }
-
-                          console.log("FAO selected but no purpose codes");
-                      }
-                        console.log("FAO selected AT least 1 purpose code");
-
-                        values['sectorcode'] = {};
-                        values['sectorcode'].removeFilter = true;
+                    // Update Dashboard Config and values if FAO Related Sectors selected
+                    if(sectorcodeObj) {
+                        self._updateConfigurationsWithFaoRelatedSectors2(values, sectorcodeObj);
+                        self._rebuildBrowseDashboard(self.dashboardFAOConfig, [values]);
+                    } else {
+                        self.browseDashboard.filter([values]);
                     }
-
-                    self.browseDashboard.filter([values]);
                 }
 
+            });
+
+        },
+
+        _updateConfigurationsWithFaoRelatedSectors2: function (values, sectorvaluesobj) {
+            // If no purposecodes have been selected
+            if(this._hasNoSelections('purposecode', values)){
+                // Get the purposecode filter component, which will contain all
+                // the purposecodes (sub-sectors) associated with the selected 'FAO-related Sectors'
+                var purposeCodeComponent = this.filterBrowse.getDomain("purposecode");
+
+                if(purposeCodeComponent){
+                    var codes = [];
+
+                    //======= UPDATE VALUES CONFIG
+                    // Add purposecode to values
+                    values['purposecode'] = {};
+                    values['purposecode'].codes = [];
+                    values['purposecode'].codes[0] = $.extend(true, {}, sectorvaluesobj); // clone the codes configuration of sectorvaluesobj
+
+                    // Get the source of the purposecode component
+                    // and populate the codes array with the IDs of the source items
+                    $.each(purposeCodeComponent.options.source, function( index, sourceItem ) {
+                        codes.push(sourceItem.id);
+                    });
+
+                    values['purposecode'].codes[0].codes = codes;
+                    values['purposecode'].codes[0].uid = 'crs_purposes';
+
+                }
+            }
+
+            // Set Values sectorcode to be removed
+            values['sectorcode'] = {};
+            values['sectorcode'].removeFilter = true;
+
+        },
+
+        _updateConfigurationsWithFaoRelatedSectors: function (values, sectorvaluesobj) {
+            // If no purposecodes have been selected
+            if(this._hasNoSelections('purposecode', values)){
+               // Get the purposecode filter component, which will contain all
+               // the purposecodes (sub-sectors) associated with the selected 'FAO-related Sectors'
+                var purposeCodeComponent = this.filterBrowse.getDomain("purposecode");
+
+                if(purposeCodeComponent){
+                    var codes = [];
+
+                    //======= UPDATE VALUES CONFIG
+                    // Add purposecode to values
+                    values['purposecode'] = {};
+                    values['purposecode'].codes = [];
+                    values['purposecode'].codes[0] = $.extend(true, {}, sectorvaluesobj); // clone the codes configuration of sectorvaluesobj
+
+                    // Get the source of the purposecode component
+                    // and populate the codes array with the IDs of the source items
+                    $.each(purposeCodeComponent.options.source, function( index, sourceItem ) {
+                        codes.push(sourceItem.id);
+                    });
+
+                    values['purposecode'].codes[0].codes = codes;
+                    values['purposecode'].codes[0].uid = 'crs_purposes';
+
+                }
+            }
+
+            //======= UPDATE DASHBOARD CONFIG
+            // Get the dashboard items which have a group filter
+            // Then either remove sectorcode from the associated 'by' array (i.e. array size > 1)
+            // Or remove the group filter entirely if the 'by' array only contains sectorcode (i.e. array size = 1)
+            $.each(this.dashboardConfig.items, function(index, dbItem) {
+                var grpFilter = _.filter(dbItem.filter, {name:'group'})[0];
+
+                if (grpFilter) {
+                    if (_.intersection(['sectorcode'], grpFilter.parameters.by).length > 0) {  // Check if sectorcode is present in the 'by' array
+
+                        if (grpFilter.parameters.by.length > 1) {
+                            var arr = grpFilter.parameters.by;
+                            var result = _.without(arr, 'sectorcode'); // Remove sectorcode from Group by array
+                            grpFilter.parameters.by = result;
+                        } else {
+                            // Remove group by filter if sectorcode was the only Group by array item
+                            var filterIdx = this.dashboardConfig.items[index].filter.indexOf(grpFilter);
+                            this.dashboardConfig.items[index].filter.splice(filterIdx, 1);
+                        }
+                    }
+                }
+            });
+
+            // Set Values sectorcode to be removed
+            values['sectorcode'] = {};
+            values['sectorcode'].removeFilter = true;
+
+        },
+
+        _resetDashboardConfiguration: function (values, sectorvaluesobj) {
+
+            //======= UPDATE DASHBOARD CONFIG
+            // Get the dashboard items which have a group filter
+            // Then either remove sectorcode from the associated 'by' array (i.e. array size > 1)
+            // Or remove the group filter entirely if the 'by' array only contains sectorcode (i.e. array size = 1)
+            $.each(this.dashboardConfig.items, function(index, dbItem) {
+                var grpFilter = _.filter(dbItem.filter, {name:'group'})[0];
+
+                if (grpFilter) {
+                    if (_.intersection(['sectorcode'], grpFilter.parameters.by).length > 0) {  // Check if sectorcode is present in the 'by' array
+
+                        if (grpFilter.parameters.by.length > 1) {
+                            var arr = grpFilter.parameters.by;
+                            var result = _.without(arr, 'sectorcode'); // Remove sectorcode from Group by array
+                            grpFilter.parameters.by = result;
+                        } else {
+                            // Remove group by filter if sectorcode was the only Group by array item
+                            var filterIdx = this.dashboardConfig.items[index].filter.indexOf(grpFilter);
+                            this.dashboardConfig.items[index].filter.splice(filterIdx, 1);
+                        }
+                    }
+                }
             });
 
         },
@@ -301,6 +398,8 @@ define([
 
         _renderBrowseComponents: function (topic) {
             var config = BrowseConfig[topic];
+            var configFao = BrowseFaoSectorsConfig[topic];
+
 
             if (!config || !config.dashboard || !config.filter) {
                 alert(" HERE Impossible to find configuration for topic: " + topic);
@@ -309,6 +408,7 @@ define([
 
            this.filterConfig = config.filter;
            this.dashboardConfig = config.dashboard;
+           this.dashboardFAOConfig = configFao.dashboard;
 
             this._renderBrowseFilter(this.filterConfig);
 
