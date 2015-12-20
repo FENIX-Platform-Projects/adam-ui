@@ -795,7 +795,7 @@ define(function () {
                                 xDimensions: 'year',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: [],
+                                seriesDimensions: ['sectorname'],
                                 seriesNames: ['FAO Related Sectors']
                             },
                             template: {
