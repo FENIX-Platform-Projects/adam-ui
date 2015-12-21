@@ -63,6 +63,7 @@ define([
         initialize: function (params) {
             this.browse_type = params.filter;
             this.page = params.page;
+           // this.recipientcode =  params.recipientcode;
             this.datasetChanged = s.datasetChanged;
             this.datasetType = s.datasetType;
 
@@ -135,7 +136,15 @@ define([
                 var filter = {};
                 var values = self.filterBrowse.getValues();
                 var sectorcodeObj = self._getObjectByValue('9999',values);
-                console.log(values);
+
+                // Set Sectors to crs_sectors
+                if(!this._hasNoSelections('sectorcode', values)){
+                    values['sectorcode'].codes[0].uid = 'crs_sectors';
+                }
+                // Set Subsectors to crs_purposes
+                if(!this._hasNoSelections('purposecode', values)){
+                    values['purposecode'].codes[0].uid = 'crs_purposes';
+                }
 
                 // Update Dashboard Config and Rebuild if uid changed
                 if(self.datasetChanged) {
@@ -368,6 +377,10 @@ define([
         _showBrowseTopic: function (topic) {
             var self = this;
 
+            //update State
+           // amplify.publish(E.STATE_CHANGE, {menu: 'browse', breadcrumb: this._initMenuBreadcrumbItem()});
+
+
             //Inject HTML
            var source = $(browseByDashboardTemplate).find("[data-topic='" + topic + "']"),
                template = Handlebars.compile(source.prop('outerHTML')),
@@ -407,8 +420,23 @@ define([
             }
 
            this.filterConfig = config.filter;
-           this.dashboardConfig = config.dashboard;
-           this.dashboardFAOConfig = configFao.dashboard;
+
+          /** var recipientfilter= _.find(this.filterConfig, function(obj){
+                return obj.components[0].name === 'recipientcode';
+           });
+
+
+           if(recipientfilter && this.recipientcode){
+               var codes = [];
+               codes.push(this.recipientcode);
+
+               console.log(codes);
+               recipientfilter.components[0].config.defaultcodes = codes;
+               this.dashboardConfig.filter[0].parameters.rows.recipientcode.codes[0].codes = codes
+           }**/
+
+            this.dashboardConfig = config.dashboard;
+            this.dashboardFAOConfig = configFao.dashboard;
 
             this._renderBrowseFilter(this.filterConfig);
 
@@ -487,6 +515,10 @@ define([
         },
 
         _displayBrowseOptions: function () {
+
+            //remove Breadcrumbs
+            //amplify.publish(E.MENU_RESET_BREADCRUMB);
+
             var template = Handlebars.compile(modulesTemplate),
                 html = template({modules: moduleLabels["modules"]});
 
