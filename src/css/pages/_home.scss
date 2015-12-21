@@ -1,5 +1,11 @@
 /* Home */
 
+[data-page="home"]{
+  .breadcrumb{
+    opacity: 0;
+  }
+}
+
 
 .welcome-container{
   position: relative;
@@ -67,11 +73,12 @@
 
   }
 
-  select{
+  .ad-home-select{
     width: 100%;
   }
 
 }
+
 
 .home-topic-container{
   text-align: center;
