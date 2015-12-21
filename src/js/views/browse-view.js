@@ -293,7 +293,6 @@ define([
 
         _onSectorChange: function (s) {
             var self = this;
-            console.log("================== _onSectorChange");
 
             if(s.value){
                var pcfilter= _.find(this.filterConfig, function(obj){
