@@ -26,7 +26,8 @@ define(function () {
                 "selector": {
                     "type": "tree", //tree | list
                     //"source" : "codelist | static" // if type:list
-                    "default": [130] //selected codes by default
+                    "default": [130], //selected codes by default,
+                    "max" : 2 //max number of selectable item
                 },
 
                 "filter": {
@@ -122,7 +123,8 @@ define(function () {
                 },
                 "filter": {
                     "type": "dynamic",
-                    "process": '{"sectorcode": { "codes":[{"uid": "{{uid}}", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
+                    //TODO change to template uid and version as in 'country-country'
+                    "process": '{"sectorcode": { "codes":[{"uid": "crs_sectors", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
                 }
             },
 
@@ -139,7 +141,8 @@ define(function () {
                 },
                 "filter": {
                     "type": "dynamic",
-                    "process": '{"purposecode": { "codes":[{"uid": "{{uid}}", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
+                    //TODO change to template uid and version as in 'country-country'
+                    "process": '{"purposecode": { "codes":[{"uid": "crs_purposes", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
                 }
             },
 
@@ -150,7 +153,8 @@ define(function () {
                 },
                 "selector": {
                     "type": "dropdown",
-                    "source": "codelist"
+                    "source": "codelist",
+                    "default": ["adam_usd_commitment"]
                 },
                 "filter": {
                     "type": "static"
@@ -206,7 +210,9 @@ define(function () {
             }
         },
 
-        "processesOrder" : ['flowcode', 'sectorcode', 'recipientcode', 'donorcode',  'year', 'purposecode' ]
+        "processesOrder" : ['flowcode', 'sectorcode', 'recipientcode', 'donorcode',  'year', 'purposecode' ],
+
+        "maxCombinations" : 20 //Max number of requests to d3p
     }
 
 });

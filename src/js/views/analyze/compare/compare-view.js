@@ -147,6 +147,35 @@ define([
             //Reset page
             this.$resetBtn.on('click', _.bind(this._onResetClick, this));
 
+            amplify.subscribe(E.SELECTORS_READY, this, function () {
+
+                this._unlockForm();
+
+                //amplify.subscribe(E.SELECTORS_ITEM_SELECT, this, this._onSelectorSelect)
+
+            });
+
+        },
+
+        _onSelectorSelect : function () {
+            log.info("Listening to 'Item selected' event");
+
+            var valid;
+
+            this.currentRequest.selection = this.subview('selectors').getSelection();
+
+            valid = this._validateSelection();
+
+            this.currentRequest.valid = typeof valid === 'boolean' ? valid : false;
+
+            if (valid === true) {
+
+                this._createRequests();
+
+                if (Array.isArray(this.currentRequest.combinations) && !isNaN(AC.maxCombinations) && this.currentRequest.combinations.length > AC.maxCombinations ) {
+                    this._printErrors('too_many_combinations');
+                }
+            }
         },
 
         _onCompareClick: function () {
@@ -195,42 +224,86 @@ define([
 
         _compare: function () {
 
-            //this._lockForm();
+            var r = [];
+
+            this._lockForm();
 
             this._createRequests();
 
             _.each(this.currentRequest.requests, _.bind(function (b) {
 
-                return;
+                this.currentRequest.body = [b];
 
-                this._query(b).then(
-                    _.bind(this._onQuerySuccess, this),
-                    _.bind(this._onQueryError, this)
-                );
+                r.push(this._createPromise($.extend(true, {}, this.currentRequest)));
 
             }, this));
 
+            Q.all(r).then(
+                _.bind(this._onAllSuccess, this),
+                _.bind(this._onAllError, this)
+            );
+
         },
 
-        _query: function (body) {
+        _createPromise: function (r) {
+
+            r.$el = this.subview('results').add(r);
 
             //TODO no multi language
             return Q($.ajax({
-                url: GC.SERVER + GC.D3P_POSTFIX + this.currentRequest.selection.oda + "/language=EN",
+                url: GC.SERVER + GC.D3P_POSTFIX + this.currentRequest.selection.oda + "?language=EN",
                 type: "POST",
                 contentType: "application/json",
-                data: JSON.stringify(body),
+                data: JSON.stringify(r.body),
                 dataType: 'json'
-            }));
+            })).then(
+                _.bind(this._onPromiseSuccess, this, r),
+                _.bind(this._onPromiseError, this, r)
+            );
 
         },
 
-        _onQuerySuccess: function (result) {
-            log.info("query success")
+        _onAllSuccess: function () {
+
+            log.info("All requests success");
+
+            this._unlockForm();
         },
 
-        _onQueryError: function () {
-            this._printErrors('request_error')
+        _onAllError: function (request, error) {
+
+            log.error("Requests error");
+            log.error(request);
+            log.error(error);
+
+            this._printErrors('request_error');
+
+            this._unlockForm();
+
+        },
+
+        _onPromiseSuccess: function (request, result) {
+
+            log.info("Request success: [request/result]");
+            log.info(request);
+            log.info(result);
+
+            this.subview('results').renderObj({
+                model : result,
+                request : request
+            });
+
+        },
+
+        _onPromiseError: function (request, error) {
+
+            log.error(error);
+            log.error(request);
+
+            this._printErrors('request_error');
+
+            this.subview('results').errorObj(request);
+
         },
 
         _createRequests: function () {
@@ -327,10 +400,9 @@ define([
                 log.error("Impossible to find '" + s + "' process template. Check your '" + s + "'.filter.process configuration.")
             }
 
-            var template = Handlebars.compile(process),
-                filter = template(values);
+            var template = Handlebars.compile(process);
 
-            return filter;
+            return template(values);
 
         },
 
@@ -357,10 +429,12 @@ define([
 
             this.subview('selectors').reset();
 
-            //this.subview('results').reset();
+            this.subview('results').reset();
         },
 
         _initComponents: function () {
+
+            this._lockForm();
 
         },
 
@@ -465,6 +539,30 @@ define([
             helper([], 0);
 
             return r;
+        },
+
+        _unbindEventListeners: function () {
+
+            //Toggle the selectors panel
+            this.$collapseBtn.off();
+
+            //Search and compare data
+            this.$compareBtn.off();
+
+            //Reset page
+            this.$resetBtn.off();
+
+            amplify.unsubscribe(E.SELECTORS_READY, this._unlockForm);
+
+            amplify.unsubscribe(E.SELECTORS_ITEM_SELECT, this._onSelectorSelect)
+
+        },
+
+        dispose: function () {
+
+            this._unbindEventListeners();
+
+            View.prototype.dispose.call(this, arguments);
         }
 
     });

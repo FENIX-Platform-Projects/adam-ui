@@ -10,5 +10,6 @@ define({
     "country_empty" : "Country can not be empty.",
     "indicator_empty" : "Indicator can not be empty.",
     "qualifier_empty" : "Qualifier can not be empty.",
-    "year_empty" : "Year can not be empty."
+    "year_empty" : "Year can not be empty.",
+    "too_many_combinations" : "Too many combinations"
 });

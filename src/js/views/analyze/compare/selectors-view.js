@@ -192,6 +192,10 @@ define([
             log.info("Resources loaded");
 
             this._renderSelectors();
+
+            this.ready = true;
+
+            amplify.publish(E.SELECTORS_READY)
         },
 
         _renderSelectors: function () {
@@ -285,10 +289,19 @@ define([
                 //Limit selection e select only leafs for indicators
                 .on("select_node.jstree", _.bind(function (e, data) {
 
+                   if (!isNaN(this.selectors[o.id].selector.max) && data.selected.length > this.selectors[o.id].selector.max) {
+                       data.instance.deselect_node(data.node);
+                       log.warn("Max number of selectable item reached. Change 'selector.selector.max' config.");
+                       return;
+                    }
+
                     if (!data.instance.is_leaf(data.node)) {
                         data.instance.deselect_node(data.node, true);
                         data.instance.toggle_node(data.node);
+                        return;
                     }
+
+                    amplify.publish(E.SELECTORS_ITEM_SELECT)
 
                 }, this));
 
@@ -376,6 +389,10 @@ define([
         },
 
         getSelection: function () {
+
+            if (this.ready !== true) {
+                return {};
+            }
 
             var result = {
                 labels: {}
