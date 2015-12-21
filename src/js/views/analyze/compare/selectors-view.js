@@ -22,8 +22,8 @@ define([
         TREE_CONTAINER: "[data-role='tree']",
         FILTER_CONTAINER: "[data-role='filter']",
         CLEAR_ALL_CONTAINER: "[data-role='clear']",
-        COMPARE_RADIO_BTNS : "input:radio[name='compare']",
-        ACTIVE_TAB : "ul#country-ul li.active"
+        COMPARE_RADIO_BTNS: "input:radio[name='compare']:checked",
+        ACTIVE_TAB: "ul#country-ul li.active"
     };
 
     var SelectorView = View.extend({
@@ -65,7 +65,7 @@ define([
 
         _initVariables: function () {
 
-            this.selectors = AC;
+            this.selectors = AC.selectors;
 
             this.selectorsId = Object.keys(this.selectors);
 
@@ -78,9 +78,9 @@ define([
             this.treeContainers = {};
             this.dropdownContainers = {};
 
-            _.each(this.selectorsId, _.bind(function (k){
+            _.each(this.selectorsId, _.bind(function (k) {
 
-                if ( this.selectors.hasOwnProperty(k)) {
+                if (this.selectors.hasOwnProperty(k)) {
 
                     var s = this.selectors[k];
 
@@ -216,24 +216,31 @@ define([
                 this._renderDropdown({
                     id: cl,
                     data: rawCl ? this._buildDropdownModel(rawCl) : null,
-                    conf : conf
+                    conf: conf
                 });
 
             }, this));
 
         },
 
-        _buildTreeModel: function (fxResource) {
+        _buildTreeModel: function (fxResource, parent) {
 
             var data = [];
 
-            _.each(fxResource, function (item) {
+            _.each(fxResource, _.bind(function (item) {
+
                 data.push({
                     id: item.code,
                     //TODO no multi language
-                    text: item.title.EN
+                    text: item.title.EN,
+                    parent: parent || '#'
                 });
-            });
+
+                if (Array.isArray(item.children) && item.children.length > 0) {
+                    data = _.union(data, this._buildTreeModel(item.children, item.code));
+                }
+
+            }, this));
 
             //order alphabetically
             data = data.sort(function (a, b) {
@@ -252,27 +259,38 @@ define([
                 tree;
 
             tree = $container.find(s.TREE_CONTAINER).jstree({
-                core: {
-                    multiple: true,
-                    data: o.data,
-                    themes: {
-                        icons: false,
-                        stripes: true
+                    core: {
+                        multiple: true,
+                        data: o.data,
+                        themes: {
+                            icons: false,
+                            stripes: true
+                        }
+                    },
+                    plugins: ['search', 'wholerow', 'checkbox'],
+                    search: {
+                        show_only_matches: true
                     }
-                },
-                plugins: ['search', 'wholerow', 'checkbox'],
-                search: {
-                    show_only_matches: true
-                }
-            }).on('ready.jstree', function (e, data) {
+                })
+                //Default selection
+                .on('ready.jstree', function (e, data) {
 
-                if (o.conf.selector.default && Array.isArray(o.conf.selector.default)) {
-                    _.each(o.conf.selector.default , function (k) {
-                        data.instance.select_node(k)
-                    });
+                    if (o.conf.selector.default && Array.isArray(o.conf.selector.default)) {
+                        _.each(o.conf.selector.default, function (k) {
+                            data.instance.select_node(k)
+                        });
 
-                }
-            });
+                    }
+                })
+                //Limit selection e select only leafs for indicators
+                .on("select_node.jstree", _.bind(function (e, data) {
+
+                    if (!data.instance.is_leaf(data.node)) {
+                        data.instance.deselect_node(data.node, true);
+                        data.instance.toggle_node(data.node);
+                    }
+
+                }, this));
 
             this.treeInstances[o.id] = tree;
 
@@ -282,7 +300,7 @@ define([
 
             //check for dependencies
             if (o.conf.dependencies) {
-                  //TODO
+                //TODO
             }
 
             function initFilter($container) {
@@ -357,10 +375,10 @@ define([
             this.dropdownInstances[o.id] = dropdown;
         },
 
-        getSelection : function () {
+        getSelection: function () {
 
             var result = {
-                labels : {}
+                labels: {}
             };
 
             //get trees selectors
@@ -401,7 +419,7 @@ define([
                 sels = ['country-country', 'country-region', 'regional-aggregation'],
                 final = _.without(sels, activeTab);
 
-            _.each(final, function( f ){
+            _.each(final, function (f) {
                 delete result[f];
                 delete result.labels[f];
             });
@@ -410,7 +428,7 @@ define([
 
         },
 
-        reset : function () {
+        reset: function () {
 
             log.info("Selector View reset");
         }

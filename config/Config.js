@@ -9,7 +9,7 @@ define(function () {
 
         SERVER: "http://fenix.fao.org/",
         CODES_POSTFIX : "d3s_dev/msd/codes/filter/",
-        D3P_POSTFIX : "d3s_dev/process",
+        D3P_POSTFIX : "d3s_dev/processes",
 
         //Chaplin JS configuration
         CHAPLINJS_CONTROLLER_SUFFIX: '-controller',

@@ -10,13 +10,13 @@ define([
     'i18n!nls/errors',
     'config/Events',
     'config/Config',
-    'config/browse/Config',
+    'config/analyze/compare/Config',
     'views/analyze/compare/selectors-view',
     'views/analyze/compare/results-view',
     'handlebars',
     'q',
     'amplify'
-], function ($, _, log, View, template, errorTemplate, i18nLabels, i18nErrors, E, GC, BC, Selectors, Results, Handlebars, Q) {
+], function ($, _, log, View, template, errorTemplate, i18nLabels, i18nErrors, E, GC, AC, Selectors, Results, Handlebars, Q) {
 
     'use strict';
 
@@ -31,7 +31,7 @@ define([
 
     };
 
-    var BrowseView = View.extend({
+    var CompareView = View.extend({
 
         // Automatically render after initialize
         autoRender: true,
@@ -87,6 +87,35 @@ define([
         },
 
         _initVariables: function () {
+
+            this.selectors = AC.selectors;
+
+            this.selectorsId = Object.keys(this.selectors);
+
+            this.dynamicSelectors = {};
+
+            this.recipientSelectors = {};
+
+            _.each(this.selectorsId, _.bind(function (id) {
+
+                var s = this.selectors[id] || {},
+                    f = s.filter || {};
+
+                if (f.type === 'dynamic') {
+                    this.dynamicSelectors[id] = s;
+                }
+
+                //for recipient selectors
+                if (s.subject === 'recipient') {
+                    this.recipientSelectors[id] = s;
+                }
+
+
+            }, this));
+
+            this.dynamicSelectorsId = Object.keys(this.dynamicSelectors);
+
+            this.recipientSelectorsId = Object.keys(this.recipientSelectors);
 
             this.$compareBtn = this.$el.find(s.COMPARE_BTN);
 
@@ -166,18 +195,18 @@ define([
 
         _compare: function () {
 
-            this._lockForm();
+            //this._lockForm();
 
-            this._createRequestBodies();
+            this._createRequests();
 
-            return;
+            _.each(this.currentRequest.requests, _.bind(function (b) {
 
-            _.each(this.currentRequest.bodies, _.bind(function (b) {
+                return;
 
                 this._query(b).then(
                     _.bind(this._onQuerySuccess, this),
                     _.bind(this._onQueryError, this)
-                ).always(this._unlockForm)
+                );
 
             }, this));
 
@@ -192,7 +221,7 @@ define([
                 contentType: "application/json",
                 data: JSON.stringify(body),
                 dataType: 'json'
-            }))
+            }));
 
         },
 
@@ -201,25 +230,116 @@ define([
         },
 
         _onQueryError: function () {
-             this._printErrors('request_error')
+            this._printErrors('request_error')
+        },
+
+        _createRequests: function () {
+
+            this.currentRequest.requests = [];
+
+            this.currentRequest.staticFilter = this._createStaticFilter();
+
+            log.info("Static filter: ");
+            log.info(this.currentRequest.staticFilter);
+
+            this.currentRequest.combinations = this._createCombinations();
+
+            log.info("Combination: [length=" + this.currentRequest.combinations.length + "]");
+            log.info(this.currentRequest.combinations);
+
+            this.currentRequest.requests = this._createRequestBodies() || [];
+
+            log.info("Requests: [length=" + this.currentRequest.requests.length + "]");
+            log.info(JSON.stringify(this.currentRequest.requests));
+
+        },
+
+        _createStaticFilter: function () {
+
+            return this._createFilterProcess('year-from', this.currentRequest.selection);
+
         },
 
         _createRequestBodies: function () {
 
-            this.currentRequest.bodies = [];
+            var bodies = [],
+                base = AC.filter;
 
-            var base = this._createBaseFilter();
+            _.each(this.currentRequest.combinations, _.bind(function (c) {
 
-            console.log( this.currentRequest)
+                var b = {},
+                    compare = this.currentRequest.compareField,
+                    compareValues = this.currentRequest.compareFilter;
+
+                //Static filter (parse string)
+                $.extend(true, b, JSON.parse(this.currentRequest.staticFilter));
+
+                //Compare filter
+                $.extend(true, b, this._compileFilter(compare, compareValues));
+
+                //Dynamic filter
+                _.each(Object.keys(c), _.bind(function (k) {
+
+                    $.extend(true, b, this._compileFilter(k, c[k]));
+
+                }, this));
+
+                //create body
+                var x = $.extend(true, {}, base);
+                x.parameters.rows = this._orderProcesses($.extend(true, x.parameters.rows, b));
+
+                bodies.push(x);
+
+            }, this));
+
+            return bodies;
+
         },
 
-        _createBaseFilter: function () {
+        _orderProcesses: function (obj) {
 
-            var s = this.currentRequest.selection,
-                b = {
-                    uid : s.oda
-                };
+            var ordered = {},
+                order = AC.processesOrder.slice(0); // clone array
 
+            if (!order) {
+                log.warn("Impossible to find the 'processesOrder' configuration. Filter not ordered.");
+                return obj;
+            }
+
+            _.each(order, function (o) {
+
+                if (obj.hasOwnProperty(o)) {
+                    ordered[o] = obj[o];
+                }
+
+            });
+
+            return ordered;
+
+        },
+
+        _createFilterProcess: function (s, values) {
+
+            var config = this.selectors[s].filter || {},
+                process = config.process || {};
+
+            if (!process) {
+                log.error("Impossible to find '" + s + "' process template. Check your '" + s + "'.filter.process configuration.")
+            }
+
+            var template = Handlebars.compile(process),
+                filter = template(values);
+
+            return filter;
+
+        },
+
+        _compileFilter: function (s, values) {
+
+            var m = $.extend(true, this.selectors[s].cl,
+                {codes: '"' + values.join('","') + '"'});
+
+            return JSON.parse(this._createFilterProcess(s, m));
         },
 
         _lockForm: function () {
@@ -241,6 +361,7 @@ define([
         },
 
         _initComponents: function () {
+
         },
 
         _printErrors: function (e) {
@@ -249,9 +370,104 @@ define([
                 html = template({text: i18nErrors[e]});
 
             this.$error.html(html)
+        },
+
+        _createCombinations: function () {
+
+            var selectionOrder = [],
+                selectionValues = [],
+                s = $.extend(true, {}, this.currentRequest.selection),
+                compare, compareSelection;
+
+            //remove the 'compare' field from selection
+            if (s.hasOwnProperty(s.compare)) {
+
+                compare = s.compare;
+                compareSelection = s[compare];
+
+            } else {
+
+                _.each(this.recipientSelectorsId, function (id) {
+
+                    if (s.hasOwnProperty(id)) {
+                        compare = id;
+                        compareSelection = s[id];
+                    }
+
+                });
+
+            }
+
+            this.currentRequest.compareField = compare;
+
+            this.currentRequest.compareFilter = compareSelection.slice(0); // clone array
+
+            delete s[compare];
+
+            //push only the selector that are 'dynamic'
+
+            _.each(Object.keys(s), _.bind(function (id) {
+
+                if (_.contains(this.dynamicSelectorsId, id)) {
+                    selectionValues.push(this.currentRequest.selection[id]);
+                    selectionOrder.push(id);
+                }
+
+            }, this));
+
+            this.currentRequest.selectionOrder = selectionOrder;
+
+            this.currentRequest.selectionValues = selectionValues;
+
+            //create combination of the dynamic values
+
+            //TODO check that selectionValues is Array of Array
+            this.currentRequest.valuesCombinations = this._cartesian(this.currentRequest.selectionValues);
+
+            this.dynamicFiltersModels = [];
+
+            _.each(this.currentRequest.valuesCombinations, _.bind(function (c) {
+
+                var m = {};
+
+                _.map(c, _.bind(function (value, index) {
+
+                        var key = this.currentRequest.selectionOrder[index];
+                        m[key] = [value];
+
+                    }, this)
+                );
+
+                this.dynamicFiltersModels.push(m);
+
+            }, this));
+
+            return this.dynamicFiltersModels;
+
+        },
+
+        _cartesian: function (arg) {
+
+            var r = [],
+                max = arg.length - 1;
+
+            function helper(arr, i) {
+                for (var j = 0, l = arg[i].length; j < l; j++) {
+                    var a = arr.slice(0); // clone arr
+                    a.push(arg[i][j]);
+                    if (i == max)
+                        r.push(a);
+                    else
+                        helper(a, i + 1);
+                }
+            }
+
+            helper([], 0);
+
+            return r;
         }
 
     });
 
-    return BrowseView;
+    return CompareView;
 });
