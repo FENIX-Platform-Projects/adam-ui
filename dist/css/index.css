@@ -13151,6 +13151,48 @@ h2 {
   margin-top: 0;
   position: relative; }
 
+.adam-entry-point {
+  position: relative; }
+  .adam-entry-point:nth-child(odd) .adam-entry-point-content:before {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0;
+    width: 80%;
+    left: 10%;
+    height: 1px;
+    background-color: #dfdfdf; }
+  .adam-entry-point:nth-child(odd) .adam-entry-point-content:after {
+    content: '';
+    display: block;
+    position: absolute;
+    right: 0;
+    width: 1px;
+    top: 10%;
+    height: 80%;
+    background-color: #dfdfdf; }
+  .adam-entry-point:nth-child(even) .adam-entry-point-content:before {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0;
+    width: 80%;
+    left: 10%;
+    height: 1px;
+    background-color: #dfdfdf; }
+  .adam-entry-point:last-child .adam-entry-point-content {
+    margin-bottom: 100px; }
+  .adam-entry-point .adam-entry-point-content {
+    padding: 35px; }
+  .adam-entry-point h2 {
+    font-size: 16px;
+    color: #333333; }
+  .adam-entry-point p.title {
+    color: #ec6e00;
+    font-size: 32px; }
+  .adam-entry-point p.text-justify {
+    color: #cccccc; }
+
 /* Components */
 /* BreadCrumbs */
 #breadcumb_container {
