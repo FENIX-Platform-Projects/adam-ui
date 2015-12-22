@@ -18,12 +18,14 @@ define([
     'use strict';
 
     var s = {
+        SELECTORS_CLASS: ".amis-selector",
         SELECTORS: "[data-selector]",
         TREE_CONTAINER: "[data-role='tree']",
         FILTER_CONTAINER: "[data-role='filter']",
         CLEAR_ALL_CONTAINER: "[data-role='clear']",
         COMPARE_RADIO_BTNS: "input:radio[name='compare']:checked",
-        ACTIVE_TAB: "ul#country-ul li.active"
+        ACTIVE_TAB: "ul#country-ul li.active",
+        SWITCH : "input[data-role='switch']"
     };
 
     var SelectorView = View.extend({
@@ -45,6 +47,36 @@ define([
         },
 
         _bindEventListeners: function () {
+
+            //TODO double event fired
+            this.$switches.on("click", _.bind(function (e) {
+
+                log.info("Switch clicked");
+
+                var $this = $(e.currentTarget),
+                    $selectors = $(e.currentTarget).closest(s.SELECTORS_CLASS).find(s.SELECTORS).andSelf();
+
+                _.each($selectors, _.bind(function (s) {
+
+                    var selector = $(s).data("selector");
+
+                    if (_.contains(this.selectorsId, selector)){
+
+                        // $this will contain a reference to the checkbox
+                        if ($this.is(':checked')) {
+
+                            // the checkbox was checked
+                            this._enableSelector(selector);
+
+                        } else {
+                            // the checkbox was unchecked
+                            this._disableSelector(selector);
+                        }
+                    }
+
+                }, this));
+
+            }, this));
 
         },
 
@@ -116,6 +148,8 @@ define([
             _.each(this.dropdown, _.bind(function (t) {
                 this.dropdownContainers[t] = this._getSelectorContainer(t);
             }, this));
+
+            this.$switches = this.$el.find(s.SWITCH);
 
         },
 
@@ -193,9 +227,11 @@ define([
 
             this._renderSelectors();
 
+            this._bindEventListeners();
+
             this.ready = true;
 
-            amplify.publish(E.SELECTORS_READY)
+            amplify.publish(E.SELECTORS_READY);
         },
 
         _renderSelectors: function () {
@@ -339,6 +375,48 @@ define([
             }
         },
 
+        _disableSelector: function (t) {
+
+            var nodes,
+                $container = this.treeContainers[t];
+
+            nodes = $container.find(s.TREE_CONTAINER).jstree(true).get_json(null, {flat: true});
+
+            _.each(nodes, function (n) {
+                $container.find(s.TREE_CONTAINER).jstree(true).disable_node(n);
+            });
+
+            //disable filter
+            $container.find(s.CLEAR_ALL_CONTAINER).attr("disabled", true);
+
+            //disable filter
+            $container.find(s.FILTER_CONTAINER).attr("disabled", true);
+
+            log.info("Selector disabled : " + t);
+
+        },
+
+        _enableSelector: function (t) {
+
+            var nodes,
+                $container = this.treeContainers[t];
+
+            nodes = $container.find(s.TREE_CONTAINER).jstree(true).get_json(null, {flat: true});
+
+            _.each(nodes, function (n) {
+                $container.find(s.TREE_CONTAINER).jstree(true).enable_node(n);
+            });
+
+            //enable filter
+            $container.find(s.CLEAR_ALL_CONTAINER).removeAttr("disabled");
+
+            //enable filter
+            $container.find(s.FILTER_CONTAINER).removeAttr("disabled");
+
+            log.info("Selector enabled : " + t);
+
+        },
+
         _refreshTree: function () {
             console.log("Refresh")
         },
@@ -393,6 +471,8 @@ define([
             if (this.ready !== true) {
                 return {};
             }
+
+            this._disableSelector("country-country")
 
             var result = {
                 labels: {}
