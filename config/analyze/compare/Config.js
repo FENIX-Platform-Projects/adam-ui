@@ -26,8 +26,8 @@ define(function () {
                 "selector": {
                     "type": "tree", //tree | list
                     //"source" : "codelist | static" // if type:list
-                    "default": [130], //selected codes by default,
-                    "max" : 2 //max number of selectable item
+                    "default": [130] //selected codes by default,
+                    //, "max" : 2 //max number of selectable item
                 },
 
                 "filter": {
@@ -112,7 +112,7 @@ define(function () {
                     "uid": "crs_dac",
                     "version": "2015",
                     "level": 1,
-                    "levels": 3
+                    "levels": 1
                 },
                 "selector": {
                     "type": "tree",
@@ -132,8 +132,8 @@ define(function () {
                 "cl": {
                     "uid": "crs_dac",
                     "version": "2015",
-                    "level": 3,
-                    "levels": 3
+                    "level": 2,
+                    "levels": 2
                 },
                 "selector": {
                     "type": "tree",

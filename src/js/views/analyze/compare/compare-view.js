@@ -270,11 +270,10 @@ define([
             this._unlockForm();
         },
 
-        _onAllError: function (request, error) {
+        _onAllError: function (request) {
 
             log.error("Requests error");
             log.error(request);
-            log.error(error);
 
             this._printErrors('request_error');
 
@@ -430,6 +429,8 @@ define([
             this.subview('selectors').reset();
 
             this.subview('results').reset();
+
+            this._resetErrors();
         },
 
         _initComponents: function () {
@@ -443,7 +444,12 @@ define([
             var template = Handlebars.compile(errorTemplate),
                 html = template({text: i18nErrors[e]});
 
-            this.$error.html(html)
+            this.$error.html(html);
+        },
+
+        _resetErrors: function () {
+
+            this.$error.empty();
         },
 
         _createCombinations: function () {
