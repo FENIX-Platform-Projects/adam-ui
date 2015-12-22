@@ -11,5 +11,10 @@ define({
     "indicator_empty" : "Indicator can not be empty.",
     "qualifier_empty" : "Qualifier can not be empty.",
     "year_empty" : "Year can not be empty.",
-    "too_many_combinations" : "Too many combinations"
+    "too_many_combinations" : "Too many combinations",
+    "oda_missing" : "Official Development Assistance (ODA) value is missing",
+    "year_missing" : "Year value is missing",
+    "compare_missing" : "Missing values for 'compare' dimension.",
+    "no_compare" : "Impossible to find the 'compare' dimension.",
+    "at_least_one_more_dimension" : "Please specify at lease two dimensions to compare"
 });

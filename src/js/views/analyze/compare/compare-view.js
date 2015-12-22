@@ -157,7 +157,7 @@ define([
 
         },
 
-        _onSelectorSelect : function () {
+        _onSelectorSelect: function () {
             log.info("Listening to 'Item selected' event");
 
             var valid;
@@ -172,7 +172,7 @@ define([
 
                 this._createRequests();
 
-                if (Array.isArray(this.currentRequest.combinations) && !isNaN(AC.maxCombinations) && this.currentRequest.combinations.length > AC.maxCombinations ) {
+                if (Array.isArray(this.currentRequest.combinations) && !isNaN(AC.maxCombinations) && this.currentRequest.combinations.length > AC.maxCombinations) {
                     this._printErrors('too_many_combinations');
                 }
             }
@@ -182,10 +182,13 @@ define([
 
             log.info("Compare click");
 
+            this._resetErrors();
+
             var selection = this.subview('selectors').getSelection(),
                 valid;
 
-            log.info("Selection: " + JSON.stringify(selection));
+            log.warn("Selection:");
+            log.warn(selection);
 
             this.currentRequest = {
                 selection: selection
@@ -212,10 +215,37 @@ define([
 
             var valid = true,
                 errors = [],
-                s = this.currentRequest.selection;
+                s = this.currentRequest.selection,
+                compare;
+
+            console.log(s)
 
             if (!s.hasOwnProperty('oda')) {
-                errors.push('fill_all_fields');
+                errors.push('oda_missing');
+                return errors;
+            }
+
+            if (!s.hasOwnProperty('year-from') || !s.hasOwnProperty('year-to')) {
+                errors.push('year_missing');
+                return errors;
+            }
+
+            compare = s.compare;
+
+            if (!s[compare]) {
+                errors.push('no_compare');
+                return errors;
+            }
+
+            if (!compare) {
+                errors.push("compare_missing");
+                return errors;
+            }
+
+            // for sure we have oda, year-from, year-to, and 'compare'
+            //TODO make stronger
+            if (Object.keys(s.labels).length <= 4) {
+                errors.push("at_least_one_more_dimension");
                 return errors;
             }
 
@@ -234,9 +264,12 @@ define([
 
                 this.currentRequest.body = [b];
 
-                r.push(this._createPromise($.extend(true, {}, this.currentRequest)));
+                r.push(this._createPromise($.extend(true, { id : Math.floor(100000 + Math.random() * 900000) }, this.currentRequest)));
 
             }, this));
+
+            log.warn("REMOVE return; HERE");
+            return;
 
             Q.all(r).then(
                 _.bind(this._onAllSuccess, this),
@@ -248,6 +281,9 @@ define([
         _createPromise: function (r) {
 
             r.$el = this.subview('results').add(r);
+
+            log.warn("REMOVE return; HERE");
+            return;
 
             //TODO no multi language
             return Q($.ajax({
@@ -288,8 +324,8 @@ define([
             log.info(result);
 
             this.subview('results').renderObj({
-                model : result,
-                request : request
+                model: result,
+                request: request
             });
 
         },
@@ -407,10 +443,12 @@ define([
 
         _compileFilter: function (s, values) {
 
-            var m = $.extend(true, this.selectors[s].cl,
-                {codes: '"' + values.join('","') + '"'});
+            var id = this._getSelectorIdsBySubject(s),
+                sel = Array.isArray(id) ? id[0] : id,
+                m = $.extend(true, this.selectors[sel].cl,
+                    {codes: '"' + values.join('","') + '"'});
 
-            return JSON.parse(this._createFilterProcess(s, m));
+            return JSON.parse(this._createFilterProcess(sel, m));
         },
 
         _lockForm: function () {
@@ -464,17 +502,6 @@ define([
 
                 compare = s.compare;
                 compareSelection = s[compare];
-
-            } else {
-
-                _.each(this.recipientSelectorsId, function (id) {
-
-                    if (s.hasOwnProperty(id)) {
-                        compare = id;
-                        compareSelection = s[id];
-                    }
-
-                });
 
             }
 
@@ -545,6 +572,30 @@ define([
             helper([], 0);
 
             return r;
+        },
+
+        _getSelectorIdsBySubject: function (sub) {
+
+            var sels = [];
+
+            if (_.contains(this.selectorsId, sub)) {
+
+                sels.push(sub);
+
+            } else {
+
+                _.each(this.selectors, _.bind(function (sel, id) {
+
+                    if (sel.hasOwnProperty("subject") && sel.subject === sub) {
+                        sels.push(id);
+                    }
+
+                }, this));
+
+            }
+
+            return sels;
+
         },
 
         _unbindEventListeners: function () {

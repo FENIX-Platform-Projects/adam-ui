@@ -18,8 +18,8 @@ define([
 
     var s = {
         LIST : "#results-list",
-        SWITCH : "input[type='radio'][name='visualization']",
-        SWITCH_CHECKED : "input[type='radio'][name='visualization']:checked",
+        SWITCH : "input[type='radio']",
+        SWITCH_CHECKED : "input[type='radio']:checked",
         TAB : ".tab-container [data-visualization]",
         REMOVE_BTN : "[data-action='remove']",
         TABLE_CONTAINER : "[data-visualization='table'] [data-container]",
@@ -61,7 +61,7 @@ define([
         add: function ( obj ) {
 
             var template = Handlebars.compile(resultTemplate),
-                $li = $(template($.extend(true, {}, i18nLabels, obj.selection.labels))),
+                $li = $(template($.extend(true, {}, i18nLabels, obj.selection.labels, obj))),
                 o = $.extend(true, obj, {$el : $li});
 
             this._bindObjEventListeners(o);

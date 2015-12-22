@@ -9,11 +9,11 @@
 
                     {{ compare_as }}
 
-                       <input id="visualization-1" type="radio" name="visualization" value="chart" checked="chacked">
-                        <label for="visualization-1">{{ kind_chart }}</label>
+                       <input id="visualization-{{id}}-1" type="radio" name="visualization-{{id}}" value="chart" checked="checked">
+                        <label for="visualization-{{id}}-1">{{ kind_chart }}</label>
 
-                        <input id="visualization-2" type="radio" name="visualization" value="table">
-                        <label for="visualization-2">{{ kind_table }}</label>
+                        <input id="visualization-{{id}}-2" type="radio" name="visualization-{{id}}" value="table">
+                        <label for="visualization-{{id}}-2">{{ kind_table }}</label>
 
                     </span>
                 </div>
@@ -33,10 +33,14 @@
         <div class="col-xs-12">
             <div class="tab-container">
                 <div data-visualization="chart" class="result-tab">
-                     <div data-container></div>
+                     <div data-container>
+                         CHART
+                     </div>
                 </div>
                 <div data-visualization="table" class="result-tab">
-                    <div data-container></div>
+                    <div data-container>
+                        TABLE
+                    </div>
                 </div>
             </div>
         </div>

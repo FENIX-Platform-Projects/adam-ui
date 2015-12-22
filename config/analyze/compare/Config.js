@@ -29,6 +29,7 @@ define(function () {
                     "default": [130] //selected codes by default,
                     //, "max" : 2 //max number of selectable item
                     //"disabled" : true //if present and true the selector is initially disabled
+                    //"config" : { core: { multiple: true } } //specific jstree or select2 config
                 },
 
                 "filter": {

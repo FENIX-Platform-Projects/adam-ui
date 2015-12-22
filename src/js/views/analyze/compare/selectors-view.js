@@ -165,7 +165,7 @@ define([
 
         },
 
-        _initDependencies : function () {
+        _initDependencies: function () {
 
             var self = this;
 
@@ -176,16 +176,16 @@ define([
                     var deps = sel.dependencies,
                         objs = Object.keys(deps);
 
-                    _.each(objs, _.bind(function (obj){
+                    _.each(objs, _.bind(function (obj) {
 
                         var d = {
-                            event : E.SELECTORS_ITEM_SELECT + obj,
-                            callback : function (payload) {
+                            event: E.SELECTORS_ITEM_SELECT + obj,
+                            callback: function (payload) {
 
                                 var call = self["_dep_" + deps[obj]];
 
                                 if (call) {
-                                    call.call(self, payload, { src : obj, target : id });
+                                    call.call(self, payload, {src: obj, target: id});
                                 }
                             }
                         };
@@ -203,9 +203,12 @@ define([
 
         /* dependencies fns */
 
-        _dep_min : function (payload, o) {
+        _dep_min: function (payload, o) {
 
-           var config = this.selectors[o.target].selector;
+            log.info("_dep_min invokation");
+            log.info(o);
+
+            var config = this.selectors[o.target].selector;
 
             switch (config.type.toLowerCase()) {
 
@@ -216,10 +219,10 @@ define([
                         originalValue = $container.select2('data').id,
                         data = [];
 
-                    for (var i = from; i <= config.to; i ++ ) {
+                    for (var i = from; i <= config.to; i++) {
                         data.push({
-                            id : i,
-                            text : i.toString()
+                            id: i,
+                            text: i.toString()
                         })
                     }
 
@@ -237,7 +240,10 @@ define([
 
         },
 
-        _dep_parent : function (payload, o) {
+        _dep_parent: function (payload, o) {
+
+            log.info("_dep_min _dep_parent");
+            log.info(o);
 
             var config = this.selectors[o.target].selector;
 
@@ -497,12 +503,13 @@ define([
 
         },
 
-        _renderTree: function (o)  {
+        _renderTree: function (o) {
 
-            var $container = this.treeContainers[o.id],
+            var config = this.selectors[o.id].selector,
+                $container = this.treeContainers[o.id],
                 tree;
 
-            tree = $container.find(s.TREE_CONTAINER).jstree({
+            tree = $container.find(s.TREE_CONTAINER).jstree($.extend(true, {}, {
                     core: {
                         multiple: true,
                         data: o.data,
@@ -515,7 +522,7 @@ define([
                     search: {
                         show_only_matches: true
                     }
-                })
+                }, config.config))
                 //Default selection
                 .on('ready.jstree', function (e, data) {
 
@@ -547,7 +554,7 @@ define([
 
                     _.each(selected, function (sel) {
                         var node = data.instance.get_node(sel);
-                        payload.push({ code : node.id, label: { EN : node.text }, parent: node.parent})
+                        payload.push({code: node.id, label: {EN: node.text}, parent: node.parent})
                     });
 
                     amplify.publish(E.SELECTORS_ITEM_SELECT + o.id, payload);
@@ -653,9 +660,9 @@ define([
 
             var config = o.conf.selector,
                 $container = this.dropdownContainers[o.id],
-                select2conf = {
+                select2conf = $.extend(true,{
                     width: 'resolve'
-                },
+                }, config.config),
                 dropdown,
                 data;
 
@@ -690,7 +697,11 @@ define([
 
                 var data = dropdown.select2('data') || {};
 
-                amplify.publish(E.SELECTORS_ITEM_SELECT + o.id, [{ code : data.id, label: { EN :data.text }, parent: data.parent}])
+                amplify.publish(E.SELECTORS_ITEM_SELECT + o.id, [{
+                    code: data.id,
+                    label: {EN: data.text},
+                    parent: data.parent
+                }])
             });
 
             this.dropdownInstances[o.id] = dropdown;
@@ -720,15 +731,21 @@ define([
 
                 if (_.contains(enabled, cl)) {
 
-                    var instance = this.treeInstances[cl].jstree(true);
+                    var instance = this.treeInstances[cl].jstree(true),
+                        selection = instance.get_selected();
 
-                    result[cl] = instance.get_selected();
+                    //remove empty selection
+                    if (Array.isArray(selection) && selection.length > 0 ){
 
-                    result.labels[cl] = [];
+                        result[cl] = selection;
 
-                    _.each(result[cl], function (c) {
-                        result.labels[cl].push(instance.get_node(c).text);
-                    });
+                        result.labels[cl] = [];
+
+                        _.each(result[cl], function (c) {
+                            result.labels[cl].push(instance.get_node(c).text);
+                        });
+
+                    }
 
                 }
 
@@ -752,15 +769,19 @@ define([
             //get compare
             result.compare = this.$el.find(s.COMPARE_RADIO_BTNS_CHECKED).val();
 
-            //remove unused country selection
+            //harmonize country selection
             var activeTab = this.$el.find(s.ACTIVE_TAB).data('sel'),
                 sels = ['country-country', 'country-region', 'regional-aggregation'],
-                final = _.without(sels, activeTab);
+                recipientValues = result[activeTab].slice(0),
+                recpientsLabels = result.labels[activeTab].slice(0);
 
-            _.each(final, function (f) {
+            _.each(sels, function (f) {
                 delete result[f];
                 delete result.labels[f];
             });
+
+            result["recipient"] = recipientValues;
+            result.labels["recipient"] = recpientsLabels;
 
             return result;
 
