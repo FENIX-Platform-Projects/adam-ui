@@ -95,7 +95,7 @@ define([
 
         _getSubjectBySelectorId: function (id) {
 
-            return this.selectors[id].hasOwnProperty("subject") ?
+            return (this.selectors[id] && this.selectors[id].hasOwnProperty("subject")) ?
                 this.selectors[id].subject : id;
 
         },
@@ -155,12 +155,104 @@ define([
 
             }, this));
 
+            //check if compare by is a disabled selector
             var defaultSelection = this._getSelectorIdsBySubject(this.$el.find(s.COMPARE_RADIO_BTNS_CHECKED).val());
             this._checkCompareValue(defaultSelection[0]);
+
+            this._initDependencies();
 
             amplify.publish(E.SELECTORS_READY);
 
         },
+
+        _initDependencies : function () {
+
+            var self = this;
+
+            _.each(this.selectors, _.bind(function (sel, id) {
+
+                if (sel.hasOwnProperty("dependencies")) {
+
+                    var deps = sel.dependencies,
+                        objs = Object.keys(deps);
+
+                    _.each(objs, _.bind(function (obj){
+
+                        var d = {
+                            event : E.SELECTORS_ITEM_SELECT + obj,
+                            callback : function (payload) {
+
+                                var call = self["_dep_" + deps[obj]];
+
+                                if (call) {
+                                    call.call(self, payload, { src : obj, target : id });
+                                }
+                            }
+                        };
+
+                        this.dependeciesToDestory.push(d);
+
+                        amplify.subscribe(d.event, this, d.callback);
+
+                    }, this));
+
+                }
+
+            }, this));
+        },
+
+        /* dependencies fns */
+
+        _dep_min : function (payload, o) {
+
+           var config = this.selectors[o.target].selector;
+
+            switch (config.type.toLowerCase()) {
+
+                case "dropdown" :
+
+                    var from = payload[0].code,
+                        $container = this.dropdownContainers[o.target],
+                        originalValue = $container.select2('data').id,
+                        data = [];
+
+                    for (var i = from; i <= config.to; i ++ ) {
+                        data.push({
+                            id : i,
+                            text : i.toString()
+                        })
+                    }
+
+                    $container.select2({
+                        data: data
+                    });
+
+                    //Set selected value
+                    var v = from > originalValue ? from : originalValue;
+
+                    $container.val(v.toString()).trigger("change");
+
+                    break;
+            }
+
+        },
+
+        _dep_parent : function (payload, o) {
+
+            var config = this.selectors[o.target].selector;
+
+            switch (config.type.toLowerCase()) {
+
+                case "tree" :
+
+                    console.log(payload)
+                    console.log(o)
+
+                    break;
+            }
+        },
+
+        /* end dependencies fns*/
 
         _checkCompareValue: function (d) {
 
@@ -218,6 +310,7 @@ define([
             this.treeContainers = {};
             this.dropdownContainers = {};
             this.disabledSelectors = [];
+            this.dependeciesToDestory = [];
 
             _.each(this.selectorsId, _.bind(function (k) {
 
@@ -404,7 +497,7 @@ define([
 
         },
 
-        _renderTree: function (o) {
+        _renderTree: function (o)  {
 
             var $container = this.treeContainers[o.id],
                 tree;
@@ -449,7 +542,15 @@ define([
                         return;
                     }
 
-                    amplify.publish(E.SELECTORS_ITEM_SELECT)
+                    var payload = [],
+                        selected = data.instance.get_selected();
+
+                    _.each(selected, function (sel) {
+                        var node = data.instance.get_node(sel);
+                        payload.push({ code : node.id, label: { EN : node.text }, parent: node.parent})
+                    });
+
+                    amplify.publish(E.SELECTORS_ITEM_SELECT + o.id, payload);
 
                 }, this));
 
@@ -458,11 +559,6 @@ define([
             initFilter($container);
 
             initBtns($container);
-
-            //check for dependencies
-            if (o.conf.dependencies) {
-                //TODO
-            }
 
             function initFilter($container) {
 
@@ -589,6 +685,13 @@ define([
 
             //print default values
             dropdown.val(config.default ? config.default : data[0].id).trigger("change");
+
+            dropdown.on('change', function () {
+
+                var data = dropdown.select2('data') || {};
+
+                amplify.publish(E.SELECTORS_ITEM_SELECT + o.id, [{ code : data.id, label: { EN :data.text }, parent: data.parent}])
+            });
 
             this.dropdownInstances[o.id] = dropdown;
         },

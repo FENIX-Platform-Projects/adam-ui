@@ -26,9 +26,9 @@ define(function () {
                 "selector": {
                     "type": "tree", //tree | list
                     //"source" : "codelist | static" // if type:list
-                    "default": [130], //selected codes by default,
+                    "default": [130] //selected codes by default,
                     //, "max" : 2 //max number of selectable item
-                    "disabled" : true //if present and true the selector is initially disabled
+                    //"disabled" : true //if present and true the selector is initially disabled
                 },
 
                 "filter": {
@@ -83,8 +83,7 @@ define(function () {
                 },
                 "selector": {
                     "type": "tree",
-                    "default": [1012],
-                    "disabled" : true
+                    "default": [1012]
                 },
                 "filter": {
                     "type": "dynamic",
@@ -120,9 +119,7 @@ define(function () {
                     "type": "tree",
                     "default": [60010]
                 },
-                "dependencies": {
-                    "refresh": ["sub-sector"]
-                },
+
                 "filter": {
                     "type": "dynamic",
                     //TODO change to template uid and version as in 'country-country'
@@ -131,20 +128,28 @@ define(function () {
             },
 
             "sub-sector": {
+
                 "cl": {
                     "uid": "crs_dac",
                     "version": "2015",
                     "level": 2,
                     "levels": 2
                 },
+
                 "selector": {
                     "type": "tree",
-                    "default": [11430]
+                    "default": [11430],
+                    "disabled" : true
                 },
+
                 "filter": {
                     "type": "dynamic",
                     //TODO change to template uid and version as in 'country-country'
                     "process": '{"purposecode": { "codes":[{"uid": "crs_purposes", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
+                },
+
+                dependencies : {
+                    "sector" : "parent"
                 }
             },
 
@@ -171,9 +176,7 @@ define(function () {
                     "from": 2000,
                     "to": 2013
                 },
-                "dependencies": {
-                    "lower": ["sub-sector"]
-                },
+
                 "filter": {
                     "type": "static",
                     "process": '{"year": { "time":[{"from": "{{year-from}}", "to": "{{year-to}}" } ]}}'
@@ -181,6 +184,7 @@ define(function () {
             },
 
             "year-to": {
+
                 "selector": {
                     "type": "dropdown",
                     "source": "static",
@@ -188,10 +192,16 @@ define(function () {
                     "to": 2013,
                     "default": [2013]
                 },
+
                 "filter": {
                     "type": "static"
                     //, "process": '{"year": { "time":[{"from": "{{year-from}}", "to": "{{year-to}}" } ]}}' //Not used
+                },
+
+                dependencies : {
+                    "year-from" : "min"
                 }
+
             }
         },
 
