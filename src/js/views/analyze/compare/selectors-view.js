@@ -23,9 +23,10 @@ define([
         TREE_CONTAINER: "[data-role='tree']",
         FILTER_CONTAINER: "[data-role='filter']",
         CLEAR_ALL_CONTAINER: "[data-role='clear']",
-        COMPARE_RADIO_BTNS: "input:radio[name='compare']:checked",
+        COMPARE_RADIO_BTNS: "input:radio[name='compare']",
+        COMPARE_RADIO_BTNS_CHECKED: "input:radio[name='compare']:checked",
         ACTIVE_TAB: "ul#country-ul li.active",
-        SWITCH : "input[data-role='switch']"
+        SWITCH: "input[data-role='switch']"
     };
 
     var SelectorView = View.extend({
@@ -48,35 +49,142 @@ define([
 
         _bindEventListeners: function () {
 
+            var readies = 0;
+
+            amplify.subscribe(E.TREE_READY, _.bind(function () {
+
+                readies++;
+
+                if (readies === this.trees.length) {
+
+                    log.info("All trees are ready");
+
+                    this.ready = true;
+
+                    this._onReady();
+
+                }
+
+            }, this));
+
+        },
+
+        _getSelectorIdsBySubject: function (sub) {
+
+            var sels = [];
+
+            if (_.contains(this.selectorsId, sub)) {
+
+                sels.push(sub);
+
+            } else {
+
+                _.each(this.selectors, _.bind(function (sel, id) {
+
+                    if (sel.hasOwnProperty("subject") && sel.subject === sub) {
+                        sels.push(id);
+                    }
+
+                }, this));
+
+            }
+
+            return sels;
+
+        },
+
+        _getSubjectBySelectorId: function (id) {
+
+            return this.selectors[id].hasOwnProperty("subject") ?
+                this.selectors[id].subject : id;
+
+        },
+
+        _onReady: function () {
+
             //TODO double event fired
             this.$switches.on("click", _.bind(function (e) {
 
                 log.info("Switch clicked");
 
                 var $this = $(e.currentTarget),
-                    $selectors = $(e.currentTarget).closest(s.SELECTORS_CLASS).find(s.SELECTORS).andSelf();
+                    $selectors = this._getSelectorIdsBySubject($(e.currentTarget).attr("data-target"));
 
-                _.each($selectors, _.bind(function (s) {
+                _.each($selectors, _.bind(function (sel) {
 
-                    var selector = $(s).data("selector");
-
-                    if (_.contains(this.selectorsId, selector)){
+                    if (_.contains(this.selectorsId, sel)) {
 
                         // $this will contain a reference to the checkbox
                         if ($this.is(':checked')) {
 
                             // the checkbox was checked
-                            this._enableSelector(selector);
+                            this._enableSelector(sel);
 
                         } else {
                             // the checkbox was unchecked
-                            this._disableSelector(selector);
+                            this._disableSelector(sel);
+
+                            this._checkCompareValue(sel);
                         }
                     }
 
                 }, this));
 
             }, this));
+
+            //default disabled selectors
+            _.each(this.disabledSelectors, _.bind(function (d) {
+
+                if (_.contains(this.selectorsId, d)) {
+                    this._disableSelectorAndSwitch(d);
+                }
+
+            }, this));
+
+            //compare btns and enable selector
+            this.$radios.on('change', _.bind(function () {
+
+                var d = this.$el.find(s.COMPARE_RADIO_BTNS_CHECKED).val(),
+                    selectors = this._getSelectorIdsBySubject(d);
+
+                _.each(selectors, _.bind(function (sel) {
+
+                    this._enableSelectorAndSwitch(sel);
+
+                }, this));
+
+            }, this));
+
+            var defaultSelection = this._getSelectorIdsBySubject(this.$el.find(s.COMPARE_RADIO_BTNS_CHECKED).val());
+            this._checkCompareValue(defaultSelection[0]);
+
+            amplify.publish(E.SELECTORS_READY);
+
+        },
+
+        _checkCompareValue: function (d) {
+
+            var compareBy = this.$el.find(s.COMPARE_RADIO_BTNS_CHECKED).val(),
+                subject = this._getSubjectBySelectorId(d),
+                enabled = this._getEnablesSelectors();
+
+            if (subject === compareBy) {
+                var sel = enabled.length > 0 ? enabled[0] : this.selectorsId[0];
+                this.$el.find(s.COMPARE_RADIO_BTNS).filter("[value='" + this._getSubjectBySelectorId(sel) + "']").prop('checked', true);
+            }
+
+        },
+
+        _getEnablesSelectors: function () {
+
+            var cks = this.$switches.filter(':checked'),
+                res = [];
+
+            _.each(cks, function (el) {
+                res.push($(el).attr("data-target"))
+            });
+
+            return res;
 
         },
 
@@ -109,6 +217,7 @@ define([
             this.dropdownInstances = {};
             this.treeContainers = {};
             this.dropdownContainers = {};
+            this.disabledSelectors = [];
 
             _.each(this.selectorsId, _.bind(function (k) {
 
@@ -137,6 +246,11 @@ define([
                         this.codelists.push(k);
                     }
 
+                    //get initially disabled selectors
+                    if (s.selector.hasOwnProperty("disabled") && s.selector.disabled === true) {
+                        this.disabledSelectors.push(k);
+                    }
+
                 }
 
             }, this));
@@ -150,6 +264,8 @@ define([
             }, this));
 
             this.$switches = this.$el.find(s.SWITCH);
+
+            this.$radios = this.$el.find(s.COMPARE_RADIO_BTNS);
 
         },
 
@@ -227,11 +343,6 @@ define([
 
             this._renderSelectors();
 
-            this._bindEventListeners();
-
-            this.ready = true;
-
-            amplify.publish(E.SELECTORS_READY);
         },
 
         _renderSelectors: function () {
@@ -319,16 +430,17 @@ define([
                         _.each(o.conf.selector.default, function (k) {
                             data.instance.select_node(k)
                         });
-
                     }
+
+                    amplify.publish(E.TREE_READY, o);
                 })
                 //Limit selection e select only leafs for indicators
                 .on("select_node.jstree", _.bind(function (e, data) {
 
-                   if (!isNaN(this.selectors[o.id].selector.max) && data.selected.length > this.selectors[o.id].selector.max) {
-                       data.instance.deselect_node(data.node);
-                       log.warn("Max number of selectable item reached. Change 'selector.selector.max' config.");
-                       return;
+                    if (!isNaN(this.selectors[o.id].selector.max) && data.selected.length > this.selectors[o.id].selector.max) {
+                        data.instance.deselect_node(data.node);
+                        log.warn("Max number of selectable item reached. Change 'selector.selector.max' config.");
+                        return;
                     }
 
                     if (!data.instance.is_leaf(data.node)) {
@@ -396,6 +508,14 @@ define([
 
         },
 
+        _disableSelectorAndSwitch: function (d) {
+
+            this.$el.find("[data-selector='" + d + "']").find(s.SWITCH).prop('checked', false);
+            this.$el.find("[data-selector='" + d + "']").closest(s.SELECTORS_CLASS).find(s.SWITCH).prop('checked', false);
+            this._disableSelector(d);
+
+        },
+
         _enableSelector: function (t) {
 
             var nodes,
@@ -415,6 +535,13 @@ define([
 
             log.info("Selector enabled : " + t);
 
+        },
+
+        _enableSelectorAndSwitch: function (d) {
+
+            this.$el.find("[data-selector='" + d + "']").find(s.SWITCH).prop('checked', true);
+            this.$el.find("[data-selector='" + d + "']").closest(s.SELECTORS_CLASS).find(s.SWITCH).prop('checked', true);
+            this._enableSelector(d);
         },
 
         _refreshTree: function () {
@@ -472,24 +599,27 @@ define([
                 return {};
             }
 
-            this._disableSelector("country-country")
-
             var result = {
                 labels: {}
             };
 
             //get trees selectors
+            var enabled = this._getEnablesSelectors();
             _.each(this.trees, _.bind(function (cl) {
 
-                var instance = this.treeInstances[cl].jstree(true);
+                if (_.contains(enabled, cl)) {
 
-                result[cl] = instance.get_selected();
+                    var instance = this.treeInstances[cl].jstree(true);
 
-                result.labels[cl] = [];
+                    result[cl] = instance.get_selected();
 
-                _.each(result[cl], function (c) {
-                    result.labels[cl].push(instance.get_node(c).text);
-                });
+                    result.labels[cl] = [];
+
+                    _.each(result[cl], function (c) {
+                        result.labels[cl].push(instance.get_node(c).text);
+                    });
+
+                }
 
             }, this));
 
@@ -509,7 +639,7 @@ define([
             }, this));
 
             //get compare
-            result.compare = this.$el.find(s.COMPARE_RADIO_BTNS).val();
+            result.compare = this.$el.find(s.COMPARE_RADIO_BTNS_CHECKED).val();
 
             //remove unused country selection
             var activeTab = this.$el.find(s.ACTIVE_TAB).data('sel'),

@@ -26,8 +26,9 @@ define(function () {
                 "selector": {
                     "type": "tree", //tree | list
                     //"source" : "codelist | static" // if type:list
-                    "default": [130] //selected codes by default,
+                    "default": [130], //selected codes by default,
                     //, "max" : 2 //max number of selectable item
+                    "disabled" : true //if present and true the selector is initially disabled
                 },
 
                 "filter": {
@@ -82,7 +83,8 @@ define(function () {
                 },
                 "selector": {
                     "type": "tree",
-                    "default": [1012]
+                    "default": [1012],
+                    "disabled" : true
                 },
                 "filter": {
                     "type": "dynamic",
@@ -212,7 +214,8 @@ define(function () {
 
         "processesOrder" : ['flowcode', 'sectorcode', 'recipientcode', 'donorcode',  'year', 'purposecode' ],
 
-        "maxCombinations" : 20 //Max number of requests to d3p
+        "maxCombinations" : 20 //Max number of requests to d3p,
+
     }
 
 });

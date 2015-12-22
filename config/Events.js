@@ -12,7 +12,8 @@ define(function ( ) {
         MENU_ADD_BREADCRUMB:  'fx.fenix.menu.addbreadcrumb',
 
         SELECTORS_READY: "fx.analyze.selectors.ready",
-        SELECTORS_ITEM_SELECT : "fx.analyze.selectors.select"
+        SELECTORS_ITEM_SELECT : "fx.analyze.selectors.select",
+        TREE_READY : "fx.analyze.tree.ready"
 
     };
 });
