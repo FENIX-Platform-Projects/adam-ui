@@ -604,7 +604,15 @@ define([
             };
 
             //get trees selectors
-            var enabled = this._getEnablesSelectors();
+            var en = this._getEnablesSelectors(),
+                enabled = [];
+
+            _.each(en, _.bind(function (e) {
+                enabled = enabled.concat(this._getSelectorIdsBySubject(e))
+            }, this));
+
+            enabled = _.unique(enabled);
+
             _.each(this.trees, _.bind(function (cl) {
 
                 if (_.contains(enabled, cl)) {
