@@ -54,3 +54,34 @@
 
 
 }
+
+
+.year-select{
+  font-size: 24px;
+  position: relative;
+  top: 47px;
+  left: 10px;
+  color: $fenix-secondary-text;
+}
+
+.compare-collapse-btn{
+  color: $fenix-text;
+  cursor: pointer;
+
+
+  span{
+    font-size: 18px;
+    margin-left: 5px;
+    position: relative;
+    top: 3px;
+  }
+
+  &:hover{
+    color: $fenix-text;
+
+    text-decoration: none;
+
+  }
+
+
+}

@@ -13162,9 +13162,14 @@ input[type="checkbox"]:checked + label {
   background: none;
   background-color: #c3e2f3; }
 
+.jstree-default .jstree-disabled.jstree-clicked {
+  background: none;
+  background-color: #c3e2f3; }
+
 .jstree-container-ul .jstree-anchor {
   white-space: normal;
-  height: auto; }
+  height: auto;
+  width: 90%; }
 .jstree-container-ul [role="group"].jstree-children [role='treeitem'] {
   position: relative; }
 
@@ -13276,6 +13281,31 @@ h2 {
 .tree-holder {
   height: 150px;
   overflow-y: auto; }
+
+.fx-arrow-time {
+  position: absolute;
+  top: 55px;
+  left: 0;
+  width: 100%;
+  display: block; }
+  .fx-arrow-time:before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    width: 100%;
+    height: 1px;
+    display: block;
+    background-color: #999999; }
+  .fx-arrow-time:after {
+    content: '';
+    width: 0;
+    height: 0;
+    display: block;
+    right: -1px;
+    position: absolute;
+    border-style: solid;
+    border-width: 4px 0 4px 8px;
+    border-color: transparent transparent transparent #999999; }
 
 /* Components */
 /* BreadCrumbs */
@@ -13708,6 +13738,25 @@ footer h4 {
 
 [data-selector="country-country"] .selector-content, [data-selector="country-region"] .selector-content, [data-selector="regional-aggregation"] .selector-content {
   margin-top: 0; }
+
+.year-select {
+  font-size: 24px;
+  position: relative;
+  top: 47px;
+  left: 10px;
+  color: #999999; }
+
+.compare-collapse-btn {
+  color: #333333;
+  cursor: pointer; }
+  .compare-collapse-btn span {
+    font-size: 18px;
+    margin-left: 5px;
+    position: relative;
+    top: 3px; }
+  .compare-collapse-btn:hover {
+    color: #333333;
+    text-decoration: none; }
 
 body {
   background-color: #f1f1f1;
