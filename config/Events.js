@@ -13,7 +13,7 @@ define(function ( ) {
 
         SELECTORS_READY: "fx.analyze.selectors.ready",
         SELECTORS_ITEM_SELECT : "fx.analyze.selectors.select",
-        TREE_READY : "fx.analyze.tree.ready"
+        TREE_READY : "fx.analyze.tree.ready",
 
         MENU_RESET_BREADCRUMB: 'fx.fenix.menu.resetbreadcrumb'
 
