@@ -11,7 +11,10 @@ define(function () {
         match('home', 'analysis#show');
         match('browse', 'browse#show');
         match('browse/:filter', 'browse#show');
+        match('browse/:filter/:recipientcode', 'browse#show');
         match('analyze', 'analyze#show');
+        match('analyze/compare', 'analyze#compare');
+        match('analyze/project', 'analyze#project');
         match('dani', 'analyze#show');
         //match('login', 'login#show');
         match('analysis', 'analysis#show');
