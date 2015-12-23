@@ -44,6 +44,7 @@ define([
             this.view = new View({
                 region: 'main',
                 filter: params.filter,
+                recipientcode: params.recipientcode,
                 page: Backbone.history.fragment
             });
         }
