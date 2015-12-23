@@ -6,10 +6,8 @@ define([
     'text!templates/browse/browse.hbs',
     'text!templates/browse/dashboard.hbs',
     'i18n!nls/browse',
-    'i18n!nls/topics-flude',
     'config/Events',
     'config/Config',
-    'text!config/browse/flude-topics.json',
     'config/browse/Config',
     'config/browse/Config-fao-sectors',
     'fx-filter/Fx-filter-configuration-creator',
@@ -21,16 +19,13 @@ define([
     'jstree',
     'highcharts-export'
 
-], function (View, Dashboard, Filter, template, browseByDashboardTemplate, i18nLabels, topicFludeLabels, E, C, FludeTopics, BrowseConfig, BrowseFaoSectorsConfig, FilterConfCreator, Handlebars, Utils, Q) {
+], function (View, Dashboard, Filter, template, browseByDashboardTemplate, i18nLabels, E, C, BrowseConfig, BrowseFaoSectorsConfig, FilterConfCreator, Handlebars, Utils, Q) {
 
     'use strict';
 
     var s = {
         css_classes: {
-            TOPIC_SELECTOR_BROWSE: "#browse-topic-selector",
             TOPIC_CONTENT_BROWSE: "#browse-topic-content",
-            FILTER_OPENER_BROWSE: ".filter-opener-browse",
-            FILTER_CONTAINER_BROWSE: "#filter-container-browse",
             FILTER_BROWSE: "filter-browse",
             FILTER_SUBMIT_BROWSE: "#filter-submit-btn-browse",
 
@@ -46,7 +41,7 @@ define([
         datasetType: {"uid": "usd_commitment"}
     };
 
-    var BrowseView = View.extend({
+    var BrowseByView = View.extend({
 
         // Automatically render after initialize
         autoRender: true,
@@ -82,8 +77,6 @@ define([
 
             this._initVariables();
 
-            this._initComponents();
-
             this._bindEventListeners();
 
             this._showBrowseTopic(this.browse_type);
@@ -102,18 +95,11 @@ define([
         },
 
         _initVariables: function () {
-
-            this.$topicSelectorFlude = this.$el.find(s.css_classes.TOPIC_SELECTOR_BROWSE);
-            this.$topicContentFlude = this.$el.find(s.css_classes.TOPIC_CONTENT_BROWSE);
-
-            this.$filterOpenerFlude = this.$el.find(s.css_classes.FILTER_OPENER_BROWSE);
-            this.$filterContainerFlude = this.$el.find(s.css_classes.FILTER_CONTAINER_BROWSE);
+            this.$topicContentBrowse = this.$el.find(s.css_classes.TOPIC_CONTENT_BROWSE);
 
             this.$filterSubmitBrowse = this.$el.find(s.css_classes.FILTER_SUBMIT_BROWSE);
 
-            this.$sideFlude = this.$el.find(s.css_classes.SIDE_BROWSE);
-
-
+            this.$sideBrowse = this.$el.find(s.css_classes.SIDE_BROWSE);
 
         },
 
@@ -124,10 +110,6 @@ define([
             amplify.subscribe(s.events.SECTOR_LIST_CHANGE, this, this._onSectorChange);
 
             amplify.subscribe(s.events.UID_LIST_CHANGE, this, this._onDatasetChange);
-
-            this.$topicSelectorFlude.on("change", function (e) {
-                self._onBrowseTopicChange(e.val);
-            });
 
             this.$filterSubmitBrowse.on('click', function (e, data) {
 
@@ -377,34 +359,16 @@ define([
             //update State
            // amplify.publish(E.STATE_CHANGE, {menu: 'browse', breadcrumb: this._initMenuBreadcrumbItem()});
 
-
-            //Inject HTML
+             //Inject HTML
            var source = $(browseByDashboardTemplate).find("[data-topic='" + topic + "']"),
-               template = Handlebars.compile(source.prop('outerHTML')),
-               html = template(topicFludeLabels[topic]);
+               template = Handlebars.compile(source.prop('outerHTML'));
 
-            this.$topicContentFlude.html(html);
-
-
-
-            this._renderBrowseComponents(topic);
+            this.$topicContentBrowse.html(template);
+            
+           this._renderBrowseComponents(topic);
 
         },
 
-
-        _initComponents: function () {
-
-            //Flude
-
-            var conf = JSON.parse(FludeTopics);
-
-            this.$topicSelectorFlude.select2(conf);
-
-            this.$topicSelectorFlude.select2('data', conf.data[0]);
-           // this._onFludeTopicChange(conf.data[0].id);  // sets first item as default
-
-
-        },
 
         _renderBrowseComponents: function (topic) {
             var config = BrowseConfig[topic];
@@ -541,5 +505,5 @@ define([
 
    });
 
-    return BrowseView;
+    return BrowseByView;
 });
