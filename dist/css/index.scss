@@ -5,8 +5,6 @@
 
 
 .fx-sandbox{
-
-
   padding: 0 5px;
 }
 
@@ -32,16 +30,13 @@
 
 /* Pages */
 @import '../../src/css/pages/home';
+@import '../../src/css/pages/analyze-data';
+
+
 body{
   background-color: $fenix-light-bg;
   font-family:  "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif;
 }
 
 
-/*TEMP*/
-
-.tree-holder {
-  height: 150px;
-  overflow-y: auto;
-}
 

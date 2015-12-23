@@ -42,7 +42,7 @@ define([
 
         initialize: function (params) {
 
-            log.setLevel('info');
+            log.setLevel('warn');
 
             View.prototype.initialize.call(this, arguments);
         },

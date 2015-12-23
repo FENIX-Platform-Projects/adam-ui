@@ -1,6 +1,72 @@
 <div class="row">
+    <div class="col-xs-12">
+        <h2>{{ sel_heading_compare_by }}</h2>
+        <ul class="list-unstyled list-inline">
+            <li>
+                <input type="radio" id="sel-com-1" name="compare" value="recipient" checked="checked">
+                <label for="sel-com-1">{{sel_heading_country}} </label>
+            </li>
+            <li>
+                <input type="radio" id="sel-com-3" name="compare" value="donor">
+                <label for="sel-com-3">{{sel_heading_donor}}</label>
+            </li>
+            <li>
+                <input type="radio" id="sel-com-2" name="compare" value="delivery">
+                <label for="sel-com-2">{{sel_heading_channel_of_delivery}}</label>
+            </li>
+            <li>
+                <input type="radio" id="sel-com-4" name="compare" value="sector">
+                <label for="sel-com-4">{{sel_heading_sector}}</label>
+            </li>
+            <li>
+                <input type="radio" id="sel-com-5" name="compare" value="sub-sector">
+                <label for="sel-com-5">{{sel_heading_sub_sector}}</label>
+            </li>
 
-    <div class="col-xs-4">
+        </ul>
+    </div>
+</div>
+<div class="row">
+
+    <div class="col-sm-4">
+
+        <!-- ODA Selector -->
+        <div class="amis-selector">
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <h2>{{ sel_heading_oda }}</h2>
+
+                    <div data-selector="oda"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h2>{{ sel_heading_year }}</h2>
+
+                    <div class="row">
+                        <div class="col-xs-2"></div>
+                        <div class="col-xs-5">
+                            <h3>{{ year_form}}</h3>
+
+                            <div data-selector="year-from"></div>
+                        </div>
+                        <div class="col-xs-5">
+                            <h3>{{ year_to}}</h3>
+
+                            <div data-selector="year-to"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <div class="col-sm-4">
 
         <!-- Country Selector -->
         <div class="amis-selector">
@@ -9,7 +75,9 @@
                 <h2>{{ sel_heading_country }}
 
                     <div class="toggle-wrapper pull-right">
-                        <input type="checkbox" name="toggle" id="switch-country" data-target="recipient" data-type="switch" data-role="switch" checked>
+                        <p class="toggle-text">Enable this filter</p>
+                        <input type="checkbox" name="toggle" id="switch-country" data-target="recipient"
+                               data-type="switch" data-role="switch" checked>
                         <label for="switch-country"></label>
                     </div>
 
@@ -18,31 +86,35 @@
             </div>
 
             <!-- Nav tabs -->
-            <ul id="country-ul" class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active" data-sel="country-country">
-                    <a href="#countries" aria-controls="countries" role="tab"
-                       data-toggle="tab">{{sel_country_tab_countries}}</a>
-                </li>
-                <li role="presentation" data-sel="country-region">
-                    <a href="#regions" aria-controls="regions" role="tab"
-                       data-toggle="tab">{{sel_country_tab_regions}}</a>
-                </li>
-                <li role="presentation" data-sel="regional-aggregation">
-                    <a href="#regional-aggregation" aria-controls="regional-aggregation" role="tab"
-                       data-toggle="tab">{{sel_country_tab_regional_aggregation}}</a>
-                </li>
 
-            </ul>
+            <div class="fx-tabs">
 
+                <ul id="country-ul" class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active" data-sel="country-country">
+                        <a href="#countries" aria-controls="countries" role="tab"
+                           data-toggle="tab">{{sel_country_tab_countries}}</a>
+                    </li>
+                    <li role="presentation" data-sel="country-region">
+                        <a href="#regions" aria-controls="regions" role="tab"
+                           data-toggle="tab">{{sel_country_tab_regions}}</a>
+                    </li>
+                    <li role="presentation" data-sel="regional-aggregation">
+                        <a href="#regional-aggregation" aria-controls="regional-aggregation" role="tab"
+                           data-toggle="tab">{{sel_country_tab_regional_aggregation}}</a>
+                    </li>
+
+                </ul>
+            </div>
             <!-- Tab panes -->
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="countries" data-selector="country-country">
 
-                    <div class="selector-content" >
+                    <div class="selector-content">
                         <input data-role="filter" type="text" class="form-control" placeholder="{{search_placeholder}}">
-                         <div class="tree-holder">
-                             <div data-role="tree"></div>
-                         </div>
+
+                        <div class="tree-holder">
+                            <div data-role="tree"></div>
+                        </div>
                     </div>
                     <div class="selector-footer">
                         <button data-role="clear" class="btn btn-danger pull-right">{{ clear_all_btn }}</button>
@@ -50,7 +122,7 @@
 
                 </div>
                 <div role="tabpanel" class="tab-pane" id="regions" data-selector="country-region">
-                    <div class="selector-content" >
+                    <div class="selector-content">
                         <input data-role="filter" type="text" class="form-control" placeholder="{{search_placeholder}}">
 
                         <div class="tree-holder">
@@ -62,7 +134,7 @@
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="regional-aggregation" data-selector="regional-aggregation">
-                    <div class="selector-content" >
+                    <div class="selector-content">
                         <input data-role="filter" type="text" class="form-control" placeholder="{{search_placeholder}}">
 
                         <div class="tree-holder">
@@ -79,7 +151,7 @@
 
     </div>
 
-    <div class="col-xs-4">
+    <div class="col-sm-4">
 
         <!-- Donor Selector -->
         <div class="amis-selector" data-selector="donor">
@@ -87,7 +159,9 @@
             <div class="selector-header">
                 <h2>{{ sel_heading_donor }}
                     <div class="toggle-wrapper pull-right">
-                        <input type="checkbox" name="toggle" id="switch-donor" data-target="donor" data-type="switch" data-role="switch" checked>
+                        <p class="toggle-text">Enable this filter</p>
+                        <input type="checkbox" name="toggle" id="switch-donor" data-target="donor" data-type="switch"
+                               data-role="switch" checked>
                         <label for="switch-donor"></label>
                     </div>
                 </h2>
@@ -107,80 +181,21 @@
 
     </div>
 
-    <div class="col-xs-4">
-
-        <!-- ODA Selector -->
-        <div class="amis-selector">
-
-            <div class="row">
-                <div class="col-xs-12">
-                    <h2>{{ sel_heading_oda }}</h2>
-                    <div data-selector="oda"></div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-12">
-                    <h2>{{ sel_heading_year }}</h2>
-
-                    <div class="row">
-                        <div class="col-xs-2"></div>
-                        <div class="col-xs-5">
-                            <h3>{{ year_form}}</h3>
-                            <div data-selector="year-from"></div>
-                        </div>
-                        <div class="col-xs-5">
-                            <h3>{{ year_to}}</h3>
-                            <div data-selector="year-to"></div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-12">
-                    <h2>{{ sel_heading_compare_by }}</h2>
-
-                    <span>
-
-                        <input type="radio" id="sel-com-1" name="compare" value="recipient" checked="checked">
-                        <label for="sel-com-1">{{sel_heading_country}} </label>
-                        <br>
-
-                          <input type="radio" id="sel-com-3" name="compare" value="donor">
-                        <label for="sel-com-3">{{sel_heading_donor}}</label>
-                        <br>
-
-                        <input type="radio" id="sel-com-2" name="compare" value="delivery">
-                        <label for="sel-com-2">{{sel_heading_channel_of_delivery}}</label>
-                        <br>
-
-                        <input type="radio" id="sel-com-4" name="compare" value="sector">
-                        <label for="sel-com-4">{{sel_heading_sector}}</label>
-                        <br>
-
-                        <input type="radio" id="sel-com-5" name="compare" value="sub-sector">
-                        <label for="sel-com-5">{{sel_heading_sub_sector}}</label>
-
-                    </span>
-                </div>
-            </div>
-
-        </div>
-
-    </div>
 
 </div>
 
 <div class="row">
 
-    <div class="col-xs-4">
+    <div class="col-sm-4">
         <!-- Channel of delivery Selector -->
         <div class="amis-selector" data-selector="delivery">
 
             <div class="selector-header">
                 <h2>{{ sel_heading_channel_of_delivery }}
                     <div class="toggle-wrapper pull-right">
-                        <input type="checkbox" name="toggle" id="switch-delivery" data-target="delivery" data-type="switch" data-role="switch" checked>
+                        <p class="toggle-text">Enable this filter</p>
+                        <input type="checkbox" name="toggle" id="switch-delivery" data-target="delivery"
+                               data-type="switch" data-role="switch" checked>
                         <label for="switch-delivery"></label>
                     </div>
                 </h2>
@@ -199,7 +214,7 @@
 
     </div>
 
-    <div class="col-xs-4">
+    <div class="col-sm-4">
 
         <!-- sector Selector -->
         <div class="amis-selector" data-selector="sector">
@@ -207,7 +222,9 @@
             <div class="selector-header">
                 <h2>{{ sel_heading_sector }}
                     <div class="toggle-wrapper pull-right">
-                        <input type="checkbox" name="toggle" id="switch-sector" data-target="sector" data-type="switch" data-role="switch" checked>
+                        <p class="toggle-text">Enable this filter</p>
+                        <input type="checkbox" name="toggle" id="switch-sector" data-target="sector" data-type="switch"
+                               data-role="switch" checked>
                         <label for="switch-sector"></label>
                     </div>
                 </h2>
@@ -227,7 +244,7 @@
 
     </div>
 
-    <div class="col-xs-4">
+    <div class="col-sm-4">
 
         <!-- Seb-Sector Selector -->
         <div class="amis-selector" data-selector="sub-sector">
@@ -235,7 +252,9 @@
             <div class="selector-header">
                 <h2>{{ sel_heading_sub_sector }}
                     <div class="toggle-wrapper pull-right">
-                        <input type="checkbox" name="toggle" id="switch-sub-sector" data-target="sub-sector" data-type="switch" data-role="switch" checked>
+                        <p class="toggle-text">Enable this filter</p>
+                        <input type="checkbox" name="toggle" id="switch-sub-sector" data-target="sub-sector"
+                               data-type="switch" data-role="switch" checked>
                         <label for="switch-sub-sector"></label>
                     </div>
                 </h2>

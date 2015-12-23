@@ -661,7 +661,7 @@ define([
             var config = o.conf.selector,
                 $container = this.dropdownContainers[o.id],
                 select2conf = $.extend(true,{
-                    width: 'resolve'
+                    width: '99%'
                 }, config.config),
                 dropdown,
                 data;

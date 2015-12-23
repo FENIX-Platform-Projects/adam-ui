@@ -1,0 +1,56 @@
+/* Analyze Data */
+
+
+
+.analyze-compare-selectors{
+
+
+  .tab-content{
+
+    padding-top: 0;
+
+  }
+
+
+  .fx-tabs .nav-tabs > li{
+
+    margin: 0;
+
+    margin-bottom: 5px;
+  }
+
+}
+
+.fx-tabs{
+  .nav-tabs{
+    border-color: transparent;
+  }
+}
+
+
+
+
+
+.selector-content{
+
+  margin-top: 34px;
+  margin-bottom: 10px;
+
+
+  [data-role="filter"]{
+
+    margin-bottom: 7px;
+
+  }
+
+}
+
+[data-selector="country-country"], [data-selector="country-region"], [data-selector="regional-aggregation"]{
+
+  .selector-content{
+    margin-top: 0;
+
+  }
+
+
+}
