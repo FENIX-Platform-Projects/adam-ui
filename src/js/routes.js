@@ -10,8 +10,8 @@ define(function () {
         //match('index', 'analysis#show');
         match('home', 'analysis#show');
         match('browse', 'browse#show');
-        match('browse/:filter', 'browse#show');
-        match('browse/:filter/:recipientcode', 'browse#show');
+        match('browse/:filter', 'browse#browseby');
+        match('browse/:filter/:recipientcode', 'browse#browseby');
         match('analyze', 'analyze#show');
         match('analyze/compare', 'analyze#compare');
         match('analyze/project', 'analyze#project');

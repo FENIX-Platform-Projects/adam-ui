@@ -35,6 +35,9 @@ define([
             //update State
             amplify.publish(E.STATE_CHANGE, {menu: 'analyze'});
 
+            //remove Breadcrumbs
+            amplify.publish(E.MENU_RESET_BREADCRUMB);
+
             this._displayAnalyzeOptions() ;
         },
 

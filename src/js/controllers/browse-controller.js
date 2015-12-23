@@ -3,9 +3,10 @@ define([
     'chaplin',
     'controllers/base/controller',
     'views/browse-view',
+    'views/browse/browse-by-view',
     'rsvp',
     'globals/AuthManager'
-], function (Chaplin, Controller, View, RSVP, AuthManager) {
+], function (Chaplin, Controller, View, BrowseByView, RSVP, AuthManager) {
     'use strict';
 
     var BrowseController = Controller.extend({
@@ -32,22 +33,26 @@ define([
 
         show: function (params) {
 
-/*            if (this.authorized === false) {
-                Chaplin.utils.redirectTo({controller: 'login', action: 'show'});
-                return;
-            }*/
-
-
-            // USE fx-menu: for breadcrumbs
-            //FM.prototype.addItemsToBreadcrumb = function (path);
+            /*            if (this.authorized === false) {
+             Chaplin.utils.redirectTo({controller: 'login', action: 'show'});
+             return;
+             }*/
 
             this.view = new View({
+                region: 'main',
+                page: Backbone.history.fragment
+            });
+        },
+
+        browseby: function (params) {
+            this.view = new BrowseByView({
                 region: 'main',
                 filter: params.filter,
                 recipientcode: params.recipientcode,
                 page: Backbone.history.fragment
             });
         }
+
     });
 
     return BrowseController;
