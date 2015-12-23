@@ -52,7 +52,7 @@ define({
             "body": {
                 "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.."
             },
-            "link": "#analyse/sector",
+            "link": "#analyse/projects",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/monitoring/kenya/timeseries/kenya_monitoring_timeseries.png"
         },
         {
@@ -65,7 +65,7 @@ define({
             "body": {
                 "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.."
             },
-            "link": "#analyse/priority",
+            "link": "#analyse/priorities",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/monitoring/kenya/timeseries/kenya_monitoring_timeseries.png"
         }
     ]
