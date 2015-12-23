@@ -1220,126 +1220,13 @@ define(function () {
                         ]
                     },
                     {
-                        id: 'item-4', // TOP Channels
+                        id: 'item-4',    // Top sub-sectors
                         type: 'chart',
                         class: "fx-timeseries-ecample",
                         //needed if layout = injected
                         container: "#item-4",
                         config: {
                             container: "#item-4",
-                            adapter: {
-                                type: "standard",
-                                xDimensions: 'channelcode',
-                                yDimensions: 'unitname',
-                                valueDimensions: 'value',
-                                seriesDimensions: ['channelcode']
-                            },
-                            template: {
-                                //"title": "Top 25..."
-                            },
-                            creator: {
-                                chartObj: {
-                                    chart: {
-                                        type: "column"
-                                    },
-                                    subtitle: {
-                                        text: ''
-                                    },
-                                    tooltip: {
-                                        formatter: function(){
-                                            return '<b>' +this.x + ': ' + '</b><br/>' +
-                                                Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
-                                        }
-                                    }
-
-                                }
-                            }
-                        },
-                        // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['sectorcode', 'purposecode', 'year', 'channelcode'],
-                        filter: [
-                            {
-                                "name": "filter",
-                                "parameters": {
-                                    "rows": {
-                                        "sectorcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_sectors",
-                                                    "version": "2015",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                        "recipientcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_recipients",
-                                                    "version": "2015",
-                                                    "codes": [
-                                                        "625"  //Afghanistan
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                        "year": {
-                                            "time": [
-                                                {
-                                                    "from": 2000,
-                                                    "to": 2013
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            },
-                            {
-                                "name": "group",
-                                "parameters": {
-                                    "by": [
-                                        "channelcode"
-                                    ],
-                                    "aggregations": [
-                                        {
-                                            "columns": ["value"],
-                                            "rule": "SUM"
-                                        },
-                                        {
-                                            "columns": ["unitcode"],
-                                            "rule": "FIRST"
-                                        },
-                                        {
-                                            "columns": ["unitname"],
-                                            "rule": "FIRST"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                "name": "order",
-                                "parameters": {
-                                    "value": "DESC"
-                                }
-                            },
-                            {
-                                "name": "page",
-                                "parameters": {
-                                    "perPage": 10,  //top 10
-                                    "page": 1
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        id: 'item-5',    // Top sub-sectors
-                        type: 'chart',
-                        class: "fx-timeseries-ecample",
-                        //needed if layout = injected
-                        container: "#item-5",
-                        config: {
-                            container: "#item-5",
                             adapter: {
                                 type: "pie",
                                 valueDimensions: 'value',
@@ -1455,7 +1342,121 @@ define(function () {
                                 }
                             }
                         ]
+                    },
+                    {
+                        id: 'item-5', // TOP Channels
+                        type: 'chart',
+                        class: "fx-timeseries-ecample",
+                        //needed if layout = injected
+                        container: "#item-5",
+                        config: {
+                            container: "#item-5",
+                            adapter: {
+                                type: "standard",
+                                xDimensions: 'channelcode',
+                                yDimensions: 'unitname',
+                                valueDimensions: 'value',
+                                seriesDimensions: ['channelcode']
+                            },
+                            template: {
+                                //"title": "Top 25..."
+                            },
+                            creator: {
+                                chartObj: {
+                                    chart: {
+                                        type: "column"
+                                    },
+                                    subtitle: {
+                                        text: ''
+                                    },
+                                    tooltip: {
+                                        formatter: function(){
+                                            return '<b>' +this.x + ': ' + '</b><br/>' +
+                                                Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
+                                        }
+                                    }
+
+                                }
+                            }
+                        },
+                        // for now it takes the id, TODO: add uid as well
+                        allowedFilter: ['sectorcode', 'purposecode', 'year', 'channelcode'],
+                        filter: [
+                            {
+                                "name": "filter",
+                                "parameters": {
+                                    "rows": {
+                                        "sectorcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_sectors",
+                                                    "version": "2015",
+                                                    "codes": [
+                                                        "600"
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "recipientcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_recipients",
+                                                    "version": "2015",
+                                                    "codes": [
+                                                        "625"  //Afghanistan
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "year": {
+                                            "time": [
+                                                {
+                                                    "from": 2000,
+                                                    "to": 2013
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "name": "group",
+                                "parameters": {
+                                    "by": [
+                                        "channelcode"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": ["value"],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "FIRST"
+                                        },
+                                        {
+                                            "columns": ["unitname"],
+                                            "rule": "FIRST"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "order",
+                                "parameters": {
+                                    "value": "DESC"
+                                }
+                            },
+                            {
+                                "name": "page",
+                                "parameters": {
+                                    "perPage": 10,  //top 10
+                                    "page": 1
+                                }
+                            }
+                        ]
                     }
+
 
                 ]
             }
