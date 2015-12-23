@@ -139,8 +139,7 @@ define(function () {
 
                 "selector": {
                     "type": "tree",
-                    "default": [11430],
-                    "disabled" : true
+                    "default": [11430]
                 },
 
                 "filter": {

@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-xs-12">
+    <div class="col-xs-10">
         <h2>{{ sel_heading_compare_by }}</h2>
         <ul class="list-unstyled list-inline">
             <li>
@@ -24,6 +24,14 @@
             </li>
 
         </ul>
+    </div>
+    <div class="col-sm-2">
+        <div class="toggle-wrapper pull-right">
+            <p class="toggle-text">{{ show_advanced_options }}</p>
+            <input type="checkbox" name="advanced-options" id="advanced-options"
+                   data-type="switch" data-role="switch">
+            <label for="advanced-options"></label>
+        </div>
     </div>
 </div>
 <div class="row">
@@ -76,7 +84,7 @@
 
                     <div class="toggle-wrapper pull-right">
                         <p class="toggle-text">Enable this filter</p>
-                        <input type="checkbox" name="toggle" id="switch-country" data-target="recipient"
+                        <input type="checkbox" name="disable-selector" id="switch-country" data-target="recipient"
                                data-type="switch" data-role="switch" checked>
                         <label for="switch-country"></label>
                     </div>
@@ -160,7 +168,7 @@
                 <h2>{{ sel_heading_donor }}
                     <div class="toggle-wrapper pull-right">
                         <p class="toggle-text">Enable this filter</p>
-                        <input type="checkbox" name="toggle" id="switch-donor" data-target="donor" data-type="switch"
+                        <input type="checkbox" name="disable-selector" id="switch-donor" data-target="donor" data-type="switch"
                                data-role="switch" checked>
                         <label for="switch-donor"></label>
                     </div>
@@ -194,7 +202,7 @@
                 <h2>{{ sel_heading_channel_of_delivery }}
                     <div class="toggle-wrapper pull-right">
                         <p class="toggle-text">Enable this filter</p>
-                        <input type="checkbox" name="toggle" id="switch-delivery" data-target="delivery"
+                        <input type="checkbox" name="disable-selector" id="switch-delivery" data-target="delivery"
                                data-type="switch" data-role="switch" checked>
                         <label for="switch-delivery"></label>
                     </div>
@@ -223,7 +231,7 @@
                 <h2>{{ sel_heading_sector }}
                     <div class="toggle-wrapper pull-right">
                         <p class="toggle-text">Enable this filter</p>
-                        <input type="checkbox" name="toggle" id="switch-sector" data-target="sector" data-type="switch"
+                        <input type="checkbox" name="disable-selector" id="switch-sector" data-target="sector" data-type="switch"
                                data-role="switch" checked>
                         <label for="switch-sector"></label>
                     </div>
@@ -253,7 +261,7 @@
                 <h2>{{ sel_heading_sub_sector }}
                     <div class="toggle-wrapper pull-right">
                         <p class="toggle-text">Enable this filter</p>
-                        <input type="checkbox" name="toggle" id="switch-sub-sector" data-target="sub-sector"
+                        <input type="checkbox" name="disable-selector" id="switch-sub-sector" data-target="sub-sector"
                                data-type="switch" data-role="switch" checked>
                         <label for="switch-sub-sector"></label>
                     </div>

@@ -25,6 +25,8 @@ define({
 
     "compare_as" : "Compare as",
     "kind_chart" : "Chart",
-    "kind_table" : "Table"
+    "kind_table" : "Table",
+
+    "show_advanced_options" : "Show advanced options"
 
 });

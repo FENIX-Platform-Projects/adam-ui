@@ -26,7 +26,8 @@ define([
         COMPARE_RADIO_BTNS: "input:radio[name='compare']",
         COMPARE_RADIO_BTNS_CHECKED: "input:radio[name='compare']:checked",
         ACTIVE_TAB: "ul#country-ul li.active",
-        SWITCH: "input[data-role='switch']"
+        SWITCH: "input[data-role='switch'][name='disable-selector']",
+        SWITCH_ADVANCED_OPTION : "#advanced-options"
     };
 
     var SelectorView = View.extend({
@@ -66,6 +67,25 @@ define([
                 }
 
             }, this));
+
+            this.$switchAdvancedOptions.on("click", _.bind(function (e) {
+
+                this._configureVisibilityAdvancedOptions($(e.currentTarget).is(':checked'));
+
+            }, this));
+
+        },
+
+        _configureVisibilityAdvancedOptions : function ( show ) {
+
+            if (show) {
+
+                this.$switches.parent().show();
+
+            } else {
+
+                this.$switches.parent().hide();
+            }
 
         },
 
@@ -251,8 +271,27 @@ define([
 
                 case "tree" :
 
-                    console.log(payload)
-                    console.log(o)
+                    var c = this.selectors[o.target].cl;
+
+                    if (c) {
+
+                        //delete c.levels;
+                        c.levels = 2;
+                        delete c.level;
+
+                        c.codes = [];
+
+                        _.each(payload, function (item) {
+                            c.codes.push(item.code);
+                        });
+
+                        this._getPromise(c).then(
+                            _.bind(this._refreshTree, this, o),
+                            function (r) {
+                                log.error(r);
+                            }
+                        )
+                    }
 
                     break;
             }
@@ -294,11 +333,17 @@ define([
 
             this._bindEventListeners();
 
+            this._initPage();
+
             this._preloadResources().then(
                 _.bind(this._onPreloadResourceSuccess, this),
                 _.bind(this._onPreloadResourceError, this)
             );
 
+        },
+
+        _initPage : function () {
+            this._configureVisibilityAdvancedOptions(this.$switchAdvancedOptions.is(":checked"));
         },
 
         _initVariables: function () {
@@ -366,6 +411,8 @@ define([
 
             this.$radios = this.$el.find(s.COMPARE_RADIO_BTNS);
 
+            this.$switchAdvancedOptions = this.$el.find(s.SWITCH_ADVANCED_OPTION);
+
         },
 
         _getSelectorContainer: function (cl) {
@@ -408,13 +455,7 @@ define([
             var self = this,
                 body = this.selectors[cl].cl;
 
-            return Q($.ajax({
-                url: GC.SERVER + GC.CODES_POSTFIX,
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(body),
-                dataType: 'json'
-            })).then(function (result) {
+            return this._getPromise(body).then(function (result) {
 
                 if (typeof result === 'undefined') {
                     log.info("No Code List loaded for: " + cl);
@@ -430,6 +471,18 @@ define([
 
                 log.error(r);
             });
+        },
+
+        _getPromise : function (body) {
+
+            return Q($.ajax({
+                url: GC.SERVER + GC.CODES_POSTFIX,
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(body),
+                dataType: 'json'
+            }));
+
         },
 
         _onPreloadResourceError: function () {
@@ -535,7 +588,7 @@ define([
                     amplify.publish(E.TREE_READY, o);
                 })
                 //Limit selection e select only leafs for indicators
-                .on("select_node.jstree", _.bind(function (e, data) {
+                .on("select_node.jstree deselect_node.jstree", _.bind(function (e, data) {
 
                     if (!isNaN(this.selectors[o.id].selector.max) && data.selected.length > this.selectors[o.id].selector.max) {
                         data.instance.deselect_node(data.node);
@@ -647,8 +700,29 @@ define([
             this._enableSelector(d);
         },
 
-        _refreshTree: function () {
-            console.log("Refresh")
+        _refreshTree: function ( o, data ) {
+            log.info("Refresh tree");
+            log.info(o);
+
+
+            var model = [],
+                $container = this.treeContainers[o.target],
+                tree;
+
+            _.each(data, function (item) {
+                model = _.unique(model.concat(item.children));
+            });
+
+            if ($container.length > 0 && Array.isArray(model)) {
+
+                tree = $container.find(s.TREE_CONTAINER).jstree(true);
+                tree.settings.core.data = this._buildTreeModel(model);
+                tree.refresh(true);
+                tree.redraw(true);
+
+            } else {
+                log.warn("Impossible to find container for: "+ o.target);
+            }
         },
 
         _buildDropdownModel: function (fxResource) {
