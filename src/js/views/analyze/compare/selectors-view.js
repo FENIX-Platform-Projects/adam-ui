@@ -735,7 +735,7 @@ define([
                         selection = instance.get_selected();
 
                     //remove empty selection
-                    if (Array.isArray(selection) && selection.length > 0 ){
+                    if (Array.isArray(selection) && selection.length > 0) {
 
                         result[cl] = selection;
 
@@ -772,8 +772,13 @@ define([
             //harmonize country selection
             var activeTab = this.$el.find(s.ACTIVE_TAB).data('sel'),
                 sels = ['country-country', 'country-region', 'regional-aggregation'],
-                recipientValues = result[activeTab].slice(0),
+                recipientValues,
+                recpientsLabels;
+
+            if (result[activeTab] && Array.isArray(result[activeTab])) {
+                recipientValues = result[activeTab].slice(0);
                 recpientsLabels = result.labels[activeTab].slice(0);
+            }
 
             _.each(sels, function (f) {
                 delete result[f];

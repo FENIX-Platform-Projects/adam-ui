@@ -16,5 +16,5 @@ define({
     "year_missing" : "Year value is missing",
     "compare_missing" : "Missing values for 'compare' dimension.",
     "no_compare" : "Impossible to find the 'compare' dimension.",
-    "at_least_one_more_dimension" : "Please specify at lease two dimensions to compare"
+    "at_least_one_more_dimension" : "Please specify values for at lease two dimensions"
 });

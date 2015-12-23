@@ -223,7 +223,7 @@ define(function () {
             }
         },
 
-        "processesOrder" : ['flowcode', 'sectorcode', 'recipientcode', 'donorcode',  'year', 'purposecode' ],
+        "processesOrder" : ['flowcode', 'sectorcode', 'recipientcode', 'donorcode',  'year', 'purposecode',  'delivery' ],
 
         "maxCombinations" : 20 //Max number of requests to d3p,
 
