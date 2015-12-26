@@ -1,10 +1,8 @@
 /*global define*/
 define({
     "title": "Browse By",
-    "title_flude": "Forest resource data (FRA)",
     "filter" : "Filter Data",
-    "text" : "Change me in 118n/root/analysis.js",
-    "lateral_menu_flude_title" : "Topics",
+    "text" : "Change me in 118n/root/browse.js",
     "filter_btn" : "Update",
     "sector": "By Sector",
     "country_sector": "By Country - Sector",

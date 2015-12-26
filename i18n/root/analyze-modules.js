@@ -5,7 +5,7 @@ define({
     modules:[
         {
             "header": {
-                "EN": "Analyse data"
+                "EN": "Analyze data"
             },
             "title": {
                 "EN": "Compare"
@@ -18,7 +18,7 @@ define({
         },
         {
             "header": {
-                "EN": "Analyse data"
+                "EN": "Analyze data"
             },
             "title": {
                 "EN": "Implementing Agencies"
@@ -31,7 +31,7 @@ define({
         },
         {
             "header": {
-                "EN": "Analyse data"
+                "EN": "Analyze data"
             },
             "title": {
                 "EN": "Donor Matrix"
@@ -44,7 +44,7 @@ define({
         },
         {
             "header": {
-                "EN": "Analyse data"
+                "EN": "Analyze data"
             },
             "title": {
                 "EN": "Project Analysis"
@@ -52,7 +52,7 @@ define({
             "body": {
                 "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.."
             },
-            "link": "#analyse/projects",
+            "link": "#analyze/projects",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/monitoring/kenya/timeseries/kenya_monitoring_timeseries.png"
         },
         {
@@ -65,7 +65,7 @@ define({
             "body": {
                 "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.."
             },
-            "link": "#analyse/priorities",
+            "link": "#analyze/priorities",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/monitoring/kenya/timeseries/kenya_monitoring_timeseries.png"
         }
     ]

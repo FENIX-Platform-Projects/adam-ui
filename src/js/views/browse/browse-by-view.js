@@ -38,7 +38,7 @@ define([
             UID_LIST_CHANGE: 'fx.filter.list.change.uid'
         },
         datasetChanged: false,
-        datasetType: {"uid": "usd_commitment"}
+        datasetType: {"uid": "adam_usd_commitment"}
     };
 
     var BrowseByView = View.extend({

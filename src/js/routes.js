@@ -14,7 +14,7 @@ define(function () {
         match('browse/:filter/:recipientcode', 'browse#browseby');
         match('analyze', 'analyze#show');
         match('analyze/compare', 'analyze#compare');
-        match('analyze/project', 'analyze#project');
+        match('analyze/projects', 'analyze#projects');
         match('dani', 'analyze#show');
         //match('login', 'login#show');
         match('analysis', 'analysis#show');
