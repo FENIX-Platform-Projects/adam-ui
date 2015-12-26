@@ -118,22 +118,7 @@ define(function () {
                 uid: "adam_usd_commitment",
 
                 //data base filter
-                filter: [{
-                    "name": "filter",
-                    "parameters": {
-                        "rows": {
-                            "flowcode": {
-                                "codes": [{
-                                    "uid": "crs_flow_types",
-                                    "version": "2015",
-                                    "codes": [ "10_12", "10_11", "10_13", "10_19"]
-                                    }
-                                ]
-                            }
-                        }
-                       }
-                    }
-                ],
+                filter: [],
 
                 //bridge configuration
                 bridge: {
@@ -176,18 +161,47 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
+                                        "flowcode": {
+                                            "codes": [
+                                                {
+                                                "uid": "crs_flow_types",
+                                                "version": "2015",
+                                                "codes": [ "10_12", "10_11", "10_13", "10_19"]
+                                               }
+                                            ]
+                                        },
+                                        "sectorcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_sectors",
+                                                    "version": "2015",
+                                                    "codes": [
+                                                        "600"
+                                                    ]
+                                                }
+                                            ]
+                                        },
                                         "recipientcode": {
                                             "codes": [
                                                 {
                                                     "uid": "crs_recipients",
+                                                    "version": "2015",
                                                     "codes": [
-                                                        "625"  //afghanistan
+                                                        "625"  //Afghanistan
                                                     ]
+                                                }
+                                            ]
+                                        },
+                                        "year": {
+                                            "time": [
+                                                {
+                                                    "from": 2000,
+                                                    "to": 2013
                                                 }
                                             ]
                                         }
                                     },
-                                    "columns": ["projecttitle", "year", "agencycode", "sectorcode", "purposecode", "channelcode", "value"]
+                                    "columns": ["projecttitle", "year"]
                                 }
                             }
                         ]
