@@ -5,7 +5,7 @@ define({
     "text" : "Change me in 118n/root/projects.js",
     "filter_btn" : "Update",
     "compare": "Compare Data",
-    "projects": "Projects Analysis ",
+    "projects": "Project Analysis ",
     "priorities": "Priority Analysis",
     "donor_matrix": "Donor Matrix",
     "agencies": "Implementing Agencies"
