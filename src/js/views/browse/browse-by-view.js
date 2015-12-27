@@ -59,6 +59,7 @@ define([
            // this.recipientcode =  params.recipientcode;
             this.datasetChanged = s.datasetChanged;
             this.datasetType = s.datasetType;
+            this.firstLoad = true;
 
 
             View.prototype.initialize.call(this, arguments);
@@ -309,7 +310,13 @@ define([
 
                         self.filterBrowse.setDomain("purposecode", result);
 
-                    });
+                    }).done(function() {
+                        if(self.firstLoad) {
+                            self.firstLoad = false;
+                            self._renderBrowseDashboard(self.dashboardConfig);
+                        }
+                      }
+                    );
                 }
             }
         },
@@ -401,7 +408,7 @@ define([
 
             this._renderBrowseFilter(this.filterConfig);
 
-           this._renderBrowseDashboard(this.dashboardConfig);
+           //this._renderBrowseDashboard(this.dashboardConfig);
 
 
         },
