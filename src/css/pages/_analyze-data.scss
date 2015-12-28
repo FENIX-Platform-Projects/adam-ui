@@ -19,6 +19,34 @@
     margin-bottom: 5px;
   }
 
+
+  .first-row{
+    border-top-color: transparent;
+  }
+
+  .col-sm-height{
+    border-bottom: 1px solid $fenix-light-hr;
+    border-right-color: transparent;
+
+
+    &:nth-child(3){
+      border-right-color: transparent;
+
+    }
+
+  }
+
+  [data-role="clear"]{
+    margin-bottom: 15px;
+
+  }
+
+
+  .col-year-container{
+    padding-bottom: 15px;
+  }
+
+
 }
 
 .fx-tabs{
@@ -55,6 +83,15 @@
 
 }
 
+[data-selector="delivery"], [data-selector="sector"],[data-selector="sub-sector"]{
+
+  .selector-content{
+    margin-top: 10px;
+  }
+
+
+}
+
 
 .year-select{
   font-size: 24px;
@@ -85,3 +122,44 @@
 
 
 }
+
+
+/* Extra small devices (phones, less than 768px) */
+/* No media query since this is the default in Bootstrap */
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: $screen-sm-min) {
+
+  .analyze-compare-selectors{
+
+
+
+
+
+
+    .first-row{
+      border-top: 1px solid $fenix-light-hr;
+    }
+
+    .col-sm-height{
+      border-right: 1px solid $fenix-light-hr;
+
+      &:nth-child(3){
+        border-right-color: transparent;
+
+      }
+
+    }
+
+
+
+  }
+
+
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: $screen-md-min) {  }
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: $screen-lg-min) {  }

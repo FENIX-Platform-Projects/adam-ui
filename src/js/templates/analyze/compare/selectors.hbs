@@ -36,251 +36,258 @@
 </div>
 <div class="row">
 
-    <div class="col-sm-4">
+    <div class="row-height first-row">
 
-        <!-- ODA Selector -->
-        <div class="amis-selector">
+        <div class="col-sm-4 col-sm-height">
 
-            <div class="row">
-                <div class="col-xs-12">
-                    <h2>{{ sel_heading_oda }}</h2>
+            <!-- ODA Selector -->
+            <div class="amis-selector">
 
-                    <div data-selector="oda"></div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-12">
-                    <h2>{{ sel_heading_year }}</h2>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h2>{{ sel_heading_oda }}</h2>
 
-                    <div class="row">
-                        <div class="col-xs-2">
-                            <span class="icojam_calendar_6 pull-right year-select"></span>
-                        </div>
-                        <div class="col-xs-4">
-                            <h3>{{ year_form}}</h3>
-
-                            <div data-selector="year-from"></div>
-                        </div>
-                        <div class="col-xs-2">
-                            <span class="fx-arrow-time"></span>
-                        </div>
-                        <div class="col-xs-4">
-                            <h3>{{ year_to}}</h3>
-
-                            <div data-selector="year-to"></div>
-                        </div>
-
+                        <div data-selector="oda"></div>
                     </div>
                 </div>
-            </div>
+                <div class="row">
+                    <div class="col-xs-12 col-year-container">
+                        <h2>{{ sel_heading_year }}</h2>
 
+                        <div class="row">
+                            <div class="col-xs-2">
+                                <span class="icojam_calendar_6 pull-right year-select"></span>
+                            </div>
+                            <div class="col-xs-4">
+                                <h3>{{ year_form}}</h3>
 
-        </div>
+                                <div data-selector="year-from"></div>
+                            </div>
+                            <div class="col-xs-2">
+                                <span class="fx-arrow-time"></span>
+                            </div>
+                            <div class="col-xs-4">
+                                <h3>{{ year_to}}</h3>
 
-    </div>
-
-    <div class="col-sm-4">
-
-        <!-- Country Selector -->
-        <div class="amis-selector">
-
-            <div class="selector-header">
-                <h2>{{ sel_heading_country }}
-
-                    <div class="toggle-wrapper pull-right">
-                        <p class="toggle-text">Enable this filter</p>
-                        <input type="checkbox" name="disable-selector" id="switch-country" data-target="recipient"
-                               data-type="switch" data-role="switch" checked>
-                        <label for="switch-country"></label>
-                    </div>
-
-                </h2>
-
-            </div>
-
-            <!-- Nav tabs -->
-
-            <div class="fx-tabs">
-
-                <ul id="country-ul" class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active" data-sel="country-country">
-                        <a href="#countries" aria-controls="countries" role="tab"
-                           data-toggle="tab">{{sel_country_tab_countries}}</a>
-                    </li>
-                    <li role="presentation" data-sel="country-region">
-                        <a href="#regions" aria-controls="regions" role="tab"
-                           data-toggle="tab">{{sel_country_tab_regions}}</a>
-                    </li>
-                    <li role="presentation" data-sel="regional-aggregation">
-                        <a href="#regional-aggregation" aria-controls="regional-aggregation" role="tab"
-                           data-toggle="tab">{{sel_country_tab_regional_aggregation}}</a>
-                    </li>
-
-                </ul>
-            </div>
-            <!-- Tab panes -->
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="countries" data-selector="country-country">
-
-                    <div class="selector-content">
-                        <input data-role="filter" type="text" class="form-control" placeholder="{{search_placeholder}}">
-
-                        <div class="tree-holder">
-                            <div data-role="tree"></div>
+                                <div data-selector="year-to"></div>
+                            </div>
+                            <br><br>
                         </div>
                     </div>
-                    <div class="selector-footer">
-                        <button data-role="clear" class="btn btn-danger pull-right">{{ clear_all_btn }}</button>
-                    </div>
-
                 </div>
-                <div role="tabpanel" class="tab-pane" id="regions" data-selector="country-region">
-                    <div class="selector-content">
-                        <input data-role="filter" type="text" class="form-control" placeholder="{{search_placeholder}}">
 
-                        <div class="tree-holder">
-                            <div data-role="tree"></div>
-                        </div>
-                    </div>
-                    <div class="selector-footer">
-                        <button data-role="clear" class="btn btn-danger pull-right">{{ clear_all_btn }}</button>
-                    </div>
-                </div>
-                <div role="tabpanel" class="tab-pane" id="regional-aggregation" data-selector="regional-aggregation">
-                    <div class="selector-content">
-                        <input data-role="filter" type="text" class="form-control" placeholder="{{search_placeholder}}">
 
-                        <div class="tree-holder">
-                            <div data-role="tree"></div>
-                        </div>
-                    </div>
-                    <div class="selector-footer">
-                        <button data-role="clear" class="btn btn-danger pull-right">{{ clear_all_btn }}</button>
-                    </div>
-                </div>
             </div>
 
         </div>
 
-    </div>
+        <div class="col-sm-4 col-sm-height">
 
-    <div class="col-sm-4">
+            <!-- Country Selector -->
+            <div class="amis-selector">
 
-        <!-- Donor Selector -->
-        <div class="amis-selector" data-selector="donor">
+                <div class="selector-header">
+                    <h2>{{ sel_heading_country }}
 
-            <div class="selector-header">
-                <h2>{{ sel_heading_donor }}
-                    <div class="toggle-wrapper pull-right">
-                        <p class="toggle-text">Enable this filter</p>
-                        <input type="checkbox" name="disable-selector" id="switch-donor" data-target="donor" data-type="switch"
-                               data-role="switch" checked>
-                        <label for="switch-donor"></label>
-                    </div>
-                </h2>
-            </div>
-            <div class="selector-content">
-                <input data-role="filter" type="text" class="form-control" placeholder="{{search_placeholder}}">
+                        <div class="toggle-wrapper pull-right">
+                            <p class="toggle-text">Enable this filter</p>
+                            <input type="checkbox" name="disable-selector" id="switch-country" data-target="recipient"
+                                   data-type="switch" data-role="switch" checked>
+                            <label for="switch-country"></label>
+                        </div>
 
-                <div class="tree-holder">
-                    <div data-role="tree"></div>
+                    </h2>
+
                 </div>
+
+                <!-- Nav tabs -->
+
+                <div class="fx-tabs">
+
+                    <ul id="country-ul" class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active" data-sel="country-country">
+                            <a href="#countries" aria-controls="countries" role="tab"
+                               data-toggle="tab">{{sel_country_tab_countries}}</a>
+                        </li>
+                        <li role="presentation" data-sel="country-region">
+                            <a href="#regions" aria-controls="regions" role="tab"
+                               data-toggle="tab">{{sel_country_tab_regions}}</a>
+                        </li>
+                        <li role="presentation" data-sel="regional-aggregation">
+                            <a href="#regional-aggregation" aria-controls="regional-aggregation" role="tab"
+                               data-toggle="tab">{{sel_country_tab_regional_aggregation}}</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="countries" data-selector="country-country">
+
+                        <div class="selector-content">
+                            <input data-role="filter" type="text" class="form-control" placeholder="{{search_placeholder}}">
+
+                            <div class="tree-holder">
+                                <div data-role="tree"></div>
+                            </div>
+                        </div>
+                        <div class="selector-footer clearfix">
+                            <button data-role="clear" class="btn pull-right">{{ clear_all_btn }}</button>
+                        </div>
+
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="regions" data-selector="country-region">
+                        <div class="selector-content">
+                            <input data-role="filter" type="text" class="form-control" placeholder="{{search_placeholder}}">
+
+                            <div class="tree-holder">
+                                <div data-role="tree"></div>
+                            </div>
+                        </div>
+                        <div class="selector-footer clearfix">
+                            <button data-role="clear" class="btn pull-right">{{ clear_all_btn }}</button>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="regional-aggregation" data-selector="regional-aggregation">
+                        <div class="selector-content">
+                            <input data-role="filter" type="text" class="form-control" placeholder="{{search_placeholder}}">
+
+                            <div class="tree-holder">
+                                <div data-role="tree"></div>
+                            </div>
+                        </div>
+                        <div class="selector-footer clearfix">
+                            <button data-role="clear" class="btn pull-right">{{ clear_all_btn }}</button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            <div class="selector-footer">
-                <button data-role="clear" class="btn btn-danger pull-right">{{ clear_all_btn }}</button>
+
+        </div>
+
+        <div class="col-sm-4 col-sm-height">
+
+            <!-- Donor Selector -->
+            <div class="amis-selector" data-selector="donor">
+
+                <div class="selector-header">
+                    <h2>{{ sel_heading_donor }}
+                        <div class="toggle-wrapper pull-right">
+                            <p class="toggle-text">Enable this filter</p>
+                            <input type="checkbox" name="disable-selector" id="switch-donor" data-target="donor" data-type="switch"
+                                   data-role="switch" checked>
+                            <label for="switch-donor"></label>
+                        </div>
+                    </h2>
+                </div>
+                <div class="selector-content">
+                    <input data-role="filter" type="text" class="form-control" placeholder="{{search_placeholder}}">
+
+                    <div class="tree-holder">
+                        <div data-role="tree"></div>
+                    </div>
+                </div>
+                <div class="selector-footer clearfix">
+                    <button data-role="clear" class="btn pull-right">{{ clear_all_btn }}</button>
+                </div>
+
             </div>
 
         </div>
 
     </div>
-
 
 </div>
 
 <div class="row">
 
-    <div class="col-sm-4">
-        <!-- Channel of delivery Selector -->
-        <div class="amis-selector" data-selector="delivery">
+    <div class="row-height">
 
-            <div class="selector-header">
-                <h2>{{ sel_heading_channel_of_delivery }}
-                    <div class="toggle-wrapper pull-right">
-                        <p class="toggle-text">Enable this filter</p>
-                        <input type="checkbox" name="disable-selector" id="switch-delivery" data-target="delivery"
-                               data-type="switch" data-role="switch" checked>
-                        <label for="switch-delivery"></label>
-                    </div>
-                </h2>
-            </div>
-            <div class="selector-content">
-                <input data-role="filter" type="text" class="form-control" placeholder="{{search_placeholder}}">
+        <div class="col-sm-4 col-sm-height">
+            <!-- Channel of delivery Selector -->
+            <div class="amis-selector" data-selector="delivery">
 
-                <div class="tree-holder">
-                    <div data-role="tree"></div>
+                <div class="selector-header">
+                    <h2>{{ sel_heading_channel_of_delivery }}
+                        <div class="toggle-wrapper pull-right">
+                            <p class="toggle-text">Enable this filter</p>
+                            <input type="checkbox" name="disable-selector" id="switch-delivery" data-target="delivery"
+                                   data-type="switch" data-role="switch" checked>
+                            <label for="switch-delivery"></label>
+                        </div>
+                    </h2>
                 </div>
-            </div>
-            <div class="selector-footer">
-                <button data-role="clear" class="btn btn-danger pull-right">{{ clear_all_btn }}</button>
-            </div>
-        </div>
+                <div class="selector-content">
+                    <input data-role="filter" type="text" class="form-control" placeholder="{{search_placeholder}}">
 
-    </div>
-
-    <div class="col-sm-4">
-
-        <!-- sector Selector -->
-        <div class="amis-selector" data-selector="sector">
-
-            <div class="selector-header">
-                <h2>{{ sel_heading_sector }}
-                    <div class="toggle-wrapper pull-right">
-                        <p class="toggle-text">Enable this filter</p>
-                        <input type="checkbox" name="disable-selector" id="switch-sector" data-target="sector" data-type="switch"
-                               data-role="switch" checked>
-                        <label for="switch-sector"></label>
+                    <div class="tree-holder">
+                        <div data-role="tree"></div>
                     </div>
-                </h2>
-            </div>
-            <div class="selector-content">
-                <input data-role="filter" type="text" class="form-control" placeholder="{{search_placeholder}}">
-
-                <div class="tree-holder">
-                    <div data-role="tree"></div>
                 </div>
-            </div>
-            <div class="selector-footer">
-                <button data-role="clear" class="btn btn-danger pull-right">{{ clear_all_btn }}</button>
+                <div class="selector-footer clearfix">
+                    <button data-role="clear" class="btn pull-right">{{ clear_all_btn }}</button>
+                </div>
             </div>
 
         </div>
 
-    </div>
+        <div class="col-sm-4 col-sm-height">
 
-    <div class="col-sm-4">
+            <!-- sector Selector -->
+            <div class="amis-selector" data-selector="sector">
 
-        <!-- Seb-Sector Selector -->
-        <div class="amis-selector" data-selector="sub-sector">
-
-            <div class="selector-header">
-                <h2>{{ sel_heading_sub_sector }}
-                    <div class="toggle-wrapper pull-right">
-                        <p class="toggle-text">Enable this filter</p>
-                        <input type="checkbox" name="disable-selector" id="switch-sub-sector" data-target="sub-sector"
-                               data-type="switch" data-role="switch" checked>
-                        <label for="switch-sub-sector"></label>
-                    </div>
-                </h2>
-            </div>
-            <div class="selector-content">
-                <input data-role="filter" type="text" class="form-control" placeholder="{{search_placeholder}}">
-
-                <div class="tree-holder">
-                    <div data-role="tree"></div>
+                <div class="selector-header">
+                    <h2>{{ sel_heading_sector }}
+                        <div class="toggle-wrapper pull-right">
+                            <p class="toggle-text">Enable this filter</p>
+                            <input type="checkbox" name="disable-selector" id="switch-sector" data-target="sector" data-type="switch"
+                                   data-role="switch" checked>
+                            <label for="switch-sector"></label>
+                        </div>
+                    </h2>
                 </div>
+                <div class="selector-content">
+                    <input data-role="filter" type="text" class="form-control" placeholder="{{search_placeholder}}">
+
+                    <div class="tree-holder">
+                        <div data-role="tree"></div>
+                    </div>
+                </div>
+                <div class="selector-footer clearfix">
+                    <button data-role="clear" class="btn pull-right">{{ clear_all_btn }}</button>
+                </div>
+
             </div>
-            <div class="selector-footer">
-                <button data-role="clear" class="btn btn-danger pull-right">{{ clear_all_btn }}</button>
+
+        </div>
+
+        <div class="col-sm-4 col-sm-height">
+
+            <!-- Seb-Sector Selector -->
+            <div class="amis-selector" data-selector="sub-sector">
+
+                <div class="selector-header">
+                    <h2>{{ sel_heading_sub_sector }}
+                        <div class="toggle-wrapper pull-right">
+                            <p class="toggle-text">Enable this filter</p>
+                            <input type="checkbox" name="disable-selector" id="switch-sub-sector" data-target="sub-sector"
+                                   data-type="switch" data-role="switch" checked>
+                            <label for="switch-sub-sector"></label>
+                        </div>
+                    </h2>
+                </div>
+                <div class="selector-content">
+                    <input data-role="filter" type="text" class="form-control" placeholder="{{search_placeholder}}">
+
+                    <div class="tree-holder">
+                        <div data-role="tree"></div>
+                    </div>
+                </div>
+                <div class="selector-footer clearfix">
+                    <button data-role="clear" class="btn pull-right">{{ clear_all_btn }}</button>
+                </div>
+
             </div>
 
         </div>
