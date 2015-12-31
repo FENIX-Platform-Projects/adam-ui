@@ -278,23 +278,23 @@ define(function () {
                                 }
                             },
                             {
-                                "name": "group",
+                                "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                        "sectorcode", "year"
+                                        "sectorcode", "year", "unitcode", "value"
                                     ],
                                     "aggregations": [
                                         {
                                             "columns": ["value"],
                                             "rule": "SUM"
-                                        },
-                                        {
+                                        }
+                                        ,{
                                             "columns": ["unitcode"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         },
                                         {
                                             "columns": ["unitname"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         }
 
                                     ]
@@ -385,7 +385,7 @@ define(function () {
                                 }
                             },
                             {
-                                "name": "group",
+                                "name": "pggroup",
                                 "parameters": {
                                     "by": [
                                         "donorcode"
@@ -397,11 +397,11 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitcode"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         },
                                         {
                                             "columns": ["unitname"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         }
 
                                     ]
@@ -519,7 +519,7 @@ define(function () {
                                 }
                             },
                             {
-                                "name": "group",
+                                "name": "pggroup",
                                 "parameters": {
                                     "by": [
                                         "channelcode"
@@ -531,11 +531,11 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitcode"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         },
                                         {
                                             "columns": ["unitname"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         }
                                     ]
                                 }
@@ -661,7 +661,7 @@ define(function () {
                                 }
                             },
                             {
-                                "name": "group",
+                                "name": "pggroup",
                                 "parameters": {
                                     "by": [
                                         "purposecode"
@@ -673,11 +673,11 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitcode"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         },
                                         {
                                             "columns": ["unitname"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         }
                                     ]
                                 }
@@ -776,7 +776,7 @@ define(function () {
                                 }
                             },
                             {
-                                "name": "group",
+                                "name": "pggroup",
                                 "parameters": {
                                     "by": [
                                         "regioncode", "regionname"
@@ -786,13 +786,13 @@ define(function () {
                                             "columns": ["value"],
                                             "rule": "SUM"
                                         },
-                                        {
+                                         {
                                             "columns": ["unitcode"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         },
                                         {
                                             "columns": ["unitname"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         }
 
                                     ]
@@ -1113,7 +1113,7 @@ define(function () {
                                 }
                             },
                             {
-                                "name": "group",
+                                "name": "pggroup",
                                 "parameters": {
                                     "by": [
                                         "sectorcode", "year"
@@ -1125,11 +1125,11 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitcode"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         },
                                         {
                                             "columns": ["unitname"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         }
                                     ]
                                 }
@@ -1219,7 +1219,7 @@ define(function () {
                                 }
                             },
                             {
-                                "name": "group",
+                                "name": "pggroup",
                                 "parameters": {
                                     "by": [
                                         "sectorcode"
@@ -1231,11 +1231,11 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitcode"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         },
                                         {
                                             "columns": ["unitname"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         }
                                     ]
                                 }
@@ -1342,7 +1342,7 @@ define(function () {
                                 }
                             },
                             {
-                                "name": "group",
+                                "name": "pggroup",
                                 "parameters": {
                                     "by": [
                                         "donorcode"
@@ -1354,11 +1354,11 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitcode"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         },
                                         {
                                             "columns": ["unitname"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         }
                                     ]
                                 }
@@ -1483,7 +1483,7 @@ define(function () {
                                 }
                             },
                             {
-                                "name": "group",
+                                "name": "pggroup",
                                 "parameters": {
                                     "by": [
                                         "purposecode"
@@ -1495,11 +1495,11 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitcode"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         },
                                         {
                                             "columns": ["unitname"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         }
                                     ]
                                 }
@@ -1599,7 +1599,7 @@ define(function () {
                                 }
                             },
                             {
-                                "name": "group",
+                                "name": "pggroup",
                                 "parameters": {
                                     "by": [
                                         "channelcode"
@@ -1611,11 +1611,11 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitcode"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         },
                                         {
                                             "columns": ["unitname"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         }
                                     ]
                                 }
@@ -1944,7 +1944,7 @@ define(function () {
                                 }
                             },
                             {
-                                "name": "group",
+                                "name": "pggroup",
                                 "parameters": {
                                     "by": [
                                         "sectorcode", "year"
@@ -1956,11 +1956,11 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitcode"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         },
                                         {
                                             "columns": ["unitname"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         }
                                     ]
                                 }
@@ -2050,7 +2050,7 @@ define(function () {
                                 }
                             },
                             {
-                                "name": "group",
+                                "name": "pggroup",
                                 "parameters": {
                                     "by": [
                                         "sectorcode"
@@ -2062,11 +2062,11 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitcode"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         },
                                         {
                                             "columns": ["unitname"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         }
                                     ]
                                 }
@@ -2173,7 +2173,7 @@ define(function () {
                                 }
                             },
                             {
-                                "name": "group",
+                                "name": "pggroup",
                                 "parameters": {
                                     "by": [
                                         "channelcode"
@@ -2185,11 +2185,11 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitcode"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         },
                                         {
                                             "columns": ["unitname"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         }
                                     ]
                                 }
@@ -2314,7 +2314,7 @@ define(function () {
                                 }
                             },
                             {
-                                "name": "group",
+                                "name": "pggroup",
                                 "parameters": {
                                     "by": [
                                         "purposecode"
@@ -2326,11 +2326,11 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitcode"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         },
                                         {
                                             "columns": ["unitname"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         }
                                     ]
                                 }
@@ -2687,7 +2687,7 @@ define(function () {
                                 }
                             },
                             {
-                                "name": "group",
+                                "name": "pggroup",
                                 "parameters": {
                                     "by": [
                                         "sectorcode", "year"
@@ -2699,11 +2699,11 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitcode"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         },
                                         {
                                             "columns": ["unitname"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         }
                                     ]
                                 }
@@ -2804,7 +2804,7 @@ define(function () {
                                 }
                             },
                             {
-                                "name": "group",
+                                "name": "pggroup",
                                 "parameters": {
                                     "by": [
                                         "sectorcode"
@@ -2816,11 +2816,11 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitcode"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         },
                                         {
                                             "columns": ["unitname"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         }
                                     ]
                                 }
@@ -2938,7 +2938,7 @@ define(function () {
                                 }
                             },
                             {
-                                "name": "group",
+                                "name": "pggroup",
                                 "parameters": {
                                     "by": [
                                         "channelcode"
@@ -2950,11 +2950,11 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitcode"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         },
                                         {
                                             "columns": ["unitname"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         }
                                     ]
                                 }
@@ -3090,7 +3090,7 @@ define(function () {
                                 }
                             },
                             {
-                                "name": "group",
+                                "name": "pggroup",
                                 "parameters": {
                                     "by": [
                                         "purposecode"
@@ -3102,11 +3102,11 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitcode"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         },
                                         {
                                             "columns": ["unitname"],
-                                            "rule": "FIRST"
+                                            "rule": "pgfirst"
                                         }
                                     ]
                                 }
