@@ -185,25 +185,7 @@ define(function () {
                 uid: "adam_usd_commitment",
 
                 //data base filter
-                filter: [  {
-                    "name": "filter",
-                    "parameters": {
-                        "rows": {     // ROWS = WHERE
-                            "flowcode": {
-                                "codes": [
-                                    {
-                                        "uid": "crs_flow_types",
-                                        "version": "2015",
-                                        "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                        ]   //ODA
-                                    }
-                                ]
-                            }
-
-                        }
-                        //, "columns" = SELECT COLUMNS
-                    }
-                }],
+                filter: [],
 
                 //bridge configuration
                 bridge: {
@@ -263,6 +245,16 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                      "rows": {
+                                         "flowcode": {
+                                             "codes": [
+                                                 {
+                                                     "uid": "crs_flow_types",
+                                                     "version": "2015",
+                                                     "codes": [ "10_12", "10_11", "10_13", "10_19"
+                                                     ]   //ODA
+                                                 }
+                                             ]
+                                         },
                                          "sectorcode": {
                                              "codes": [
                                                  {
@@ -360,6 +352,16 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
+                                        "flowcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_flow_types",
+                                                    "version": "2015",
+                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
+                                                    ]   //ODA
+                                                }
+                                            ]
+                                        },
                                         "sectorcode": {
                                             "codes": [
                                                 {
@@ -446,6 +448,16 @@ define(function () {
                                     subtitle: {
                                         text: ''
                                     },
+                                    legend: {
+                                       /** layout: 'vertical',
+                                        width: 600,
+                                        floating: true,
+                                        align: 'center',
+                                        verticalAlign: 'bottom',
+                                        borderWidth: 1,
+                                        itemWidth: '300px',**/
+                                        itemStyle: 300
+                                    },
                                     tooltip: {
                                         formatter: function(){
                                             return '<b>' +this.x + ': ' + '</b><br/>' +
@@ -463,6 +475,16 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
+                                        "flowcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_flow_types",
+                                                    "version": "2015",
+                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
+                                                    ]   //ODA
+                                                }
+                                            ]
+                                        },
                                         "sectorcode": {
                                             "codes": [
                                                 {
@@ -562,9 +584,14 @@ define(function () {
                                        labelFormatter: function(){
                                         //  var words = this.name.split(/\s+/).slice(1,5);
                                           // for
+                                         //  var words = this.name;
+                                         //  if(words.length > 30){
+                                         //      words = this.name.slice(0, 30)+ '...';
+                                         //  }
 
+                                          // return words;
+                                          return this.name.slice(0, 25)+ '...';
 
-                                           return this.name.slice(0, 25)+ '...'
                                        }
                                         //s.split(/\s+/).slice(1,3);
                                     },
@@ -574,7 +601,13 @@ define(function () {
                                             cursor: 'pointer',
                                             dataLabels: {
                                                formatter: function(){
-                                                var words = this.point.name.slice(0, 60)+ '...';
+                                                  // var words = this.point.name;
+                                                  // if(words.length > 60){
+                                                  //     words = this.point.name.slice(0, 60)+ '...';
+                                                  // }
+
+                                                 var words = this.point.name.slice(0, 60)+ '...';
+   
 
                                                 return words;
 
@@ -594,6 +627,16 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
+                                        "flowcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_flow_types",
+                                                    "version": "2015",
+                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
+                                                    ]   //ODA
+                                                }
+                                            ]
+                                        },
                                         "purposecode": {
                                             "codes": [
                                                 {
@@ -647,7 +690,122 @@ define(function () {
                             }
                         ]
                     }
+                   /**, {
+                        id: 'item-5', // Regional Distribution
+                        type: 'chart',
+                        class: "fx-timeseries-ecample",
+                        //needed if layout = injected
+                        container: "#item-5",
+                        config: {
+                            container: "#item-5",
+                            adapter: {
+                                type: "standard",
+                                xDimensions: 'regioncode',
+                                yDimensions: 'unitname',
+                                valueDimensions: 'value',
+                                seriesDimensions: ['regioncode']
+                            },
+                            template: {
+                            },
+                            creator: {
+                                chartObj: {
+                                    chart: {
+                                        type: "column"
+                                    },
+                                    yaxis: {
+                                        min: 0
+                                    },
+                                    legend: {
+                                        reversed: "true"
+                                    },
+                                    plotOptions: {
+                                        series: {
+                                            stacking: 'percent'
+                                        }
+                                    },
+                                    subtitle: {
+                                        text: ''
+                                    },
+                                    tooltip: {
+                                        formatter: function(){
+                                            return '<b>' +this.x + ': ' + '</b><br/>' +
+                                                Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
+                                        }
+                                    }
 
+                                }
+                            }
+                        },
+                        // for now it takes the id, TODO: add uid as well
+                        allowedFilter: ['sectorcode', 'purposecode', 'year', 'channelcode'],
+                        filter: [
+                            {
+                                "name": "filter",
+                                "parameters": {
+                                    "rows": {
+                                      "flowcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_flow_types",
+                                                    "version": "2015",
+                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
+                                                    ]   //ODA
+                                                }
+                                            ]
+                                        },
+                                        "sectorcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_sectors",
+                                                    "version": "2015",
+                                                    "codes": [
+                                                        "600"
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "year": {
+                                            "time": [
+                                                {
+                                                    "from": 2000,
+                                                    "to": 2013
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "name": "group",
+                                "parameters": {
+                                    "by": [
+                                        "regioncode", "regionname"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": ["value"],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "FIRST"
+                                        },
+                                        {
+                                            "columns": ["unitname"],
+                                            "rule": "FIRST"
+                                        }
+
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "order",
+                                "parameters": {
+                                    "regioncode": "ASC"
+                                }
+                            }
+                        ]
+                    } **/
                 ]
             }
         },
@@ -851,36 +1009,7 @@ define(function () {
                 uid: "adam_usd_commitment",
 
                 //data base filter
-                filter: [  {
-                    "name": "filter",
-                    "parameters": {
-                        "rows": {     // ROWS = WHERE
-                            "flowcode": {
-                                "codes": [
-                                    {
-                                        "uid": "crs_flow_types",
-                                        "version": "2015",
-                                        "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                        ]   //ODA
-                                    }
-                                ]
-                            }//,
-                            /**"recipientcode": {
-                                "codes": [
-                                    {
-                                        "uid": "crs_recipients",
-                                        "version": "2015",
-                                        "codes": [
-                                            "130"  //Algeria
-                                        ]
-                                    }
-                                ]
-                            }  **/
-
-                        }
-                        //, "columns" = SELECT COLUMNS
-                    }
-                }],
+                filter: [],
 
                 //bridge configuration
                 bridge: {
@@ -940,6 +1069,16 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
+                                        "flowcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_flow_types",
+                                                    "version": "2015",
+                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
+                                                    ]   //ODA
+                                                }
+                                            ]
+                                        },
                                         "sectorcode": {
                                             "codes": [
                                                 {
@@ -1047,6 +1186,16 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
+                                        "flowcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_flow_types",
+                                                    "version": "2015",
+                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
+                                                    ]   //ODA
+                                                }
+                                            ]
+                                        },
                                         "recipientcode": {
                                             "codes": [
                                                 {
@@ -1149,6 +1298,16 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
+                                        "flowcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_flow_types",
+                                                    "version": "2015",
+                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
+                                                    ]   //ODA
+                                                }
+                                            ]
+                                        },
                                         "sectorcode": {
                                             "codes": [
                                                 {
@@ -1280,6 +1439,16 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
+                                        "flowcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_flow_types",
+                                                    "version": "2015",
+                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
+                                                    ]   //ODA
+                                                }
+                                            ]
+                                        },
                                         "sectorcode": {
                                             "codes": [
                                                 {
@@ -1386,6 +1555,16 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
+                                        "flowcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_flow_types",
+                                                    "version": "2015",
+                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
+                                                    ]   //ODA
+                                                }
+                                            ]
+                                        },
                                         "sectorcode": {
                                             "codes": [
                                                 {
@@ -1661,25 +1840,7 @@ define(function () {
                 uid: "adam_usd_commitment",
 
                 //data base filter
-                filter: [  {
-                    "name": "filter",
-                    "parameters": {
-                        "rows": {     // ROWS = WHERE
-                            "flowcode": {
-                                "codes": [
-                                    {
-                                        "uid": "crs_flow_types",
-                                        "version": "2015",
-                                        "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                        ]   //ODA
-                                    }
-                                ]
-                            }
-
-                        }
-                        //, "columns" = SELECT COLUMNS
-                    }
-                }],
+                filter: [],
 
                 //bridge configuration
                 bridge: {
@@ -1739,6 +1900,16 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
+                                        "flowcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_flow_types",
+                                                    "version": "2015",
+                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
+                                                    ]   //ODA
+                                                }
+                                            ]
+                                        },
                                         "sectorcode": {
                                             "codes": [
                                                 {
@@ -1846,6 +2017,16 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
+                                        "flowcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_flow_types",
+                                                    "version": "2015",
+                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
+                                                    ]   //ODA
+                                                }
+                                            ]
+                                        },
                                         "donorcode": {
                                             "codes": [
                                                 {
@@ -1948,6 +2129,16 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
+                                        "flowcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_flow_types",
+                                                    "version": "2015",
+                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
+                                                    ]   //ODA
+                                                }
+                                            ]
+                                        },
                                         "sectorcode": {
                                             "codes": [
                                                 {
@@ -2079,6 +2270,16 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
+                                        "flowcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_flow_types",
+                                                    "version": "2015",
+                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
+                                                    ]   //ODA
+                                                }
+                                            ]
+                                        },
                                         "sectorcode": {
                                             "codes": [
                                                 {
@@ -2371,25 +2572,7 @@ define(function () {
                 uid: "adam_usd_commitment",
 
                 //data base filter
-                filter: [  {
-                    "name": "filter",
-                    "parameters": {
-                        "rows": {     // ROWS = WHERE
-                            "flowcode": {
-                                "codes": [
-                                    {
-                                        "uid": "crs_flow_types",
-                                        "version": "2015",
-                                        "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                        ]   //ODA
-                                    }
-                                ]
-                            }
-
-                        }
-                        //, "columns" = SELECT COLUMNS
-                    }
-                }],
+                filter: [],
 
                 //bridge configuration
                 bridge: {
@@ -2449,6 +2632,16 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
+                                        "flowcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_flow_types",
+                                                    "version": "2015",
+                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
+                                                    ]   //ODA
+                                                }
+                                            ]
+                                        },
                                         "sectorcode": {
                                             "codes": [
                                                 {
@@ -2567,6 +2760,16 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
+                                        "flowcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_flow_types",
+                                                    "version": "2015",
+                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
+                                                    ]   //ODA
+                                                }
+                                            ]
+                                        },
                                         "recipientcode": {
                                             "codes": [
                                                 {
@@ -2680,6 +2883,16 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
+                                        "flowcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_flow_types",
+                                                    "version": "2015",
+                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
+                                                    ]   //ODA
+                                                }
+                                            ]
+                                        },
                                         "sectorcode": {
                                             "codes": [
                                                 {
@@ -2822,6 +3035,16 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
+                                        "flowcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_flow_types",
+                                                    "version": "2015",
+                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
+                                                    ]   //ODA
+                                                }
+                                            ]
+                                        },
                                         "sectorcode": {
                                             "codes": [
                                                 {
