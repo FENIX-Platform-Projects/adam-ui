@@ -168,6 +168,8 @@ define([
             log.info("Results reset");
 
             this.$list.empty();
+
+            //TODO destroy itmes
         }
 
 

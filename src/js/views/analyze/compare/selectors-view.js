@@ -20,6 +20,7 @@ define([
 
     var s = {
         SELECTORS_CLASS: ".fx-selector",
+        SELECTOR_DISABLED_CLASS: "fx-selector-disabled",
         SELECTORS: "[data-selector]",
         TREE_CONTAINER: "[data-role='tree']",
         FILTER_CONTAINER: "[data-role='filter']",
@@ -847,6 +848,9 @@ define([
 
             //disable filter
             $container.find(s.FILTER_CONTAINER).attr("disabled", true);
+
+            //add class
+            $container.closest(s.SELECTORS_CLASS).addClass(s.SELECTOR_DISABLED_CLASS);
 
             log.info("Selector disabled : " + t);
 
