@@ -13769,6 +13769,20 @@ footer h4 {
     color: #333333;
     text-decoration: none; }
 
+.selector-focused {
+  background-color: #e5f3fa; }
+
+/* DANI */
+.fx-result [data-content] {
+  display: none; }
+.fx-result[data-status="ready"] [data-content="ready"] {
+  display: block; }
+.fx-result[data-status="error"] [data-content="error"] {
+  display: block; }
+.fx-result[data-status="loading"] [data-content="loading"] {
+  display: block; }
+
+/* FINE DANI*/
 /* Extra small devices (phones, less than 768px) */
 /* No media query since this is the default in Bootstrap */
 /* Small devices (tablets, 768px and up) */

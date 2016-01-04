@@ -17,13 +17,13 @@ define([
     'use strict';
 
     var s = {
-        LIST : "#results-list",
-        SWITCH : "input[type='radio']",
-        SWITCH_CHECKED : "input[type='radio']:checked",
-        TAB : ".tab-container [data-visualization]",
-        REMOVE_BTN : "[data-action='remove']",
-        TABLE_CONTAINER : "[data-visualization='table'] [data-container]",
-        CHART_CONTAINER : "[data-visualization='chart'] [data-container]"
+        LIST: "#results-list",
+        SWITCH: "input[type='radio']",
+        SWITCH_CHECKED: "input[type='radio']:checked",
+        TAB: ".tab-container [data-visualization]",
+        REMOVE_BTN: "[data-action='remove']",
+        TABLE_CONTAINER: "[data-visualization='table'] [data-container]",
+        CHART_CONTAINER: "[data-visualization='chart'] [data-container]"
     };
 
     var ResultsView = View.extend({
@@ -58,11 +58,14 @@ define([
 
         },
 
-        add: function ( obj ) {
+        add: function (obj) {
+
+            log.info("Add result:");
+            log.info(obj);
 
             var template = Handlebars.compile(resultTemplate),
-                $li = $(template($.extend(true, {}, i18nLabels, obj.selection.labels, obj))),
-                o = $.extend(true, obj, {$el : $li});
+                $li = $(template($.extend(true, {}, i18nLabels, obj.request.selection.labels, obj))),
+                o = $.extend(true, obj, {$el: $li});
 
             this._bindObjEventListeners(o);
 
@@ -74,39 +77,57 @@ define([
 
         },
 
-        renderObj : function (obj) {
+        renderObj: function (obj) {
 
             obj.ready = true;
 
-            obj.request.$el.attr("data-status", "ready");
+            this._setStatus(obj, "ready");
 
             //TODO render chart and olap
 
         },
 
-        errorObj : function (obj) {
+        errorObj: function (obj) {
+            log.error("Error on result:");
+            log.error(obj);
 
-            obj.request.$el.attr("data-status", "error");
+            this._setStatus(obj, "error");
 
-            log.warn("Error for: " + JSON.stringify(obj));
+            //TODO handle error
 
         },
 
-        _bindObjEventListeners : function (obj) {
+        _bindObjEventListeners: function (obj) {
 
             var $el = obj.$el;
 
-            $el.find(s.SWITCH).on('change', _.bind(function () {
-                this._onTabChange(obj.$el);
-            }, this));
+            $el.find(s.SWITCH).on('change', _.bind(this._onSwitchChange, this, obj));
 
-            $el.find(s.REMOVE_BTN).on('click', _.bind(function () {
-                this.remove(obj);
-            }, this));
+            $el.find(s.REMOVE_BTN).on('click', _.bind(this._onRemoveItem, this, obj));
 
         },
 
-        _unbindObjEventListeners : function (obj) {
+        _setStatus: function (obj, status) {
+
+            log.info("Set '" + status + "' for result id: " + obj.id);
+            log.info(obj);
+
+            obj.$el.attr("data-status", status);
+        },
+
+        _onSwitchChange: function (obj) {
+            log.info("Change visualization for result id: " + obj.id);
+
+            this._onTabChange(obj.$el);
+        },
+
+        _onRemoveItem: function (obj) {
+            log.info("Remove result id: " + obj.id);
+
+            this.removeItem(obj);
+        },
+
+        _unbindObjEventListeners: function (obj) {
 
             var $el = obj.$el;
 
@@ -122,11 +143,13 @@ define([
 
             $li.find(s.TAB).hide();
 
-            $li.find('[data-visualization="'+$checked.val()+'"]').show();
+            $li.find('[data-visualization="' + $checked.val() + '"]').show();
+
+            log.info("Show tab: " + $checked.val());
 
         },
 
-        remove: function ( obj ) {
+        removeItem: function (obj) {
 
             this._unbindObjEventListeners(obj);
 
@@ -136,7 +159,7 @@ define([
 
         },
 
-        _remove : function ($el) {
+        _remove: function ($el) {
 
             $el.remove();
         },

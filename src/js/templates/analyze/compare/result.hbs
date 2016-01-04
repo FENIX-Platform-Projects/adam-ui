@@ -1,4 +1,4 @@
-<li class="adam-result" data-status="loading">
+<li class="fx-result" data-status="loading">
 
     <!-- header -->
     <div class="row">
@@ -28,21 +28,36 @@
             </div>
         </div>
     </div>
+
     <!-- content -->
     <div class="row">
         <div class="col-xs-12">
-            <div class="tab-container">
-                <div data-visualization="chart" class="result-tab">
-                     <div data-container>
-                         CHART
-                     </div>
-                </div>
-                <div data-visualization="table" class="result-tab">
-                    <div data-container>
-                        TABLE
+
+            <div data-content="ready">
+                <div class="tab-container">
+                    <div data-visualization="chart" class="result-tab">
+                        <div data-container>
+                            CHART
+                        </div>
+                    </div>
+                    <div data-visualization="table" class="result-tab">
+                        <div data-container>
+                            TABLE
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <div data-content="error">
+                ERROR
+                <button data-action="reload" class="btn btn-default">{{ reload }}</button>
+
+            </div>
+
+            <div data-content="loading">
+                LOADING
+            </div>
+
         </div>
     </div>
 

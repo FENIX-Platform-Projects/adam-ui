@@ -27,6 +27,8 @@ define({
     "kind_chart" : "Chart",
     "kind_table" : "Table",
 
-    "show_advanced_options" : "Show advanced options"
+    "show_advanced_options" : "Show advanced options",
+
+    "reload" : "Reload"
 
 });

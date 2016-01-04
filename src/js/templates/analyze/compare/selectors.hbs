@@ -3,7 +3,7 @@
         <h2>{{ sel_heading_compare_by }}</h2>
         <ul class="list-unstyled list-inline">
             <li>
-                <input type="radio" id="sel-com-1" name="compare" value="recipient" checked="checked">
+                <input type="radio" id="sel-com-1" name="compare" value="recipient">
                 <label for="sel-com-1">{{sel_heading_country}} </label>
             </li>
             <li>
@@ -41,7 +41,7 @@
         <div class="col-sm-4 col-sm-height">
 
             <!-- ODA Selector -->
-            <div class="amis-selector">
+            <div class="fx-selector">
 
                 <div class="row">
                     <div class="col-xs-12">
@@ -84,12 +84,12 @@
         <div class="col-sm-4 col-sm-height">
 
             <!-- Country Selector -->
-            <div class="amis-selector">
+            <div class="fx-selector">
 
                 <div class="selector-header">
-                    <h2>{{ sel_heading_country }}
+                    <h2>{{ sel_heading_country }}  <small class="advanced-option" >[ <span data-role="amount">0</span> ]</small>
 
-                        <div class="toggle-wrapper pull-right">
+                        <div class="toggle-wrapper pull-right advanced-option">
                             <p class="toggle-text">Enable this filter</p>
                             <input type="checkbox" name="disable-selector" id="switch-country" data-target="recipient"
                                    data-type="switch" data-role="switch" checked>
@@ -169,11 +169,11 @@
         <div class="col-sm-4 col-sm-height">
 
             <!-- Donor Selector -->
-            <div class="amis-selector" data-selector="donor">
+            <div class="fx-selector" data-selector="donor">
 
                 <div class="selector-header">
-                    <h2>{{ sel_heading_donor }}
-                        <div class="toggle-wrapper pull-right">
+                    <h2>{{ sel_heading_donor }}  <small class="advanced-option" >[ <span data-role="amount">0</span> ]</small>
+                        <div class="toggle-wrapper pull-right advanced-option">
                             <p class="toggle-text">Enable this filter</p>
                             <input type="checkbox" name="disable-selector" id="switch-donor" data-target="donor" data-type="switch"
                                    data-role="switch" checked>
@@ -206,11 +206,11 @@
 
         <div class="col-sm-4 col-sm-height">
             <!-- Channel of delivery Selector -->
-            <div class="amis-selector" data-selector="delivery">
+            <div class="fx-selector" data-selector="delivery">
 
                 <div class="selector-header">
-                    <h2>{{ sel_heading_channel_of_delivery }}
-                        <div class="toggle-wrapper pull-right">
+                    <h2>{{ sel_heading_channel_of_delivery }}  <small class="advanced-option" >[ <span data-role="amount">0</span> ]</small>
+                        <div class="toggle-wrapper pull-right advanced-option">
                             <p class="toggle-text">Enable this filter</p>
                             <input type="checkbox" name="disable-selector" id="switch-delivery" data-target="delivery"
                                    data-type="switch" data-role="switch" checked>
@@ -235,11 +235,11 @@
         <div class="col-sm-4 col-sm-height">
 
             <!-- sector Selector -->
-            <div class="amis-selector" data-selector="sector">
+            <div class="fx-selector" data-selector="sector">
 
                 <div class="selector-header">
-                    <h2>{{ sel_heading_sector }}
-                        <div class="toggle-wrapper pull-right">
+                    <h2>{{ sel_heading_sector }}  <small class="advanced-option" >[ <span data-role="amount">0</span> ]</small>
+                        <div class="toggle-wrapper pull-right advanced-option">
                             <p class="toggle-text">Enable this filter</p>
                             <input type="checkbox" name="disable-selector" id="switch-sector" data-target="sector" data-type="switch"
                                    data-role="switch" checked>
@@ -265,11 +265,11 @@
         <div class="col-sm-4 col-sm-height">
 
             <!-- Seb-Sector Selector -->
-            <div class="amis-selector" data-selector="sub-sector">
+            <div class="fx-selector" data-selector="sub-sector">
 
                 <div class="selector-header">
-                    <h2>{{ sel_heading_sub_sector }}
-                        <div class="toggle-wrapper pull-right">
+                    <h2>{{ sel_heading_sub_sector }} <small class="advanced-option" >[ <span data-role="amount">0</span> ]</small>
+                        <div class="toggle-wrapper pull-right advanced-option">
                             <p class="toggle-text">Enable this filter</p>
                             <input type="checkbox" name="disable-selector" id="switch-sub-sector" data-target="sub-sector"
                                    data-type="switch" data-role="switch" checked>

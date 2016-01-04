@@ -3,6 +3,7 @@ define([
     'jquery',
     'underscore',
     'loglevel',
+    'lib/utils',
     'views/base/view',
     'text!templates/analyze/compare/compare.hbs',
     'text!templates/analyze/error.hbs',
@@ -16,7 +17,7 @@ define([
     'handlebars',
     'q',
     'amplify'
-], function ($, _, log, View, template, errorTemplate, i18nLabels, i18nErrors, E, GC, AC, Selectors, Results, Handlebars, Q) {
+], function ($, _, log, Utils, View, template, errorTemplate, i18nLabels, i18nErrors, E, GC, AC, Selectors, Results, Handlebars, Q) {
 
     'use strict';
 
@@ -151,7 +152,9 @@ define([
 
                 this._unlockForm();
 
-                //amplify.subscribe(E.SELECTORS_ITEM_SELECT, this, this._onSelectorSelect)
+                this.currentRequest = {};
+
+                amplify.subscribe(E.SELECTORS_ITEM_SELECT, this, this._onSelectorSelect);
 
             });
 
@@ -160,22 +163,32 @@ define([
         _onSelectorSelect: function () {
             log.info("Listening to 'Item selected' event");
 
-            var valid;
+            /*
+             //Uncomment this to have react feedback
 
-            this.currentRequest.selection = this.subview('selectors').getSelection();
+             var valid;
 
-            valid = this._validateSelection();
+             this.currentRequest.selection = this.subview('selectors').getSelection();
 
-            this.currentRequest.valid = typeof valid === 'boolean' ? valid : false;
+             valid = this._validateSelection();
 
-            if (valid === true) {
+             this.currentRequest.valid = typeof valid === 'boolean' ? valid : false;
 
-                this._createRequests();
+             if (valid === true) {
 
-                if (Array.isArray(this.currentRequest.combinations) && !isNaN(AC.maxCombinations) && this.currentRequest.combinations.length > AC.maxCombinations) {
-                    this._printErrors('too_many_combinations');
-                }
-            }
+             this._createRequests();
+
+             if (Array.isArray(this.currentRequest.combinations) && !isNaN(AC.maxCombinations) && this.currentRequest.combinations.length > AC.maxCombinations) {
+             this._printErrors('too_many_combinations');
+             //this._lockForm();
+             } else {
+             this._resetErrors();
+             this._unlockForm();
+             }
+             }*/
+
+            this._resetErrors();
+            this._unlockForm();
         },
 
         _onCompareClick: function () {
@@ -218,8 +231,6 @@ define([
                 s = this.currentRequest.selection,
                 compare;
 
-            console.log(s)
-
             if (!s.hasOwnProperty('oda')) {
                 errors.push('oda_missing');
                 return errors;
@@ -256,20 +267,23 @@ define([
 
             var r = [];
 
-            this._lockForm();
-
             this._createRequests();
+
+            if (Array.isArray(this.currentRequest.combinations) && !isNaN(AC.maxCombinations) && this.currentRequest.combinations.length > AC.maxCombinations) {
+                this._printErrors('too_many_combinations');
+                return;
+            } else {
+                this._resetErrors();
+                this._lockForm();
+            }
 
             _.each(this.currentRequest.requests, _.bind(function (b) {
 
                 this.currentRequest.body = [b];
 
-                r.push(this._createPromise($.extend(true, { id : Math.floor(100000 + Math.random() * 900000) }, this.currentRequest)));
+                r.push(this._createPromise($.extend(true, {}, this.currentRequest)));
 
             }, this));
-
-            log.warn("REMOVE return; HERE");
-            return;
 
             Q.all(r).then(
                 _.bind(this._onAllSuccess, this),
@@ -280,35 +294,37 @@ define([
 
         _createPromise: function (r) {
 
-            r.$el = this.subview('results').add(r);
+            var obj = {
+                model: null,
+                ready: false,
+                request: r,
+                id: Math.floor(100000 + Math.random() * 900000)
+            };
 
-            log.warn("REMOVE return; HERE");
-            return;
+            obj.$el= this.subview('results').add(obj);
 
-            //TODO no multi language
             return Q($.ajax({
-                url: GC.SERVER + GC.D3P_POSTFIX + this.currentRequest.selection.oda + "?language=EN",
+                url: GC.SERVER + GC.D3P_POSTFIX + this.currentRequest.selection.oda + "?language=" + Utils.getLocale().toUpperCase(),
                 type: "POST",
                 contentType: "application/json",
-                data: JSON.stringify(r.body),
+                data: JSON.stringify(obj.request.body),
                 dataType: 'json'
             })).then(
-                _.bind(this._onPromiseSuccess, this, r),
-                _.bind(this._onPromiseError, this, r)
+                _.bind(this._onPromiseSuccess, this, obj),
+                _.bind(this._onPromiseError, this, obj)
             );
-
         },
 
         _onAllSuccess: function () {
 
-            log.info("All requests success");
+            log.info("All requests returned successfully");
 
             this._unlockForm();
         },
 
         _onAllError: function (request) {
 
-            log.error("Requests error");
+            log.error("Requests error:");
             log.error(request);
 
             this._printErrors('request_error');
@@ -317,27 +333,26 @@ define([
 
         },
 
-        _onPromiseSuccess: function (request, result) {
+        _onPromiseSuccess: function (obj, result) {
 
-            log.info("Request success: [request/result]");
-            log.info(request);
+            log.info("Request success: [obj/result]");
+            log.info(obj);
             log.info(result);
 
-            this.subview('results').renderObj({
-                model: result,
-                request: request
-            });
+            obj.model = result;
+
+            this.subview('results').renderObj(obj);
 
         },
 
-        _onPromiseError: function (request, error) {
+        _onPromiseError: function (obj, error) {
 
             log.error(error);
-            log.error(request);
+            log.error(obj);
 
             this._printErrors('request_error');
 
-            this.subview('results').errorObj(request);
+            this.subview('results').errorObj(obj);
 
         },
 
@@ -483,6 +498,10 @@ define([
                 html = template({text: i18nErrors[e]});
 
             this.$error.html(html);
+
+            if (!this.$error.is(':animated')) {
+                this.$error.fadeTo(0, 0).fadeTo("slow", 1);
+            }
         },
 
         _resetErrors: function () {

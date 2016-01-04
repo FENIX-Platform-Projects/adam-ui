@@ -138,8 +138,8 @@ define(function () {
                 },
 
                 "selector": {
-                    "type": "tree",
-                    "default": [11430]
+                    "type": "tree"
+                    //,"default": [11430]
                 },
 
                 "filter": {
@@ -222,9 +222,13 @@ define(function () {
             }
         },
 
-        "processesOrder" : ['flowcode', 'sectorcode', 'recipientcode', 'donorcode',  'year', 'purposecode',  'delivery' ],
+        "processesOrder" : ['flowcode', 'year', 'sectorcode', 'recipientcode', 'donorcode', 'purposecode', 'delivery' ],
 
-        "maxCombinations" : 20 //Max number of requests to d3p,
+        "maxCombinations" : 20, //Max number of requests to d3p
+
+        "compareBy" : "recipient", //recipient || donor || delivery || sector || sub-sector
+
+        "selectorFocusedClass" : "selector-focused"
 
     }
 
