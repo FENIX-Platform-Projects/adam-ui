@@ -13208,6 +13208,9 @@ ul[role="group"] {
 .container {
   background-color: white; }
 
+.fit-height {
+  height: 100%; }
+
 h1 {
   color: #333; }
 
