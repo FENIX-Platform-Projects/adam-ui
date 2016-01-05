@@ -1,64 +1,95 @@
-<li class="fx-result" data-status="loading">
+<!--<li class="" >-->
 
-    <!-- header -->
-    <div class="row">
-        <div class="col-xs-12">
+<!--&lt;!&ndash; header &ndash;&gt;-->
+<!--<div class="row">-->
+<!--<div class="col-xs-12">-->
+<!--<div class="row">-->
+<!--<div class="col-xs-5">-->
+<!--<span class="compare-as">-->
+
+<!--{{ compare_as }}-->
+
+<!--<input id="visualization-{{id}}-1" type="radio" name="visualization-{{id}}" value="chart" checked="checked">-->
+<!--<label for="visualization-{{id}}-1">{{ kind_chart }}</label>-->
+
+<!--<input id="visualization-{{id}}-2" type="radio" name="visualization-{{id}}" value="table">-->
+<!--<label for="visualization-{{id}}-2">{{ kind_table }}</label>-->
+
+<!--</span>-->
+<!--</div>-->
+
+<!--<div class="col-xs-5">-->
+<!--{{oda}}-->
+<!--</div>-->
+
+<!--<div class="col-xs-2">-->
+<!--<button  class="btn btn-default pull-right">remove</button>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+
+
+<!--</li>-->
+
+
+<div class="fx-analysis-item fit fx-result" data-status="loading">
+    <div class="fx-handle"></div>
+    <div class="fx-dataset-details-container">
+        <span class="fx-dataset-details truncate">Titolo</span>
+    </div>
+
+    <div class='fx-widget ' role="tabpanel">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs small-icons-analysis" role="tablist" data-role="fx-module-tabs">
+
+            <!-- Control buttons-->
+            <li class="pull-right"><a data-control='remove' data-action="remove"><span class="fx-widget-icons icojam_button_delete_1"></span></a>
+            </li>
+
+            <!--        <li class="pull-right"><a data-control='minimize' ><span class="fx-widget-icons icojam_inbox_receive"></span></a></li>-->
+            <li role="presentation" data-plugin="table" class="active"><a href="#fx-tab-table-6" aria-controls="table"
+                                                                          role="tab" data-toggle="tab" aria-expanded="true">Table</a>
+            </li>
+            <li role="presentation" data-plugin="chart"><a href="#fx-tab-chart-8" aria-controls="chart" role="tab"
+                                                           data-toggle="tab">Chart</a></li>
+        </ul>
+
+        <div class="tab-content" data-role="fx-module-content">
+            <!-- content -->
             <div class="row">
-                <div class="col-xs-5">
-                   <span class="compare-as">
+                <div class="col-xs-12">
 
-                    {{ compare_as }}
+                    <div data-content="ready">
+                        <div class="tab-container">
+                            <div data-visualization="chart" class="result-tab">
+                                <div data-container>
+                                    CHART
+                                </div>
+                            </div>
+                            <div data-visualization="table" class="result-tab">
+                                <div data-container>
+                                    TABLE
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                       <input id="visualization-{{id}}-1" type="radio" name="visualization-{{id}}" value="chart" checked="checked">
-                        <label for="visualization-{{id}}-1">{{ kind_chart }}</label>
+                    <div data-content="error">
+                        ERROR
+                        <button data-action="reload" class="btn btn-default">{{ reload }}</button>
 
-                        <input id="visualization-{{id}}-2" type="radio" name="visualization-{{id}}" value="table">
-                        <label for="visualization-{{id}}-2">{{ kind_table }}</label>
+                    </div>
 
-                    </span>
-                </div>
+                    <div data-content="loading">
+                        LOADING
+                    </div>
 
-                <div class="col-xs-5">
-                    {{oda}}
-                </div>
-
-                <div class="col-xs-2">
-                    <button data-action="remove" class="btn btn-default pull-right">remove</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- content -->
-    <div class="row">
-        <div class="col-xs-12">
+</div>
 
-            <div data-content="ready">
-                <div class="tab-container">
-                    <div data-visualization="chart" class="result-tab">
-                        <div data-container>
-                            CHART
-                        </div>
-                    </div>
-                    <div data-visualization="table" class="result-tab">
-                        <div data-container>
-                            TABLE
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div data-content="error">
-                ERROR
-                <button data-action="reload" class="btn btn-default">{{ reload }}</button>
-
-            </div>
-
-            <div data-content="loading">
-                LOADING
-            </div>
-
-        </div>
-    </div>
-
-</li>

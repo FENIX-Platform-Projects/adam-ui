@@ -112,10 +112,12 @@
 /* DANI */
 
 .fx-result {
+  position: relative;
 
   //by default each tab content is hidden
   [data-content] {
     display: none;
+
   }
 
   //show only the status only correspondent tab content
@@ -127,6 +129,7 @@
 
       [data-content="#{$status}"] {
         display: block;
+
       }
 
     }

@@ -13773,14 +13773,16 @@ footer h4 {
   background-color: #e5f3fa; }
 
 /* DANI */
-.fx-result [data-content] {
-  display: none; }
-.fx-result[data-status="ready"] [data-content="ready"] {
-  display: block; }
-.fx-result[data-status="error"] [data-content="error"] {
-  display: block; }
-.fx-result[data-status="loading"] [data-content="loading"] {
-  display: block; }
+.fx-result {
+  position: relative; }
+  .fx-result [data-content] {
+    display: none; }
+  .fx-result[data-status="ready"] [data-content="ready"] {
+    display: block; }
+  .fx-result[data-status="error"] [data-content="error"] {
+    display: block; }
+  .fx-result[data-status="loading"] [data-content="loading"] {
+    display: block; }
 
 /* FINE DANI*/
 /* Extra small devices (phones, less than 768px) */
