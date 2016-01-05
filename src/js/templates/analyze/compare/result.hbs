@@ -7,64 +7,58 @@
         <span class="fx-dataset-details truncate">{{oda}}</span>
     </div>
 
-    <div class='fx-widget' role="tabpanel">
+    <div class='fx-widget'>
 
-        <ul class="nav nav-tabs small-icons-analysis" role="tablist" data-role="fx-module-tabs">
+        <ul class="nav nav-tabs small-icons-analysis" role="tablist">
 
-            <!-- Control buttons-->
-            <li role="presentation" class="pull-right">
-                <a data-control='remove'>
-                    <span class="fx-widget-icons icojam_button_delete_1"></span>
+            <li role="presentation" class="active">
+                <a href="#fx-tab-table-{{id}}" role="tab" data-toggle="tab" data-visualization="table">
+                    {{ tab_table }}
                 </a>
             </li>
 
-            <li role="presentation" data-plugin="table" class="active">
-                <a href="#fx-tab-table-{{id}}" aria-controls="table" role="tab" data-toggle="tab"
-                   aria-expanded="true">{{ tab_table }}</a>
-            </li>
-
-            <li role="presentation" data-plugin="chart">
-                <a href="#fx-tab-chart-{{id}}" aria-controls="chart" role="tab" data-toggle="tab">{{ tab_chart }}</a>
+            <li role="presentation" data-visualization="chart">
+                <a href="#fx-tab-chart-{{id}}" role="tab" data-toggle="tab" data-visualization="chart">
+                    {{ tab_chart }}
+                </a>
             </li>
 
         </ul>
 
-        <div class="tab-content" data-role="fx-module-content">
+        <div class="row fit-height">
+            <div class="col-xs-12 fit-height">
 
-            <!-- content -->
-            <div class="row fit-height">
-                <div class="col-xs-12 fit-height">
+                <div data-content="ready" class="fit-height">
 
-                    <div data-content="ready" class="fit-height">
+                    <div class="tab-content fit-height">
 
-                        <div class="tab-container fit-height">
-                            <div id="fx-tab-table-{{id}}" role="tabpanel" data-visualization="chart" class="tab-pane active">
-                                <div data-container>
-                                    CHART
-                                </div>
+                        <div id="fx-tab-table-{{id}}" role="tabpanel" data-visualization="chart" class="tab-pane fade in active">
+                            <div data-container>
+                                TABLE
                             </div>
-                            <div id="fx-tab-chart-{{id}}" role="tabpanel" data-visualization="table" class="tab-pane">
-                                <div data-container>
-                                    TABLE
-                                </div>
+                        </div>
+                        <div id="fx-tab-chart-{{id}}" role="tabpanel" data-visualization="table" class="tab-pane fade">
+                            <div data-container>
+                                CHARt
                             </div>
                         </div>
                     </div>
 
-                    <div data-content="error" class="fit-height">
-                        ERROR
-                        <button data-action="reload" class="btn btn-default">{{ reload }}</button>
+                </div>
 
-                    </div>
-
-                    <div data-content="loading" class="fit-height">
-                        LOADING
-                    </div>
+                <div data-content="error" class="fit-height">
+                    ERROR
+                    <button data-action="reload" class="btn btn-default">{{ reload }}</button>
 
                 </div>
-            </div>
 
+                <div data-content="loading" class="fit-height">
+                    LOADING
+                </div>
+
+            </div>
         </div>
+
     </div>
 
 </div>
