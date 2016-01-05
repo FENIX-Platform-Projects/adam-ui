@@ -18,7 +18,7 @@ define([
 
     var s = {
         LIST: "#results-list",
-        SWITCH: "input[type='radio']",
+        SWITCH: "a[data-toggle='tab']",
         SWITCH_CHECKED: "input[type='radio']:checked",
         TAB: ".tab-container [data-visualization]",
         REMOVE_BTN: "[data-control='remove']",
@@ -45,7 +45,6 @@ define([
         },
 
         attach: function () {
-
             View.prototype.attach.call(this, arguments);
 
             this._initVariables();
@@ -55,11 +54,17 @@ define([
         _initVariables: function () {
 
             this.$list = this.$el.find(s.LIST);
+        },
+
+        _initObj: function (obj) {
+
+            obj.tab = "table";
+
+            obj.tabs = {};
 
         },
 
         add: function (obj) {
-
             log.info("Add result:");
             log.info(obj);
 
@@ -67,9 +72,9 @@ define([
                 $li = $(template($.extend(true, {}, i18nLabels, obj.request.selection.labels, obj))),
                 o = $.extend(true, obj, {$el: $li});
 
-            this._bindObjEventListeners(o);
+            this._initObj(obj);
 
-            this._onTabChange(o.$el);
+            this._bindObjEventListeners(o);
 
             this.$list.append($li);
 
@@ -83,8 +88,7 @@ define([
 
             this._setStatus(obj, "ready");
 
-            //TODO render chart and olap
-
+            this._onTabChange(obj);
         },
 
         errorObj: function (obj) {
@@ -101,7 +105,7 @@ define([
 
             var $el = obj.$el;
 
-            $el.find(s.SWITCH).on('change', _.bind(this._onSwitchChange, this, obj));
+            $el.find(s.SWITCH).on('shown.bs.tab', _.bind(this._onSwitchChange, this, obj));
 
             $el.find(s.REMOVE_BTN).on('click', _.bind(this._onRemoveItem, this, obj));
 
@@ -114,10 +118,15 @@ define([
             obj.$el.attr("data-status", status);
         },
 
-        _onSwitchChange: function (obj) {
+        _onSwitchChange: function (obj, e) {
             log.info("Change visualization for result id: " + obj.id);
 
-            this._onTabChange(obj.$el);
+            obj.tab = $(e.target).attr("data-visualization"); // newly activated tab
+            obj.previousTab = $(e.relatedTarget).attr("data-visualization"); // previous active tab
+
+            log.info("Show tab: " + obj.tab);
+
+            this._onTabChange(obj);
         },
 
         _onRemoveItem: function (obj) {
@@ -136,17 +145,47 @@ define([
 
         },
 
-        _onTabChange: function ($li) {
+        _onTabChange: function (obj) {
 
-            var $checked = $li.find(s.SWITCH_CHECKED);
+            if (obj.ready === true && obj.tabs.hasOwnProperty(obj.tab) && obj.tabs[obj.tab].ready === true) {
+                log.info("Tab '" + obj.tab + "' already initialized");
+                return;
+            }
 
-            $li.find(s.TAB).hide();
+            log.info("Initializing tab '" + obj.tab + "'");
 
-            $li.find('[data-visualization="' + $checked.val() + '"]').show();
+            //Init tab status
+            obj.tabs[obj.tab] = {
+                ready: true
+            };
 
-            log.info("Show tab: " + $checked.val());
+            //tab callback
+            if ($.isFunction(this["_tab_" + obj.tab])) {
+
+                log.info("Invoking '" + obj.tab + "' tab callback");
+
+                this["_tab_" + obj.tab].call(this, obj);
+
+            } else {
+
+                log.info("Callback for '" + obj.tab + "' tab not found");
+            }
 
         },
+
+        //Tab callback
+
+        _tab_chart: function (obj) {
+            log.info("'Chart' callback");
+
+        },
+
+        _tab_table: function (obj) {
+            log.info("'Table' callback");
+
+        },
+
+        // end tab callback
 
         removeItem: function (obj) {
 
