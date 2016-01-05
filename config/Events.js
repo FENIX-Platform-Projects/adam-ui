@@ -15,6 +15,7 @@ define(function ( ) {
         SELECTORS_ITEM_SELECT : "fx.analyze.selectors.select",
         TREE_READY : "fx.analyze.tree.ready",
         RELOAD_RESULT : "fx.analyze.results.reload",
+        CHANGE_MODE: "fx.analyze.mode.change",
 
         MENU_RESET_BREADCRUMB: 'fx.fenix.menu.resetbreadcrumb'
 

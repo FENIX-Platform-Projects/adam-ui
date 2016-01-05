@@ -228,7 +228,13 @@ define(function () {
 
         "compareBy" : "recipient", //recipient || donor || delivery || sector || sub-sector
 
-        "selectorFocusedClass" : "selector-focused"
+        "selectorFocusedClass" : "selector-focused", //class to highlight a selector
+
+        "resultDefaultTab" : "chart", //Default tab to show for result,
+
+        "advancedOptionsSelector" : ".advanced-option",
+
+        "showAdvancedOptions" : false
 
     }
 

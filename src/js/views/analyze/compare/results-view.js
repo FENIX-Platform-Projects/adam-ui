@@ -9,20 +9,19 @@ define([
     'i18n!nls/analyze',
     'config/Events',
     'config/Config',
-    'config/browse/Config',
+    'config/analyze/compare/Config',
     'handlebars',
     'loglevel',
     //TODO REMOVE ME
     'text!../../../../../submodules/fenix-ui-chart-creator/tests/fenix/data/afo/scattered_data.json',
     'amplify'
-], function ($, _, ChartCreator, View, template, resultTemplate, i18nLabels, E, GC, BC, Handlebars, log, TEST_MODEL) {
+], function ($, _, ChartCreator, View, template, resultTemplate, i18nLabels, E, GC, AC, Handlebars, log, TEST_MODEL) {
 
     'use strict';
 
     var s = {
         LIST: "#results-list",
-        SWITCH: "a[data-toggle='tab']",
-        SWITCH_CHECKED: "input[type='radio']:checked",
+        TABS_CONTROLLERS: "a[data-toggle='tab']",
         TAB: ".tab-container [data-visualization]",
         REMOVE_BTN: "[data-control='remove']",
         RELOAD_BTN: "[data-control='reload']",
@@ -64,8 +63,6 @@ define([
 
         _initObj: function (obj) {
 
-            obj.tab = "table";
-
             obj.tabs = {};
 
         },
@@ -78,9 +75,9 @@ define([
                 $li = $(template($.extend(true, {}, i18nLabels, obj.request.selection.labels, obj))),
                 o = $.extend(true, obj, {$el: $li});
 
-            this._initObj(obj);
-
             this._bindObjEventListeners(o);
+
+            this._initObj(obj);
 
             this.$list.prepend($li);
 
@@ -97,7 +94,24 @@ define([
 
             this._setStatus(obj, "ready");
 
-            this._onTabChange(obj);
+            this._renderObj(obj);
+        },
+
+
+        _renderObj: function (obj) {
+
+            //show default tab
+            var $tabs = obj.$el.find(s.TABS_CONTROLLERS),
+                $candidate = $tabs.filter("[data-visualization='"+AC.resultDefaultTab+"']");
+
+            if ($candidate.length < 1) {
+                $candidate = $tabs.first();
+
+                log.warn("Impossible to find default tab '"+AC.resultDefaultTab+"'. Showing first tab instead")
+            }
+
+            $candidate.tab('show');
+
         },
 
         errorObj: function (obj) {
@@ -105,16 +119,13 @@ define([
             log.error(obj);
 
             this._setStatus(obj, "error");
-
-            //TODO handle error
-
         },
 
         _bindObjEventListeners: function (obj) {
 
             var $el = obj.$el;
 
-            $el.find(s.SWITCH).on('shown.bs.tab', _.bind(this._onSwitchChange, this, obj));
+            $el.find(s.TABS_CONTROLLERS).on('shown.bs.tab', _.bind(this._onSwitchChange, this, obj));
 
             $el.find(s.REMOVE_BTN).on('click', _.bind(this._onRemoveItem, this, obj));
 
@@ -124,8 +135,6 @@ define([
 
         _setStatus: function (obj, status) {
             log.info("Set '" + status + "' for result id: " + obj.id);
-            log.info(obj);
-
 
             obj.status = status;
 
@@ -159,13 +168,18 @@ define([
 
             var $el = obj.$el;
 
-            $el.find(s.SWITCH).off();
+            $el.find(s.TABS_CONTROLLERS).off();
 
             $el.find(s.REMOVE_BTN).off();
 
         },
 
         _onTabChange: function (obj) {
+
+            if (obj.status !== 'ready') {
+                log.warn("Obj does not have a 'ready' state. State found: '" + obj.status +"'" );
+                return;
+            }
 
             if (obj.status === 'ready' && obj.tabs.hasOwnProperty(obj.tab) && obj.tabs[obj.tab].ready === true) {
                 log.info("Tab '" + obj.tab + "' already initialized");

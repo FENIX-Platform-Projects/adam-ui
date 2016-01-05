@@ -20,6 +20,8 @@ define({
     "sel_country_tab_regions": "Regions",
     "sel_country_tab_regional_aggregation": "Regional Aggregation",
 
+    "expectedResult" : "Expected results",
+
     "year_form" : "From",
     "year_to" : "To",
 

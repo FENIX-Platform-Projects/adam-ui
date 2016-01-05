@@ -28,7 +28,8 @@ define([
         COMPARE_BTN: "#compare-btn",
         RESET_BTN: "#reset-btn",
         BTNS: "[data-btn]",
-        ERROR: "#error-container"
+        ERROR: "#error-container",
+        EXPECTED_RESULTS: "#expected-results"
 
     };
 
@@ -128,6 +129,10 @@ define([
 
             this.currentRequest = {};
 
+            this.$expectedResults = this.$el.find(s.EXPECTED_RESULTS);
+
+            this.$advancedOptions = this.$el.find(AC.advancedOptionsSelector);
+
         },
 
         _bindEventListeners: function () {
@@ -148,47 +153,76 @@ define([
             //Reset page
             this.$resetBtn.on('click', _.bind(this._onResetClick, this));
 
+            amplify.subscribe(E.CHANGE_MODE, this, this._configureVisibilityAdvancedOptions);
+
             amplify.subscribe(E.SELECTORS_READY, this, function () {
 
                 this._unlockForm();
 
+                //used to update advanced Stats
+                this._onSelectorSelect();
+
                 amplify.subscribe(E.SELECTORS_ITEM_SELECT, this, this._onSelectorSelect);
 
-            });
+                amplify.subscribe(E.RELOAD_RESULT, this, this._onResultReload);
 
-            amplify.subscribe(E.RELOAD_RESULT, this, this._onResultReload);
+            });
 
         },
 
         _onSelectorSelect: function () {
             log.info("Listening to 'Item selected' event");
 
-            /*
-             //Uncomment this to have react feedback
+            var valid;
 
-             var valid;
+            this.currentRequest.selection = this.subview('selectors').getSelection();
 
-             this.currentRequest.selection = this.subview('selectors').getSelection();
+            valid = this._validateSelection();
 
-             valid = this._validateSelection();
+            this.currentRequest.valid = typeof valid === 'boolean' ? valid : false;
 
-             this.currentRequest.valid = typeof valid === 'boolean' ? valid : false;
+            if (valid === true) {
 
-             if (valid === true) {
+                this._createRequests();
+                this._updateAdvancedStats();
 
-             this._createRequests();
-
-             if (Array.isArray(this.currentRequest.combinations) && !isNaN(AC.maxCombinations) && this.currentRequest.combinations.length > AC.maxCombinations) {
-             this._printErrors('too_many_combinations');
-             //this._lockForm();
-             } else {
-             this._resetErrors();
-             this._unlockForm();
-             }
-             }*/
+                //Uncomment this to have react feedback
+                /*
+                 if (Array.isArray(this.currentRequest.combinations) && !isNaN(AC.maxCombinations) && this.currentRequest.combinations.length > AC.maxCombinations) {
+                 //this._printErrors('too_many_combinations');
+                 //this._lockForm();
+                 }
+                 else {
+                 this._resetErrors();
+                 this._unlockForm();
+                 }*/
+            }
 
             this._resetErrors();
             this._unlockForm();
+
+
+        },
+
+        _updateAdvancedStats: function () {
+            log.info("Update advanced stats");
+
+            this.$expectedResults.html(this.currentRequest.combinations.length);
+
+        },
+
+        _configureVisibilityAdvancedOptions: function (show) {
+
+            log.info("Configure advanced mode visibility. Advanced mode? " + show);
+
+            if (show) {
+
+                this.$advancedOptions.show();
+
+            } else {
+
+                this.$advancedOptions.hide();
+            }
         },
 
         _onCompareClick: function () {
@@ -224,9 +258,9 @@ define([
 
         },
 
-        _onResultReload : function( obj ) {
+        _onResultReload: function (obj) {
 
-            log.info("Reloading resouce id: " +obj.id);
+            log.info("Reloading resouce id: " + obj.id);
 
             return this._getResource(obj);
         },
@@ -308,13 +342,13 @@ define([
                 id: Math.floor(100000 + Math.random() * 900000)
             };
 
-            obj.$el= this.subview('results').add(obj);
+            obj.$el = this.subview('results').add(obj);
 
             return this._getResource(obj);
 
         },
 
-        _getResource : function ( obj ) {
+        _getResource: function (obj) {
 
             return Q($.ajax({
                 url: GC.SERVER + GC.D3P_POSTFIX + this.currentRequest.selection.oda + "?language=" + Utils.getLocale().toUpperCase(),
@@ -501,6 +535,8 @@ define([
 
         _initComponents: function () {
 
+            this._configureVisibilityAdvancedOptions(AC.showAdvancedOptions);
+
             this._lockForm();
 
         },
@@ -646,6 +682,8 @@ define([
             amplify.unsubscribe(E.SELECTORS_ITEM_SELECT, this._onSelectorSelect);
 
             amplify.unsubscribe(E.RELOAD_RESULT, this._onResultReload);
+
+            amplify.unsubscribe(E.CHANGE_MODE, this._configureVisibilityAdvancedOptions);
 
         },
 

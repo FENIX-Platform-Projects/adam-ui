@@ -30,8 +30,7 @@ define([
         COMPARE_RADIO_BTNS_CHECKED: "input:radio[name='compare']:checked",
         ACTIVE_TAB: "ul#country-ul li.active",
         SWITCH: "input[data-role='switch'][name='disable-selector']",
-        SWITCH_ADVANCED_OPTION: "#advanced-options",
-        ADVANCED_OPTIONS : ".advanced-option"
+        SWITCH_ADVANCED_OPTION: "#advanced-options"
     };
 
     var SelectorView = View.extend({
@@ -58,7 +57,11 @@ define([
 
             this.$switchAdvancedOptions.on("click", _.bind(function (e) {
 
-                this._configureVisibilityAdvancedOptions($(e.currentTarget).is(':checked'));
+                var isChecked = $(e.currentTarget).is(':checked');
+
+                this._configureVisibilityAdvancedOptions(isChecked);
+
+                amplify.publish(E.CHANGE_MODE, isChecked);
 
             }, this));
 
@@ -359,7 +362,7 @@ define([
         },
 
         _initPage: function () {
-            this._configureVisibilityAdvancedOptions(this.$switchAdvancedOptions.is(":checked"));
+            this._configureVisibilityAdvancedOptions(AC.showAdvancedOptions);
         },
 
         _initVariables: function () {
@@ -433,7 +436,7 @@ define([
 
             this.$switchAdvancedOptions = this.$el.find(s.SWITCH_ADVANCED_OPTION);
 
-            this.$advancedOptions = this.$el.find(s.ADVANCED_OPTIONS);
+            this.$advancedOptions = this.$el.find(AC.advancedOptionsSelector);
 
         },
 
