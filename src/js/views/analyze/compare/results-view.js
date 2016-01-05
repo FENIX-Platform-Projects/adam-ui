@@ -2,6 +2,7 @@
 define([
     'jquery',
     'underscore',
+    'fx-c-c/start',
     'views/base/view',
     'text!templates/analyze/compare/results.hbs',
     'text!templates/analyze/compare/result.hbs',
@@ -11,8 +12,10 @@ define([
     'config/browse/Config',
     'handlebars',
     'loglevel',
+    //TODO REMOVE ME
+    'text!../../../../../submodules/fenix-ui-chart-creator/tests/fenix/data/afo/scattered_data.json',
     'amplify'
-], function ($, _, View, template, resultTemplate, i18nLabels, E, GC, BC, Handlebars, log) {
+], function ($, _, ChartCreator, View, template, resultTemplate, i18nLabels, E, GC, BC, Handlebars, log, TEST_MODEL) {
 
     'use strict';
 
@@ -22,8 +25,9 @@ define([
         SWITCH_CHECKED: "input[type='radio']:checked",
         TAB: ".tab-container [data-visualization]",
         REMOVE_BTN: "[data-control='remove']",
-        TABLE_CONTAINER: "[data-visualization='table'] [data-container]",
-        CHART_CONTAINER: "[data-visualization='chart'] [data-container]"
+        RELOAD_BTN: "[data-control='reload']",
+        TABLE_CONTAINER: "[data-content='ready'] [data-visualization='table'] [data-container='table']",
+        CHART_CONTAINER: "[data-content='ready'] [data-visualization='chart'] [data-container='chart']"
     };
 
     var ResultsView = View.extend({
@@ -54,6 +58,8 @@ define([
         _initVariables: function () {
 
             this.$list = this.$el.find(s.LIST);
+
+            this.currentObjs = [];
         },
 
         _initObj: function (obj) {
@@ -76,15 +82,18 @@ define([
 
             this._bindObjEventListeners(o);
 
-            this.$list.append($li);
+            this.$list.prepend($li);
+
+            //Add obj to current objs
+            this.currentObjs.push(obj);
 
             return $li;
 
         },
 
         renderObj: function (obj) {
-
-            obj.ready = true;
+            log.info("Render result:");
+            log.info(obj);
 
             this._setStatus(obj, "ready");
 
@@ -109,13 +118,18 @@ define([
 
             $el.find(s.REMOVE_BTN).on('click', _.bind(this._onRemoveItem, this, obj));
 
+            $el.find(s.RELOAD_BTN).on('click', _.bind(this._onReloadClick, this, obj));
+
         },
 
         _setStatus: function (obj, status) {
             log.info("Set '" + status + "' for result id: " + obj.id);
             log.info(obj);
 
-            obj.$el.attr("data-status", status);
+
+            obj.status = status;
+
+            obj.$el.attr("data-status", obj.status);
         },
 
         _onSwitchChange: function (obj, e) {
@@ -130,9 +144,15 @@ define([
         },
 
         _onRemoveItem: function (obj) {
-            log.info("Remove result id: " + obj.id);
+            log.info("Remove event for result id: " + obj.id);
 
             this.removeItem(obj);
+        },
+
+        _onReloadClick : function (obj) {
+            log.info("Requesting reload result id: " + obj.id);
+
+            amplify.publish(E.RELOAD_RESULT, obj);
         },
 
         _unbindObjEventListeners: function (obj) {
@@ -147,7 +167,7 @@ define([
 
         _onTabChange: function (obj) {
 
-            if (obj.ready === true && obj.tabs.hasOwnProperty(obj.tab) && obj.tabs[obj.tab].ready === true) {
+            if (obj.status === 'ready' && obj.tabs.hasOwnProperty(obj.tab) && obj.tabs[obj.tab].ready === true) {
                 log.info("Tab '" + obj.tab + "' already initialized");
                 return;
             }
@@ -178,10 +198,57 @@ define([
         _tab_chart: function (obj) {
             log.info("'Chart' callback");
 
+            var status = obj.tabs[obj.tab];
+
+            status.creator = new ChartCreator();
+
+            status.instances = [];
+
+            // Consistent Time series Chart
+
+            $.when(status.creator.init({
+                //TODO uncomment
+                //model: obj.model,
+                model: JSON.parse(TEST_MODEL),
+                adapter: {
+                    type: "timeserie",
+                    xDimensions: 'time',
+                    yDimensions: 'Element',
+                    valueDimensions: 'value',
+                    seriesDimensions: []
+                },
+                template: {},
+                creator: {}
+            })).then(function (creator) {
+
+                var intance = creator.render({
+                    container: obj.$el.find(s.CHART_CONTAINER),
+                    creator: {
+                        chartObj: {
+                            chart: {
+                                type: 'line'
+                            },
+                            plotOptions: {
+                                column: {
+                                    stacking: 'normal'
+                                }
+                            }
+                        }
+                    }
+                });
+
+                status.instances.push(intance);
+
+
+
+            });
+
         },
 
         _tab_table: function (obj) {
             log.info("'Table' callback");
+
+
 
         },
 
@@ -191,9 +258,23 @@ define([
 
             this._unbindObjEventListeners(obj);
 
-            this._remove(obj.$el);
+            //destroy creators
+            _.each(obj.tabs, function (status, tab) {
 
-            //TODO destroy
+                if (status.instances && Array.isArray(status.instances)){
+
+                    _.each(status.instances, function (inst) {
+
+                       if ($.isFunction(inst.destroy)) {
+                           log.warn("Destroy instance here");
+                           //inst.destroy.call(inst);
+                       }
+                    });
+                }
+
+            });
+
+            this._remove(obj.$el);
 
         },
 
@@ -202,12 +283,28 @@ define([
             $el.remove();
         },
 
+        _emptyResults : function () {
+
+            _.each(this.currentObjs, _.bind(this._onRemoveItem, this));
+
+            this.currentObjs = [];
+
+            log.info("Results list emptied");
+        },
+
         reset: function () {
+
+            this._emptyResults();
+
+
             log.info("Results reset");
+        },
 
-            this.$list.empty();
+        dispose: function () {
 
-            //TODO destroy itmes
+            this._emptyResults();
+
+            View.prototype.dispose.call(this, arguments);
         }
 
 

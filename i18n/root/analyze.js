@@ -26,6 +26,7 @@ define({
     "compare_as" : "Compare as",
     "tab_chart" : "Chart",
     "tab_table" : "Table",
+    "result_error" : "Aw snap! There was a problem loading this resource",
 
     "show_advanced_options" : "Show advanced options",
 

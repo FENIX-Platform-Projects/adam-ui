@@ -38,15 +38,14 @@
 
                     <div class="tab-content fit-height">
 
-                        <div id="fx-tab-table-{{id}}" role="tabpanel" data-visualization="chart" class="tab-pane fade in active">
-                            <div data-container>
+                        <div id="fx-tab-table-{{id}}" role="tabpanel" data-visualization="table" class="tab-pane fade in active">
+                            <div data-container="table">
                                 TABLE
                             </div>
                         </div>
-                        <div id="fx-tab-chart-{{id}}" role="tabpanel" data-visualization="table" class="tab-pane fade">
-                            <div data-container>
-                                Chart
-                            </div>
+                        <div id="fx-tab-chart-{{id}}" role="tabpanel" data-visualization="chart" class="tab-pane fade">
+
+                            <div data-container="chart"></div>
                         </div>
                     </div>
 
@@ -54,8 +53,9 @@
 
                 <div data-content="error" class="fixed-height">
                     <span class="status-label">
-                        Aw snap! There was a problem loading this resources<br><br>
-                        <button data-action="reload" class="btn btn-default">{{ reload }}</button>
+                        {{ result_error }}
+                        <br><br>
+                        <button data-control="reload" class="btn btn-default">{{ reload }}</button>
                     </span>
                 </div>
 

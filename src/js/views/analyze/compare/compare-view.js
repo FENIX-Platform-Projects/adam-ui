@@ -116,8 +116,6 @@ define([
 
             this.dynamicSelectorsId = Object.keys(this.dynamicSelectors);
 
-            this.recipientSelectorsId = Object.keys(this.recipientSelectors);
-
             this.$compareBtn = this.$el.find(s.COMPARE_BTN);
 
             this.$resetBtn = this.$el.find(s.RESET_BTN);
@@ -127,6 +125,8 @@ define([
             this.$btns = this.$el.find(s.BTNS);
 
             this.$error = this.$el.find(s.ERROR);
+
+            this.currentRequest = {};
 
         },
 
@@ -152,11 +152,11 @@ define([
 
                 this._unlockForm();
 
-                this.currentRequest = {};
-
                 amplify.subscribe(E.SELECTORS_ITEM_SELECT, this, this._onSelectorSelect);
 
             });
+
+            amplify.subscribe(E.RELOAD_RESULT, this, this._onResultReload);
 
         },
 
@@ -222,6 +222,13 @@ define([
                 this._printErrors(valid[0]);
             }
 
+        },
+
+        _onResultReload : function( obj ) {
+
+            log.info("Reloading resouce id: " +obj.id);
+
+            return this._getResource(obj);
         },
 
         _validateSelection: function () {
@@ -302,6 +309,12 @@ define([
             };
 
             obj.$el= this.subview('results').add(obj);
+
+            return this._getResource(obj);
+
+        },
+
+        _getResource : function ( obj ) {
 
             return Q($.ajax({
                 url: GC.SERVER + GC.D3P_POSTFIX + this.currentRequest.selection.oda + "?language=" + Utils.getLocale().toUpperCase(),
@@ -630,7 +643,9 @@ define([
 
             amplify.unsubscribe(E.SELECTORS_READY, this._unlockForm);
 
-            amplify.unsubscribe(E.SELECTORS_ITEM_SELECT, this._onSelectorSelect)
+            amplify.unsubscribe(E.SELECTORS_ITEM_SELECT, this._onSelectorSelect);
+
+            amplify.unsubscribe(E.RELOAD_RESULT, this._onResultReload);
 
         },
 
