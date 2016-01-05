@@ -24,8 +24,8 @@ define({
     "year_to" : "To",
 
     "compare_as" : "Compare as",
-    "kind_chart" : "Chart",
-    "kind_table" : "Table",
+    "tab_chart" : "Chart",
+    "tab_table" : "Table",
 
     "show_advanced_options" : "Show advanced options",
 

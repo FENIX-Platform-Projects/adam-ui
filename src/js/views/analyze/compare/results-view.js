@@ -21,7 +21,7 @@ define([
         SWITCH: "input[type='radio']",
         SWITCH_CHECKED: "input[type='radio']:checked",
         TAB: ".tab-container [data-visualization]",
-        REMOVE_BTN: "[data-action='remove']",
+        REMOVE_BTN: "[data-control='remove']",
         TABLE_CONTAINER: "[data-visualization='table'] [data-container]",
         CHART_CONTAINER: "[data-visualization='chart'] [data-container]"
     };
@@ -108,7 +108,6 @@ define([
         },
 
         _setStatus: function (obj, status) {
-
             log.info("Set '" + status + "' for result id: " + obj.id);
             log.info(obj);
 
