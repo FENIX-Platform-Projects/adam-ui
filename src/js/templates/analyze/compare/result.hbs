@@ -28,7 +28,7 @@
         <div class="row fit-height">
             <div class="col-xs-12 fit-height">
 
-                <div data-content="ready" class="fit-height">
+                <div data-content="ready" class="fixed-height">
 
                     <div class="tab-content fit-height">
 
@@ -46,14 +46,15 @@
 
                 </div>
 
-                <div data-content="error" class="fit-height">
-                    ERROR
-                    <button data-action="reload" class="btn btn-default">{{ reload }}</button>
-
+                <div data-content="error" class="fixed-height">
+                    <span class="status-label">
+                        Aw snap! There was a problem loading this resources<br><br>
+                        <button data-action="reload" class="btn btn-default">{{ reload }}</button>
+                    </span>
                 </div>
 
-                <div data-content="loading" class="fit-height">
-                    LOADING
+                <div data-content="loading" class="fixed-height">
+                    <span class="loading loading-48"></span>
                 </div>
 
             </div>
