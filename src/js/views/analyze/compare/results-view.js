@@ -280,8 +280,8 @@ define([
                     _.each(status.instances, function (inst) {
 
                        if ($.isFunction(inst.destroy)) {
-                           log.warn("Destroy instance here");
-                           //inst.destroy.call(inst);
+                           inst.destroy();
+                           log.warn("Visualization instance destroyed.");
                        }
                     });
                 }
@@ -289,6 +289,8 @@ define([
             });
 
             this._remove(obj.$el);
+
+            this.currentObjs = _.without(this.currentObjs, obj);
 
         },
 

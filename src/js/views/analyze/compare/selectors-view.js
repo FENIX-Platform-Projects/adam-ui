@@ -29,7 +29,7 @@ define([
         COMPARE_RADIO_BTNS: "input:radio[name='compare']",
         COMPARE_RADIO_BTNS_CHECKED: "input:radio[name='compare']:checked",
         ACTIVE_TAB: "ul#country-ul li.active",
-        RECIPIENT_TABS : "ul#country-ul a[data-toggle='tab']",
+        RECIPIENT_TABS: "ul#country-ul a[data-toggle='tab']",
         SWITCH: "input[data-role='switch'][name='disable-selector']"
     };
 
@@ -58,7 +58,7 @@ define([
          * @param {Boolean} show
          * @return {null}
          */
-        configureVisibilityAdvancedOptions : function ( show ) {
+        configureVisibilityAdvancedOptions: function (show) {
 
             return this._configureVisibilityAdvancedOptions(show)
         },
@@ -173,8 +173,8 @@ define([
                 var id = this.$el.find(s.ACTIVE_TAB).data('sel');
 
                 this._notifyTreeSelectionChange({
-                    instance : this.treeInstances[id].jstree(true),
-                    id : id
+                    instance: this.treeInstances[id].jstree(true),
+                    id: id
                 });
 
             }, this));
@@ -315,10 +315,10 @@ define([
 
         },
 
-        _getSelection : function () {
+        _getSelection: function () {
 
             var result = {
-                valid : false
+                valid: false
             };
 
             if (this.ready !== true) {
@@ -401,7 +401,7 @@ define([
             //validate result but return it in any case
             var valid = this._validateSelection(result);
 
-            if ( valid === true) {
+            if (valid === true) {
 
                 result.valid = true;
 
@@ -439,7 +439,7 @@ define([
                     _.each(objs, _.bind(function (obj) {
 
                         var d = {
-                            event: E.SELECTORS_ITEM_SELECT +"."+ obj,
+                            event: E.SELECTORS_ITEM_SELECT + "." + obj,
                             callback: function (payload) {
 
                                 var call = self["_dep_" + deps[obj]];
@@ -593,8 +593,8 @@ define([
                     }
 
                     this._notifyTreeSelectionChange({
-                        instance : data.instance,
-                        id : o.id
+                        instance: data.instance,
+                        id: o.id
                     })
 
                 }, this))
@@ -602,8 +602,8 @@ define([
                 .on("deselect_node.jstree ", _.bind(function (e, data) {
 
                     this._notifyTreeSelectionChange({
-                        instance : data.instance,
-                        id : o.id
+                        instance: data.instance,
+                        id: o.id
                     })
 
 
@@ -640,7 +640,7 @@ define([
 
         },
 
-        _notifyTreeSelectionChange : function  (o) {
+        _notifyTreeSelectionChange: function (o) {
 
             var payload = [],
                 selected = o.instance.get_selected();
@@ -660,10 +660,10 @@ define([
             amplify.publish(E.SELECTORS_ITEM_SELECT);
         },
 
-        _updateTreeAmount : function  ( id ) {
+        _updateTreeAmount: function (id) {
 
             var $container = this.treeContainers[id],
-                amount = $container.find(s.TREE_CONTAINER).jstree().get_selected().length ;
+                amount = $container.find(s.TREE_CONTAINER).jstree().get_selected().length;
 
             $container.closest(s.SELECTORS_CLASS).find(s.AMOUNT_CONTAINER).html(amount);
 
@@ -776,7 +776,7 @@ define([
 
                 label[Utils.getLocale()] = data.text;
 
-                amplify.publish(E.SELECTORS_ITEM_SELECT + '.' +o.id, [{
+                amplify.publish(E.SELECTORS_ITEM_SELECT + '.' + o.id, [{
                     code: data.id,
                     label: label,
                     parent: data.parent
@@ -786,7 +786,7 @@ define([
 
         },
 
-        _printDropdownDefaultSelection : function (id) {
+        _printDropdownDefaultSelection: function (id) {
 
             var config = this.selectors[id].selector,
                 dropdown = this.dropdownInstances[id];
@@ -804,11 +804,11 @@ define([
 
         //checkbox
 
-        _printCheckboxDefaultSelection : function() {
+        _printCheckboxDefaultSelection: function () {
 
-            if (AC.compareBy && this.$radios.filter("[value='"+AC.compareBy+"']").length > 0 ) {
+            if (AC.compareBy && this.$radios.filter("[value='" + AC.compareBy + "']").length > 0) {
 
-                this.$radios.filter("[value='"+AC.compareBy+"']").prop('checked', true).trigger("change");
+                this.$radios.filter("[value='" + AC.compareBy + "']").prop('checked', true).trigger("change");
 
             } else {
 
@@ -901,7 +901,7 @@ define([
             return this.$el.find('[data-selector="' + cl + '"]');
         },
 
-        _getSemanticContainer : function (cl) {
+        _getSemanticContainer: function (cl) {
 
             return this._getSelectorContainer(cl).closest(s.SELECTORS_CLASS);
 
@@ -1045,7 +1045,6 @@ define([
                 }, this));
 
 
-
             }, this));
 
             //default disabled selectors
@@ -1069,7 +1068,7 @@ define([
 
         },
 
-        _onRadioChange : function () {
+        _onRadioChange: function () {
 
             var d = this.$el.find(s.COMPARE_RADIO_BTNS_CHECKED).val(),
                 selectors = this._getSelectorIdsBySubject(d);

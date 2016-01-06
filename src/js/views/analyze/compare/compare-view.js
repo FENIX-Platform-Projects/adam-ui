@@ -156,14 +156,11 @@ define([
 
             amplify.subscribe(E.CHANGE_MODE, this, this._configureVisibilityAdvancedOptions);
 
+            amplify.subscribe(E.SELECTORS_ITEM_SELECT, this, this._onSelectorSelect);
+
             amplify.subscribe(E.SELECTORS_READY, this, function () {
 
                 this._unlockForm();
-
-                //used to update advanced Stats
-                this._onSelectorSelect();
-
-                amplify.subscribe(E.SELECTORS_ITEM_SELECT, this, this._onSelectorSelect);
 
                 amplify.subscribe(E.RELOAD_RESULT, this, this._onResultReload);
 
@@ -275,7 +272,7 @@ define([
 
         _onResultReload: function (obj) {
 
-            log.info("Reloading resouce id: " + obj.id);
+            log.info("Reloading resource id: " + obj.id);
 
             return this._getResource(obj);
         },
