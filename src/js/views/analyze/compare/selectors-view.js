@@ -776,7 +776,7 @@ define([
 
                 label[Utils.getLocale()] = data.text;
 
-                amplify.publish(E.SELECTORS_ITEM_SELECT + o.id, [{
+                amplify.publish(E.SELECTORS_ITEM_SELECT + '.' +o.id, [{
                     code: data.id,
                     label: label,
                     parent: data.parent
@@ -851,7 +851,6 @@ define([
                     var v = from > originalValue ? from : originalValue;
 
                     $container.val(v.toString()).trigger("change");
-                    console.log("set 2")
 
                     break;
             }
