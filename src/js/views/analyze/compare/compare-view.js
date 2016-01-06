@@ -98,8 +98,6 @@ define([
 
             this.recipientSelectors = {};
 
-            this.mandatorySelectors = [];
-
             _.each(this.selectorsId, _.bind(function (id) {
 
                 var s = this.selectors[id] || {},
@@ -113,12 +111,6 @@ define([
                 if (s.subject === 'recipient') {
                     this.recipientSelectors[id] = s;
                 }
-
-                //mandatory selectors
-                if (s.hasOwnProperty("validation") && s.validation.mandatory === true) {
-                    this.mandatorySelectors.push(this._getSubjectBySelectorId(id));
-                }
-                this.mandatorySelectors = _.uniq(this.mandatorySelectors);
 
             }, this));
 
@@ -244,7 +236,6 @@ define([
                 this.$advancedOptions.hide();
             }
 
-
             //subview configuration
             this.subview('selectors').configureVisibilityAdvancedOptions(show);
         },
@@ -267,17 +258,17 @@ define([
 
             valid = this._validateSelection();
 
-            this.currentRequest.valid = valid === 'boolean' ? valid : false;
+            this.currentRequest.valid = typeof valid === 'boolean' ? valid : false;
 
-            if (valid === true) {
-
-                this._compare();
-
-            } else {
+            if (selection.valid === false || valid !== true ) {
 
                 this.currentRequest.errors = valid;
 
-                this._printErrors(valid);
+                this._printErrors($.extend(true, {}, selection.errors, valid ));
+
+            } else {
+
+                this._compare();
             }
 
         },
@@ -324,20 +315,6 @@ define([
                 errors.code = "at_least_one_more_dimension";
                 return errors;
             }
-
-            //mandatory fields
-            _.each(this.mandatorySelectors, _.bind(function (id) {
-
-                if (!s.hasOwnProperty(id)) {
-
-                    errors.code = 'missing_mandatory_field';
-                    errors.details = this._getSubjectBySelectorId(id);
-
-                    return errors;
-
-                }
-
-            }, this));
 
             return _.isEmpty(errors) ? valid : errors;
         },

@@ -92,6 +92,7 @@ define([
             this.disabledSelectors = [];
             this.dependeciesToDestory = [];
             this.mandatorySelectorIds = [];
+            this.mandatorySelectors = [];
 
             //used for "ready" event
             this.treesReady = 0;
@@ -128,10 +129,12 @@ define([
                         this.disabledSelectors.push(k);
                     }
 
-                    //get mandatory selectors
+                    //get mandatory selectors id
                     if (s.hasOwnProperty("validation") && s.validation.mandatory === true) {
                         this.mandatorySelectorIds.push(k);
+                        this.mandatorySelectors.push(this._getSubjectBySelectorId(k));
                     }
+                    this.mandatorySelectors = _.uniq(this.mandatorySelectors);
 
                 }
 
@@ -152,6 +155,12 @@ define([
             this.$advancedOptions = this.$el.find(AC.advancedOptionsSelector);
 
             this.$recipientTabs = this.$el.find(s.RECIPIENT_TABS);
+
+            //mandatory selectors
+            if (s.hasOwnProperty("validation") && s.validation.mandatory === true) {
+                this.mandatorySelectors.push(this._getSubjectBySelectorId(id));
+            }
+            this.mandatorySelectors = _.uniq(this.mandatorySelectors);
 
         },
 
@@ -308,13 +317,15 @@ define([
 
         _getSelection : function () {
 
+            var result = {
+                valid : false
+            };
+
             if (this.ready !== true) {
-                return {};
+                return result;
             }
 
-            var result = {
-                labels: {}
-            };
+            result.labels = {};
 
             //get trees selectors
             var en = this._getEnablesSelectors(),
@@ -372,11 +383,11 @@ define([
             var activeTab = this.$el.find(s.ACTIVE_TAB).data('sel'),
                 sels = ['country-country', 'country-region', 'regional-aggregation'],
                 recipientValues,
-                recpientsLabels;
+                recipientsLabels;
 
             if (result[activeTab] && Array.isArray(result[activeTab])) {
                 recipientValues = result[activeTab].slice(0);
-                recpientsLabels = result.labels[activeTab].slice(0);
+                recipientsLabels = result.labels[activeTab].slice(0);
             }
 
             _.each(sels, function (f) {
@@ -385,7 +396,18 @@ define([
             });
 
             result["recipient"] = recipientValues;
-            result.labels["recipient"] = recpientsLabels;
+            result.labels["recipient"] = recipientsLabels;
+
+            //validate result but return it in any case
+            var valid = this._validateSelection(result);
+
+            if ( valid === true) {
+
+                result.valid = true;
+
+            } else {
+                result.errors = valid;
+            }
 
             return result;
 
@@ -470,6 +492,28 @@ define([
 
             return res;
 
+        },
+
+        _validateSelection: function (s) {
+
+            var valid = true,
+                errors = {};
+
+            //mandatory fields
+            _.each(this.mandatorySelectors, _.bind(function (id) {
+
+                if (!s.hasOwnProperty(id)) {
+
+                    errors.code = 'missing_mandatory_field';
+                    errors.details = this._getSubjectBySelectorId(id);
+
+                    return errors;
+
+                }
+
+            }, this));
+
+            return _.isEmpty(errors) ? valid : errors;
         },
 
         //tree
