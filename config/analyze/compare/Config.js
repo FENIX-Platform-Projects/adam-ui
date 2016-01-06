@@ -35,9 +35,14 @@ define(function () {
                 "filter": {
                     "type": "dynamic", //dynamic | static: for dynamic or static section of D3P filter
                     "process": '{"recipientcode": { "codes":[{"uid": "{{uid}}", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
-                }
+                },
 
                 //, dependencies : {} //dependencies with other selectors
+
+                // validation
+                "validation" : {
+                    "mandatory" : true //mandatory selector. Default false
+                }
             },
 
             "country-region": {
@@ -150,6 +155,10 @@ define(function () {
 
                 dependencies : {
                     "sector" : "parent"
+                },
+
+                "validation" : {
+                    "mandatory" : true
                 }
             },
 
@@ -230,11 +239,13 @@ define(function () {
 
         "selectorFocusedClass" : "selector-focused", //class to highlight a selector
 
+        "mandatorySelectorClass" : "selector-mandatory", // class for mandatory selectors
+
         "resultDefaultTab" : "chart", //Default tab to show for result,
 
         "advancedOptionsSelector" : ".advanced-option",
 
-        "showAdvancedOptions" : false
+        "showAdvancedOptions" : true
 
     }
 

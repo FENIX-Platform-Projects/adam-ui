@@ -29,8 +29,8 @@ define([
         COMPARE_RADIO_BTNS: "input:radio[name='compare']",
         COMPARE_RADIO_BTNS_CHECKED: "input:radio[name='compare']:checked",
         ACTIVE_TAB: "ul#country-ul li.active",
-        SWITCH: "input[data-role='switch'][name='disable-selector']",
-        SWITCH_ADVANCED_OPTION: "#advanced-options"
+        RECIPIENT_TABS : "ul#country-ul a[data-toggle='tab']",
+        SWITCH: "input[data-role='switch'][name='disable-selector']"
     };
 
     var SelectorView = View.extend({
@@ -42,6 +42,29 @@ define([
 
         template: template,
 
+        // API
+
+        /**
+         * Return the current selection
+         * @return {Object}
+         */
+        getSelection: function () {
+
+            return this._getSelection();
+        },
+
+        /**
+         * Enable advance mode
+         * @param {Boolean} show
+         * @return {null}
+         */
+        configureVisibilityAdvancedOptions : function ( show ) {
+
+            return this._configureVisibilityAdvancedOptions(show)
+        },
+
+        // end API
+
         initialize: function (params) {
 
             View.prototype.initialize.call(this, arguments);
@@ -49,320 +72,6 @@ define([
 
         getTemplateData: function () {
             return i18nLabels;
-        },
-
-        _bindEventListeners: function () {
-
-            amplify.subscribe(E.TREE_READY, this, this._onTreeReady);
-
-            this.$switchAdvancedOptions.on("click", _.bind(function (e) {
-
-                var isChecked = $(e.currentTarget).is(':checked');
-
-                this._configureVisibilityAdvancedOptions(isChecked);
-
-                amplify.publish(E.CHANGE_MODE, isChecked);
-
-            }, this));
-
-        },
-
-        _onTreeReady: function () {
-
-            this.treesReady++;
-
-            if (this.treesReady === this.trees.length) {
-
-                log.info("All trees are ready");
-
-                this.ready = true;
-
-                this._onReady();
-            }
-        },
-
-        _configureVisibilityAdvancedOptions: function (show) {
-
-            if (show) {
-
-                this.$advancedOptions.show();
-
-            } else {
-
-                this.$advancedOptions.hide();
-            }
-        },
-
-        _getSelectorIdsBySubject: function (sub) {
-
-            var sels = [];
-
-            if (_.contains(this.selectorsId, sub)) {
-
-                sels.push(sub);
-
-            } else {
-
-                _.each(this.selectors, _.bind(function (sel, id) {
-
-                    if (sel.hasOwnProperty("subject") && sel.subject === sub) {
-                        sels.push(id);
-                    }
-
-                }, this));
-
-            }
-
-            return sels;
-
-        },
-
-        _getSubjectBySelectorId: function (id) {
-
-            return (this.selectors[id] && this.selectors[id].hasOwnProperty("subject")) ?
-                this.selectors[id].subject : id;
-        },
-
-        _onReady: function () {
-
-            this.$switches.on("click", _.bind(function (e) {
-
-                log.info("Switch clicked");
-
-                var $this = $(e.currentTarget),
-                    $selectors = this._getSelectorIdsBySubject($(e.currentTarget).attr("data-target"));
-
-                _.each($selectors, _.bind(function (sel) {
-
-                    if (_.contains(this.selectorsId, sel)) {
-
-                        // $this will contain a reference to the checkbox
-                        if ($this.is(':checked')) {
-
-                            // the checkbox was checked
-                            this._enableSelector(sel);
-
-                        } else {
-                            // the checkbox was unchecked
-                            this._disableSelector(sel);
-
-                            this._checkCompareValue(sel);
-                        }
-                    }
-
-                    this._checkCompareValue(sel);
-
-                }, this));
-
-
-
-            }, this));
-
-            //default disabled selectors
-            _.each(this.disabledSelectors, _.bind(function (d) {
-
-                if (_.contains(this.selectorsId, d)) {
-                    this._disableSelectorAndSwitch(d);
-                }
-
-            }, this));
-
-            //compare btns and enable selector
-
-            this.$radios.on('change', _.bind(this._onRadioChange, this));
-
-            this._printCheckboxDefaultSelection();
-
-            this._initDependencies();
-
-            amplify.publish(E.SELECTORS_READY);
-
-        },
-
-        _onRadioChange : function () {
-
-            var d = this.$el.find(s.COMPARE_RADIO_BTNS_CHECKED).val(),
-                selectors = this._getSelectorIdsBySubject(d);
-
-            //highlight compare-by selector background
-            this.$el.find("." + AC.selectorFocusedClass).removeClass(AC.selectorFocusedClass);
-            this._getSelectorContainer(selectors[0]).closest(s.SELECTORS_CLASS).parent().addClass(AC.selectorFocusedClass);
-
-            _.each(selectors, _.bind(function (sel) {
-
-                this._enableSelectorAndSwitch(sel);
-
-            }, this));
-
-        },
-
-        _initDependencies: function () {
-
-            var self = this;
-
-            _.each(this.selectors, _.bind(function (sel, id) {
-
-                if (sel.hasOwnProperty("dependencies")) {
-
-                    var deps = sel.dependencies,
-                        objs = Object.keys(deps);
-
-                    _.each(objs, _.bind(function (obj) {
-
-                        var d = {
-                            event: E.SELECTORS_ITEM_SELECT +"."+ obj,
-                            callback: function (payload) {
-
-                                var call = self["_dep_" + deps[obj]];
-
-                                if (call) {
-                                    call.call(self, payload, {src: obj, target: id});
-                                }
-                            }
-                        };
-
-                        this.dependeciesToDestory.push(d);
-
-                        amplify.subscribe(d.event, this, d.callback);
-
-                    }, this));
-
-                }
-
-            }, this));
-        },
-
-        _destroyDependencies: function () {
-
-            _.each(this.dependeciesToDestory, function (d) {
-                amplify.unsubscribe(d.event, d.callback);
-            });
-        },
-
-        /* dependencies fns */
-
-        _dep_min: function (payload, o) {
-
-            log.info("_dep_min invokation");
-            log.info(o);
-
-            var config = this.selectors[o.target].selector;
-
-            switch (config.type.toLowerCase()) {
-
-                case "dropdown" :
-
-                    var from = payload[0].code,
-                        $container = this.dropdownContainers[o.target],
-                        originalValue = $container.select2('data').id,
-                        data = [];
-
-                    for (var i = from; i <= config.to; i++) {
-                        data.push({
-                            id: i,
-                            text: i.toString()
-                        })
-                    }
-
-                    $container.select2({
-                        data: data
-                    });
-
-                    //Set selected value
-                    var v = from > originalValue ? from : originalValue;
-
-                    $container.val(v.toString()).trigger("change");
-                    console.log("set 2")
-
-                    break;
-            }
-
-        },
-
-        _dep_parent: function (payload, o) {
-
-            log.info("_dep_min _dep_parent");
-            log.info(o);
-
-            var config = this.selectors[o.target].selector;
-
-            switch (config.type.toLowerCase()) {
-
-                case "tree" :
-
-                    var c = this.selectors[o.target].cl;
-
-                    if (c) {
-
-                        //delete c.levels;
-                        c.levels = 2;
-                        delete c.level;
-
-                        c.codes = [];
-
-                        _.each(payload, function (item) {
-                            c.codes.push(item.code);
-                        });
-
-                        this._getPromise(c).then(
-                            _.bind(this._refreshTree, this, o),
-                            function (r) {
-                                log.error(r);
-                            }
-                        )
-                    }
-
-                    break;
-            }
-        },
-
-        /* end dependencies fns*/
-
-        _checkCompareValue: function (d) {
-
-            var compareBy = this.$el.find(s.COMPARE_RADIO_BTNS_CHECKED).val(),
-                subject = this._getSubjectBySelectorId(d),
-                enabled = this._getEnablesSelectors();
-
-            if (subject === compareBy) {
-                var sel = enabled.length > 0 ? enabled[0] : this.selectorsId[0];
-                this.$el.find(s.COMPARE_RADIO_BTNS).filter("[value='" + this._getSubjectBySelectorId(sel) + "']").prop('checked', true).trigger("change");
-            }
-
-        },
-
-        _getEnablesSelectors: function () {
-
-            var cks = this.$switches.filter(':checked'),
-                res = [];
-
-            _.each(cks, function (el) {
-                res.push($(el).attr("data-target"))
-            });
-
-            return res;
-
-        },
-
-        attach: function () {
-
-            View.prototype.attach.call(this, arguments);
-
-            this._initVariables();
-
-            this._bindEventListeners();
-
-            this._initPage();
-
-            this._preloadResources().then(
-                _.bind(this._onPreloadResourceSuccess, this),
-                _.bind(this._onPreloadResourceError, this)
-            );
-
-        },
-
-        _initPage: function () {
-            this._configureVisibilityAdvancedOptions(AC.showAdvancedOptions);
         },
 
         _initVariables: function () {
@@ -382,6 +91,7 @@ define([
             this.dropdownContainers = {};
             this.disabledSelectors = [];
             this.dependeciesToDestory = [];
+            this.mandatorySelectorIds = [];
 
             //used for "ready" event
             this.treesReady = 0;
@@ -418,6 +128,11 @@ define([
                         this.disabledSelectors.push(k);
                     }
 
+                    //get mandatory selectors
+                    if (s.hasOwnProperty("validation") && s.validation.mandatory === true) {
+                        this.mandatorySelectorIds.push(k);
+                    }
+
                 }
 
             }, this));
@@ -434,15 +149,55 @@ define([
 
             this.$radios = this.$el.find(s.COMPARE_RADIO_BTNS);
 
-            this.$switchAdvancedOptions = this.$el.find(s.SWITCH_ADVANCED_OPTION);
-
             this.$advancedOptions = this.$el.find(AC.advancedOptionsSelector);
+
+            this.$recipientTabs = this.$el.find(s.RECIPIENT_TABS);
 
         },
 
-        _getSelectorContainer: function (cl) {
+        _bindEventListeners: function () {
 
-            return this.$el.find('[data-selector="' + cl + '"]');
+            amplify.subscribe(E.TREE_READY, this, this._onTreeReady);
+
+            this.$recipientTabs.on('shown.bs.tab', _.bind(function () {
+
+                var id = this.$el.find(s.ACTIVE_TAB).data('sel');
+
+                this._notifyTreeSelectionChange({
+                    instance : this.treeInstances[id].jstree(true),
+                    id : id
+                });
+
+            }, this));
+
+        },
+
+        attach: function () {
+
+            View.prototype.attach.call(this, arguments);
+
+            this._initVariables();
+
+            this._bindEventListeners();
+
+            this._initPage();
+
+            this._preloadResources().then(
+                _.bind(this._onPreloadResourceSuccess, this),
+                _.bind(this._onPreloadResourceError, this)
+            );
+
+        },
+
+        _initPage: function () {
+
+            //add attribute to mandatory selectors
+            _.each(this.mandatorySelectorIds, _.bind(function (id) {
+
+                this._getSemanticContainer(id).addClass(AC.mandatorySelectorClass);
+
+            }, this));
+
         },
 
         _preloadResources: function () {
@@ -551,6 +306,172 @@ define([
 
         },
 
+        _getSelection : function () {
+
+            if (this.ready !== true) {
+                return {};
+            }
+
+            var result = {
+                labels: {}
+            };
+
+            //get trees selectors
+            var en = this._getEnablesSelectors(),
+                enabled = [];
+
+            _.each(en, _.bind(function (e) {
+                enabled = enabled.concat(this._getSelectorIdsBySubject(e))
+            }, this));
+
+            enabled = _.unique(enabled);
+
+            _.each(this.trees, _.bind(function (cl) {
+
+                if (_.contains(enabled, cl)) {
+
+                    var instance = this.treeInstances[cl].jstree(true),
+                        selection = instance.get_selected();
+
+                    //remove empty selection
+                    if (Array.isArray(selection) && selection.length > 0) {
+
+                        result[cl] = selection;
+
+                        result.labels[cl] = [];
+
+                        _.each(result[cl], function (c) {
+                            result.labels[cl].push(instance.get_node(c).text);
+                        });
+
+                    }
+
+                }
+
+            }, this));
+
+            //get dropdown selectors
+            _.each(this.dropdown, _.bind(function (cl) {
+
+                var instance = this.dropdownInstances[cl],
+                    sel = instance.select2('data');
+
+                if (sel) {
+
+                    result[cl] = sel.id;
+
+                    result.labels[cl] = sel.text;
+                }
+
+            }, this));
+
+            //get compare
+            result.compare = this.$el.find(s.COMPARE_RADIO_BTNS_CHECKED).val();
+
+            //harmonize country selection
+            var activeTab = this.$el.find(s.ACTIVE_TAB).data('sel'),
+                sels = ['country-country', 'country-region', 'regional-aggregation'],
+                recipientValues,
+                recpientsLabels;
+
+            if (result[activeTab] && Array.isArray(result[activeTab])) {
+                recipientValues = result[activeTab].slice(0);
+                recpientsLabels = result.labels[activeTab].slice(0);
+            }
+
+            _.each(sels, function (f) {
+                delete result[f];
+                delete result.labels[f];
+            });
+
+            result["recipient"] = recipientValues;
+            result.labels["recipient"] = recpientsLabels;
+
+            return result;
+
+        },
+
+        _configureVisibilityAdvancedOptions: function (show) {
+
+            if (show) {
+
+                this.$advancedOptions.show();
+
+            } else {
+
+                this.$advancedOptions.hide();
+            }
+        },
+
+        _initDependencies: function () {
+
+            var self = this;
+
+            _.each(this.selectors, _.bind(function (sel, id) {
+
+                if (sel.hasOwnProperty("dependencies")) {
+
+                    var deps = sel.dependencies,
+                        objs = Object.keys(deps);
+
+                    _.each(objs, _.bind(function (obj) {
+
+                        var d = {
+                            event: E.SELECTORS_ITEM_SELECT +"."+ obj,
+                            callback: function (payload) {
+
+                                var call = self["_dep_" + deps[obj]];
+
+                                if (call) {
+                                    call.call(self, payload, {src: obj, target: id});
+                                }
+                            }
+                        };
+
+                        this.dependeciesToDestory.push(d);
+
+                        amplify.subscribe(d.event, this, d.callback);
+
+                    }, this));
+
+                }
+
+            }, this));
+        },
+
+        _destroyDependencies: function () {
+
+            _.each(this.dependeciesToDestory, function (d) {
+                amplify.unsubscribe(d.event, d.callback);
+            });
+        },
+
+        _checkCompareValue: function (d) {
+
+            var compareBy = this.$el.find(s.COMPARE_RADIO_BTNS_CHECKED).val(),
+                subject = this._getSubjectBySelectorId(d),
+                enabled = this._getEnablesSelectors();
+
+            if (subject === compareBy) {
+                var sel = enabled.length > 0 ? enabled[0] : this.selectorsId[0];
+                this.$el.find(s.COMPARE_RADIO_BTNS).filter("[value='" + this._getSubjectBySelectorId(sel) + "']").prop('checked', true).trigger("change");
+            }
+
+        },
+
+        _getEnablesSelectors: function () {
+
+            var cks = this.$switches.filter(':checked'),
+                res = [];
+
+            _.each(cks, function (el) {
+                res.push($(el).attr("data-target"))
+            });
+
+            return res;
+
+        },
+
         //tree
 
         _buildTreeModel: function (fxResource, parent) {
@@ -603,6 +524,7 @@ define([
                         show_only_matches: true
                     }
                 }, config.config))
+
                 //Default selection
                 .on('ready.jstree', _.bind(function (e, data) {
 
@@ -611,8 +533,8 @@ define([
                     amplify.publish(E.TREE_READY, o);
 
                 }, this))
-                //Limit selection e select only leafs for indicators
-                .on("select_node.jstree deselect_node.jstree", _.bind(function (e, data) {
+
+                .on("select_node.jstree ", _.bind(function (e, data) {
 
                     if (!isNaN(this.selectors[o.id].selector.max) && data.selected.length > this.selectors[o.id].selector.max) {
                         data.instance.deselect_node(data.node);
@@ -621,27 +543,25 @@ define([
                     }
 
                     if (!data.instance.is_leaf(data.node)) {
-                        data.instance.deselect_node(data.node, true);
                         data.instance.toggle_node(data.node);
+                        data.instance.deselect_node(data.node, true);
                         return;
                     }
 
-                    var payload = [],
-                        selected = data.instance.get_selected();
+                    this._notifyTreeSelectionChange({
+                        instance : data.instance,
+                        id : o.id
+                    })
 
-                    _.each(selected, function (sel) {
-                        var node = data.instance.get_node(sel),
-                            label = {};
+                }, this))
 
-                        label[Utils.getLocale()] = node.text;
+                .on("deselect_node.jstree ", _.bind(function (e, data) {
 
-                        payload.push({code: node.id, label: label, parent: node.parent})
-                    });
+                    this._notifyTreeSelectionChange({
+                        instance : data.instance,
+                        id : o.id
+                    })
 
-                    self._updateTreeAmount(o.id);
-
-                    amplify.publish(E.SELECTORS_ITEM_SELECT + "." + o.id, payload);
-                    amplify.publish(E.SELECTORS_ITEM_SELECT);
 
                 }, this));
 
@@ -674,6 +594,26 @@ define([
                 });
             }
 
+        },
+
+        _notifyTreeSelectionChange : function  (o) {
+
+            var payload = [],
+                selected = o.instance.get_selected();
+
+            _.each(selected, function (sel) {
+                var node = o.instance.get_node(sel),
+                    label = {};
+
+                label[Utils.getLocale()] = node.text;
+
+                payload.push({code: node.id, label: label, parent: node.parent})
+            });
+
+            this._updateTreeAmount(o.id);
+
+            amplify.publish(E.SELECTORS_ITEM_SELECT + "." + o.id, payload);
+            amplify.publish(E.SELECTORS_ITEM_SELECT);
         },
 
         _updateTreeAmount : function  ( id ) {
@@ -819,6 +759,7 @@ define([
         },
 
         //checkbox
+
         _printCheckboxDefaultSelection : function() {
 
             if (AC.compareBy && this.$radios.filter("[value='"+AC.compareBy+"']").length > 0 ) {
@@ -833,7 +774,125 @@ define([
 
         },
 
+        /* dependencies fns */
+
+        _dep_min: function (payload, o) {
+
+            log.info("_dep_min invokation");
+            log.info(o);
+
+            var config = this.selectors[o.target].selector;
+
+            switch (config.type.toLowerCase()) {
+
+                case "dropdown" :
+
+                    var from = payload[0].code,
+                        $container = this.dropdownContainers[o.target],
+                        originalValue = $container.select2('data').id,
+                        data = [];
+
+                    for (var i = from; i <= config.to; i++) {
+                        data.push({
+                            id: i,
+                            text: i.toString()
+                        })
+                    }
+
+                    $container.select2({
+                        data: data
+                    });
+
+                    //Set selected value
+                    var v = from > originalValue ? from : originalValue;
+
+                    $container.val(v.toString()).trigger("change");
+                    console.log("set 2")
+
+                    break;
+            }
+
+        },
+
+        _dep_parent: function (payload, o) {
+
+            log.info("_dep_min _dep_parent");
+            log.info(o);
+
+            var config = this.selectors[o.target].selector;
+
+            switch (config.type.toLowerCase()) {
+
+                case "tree" :
+
+                    var c = this.selectors[o.target].cl;
+
+                    if (c) {
+
+                        //delete c.levels;
+                        c.levels = 2;
+                        delete c.level;
+
+                        c.codes = [];
+
+                        _.each(payload, function (item) {
+                            c.codes.push(item.code);
+                        });
+
+                        this._getPromise(c).then(
+                            _.bind(this._refreshTree, this, o),
+                            function (r) {
+                                log.error(r);
+                            }
+                        )
+                    }
+
+                    break;
+            }
+        },
+
         //utils for selectors
+
+        _getSelectorContainer: function (cl) {
+
+            return this.$el.find('[data-selector="' + cl + '"]');
+        },
+
+        _getSemanticContainer : function (cl) {
+
+            return this._getSelectorContainer(cl).closest(s.SELECTORS_CLASS);
+
+        },
+
+        _getSelectorIdsBySubject: function (sub) {
+
+            var sels = [];
+
+            if (_.contains(this.selectorsId, sub)) {
+
+                sels.push(sub);
+
+            } else {
+
+                _.each(this.selectors, _.bind(function (sel, id) {
+
+                    if (sel.hasOwnProperty("subject") && sel.subject === sub) {
+                        sels.push(id);
+                    }
+
+                }, this));
+
+            }
+
+            return sels;
+
+        },
+
+        _getSubjectBySelectorId: function (id) {
+
+            return (this.selectors[id] && this.selectors[id].hasOwnProperty("subject")) ?
+                this.selectors[id].subject : id;
+        },
 
         _disableSelector: function (t) {
 
@@ -895,88 +954,92 @@ define([
             this._enableSelector(d);
         },
 
-        getSelection: function () {
+        // Handlers
 
-            if (this.ready !== true) {
-                return {};
+        _onTreeReady: function () {
+
+            this.treesReady++;
+
+            if (this.treesReady === this.trees.length) {
+
+                log.info("All trees are ready");
+
+                this.ready = true;
+
+                this._onReady();
             }
+        },
 
-            var result = {
-                labels: {}
-            };
+        _onReady: function () {
 
-            //get trees selectors
-            var en = this._getEnablesSelectors(),
-                enabled = [];
+            this.$switches.on("click", _.bind(function (e) {
 
-            _.each(en, _.bind(function (e) {
-                enabled = enabled.concat(this._getSelectorIdsBySubject(e))
-            }, this));
+                log.info("Switch clicked");
 
-            enabled = _.unique(enabled);
+                var $this = $(e.currentTarget),
+                    $selectors = this._getSelectorIdsBySubject($(e.currentTarget).attr("data-target"));
 
-            _.each(this.trees, _.bind(function (cl) {
+                _.each($selectors, _.bind(function (sel) {
 
-                if (_.contains(enabled, cl)) {
+                    if (_.contains(this.selectorsId, sel)) {
 
-                    var instance = this.treeInstances[cl].jstree(true),
-                        selection = instance.get_selected();
+                        // $this will contain a reference to the checkbox
+                        if ($this.is(':checked')) {
 
-                    //remove empty selection
-                    if (Array.isArray(selection) && selection.length > 0) {
+                            // the checkbox was checked
+                            this._enableSelector(sel);
 
-                        result[cl] = selection;
+                        } else {
+                            // the checkbox was unchecked
+                            this._disableSelector(sel);
 
-                        result.labels[cl] = [];
-
-                        _.each(result[cl], function (c) {
-                            result.labels[cl].push(instance.get_node(c).text);
-                        });
-
+                            this._checkCompareValue(sel);
+                        }
                     }
 
+                    this._checkCompareValue(sel);
+
+                }, this));
+
+
+
+            }, this));
+
+            //default disabled selectors
+            _.each(this.disabledSelectors, _.bind(function (d) {
+
+                if (_.contains(this.selectorsId, d)) {
+                    this._disableSelectorAndSwitch(d);
                 }
 
             }, this));
 
-            //get dropdown selectors
-            _.each(this.dropdown, _.bind(function (cl) {
+            //compare btns and enable selector
 
-                var instance = this.dropdownInstances[cl],
-                    sel = instance.select2('data');
+            this.$radios.on('change', _.bind(this._onRadioChange, this));
 
-                if (sel) {
+            this._printCheckboxDefaultSelection();
 
-                    result[cl] = sel.id;
+            this._initDependencies();
 
-                    result.labels[cl] = sel.text;
-                }
+            amplify.publish(E.SELECTORS_READY);
+
+        },
+
+        _onRadioChange : function () {
+
+            var d = this.$el.find(s.COMPARE_RADIO_BTNS_CHECKED).val(),
+                selectors = this._getSelectorIdsBySubject(d);
+
+            //highlight compare-by selector background
+            this.$el.find("." + AC.selectorFocusedClass).removeClass(AC.selectorFocusedClass);
+            this._getSelectorContainer(selectors[0]).closest(s.SELECTORS_CLASS).parent().addClass(AC.selectorFocusedClass);
+
+            _.each(selectors, _.bind(function (sel) {
+
+                this._enableSelectorAndSwitch(sel);
 
             }, this));
-
-            //get compare
-            result.compare = this.$el.find(s.COMPARE_RADIO_BTNS_CHECKED).val();
-
-            //harmonize country selection
-            var activeTab = this.$el.find(s.ACTIVE_TAB).data('sel'),
-                sels = ['country-country', 'country-region', 'regional-aggregation'],
-                recipientValues,
-                recpientsLabels;
-
-            if (result[activeTab] && Array.isArray(result[activeTab])) {
-                recipientValues = result[activeTab].slice(0);
-                recpientsLabels = result.labels[activeTab].slice(0);
-            }
-
-            _.each(sels, function (f) {
-                delete result[f];
-                delete result.labels[f];
-            });
-
-            result["recipient"] = recipientValues;
-            result.labels["recipient"] = recpientsLabels;
-
-            return result;
 
         },
 
@@ -985,8 +1048,6 @@ define([
         _unbindEventListeners: function () {
 
             amplify.unsubscribe(E.TREE_READY, this._onTreeReady);
-
-            this.$switchAdvancedOptions.off();
 
             //destroy selectors dependencies
             this._destroyDependencies();

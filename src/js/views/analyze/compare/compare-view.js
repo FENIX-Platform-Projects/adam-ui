@@ -29,8 +29,8 @@ define([
         RESET_BTN: "#reset-btn",
         BTNS: "[data-btn]",
         ERROR: "#error-container",
-        EXPECTED_RESULTS: "#expected-results"
-
+        EXPECTED_RESULTS: "#expected-results",
+        SWITCH_ADVANCED_OPTION: "#advanced-options"
     };
 
     var CompareView = View.extend({
@@ -98,6 +98,8 @@ define([
 
             this.recipientSelectors = {};
 
+            this.mandatorySelectors = [];
+
             _.each(this.selectorsId, _.bind(function (id) {
 
                 var s = this.selectors[id] || {},
@@ -112,6 +114,11 @@ define([
                     this.recipientSelectors[id] = s;
                 }
 
+                //mandatory selectors
+                if (s.hasOwnProperty("validation") && s.validation.mandatory === true) {
+                    this.mandatorySelectors.push(this._getSubjectBySelectorId(id));
+                }
+                this.mandatorySelectors = _.uniq(this.mandatorySelectors);
 
             }, this));
 
@@ -132,6 +139,8 @@ define([
             this.$expectedResults = this.$el.find(s.EXPECTED_RESULTS);
 
             this.$advancedOptions = this.$el.find(AC.advancedOptionsSelector);
+
+            this.$switchAdvancedOptions = this.$el.find(s.SWITCH_ADVANCED_OPTION);
 
         },
 
@@ -168,6 +177,16 @@ define([
 
             });
 
+            this.$switchAdvancedOptions.on("click", _.bind(function (e) {
+
+                var isChecked = $(e.currentTarget).is(':checked');
+
+                this._configureVisibilityAdvancedOptions(isChecked);
+
+                amplify.publish(E.CHANGE_MODE, isChecked);
+
+            }, this));
+
         },
 
         _onSelectorSelect: function () {
@@ -184,30 +203,31 @@ define([
             if (valid === true) {
 
                 this._createRequests();
-                this._updateAdvancedStats();
+                this._updateAdvancedStats(this.currentRequest.combinations.length);
 
-                //Uncomment this to have react feedback
+                //Uncomment this to have react error feedback
                 /*
                  if (Array.isArray(this.currentRequest.combinations) && !isNaN(AC.maxCombinations) && this.currentRequest.combinations.length > AC.maxCombinations) {
-                 //this._printErrors('too_many_combinations');
+                 //this._printErrors({ code : 'too_many_combinations' });
                  //this._lockForm();
                  }
                  else {
                  this._resetErrors();
                  this._unlockForm();
                  }*/
+            } else {
+                this._updateAdvancedStats();
             }
 
             this._resetErrors();
             this._unlockForm();
 
-
         },
 
-        _updateAdvancedStats: function () {
+        _updateAdvancedStats: function (amount) {
             log.info("Update advanced stats");
 
-            this.$expectedResults.html(this.currentRequest.combinations.length);
+            this.$expectedResults.html(amount || " - ");
 
         },
 
@@ -223,6 +243,10 @@ define([
 
                 this.$advancedOptions.hide();
             }
+
+
+            //subview configuration
+            this.subview('selectors').configureVisibilityAdvancedOptions(show);
         },
 
         _onCompareClick: function () {
@@ -243,7 +267,7 @@ define([
 
             valid = this._validateSelection();
 
-            this.currentRequest.valid = typeof valid === 'boolean' ? valid : false;
+            this.currentRequest.valid = valid === 'boolean' ? valid : false;
 
             if (valid === true) {
 
@@ -253,7 +277,7 @@ define([
 
                 this.currentRequest.errors = valid;
 
-                this._printErrors(valid[0]);
+                this._printErrors(valid);
             }
 
         },
@@ -268,40 +292,54 @@ define([
         _validateSelection: function () {
 
             var valid = true,
-                errors = [],
+                errors = {},
                 s = this.currentRequest.selection,
                 compare;
 
             if (!s.hasOwnProperty('oda')) {
-                errors.push('oda_missing');
+                errors.code = 'oda_missing';
                 return errors;
             }
 
             if (!s.hasOwnProperty('year-from') || !s.hasOwnProperty('year-to')) {
-                errors.push('year_missing');
+                errors.code = 'year_missing';
                 return errors;
             }
 
             compare = s.compare;
 
             if (!s[compare]) {
-                errors.push('no_compare');
+                errors.code = 'no_compare';
                 return errors;
             }
 
             if (!compare) {
-                errors.push("compare_missing");
+                errors.code = "compare_missing";
                 return errors;
             }
 
             // for sure we have oda, year-from, year-to, and 'compare'
             //TODO make stronger
             if (Object.keys(s.labels).length <= 4) {
-                errors.push("at_least_one_more_dimension");
+                errors.code = "at_least_one_more_dimension";
                 return errors;
             }
 
-            return valid;
+            //mandatory fields
+            _.each(this.mandatorySelectors, _.bind(function (id) {
+
+                if (!s.hasOwnProperty(id)) {
+
+                    errors.code = 'missing_mandatory_field';
+                    errors.details = this._getSubjectBySelectorId(id);
+
+                    return errors;
+
+                }
+
+            }, this));
+
+            return _.isEmpty(errors) ? valid : errors;
         },
 
         _compare: function () {
@@ -311,7 +349,7 @@ define([
             this._createRequests();
 
             if (Array.isArray(this.currentRequest.combinations) && !isNaN(AC.maxCombinations) && this.currentRequest.combinations.length > AC.maxCombinations) {
-                this._printErrors('too_many_combinations');
+                this._printErrors({code: 'too_many_combinations'});
                 return;
             } else {
                 this._resetErrors();
@@ -374,7 +412,7 @@ define([
             log.error("Requests error:");
             log.error(request);
 
-            this._printErrors('request_error');
+            this._printErrors({code: 'request_error'});
 
             this._unlockForm();
 
@@ -397,7 +435,7 @@ define([
             log.error(error);
             log.error(obj);
 
-            this._printErrors('request_error');
+            this._printErrors({code: 'request_error'});
 
             this.subview('results').errorObj(obj);
 
@@ -535,7 +573,9 @@ define([
 
         _initComponents: function () {
 
-            this._configureVisibilityAdvancedOptions(AC.showAdvancedOptions);
+            this.$switchAdvancedOptions.prop('checked', AC.showAdvancedOptions);
+
+            this._configureVisibilityAdvancedOptions(this.$switchAdvancedOptions.is(':checked'));
 
             this._lockForm();
 
@@ -544,7 +584,7 @@ define([
         _printErrors: function (e) {
 
             var template = Handlebars.compile(errorTemplate),
-                html = template({text: i18nErrors[e]});
+                html = template({text: i18nErrors[e.code], details: i18nLabels[e.details]});
 
             this.$error.html(html);
 
@@ -666,6 +706,12 @@ define([
 
         },
 
+        _getSubjectBySelectorId: function (id) {
+
+            return (this.selectors[id] && this.selectors[id].hasOwnProperty("subject")) ?
+                this.selectors[id].subject : id;
+        },
+
         _unbindEventListeners: function () {
 
             //Toggle the selectors panel
@@ -676,6 +722,9 @@ define([
 
             //Reset page
             this.$resetBtn.off();
+
+            //Advance mode switcher
+            this.$switchAdvancedOptions.off();
 
             amplify.unsubscribe(E.SELECTORS_READY, this._unlockForm);
 

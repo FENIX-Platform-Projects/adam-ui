@@ -2,7 +2,19 @@
 
 <hr>
 
-<a id="compare-collapse-btn" class="compare-collapse-btn pull-right">{{ collapse_btn }} <span class="icojam_view_roll-up_2"></span></a><br>
+<div class="row">
+    <div class="col-sm-12">
+        <a id="compare-collapse-btn" class="compare-collapse-btn pull-right">{{ collapse_btn }} <span class="icojam_view_roll-up_2"></span></a><br>
+
+        <div class="toggle-wrapper pull-right">
+            <p class="toggle-text">{{ show_advanced_options }}</p>
+            <input type="checkbox" name="advanced-options" id="advanced-options"
+                   data-type="switch" data-role="switch" checked>
+            <label for="advanced-options"></label>
+        </div>
+    </div>
+</div>
+
 
 <hr>
 
