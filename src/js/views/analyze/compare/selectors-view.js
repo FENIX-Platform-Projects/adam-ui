@@ -121,6 +121,7 @@ define([
 
                     //get set of codelists
                     if (s.hasOwnProperty("cl")) {
+                        //TODO remove duplication
                         this.codelists.push(k);
                     }
 
@@ -239,22 +240,22 @@ define([
 
         },
 
-        _createPromise: function (cl) {
+        _createPromise: function (id) {
 
             var self = this,
-                body = this.selectors[cl].cl;
+                body = this.selectors[id].cl;
 
             return this._getPromise(body).then(function (result) {
 
                 if (typeof result === 'undefined') {
-                    log.info("No Code List loaded for: " + cl);
+                    log.info("No Code List loaded for: " + id);
                 } else {
-                    log.info("Code List loaded successfully for: " + cl);
+                    log.info("Code List loaded successfully for: " + id);
 
-                    amplify.store.sessionStorage(cl, result);
+                    amplify.store.sessionStorage(id, result);
                 }
 
-                self.cachedCodelist[cl] = result;
+                self.cachedCodelist[id] = result;
 
             }, function (r) {
 

@@ -156,11 +156,11 @@ define([
 
             amplify.subscribe(E.CHANGE_MODE, this, this._configureVisibilityAdvancedOptions);
 
-            amplify.subscribe(E.SELECTORS_ITEM_SELECT, this, this._onSelectorSelect);
-
             amplify.subscribe(E.SELECTORS_READY, this, function () {
 
                 this._unlockForm();
+
+                amplify.subscribe(E.SELECTORS_ITEM_SELECT, this, this._onSelectorSelect);
 
                 amplify.subscribe(E.RELOAD_RESULT, this, this._onResultReload);
 
