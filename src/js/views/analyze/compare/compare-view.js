@@ -189,23 +189,19 @@ define([
 
             this.currentRequest.valid = typeof valid === 'boolean' ? valid : false;
 
-            if (valid === true) {
+            if (this.currentRequest.selection.valid === true && valid === true) {
 
                 this._createRequests();
                 this._updateAdvancedStats(this.currentRequest.combinations.length);
 
-                //Uncomment this to have react error feedback
-                /*
-                 if (Array.isArray(this.currentRequest.combinations) && !isNaN(AC.maxCombinations) && this.currentRequest.combinations.length > AC.maxCombinations) {
-                 //this._printErrors({ code : 'too_many_combinations' });
-                 //this._lockForm();
-                 }
-                 else {
-                 this._resetErrors();
-                 this._unlockForm();
-                 }*/
             } else {
+
                 this._updateAdvancedStats();
+
+                /*if (Array.isArray(this.currentRequest.combinations) && !isNaN(AC.maxCombinations) && this.currentRequest.combinations.length > AC.maxCombinations) {
+                    this._printErrors({ code : 'too_many_combinations' });
+                    this._lockForm();
+                }*/
             }
 
             this._resetErrors();
@@ -284,12 +280,12 @@ define([
                 s = this.currentRequest.selection,
                 compare;
 
-            if (!s.hasOwnProperty('oda')) {
+            if (!s.hasOwnProperty('oda') || !s['oda']) {
                 errors.code = 'oda_missing';
                 return errors;
             }
 
-            if (!s.hasOwnProperty('year-from') || !s.hasOwnProperty('year-to')) {
+            if (!s.hasOwnProperty('year-from') || !s.hasOwnProperty('year-to') || !s['year-from']  || !s['year-to']) {
                 errors.code = 'year_missing';
                 return errors;
             }

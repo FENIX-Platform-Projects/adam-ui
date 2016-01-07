@@ -502,7 +502,7 @@ define([
             //mandatory fields
             _.each(this.mandatorySelectors, _.bind(function (id) {
 
-                if (!s.hasOwnProperty(id)) {
+                if (!s.hasOwnProperty(id) || !s[id]) {
 
                     errors.code = 'missing_mandatory_field';
                     errors.details = this._getSubjectBySelectorId(id);
@@ -818,7 +818,7 @@ define([
 
         },
 
-        /* dependencies fns */
+        // dependencies fns
 
         _dep_min: function (payload, o) {
 
@@ -892,6 +892,26 @@ define([
 
                     break;
             }
+        },
+
+        _dep_focus: function (payload, o) {
+
+            if (payload.code === this._getSubjectBySelectorId(o.target)) {
+
+                var d = payload.code,
+                    selectors = this._getSelectorIdsBySubject(d);
+
+                //highlight compare-by selector background
+                this.$el.find("." + AC.selectorFocusedClass).removeClass(AC.selectorFocusedClass);
+                this._getSelectorContainer(selectors[0]).closest(s.SELECTORS_CLASS).parent().addClass(AC.selectorFocusedClass);
+
+                _.each(selectors, _.bind(function (sel) {
+
+                    this._enableSelectorAndSwitch(sel);
+
+                }, this));
+            }
+
         },
 
         //utils for selectors
@@ -1060,9 +1080,9 @@ define([
 
             this.$radios.on('change', _.bind(this._onRadioChange, this));
 
-            this._printCheckboxDefaultSelection();
-
             this._initDependencies();
+
+            this._printCheckboxDefaultSelection();
 
             amplify.publish(E.SELECTORS_READY);
 
@@ -1070,18 +1090,9 @@ define([
 
         _onRadioChange: function () {
 
-            var d = this.$el.find(s.COMPARE_RADIO_BTNS_CHECKED).val(),
-                selectors = this._getSelectorIdsBySubject(d);
+            var code = this.$el.find(s.COMPARE_RADIO_BTNS_CHECKED).val();
 
-            //highlight compare-by selector background
-            this.$el.find("." + AC.selectorFocusedClass).removeClass(AC.selectorFocusedClass);
-            this._getSelectorContainer(selectors[0]).closest(s.SELECTORS_CLASS).parent().addClass(AC.selectorFocusedClass);
-
-            _.each(selectors, _.bind(function (sel) {
-
-                this._enableSelectorAndSwitch(sel);
-
-            }, this));
+            amplify.publish(E.SELECTORS_ITEM_SELECT + ".compare", {code: code, label: i18nLabels[code], parent: null});
 
         },
 
@@ -1109,10 +1120,10 @@ define([
             //reset dropdown
             _.each(this.dropdown, this._printDropdownDefaultSelection, this);
 
+            this._initDependencies();
+
             //reset checkbox
             this._printCheckboxDefaultSelection();
-
-            this._initDependencies();
 
             log.info("Selector View reset");
 

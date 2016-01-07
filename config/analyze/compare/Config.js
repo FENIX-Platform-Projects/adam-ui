@@ -37,7 +37,10 @@ define(function () {
                     "process": '{"recipientcode": { "codes":[{"uid": "{{uid}}", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
                 },
 
-                //, dependencies : {} //dependencies with other selectors
+                //dependencies with other selectors
+                "dependencies" : {
+                    "compare" : "focus"
+                },
 
                 // validation
                 "validation" : {
@@ -53,13 +56,23 @@ define(function () {
                     "uid": "crs_regions_countries",
                     "version": "2015"
                 },
+
                 "selector": {
                     "type": "tree"
                 },
+
+                "dependencies" : {
+                    "compare" : "focus"
+                },
+
                 "filter": {
                     "type": "dynamic",
                     //TODO change to template uid and version as in 'country-country'
                     "process": '{"recipientcode": { "codes":[{"uid": "crs_recipients", "version": "2015", "codes": [{{{codes}}}] } ]}}'
+                },
+
+                "validation" : {
+                    "mandatory" : true
                 }
             },
 
@@ -71,65 +84,106 @@ define(function () {
                     "uid": "crs_regional_projects",
                     "version": "2015"
                 },
+
                 "selector": {
                     "type": "tree"
+                },
+
+                "dependencies" : {
+                    "compare" : "focus"
                 },
 
                 "filter": {
                     "type": "dynamic",
                     //TODO change to template uid and version as in 'country-country'
                     "process": '{"recipientcode": { "codes":[{"uid": "crs_recipients", "version": "2015", "codes": [{{{codes}}}] } ]}}'
+                },
+
+                "validation" : {
+                    "mandatory" : true
                 }
             },
 
             "donor": {
+
                 "cl": {
                     "uid": "crs_donors",
                     "version": "2015"
                 },
+
                 "selector": {
                     "type": "tree",
                     "default": [1012]
                 },
+
+                "dependencies" : {
+                    "compare" : "focus"
+                },
+
                 "filter": {
                     "type": "dynamic",
                     "process": '{"donorcode": { "codes":[{"uid": "{{uid}}", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
+                },
+
+                "validation" : {
+                    "mandatory" : true
                 }
             },
 
             "delivery": {
+
                 "cl": {
                     "uid": "crs_channels",
                     "version": "2015",
                     "level": 3,
                     "levels": 3
                 },
+
                 "selector": {
                     "type": "tree",
                     "default": [44006]
                 },
+
+                "dependencies" : {
+                    "compare" : "focus"
+                },
+
                 "filter": {
                     "type": "dynamic",
                     "process": '{"channelcode": { "codes":[{"uid": "{{uid}}", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
+                },
+
+                "validation" : {
+                    "mandatory" : true
                 }
             },
 
             "sector": {
+
                 "cl": {
                     "uid": "crs_dac",
                     "version": "2015",
                     "level": 1,
                     "levels": 1
                 },
+
                 "selector": {
                     "type": "tree",
-                    "default": [60010]
+                    "default": [311]
+                },
+
+                "dependencies" : {
+                    "compare" : "focus"
                 },
 
                 "filter": {
                     "type": "dynamic",
                     //TODO change to template uid and version as in 'country-country'
                     "process": '{"sectorcode": { "codes":[{"uid": "crs_sectors", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
+                },
+
+                "validation" : {
+                    "mandatory" : true
                 }
             },
 
@@ -143,8 +197,8 @@ define(function () {
                 },
 
                 "selector": {
-                    "type": "tree"
-                    //,"default": [11430]
+                    "type": "tree",
+                    "default": [31165]
                 },
 
                 "filter": {
@@ -153,8 +207,9 @@ define(function () {
                     "process": '{"purposecode": { "codes":[{"uid": "crs_purposes", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
                 },
 
-                dependencies : {
-                    "sector" : "parent"
+                "dependencies" : {
+                    "sector" : "parent",
+                    "compare" : "focus"
                 },
 
                 "validation" : {
@@ -207,7 +262,7 @@ define(function () {
                     //, "process": '{"year": { "time":[{"from": "{{year-from}}", "to": "{{year-to}}" } ]}}' //Not used
                 },
 
-                dependencies : {
+                "dependencies" : {
                     "year-from" : "min"
                 }
 
