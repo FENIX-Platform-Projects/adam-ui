@@ -13811,6 +13811,9 @@ footer h4 {
     border: none; }
 
 /* Analyze Data */
+.compare-title {
+  display: inline-block; }
+
 .analyze-compare-selectors .tab-content {
   padding-top: 0; }
 .analyze-compare-selectors .fx-tabs .nav-tabs > li {
@@ -13852,7 +13855,8 @@ footer h4 {
 
 .compare-collapse-btn {
   color: #333333;
-  cursor: pointer; }
+  cursor: pointer;
+  margin-left: 15px; }
   .compare-collapse-btn span {
     font-size: 18px;
     margin-left: 5px;
@@ -13862,22 +13866,34 @@ footer h4 {
     color: #333333;
     text-decoration: none; }
 
+.collapse-bar {
+  margin-top: 20px; }
+  .collapse-bar .toggle-wrapper {
+    margin-top: 4px; }
+
 .compare-selector {
   position: relative; }
   .compare-selector:before {
     content: '';
     display: block;
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: -1px;
+    left: -1px;
+    width: calc(100% + 2px);
+    height: calc(100% + 2px);
     border-style: solid;
     border-width: 0;
-    border-color: #2686ba;
+    border-color: #91cae8;
     pointer-events: none; }
   .compare-selector.selector-focused:before {
     border-width: 2px; }
+
+.selector-mandatory:after {
+  content: 'MANDATORY';
+  position: relative;
+  bottom: 33px;
+  font-size: 10px;
+  color: red; }
 
 /* DANI */
 .fx-result {
@@ -13909,6 +13925,9 @@ footer h4 {
     display: block; }
 
 /* FINE DANI*/
+[data-container="chart"] [data-role="content"] {
+  height: 100%; }
+
 /* Extra small devices (phones, less than 768px) */
 /* No media query since this is the default in Bootstrap */
 /* Small devices (tablets, 768px and up) */
