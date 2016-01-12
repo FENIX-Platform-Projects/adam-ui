@@ -262,6 +262,8 @@ define([
         _tab_table: function (obj) {
             log.info("'Table' callback");
 
+            console.log(obj)
+
 
 
         },
