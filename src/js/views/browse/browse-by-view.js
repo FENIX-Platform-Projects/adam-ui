@@ -17,7 +17,7 @@ define([
     'amplify',
     'select2',
     'jstree',
-    'highcharts-export'
+    'packery'
 
 ], function (View, Dashboard, Filter, template, browseByDashboardTemplate, i18nLabels, E, C, BrowseConfig, BrowseFaoSectorsConfig, FilterConfCreator, Handlebars, Utils, Q) {
 
@@ -119,11 +119,11 @@ define([
                 var sectorcodeObj = self._getObjectByValue('9999',values);
 
                 // Set Sectors to crs_sectors
-                if(!this._hasNoSelections('sectorcode', values)){
+                if(!self._hasNoSelections('sectorcode', values)){
                     values['sectorcode'].codes[0].uid = 'crs_sectors';
                 }
                 // Set Subsectors to crs_purposes
-                if(!this._hasNoSelections('purposecode', values)){
+                if(!self._hasNoSelections('purposecode', values)){
                     values['purposecode'].codes[0].uid = 'crs_purposes';
                 }
 
