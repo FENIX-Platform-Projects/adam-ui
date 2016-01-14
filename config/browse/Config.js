@@ -1067,7 +1067,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['sectorcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['recipientcode', 'sectorcode', 'purposecode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -1296,7 +1296,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['sectorcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['recipientcode', 'sectorcode', 'purposecode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -1460,7 +1460,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['sectorcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['recipientcode', 'sectorcode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -1597,7 +1597,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['sectorcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['recipientcode', 'sectorcode', 'purposecode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -1683,7 +1683,6 @@ define(function () {
                             }
                         ]
                     }
-
 
                 ]
             }
