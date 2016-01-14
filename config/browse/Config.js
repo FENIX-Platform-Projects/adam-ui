@@ -1058,7 +1058,11 @@ define(function () {
                                                 this.series.name +  '</b><br/>' +
                                                 Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
                                         }
-                                    }
+                                    },
+                                   /** legend: {
+                                        fontSize: '10px',
+                                        font: '20pt'
+                                    }   **/
                                 }
                             }
                         },
@@ -1379,7 +1383,7 @@ define(function () {
                         ]
                     },
                     {
-                        id: 'item-4',    // Top sub-sectors
+                        id: 'item-4',    // Top sub-sectors pie
                         type: 'chart',
                         class: "fx-timeseries-ecample",
                         //needed if layout = injected
@@ -1408,21 +1412,44 @@ define(function () {
                                     },
                                     tooltip: {
                                         style: {width: '200px', whiteSpace: 'normal'},
-                                        pointFormat: '<b>{point.percentage:.2f}%</b>'
+                                        pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>'
                                     },
                                     legend: {
-                                        labelFormatter: function(){return this.name.slice(0, 25)+ '...'}
+                                        itemStyle: {
+                                            width: 250
+                                        }
                                     },
+                                    exporting: {
+                                        chartOptions: {
+                                            legend: {
+                                                enabled: false
+                                            },
+                                            series: {
+                                                dataLabels: {
+                                                    style: {
+                                                        width: '100px'
+                                                    },
+                                                    enabled: true
+                                                }
+                                            }
+
+                                        }
+                                    },
+                                   // legend: {
+                                   //    labelFormatter: function(){return this.name.slice(0, 25)+ '...'}
+                                   // },
                                     plotOptions: {
                                         pie: {
                                             allowPointSelect: true,
                                             cursor: 'pointer',
-                                            dataLabels: {
+                                             dataLabels: {
+                                                style: {
+                                                   width: '100px'
+                                                 },
                                                 formatter: function(){
-                                                    var words = this.point.name.slice(0, 60)+ '...';
-
-                                                    return words;
-
+                                                   return '<div>' + this.point.name + ' '+
+                                                       Math.round(this.point.percentage) //Highcharts.numberFormat(this.point.percentage, 2)
+                                                      +'% </div>';
                                                 },
                                                 enabled: true
                                             },
@@ -1535,13 +1562,34 @@ define(function () {
                                     chart: {
                                         type: "column"
                                     },
+
                                     subtitle: {
                                         text: ''
                                     },
+                                    plotOptions: {
+                                        series: {
+                                            dataLabels: {
+                                                enabled: true
+                                            }
+                                        }
+                                    },
+                                    exporting: {
+                                       chartOptions: {
+                                           legend: {
+                                               enabled: false
+                                           }
+                                       }
+                                    },
+                                    legend: {
+                                        itemStyle: {
+                                            width: 250
+                                        }
+                                    },
                                     tooltip: {
+                                        useHTML:true,
                                         formatter: function(){
-                                            return '<b>' +this.x + ': ' + '</b><br/>' +
-                                                Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
+                                            return '<div style="width: 200px; white-space:normal"><b>' +this.x + ': ' + '</b><br/>' +
+                                                Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil' + '</div>';
                                         }
                                     }
 
