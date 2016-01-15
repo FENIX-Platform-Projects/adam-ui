@@ -300,7 +300,7 @@ define(function () {
 
         "advancedOptionsSelector" : ".advanced-option",
 
-        "showAdvancedOptions" : true
+        "showAdvancedOptions" : false
 
     }
 
