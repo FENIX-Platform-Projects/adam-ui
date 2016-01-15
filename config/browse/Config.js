@@ -199,7 +199,7 @@ define(function () {
                 metadata: {},
 
                 items: [
-                   {
+                    {
                         id: 'item-1',   // TOTAL ODA
                         type: 'chart',
                         class: "fx-timeseries-ecample",
@@ -223,7 +223,7 @@ define(function () {
                                         type: "line"
                                     },
                                     xAxis : {
-                                     type: 'datetime'
+                                        type: 'datetime'
                                     },
                                     subtitle: {
                                         text: ''
@@ -239,33 +239,33 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['sectorcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['sectorcode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
                                 "parameters": {
-                                     "rows": {
-                                         "flowcode": {
-                                             "codes": [
-                                                 {
-                                                     "uid": "crs_flow_types",
-                                                     "version": "2015",
-                                                     "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                                     ]   //ODA
-                                                 }
-                                             ]
-                                         },
-                                         "sectorcode": {
-                                             "codes": [
-                                                 {
-                                                     "uid": "crs_sectors",
-                                                     "version": "2015",
-                                                     "codes": [
-                                                         "600"
-                                                     ]
-                                                 }
-                                             ]
-                                         },
+                                    "rows": {
+                                        "flowcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_flow_types",
+                                                    "version": "2015",
+                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
+                                                    ]   //ODA
+                                                }
+                                            ]
+                                        },
+                                        "sectorcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_sectors",
+                                                    "version": "2015",
+                                                    "codes": [
+                                                        "600"
+                                                    ]
+                                                }
+                                            ]
+                                        },
                                         "year": {
                                             "time": [
                                                 {
@@ -281,14 +281,14 @@ define(function () {
                                 "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                        "sectorcode", "year", "unitcode", "value"
+                                        "sectorcode", "year"
                                     ],
                                     "aggregations": [
                                         {
                                             "columns": ["value"],
                                             "rule": "SUM"
-                                        }
-                                        ,{
+                                        },
+                                        {
                                             "columns": ["unitcode"],
                                             "rule": "pgfirst"
                                         },
@@ -296,7 +296,6 @@ define(function () {
                                             "columns": ["unitname"],
                                             "rule": "pgfirst"
                                         }
-
                                     ]
                                 }
                             },
@@ -310,7 +309,7 @@ define(function () {
                         ]
                     },
                     {
-                        id: 'item-2', // TOP 10 DONORS
+                        id: 'item-2', // TOP DONORS
                         type: 'chart',
                         class: "fx-timeseries-ecample",
                         //needed if layout = injected
@@ -322,7 +321,8 @@ define(function () {
                                 xDimensions: 'donorcode',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['donorcode']
+                                seriesDimensions: ['donorcode'],
+                                sort: false
                             },
                             template: {
                                 //"title": "Top 25..."
@@ -403,7 +403,6 @@ define(function () {
                                             "columns": ["unitname"],
                                             "rule": "pgfirst"
                                         }
-
                                     ]
                                 }
                             },
@@ -416,14 +415,14 @@ define(function () {
                             {
                                 "name": "page",
                                 "parameters": {
-                                  "perPage": 10,  //top 10
-                                   "page": 1
-                               }
+                                    "perPage": 20,  //top 20
+                                    "page": 1
+                                }
                             }
                         ]
                     },
                     {
-                        id: 'item-3', // TOP 10 CHANNELS OF DELIVERY
+                        id: 'item-3', // TOP Channels
                         type: 'chart',
                         class: "fx-timeseries-ecample",
                         //needed if layout = injected
@@ -435,7 +434,8 @@ define(function () {
                                 xDimensions: 'channelcode',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['channelcode']
+                                seriesDimensions: ['channelcode'],
+                                sort: false
                             },
                             template: {
                                 //"title": "Top 25..."
@@ -445,23 +445,34 @@ define(function () {
                                     chart: {
                                         type: "column"
                                     },
+
                                     subtitle: {
                                         text: ''
                                     },
+                                    plotOptions: {
+                                        series: {
+                                            dataLabels: {
+                                                enabled: true
+                                            }
+                                        }
+                                    },
+                                    exporting: {
+                                        chartOptions: {
+                                            legend: {
+                                                enabled: false
+                                            }
+                                        }
+                                    },
                                     legend: {
-                                       /** layout: 'vertical',
-                                        width: 600,
-                                        floating: true,
-                                        align: 'center',
-                                        verticalAlign: 'bottom',
-                                        borderWidth: 1,
-                                        itemWidth: '300px',**/
-                                        itemStyle: 300
+                                        itemStyle: {
+                                            width: 250
+                                        }
                                     },
                                     tooltip: {
+                                        useHTML:true,
                                         formatter: function(){
-                                            return '<b>' +this.x + ': ' + '</b><br/>' +
-                                                Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
+                                            return '<div style="width: 200px; white-space:normal"><b>' +this.x + ': ' + '</b><br/>' +
+                                                Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil' + '</div>';
                                         }
                                     }
 
@@ -469,7 +480,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['sectorcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['sectorcode', 'purposecode', 'year'],
                         filter: [
                             {
                                 "name": "filter",
@@ -545,11 +556,18 @@ define(function () {
                                 "parameters": {
                                     "value": "DESC"
                                 }
+                            },
+                            {
+                                "name": "page",
+                                "parameters": {
+                                    "perPage": 10,  //top 10
+                                    "page": 1
+                                }
                             }
                         ]
                     },
                     {
-                        id: 'item-4',  // TOP 10 Subsectors
+                        id: 'item-4',  // Top sub-sectors pie
                         type: 'chart',
                         class: "fx-timeseries-ecample",
                         //needed if layout = injected
@@ -578,40 +596,45 @@ define(function () {
                                     },
                                     tooltip: {
                                         style: {width: '200px', whiteSpace: 'normal'},
-                                        pointFormat: '<b>{point.percentage:.2f}%</b>'
+                                        pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>'
                                     },
                                     legend: {
-                                       labelFormatter: function(){
-                                        //  var words = this.name.split(/\s+/).slice(1,5);
-                                          // for
-                                         //  var words = this.name;
-                                         //  if(words.length > 30){
-                                         //      words = this.name.slice(0, 30)+ '...';
-                                         //  }
-
-                                          // return words;
-                                          return this.name.slice(0, 25)+ '...';
-
-                                       }
-                                        //s.split(/\s+/).slice(1,3);
+                                        itemStyle: {
+                                            width: 250
+                                        }
                                     },
+                                    exporting: {
+                                        chartOptions: {
+                                            legend: {
+                                                enabled: false
+                                            },
+                                            series: {
+                                                dataLabels: {
+                                                    style: {
+                                                        width: '200px'
+                                                    },
+                                                    enabled: true
+                                                }
+                                            }
+
+                                        }
+                                    },
+                                    // legend: {
+                                    //    labelFormatter: function(){return this.name.slice(0, 25)+ '...'}
+                                    // },
                                     plotOptions: {
                                         pie: {
                                             allowPointSelect: true,
                                             cursor: 'pointer',
                                             dataLabels: {
-                                               formatter: function(){
-                                                  // var words = this.point.name;
-                                                  // if(words.length > 60){
-                                                  //     words = this.point.name.slice(0, 60)+ '...';
-                                                  // }
-
-                                                 var words = this.point.name.slice(0, 60)+ '...';
-   
-
-                                                return words;
-
-                                               },
+                                                style: {
+                                                    width: '200px'
+                                                },
+                                                formatter: function(){
+                                                    return '<div>' + this.point.name + ' '+
+                                                        Math.round(this.point.percentage) //Highcharts.numberFormat(this.point.percentage, 2)
+                                                        +'% </div>';
+                                                },
                                                 enabled: true
                                             },
                                             showInLegend: true
@@ -621,7 +644,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['sectorcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['sectorcode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -690,7 +713,7 @@ define(function () {
                             }
                         ]
                     }
-                   /**, {
+                /**, {
                         id: 'item-5', // Regional Distribution
                         type: 'chart',
                         class: "fx-timeseries-ecample",
@@ -1048,6 +1071,9 @@ define(function () {
                                     },
                                     xAxis : {
                                         type: 'datetime'
+                                    },
+                                    exporting : {
+                                      enabled: true
                                     },
                                     subtitle: {
                                         text: ''
@@ -1596,7 +1622,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['recipientcode', 'sectorcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['recipientcode', 'sectorcode', 'purposecode', 'year'],
                         filter: [
                             {
                                 "name": "filter",
@@ -1940,7 +1966,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: [ 'donorcode', 'sectorcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: [ 'donorcode', 'sectorcode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -2033,7 +2059,8 @@ define(function () {
                                 xDimensions: 'sectorcode',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['sectorcode']
+                                seriesDimensions: ['sectorcode'],
+                                sort: false
                             },
                             template: {
                                 //"title": "Top 25..."
@@ -2126,7 +2153,7 @@ define(function () {
                             {
                                 "name": "page",
                                 "parameters": {
-                                    "perPage": 10,  //top 20
+                                    "perPage": 10,  //top 10
                                     "page": 1
                                 }
                             }
@@ -2145,7 +2172,8 @@ define(function () {
                                 xDimensions: 'channelcode',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['channelcode']
+                                seriesDimensions: ['channelcode'],
+                                sort: false
                             },
                             template: {
                                 //"title": "Top 25..."
@@ -2155,13 +2183,34 @@ define(function () {
                                     chart: {
                                         type: "column"
                                     },
+
                                     subtitle: {
                                         text: ''
                                     },
+                                    plotOptions: {
+                                        series: {
+                                            dataLabels: {
+                                                enabled: true
+                                            }
+                                        }
+                                    },
+                                    exporting: {
+                                        chartOptions: {
+                                            legend: {
+                                                enabled: false
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        itemStyle: {
+                                            width: 250
+                                        }
+                                    },
                                     tooltip: {
+                                        useHTML:true,
                                         formatter: function(){
-                                            return '<b>' +this.x + ': ' + '</b><br/>' +
-                                                Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
+                                            return '<div style="width: 200px; white-space:normal"><b>' +this.x + ': ' + '</b><br/>' +
+                                                Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil' + '</div>';
                                         }
                                     }
 
@@ -2169,7 +2218,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['donorcode', 'sectorcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['donorcode', 'sectorcode', 'purposecode', 'year'],
                         filter: [
                             {
                                 "name": "filter",
@@ -2256,7 +2305,7 @@ define(function () {
                         ]
                     },
                     {
-                        id: 'item-4',    // Top sub-sectors
+                        id: 'item-4',    // Top sub-sectors pie
                         type: 'chart',
                         class: "fx-timeseries-ecample",
                         //needed if layout = injected
@@ -2285,21 +2334,44 @@ define(function () {
                                     },
                                     tooltip: {
                                         style: {width: '200px', whiteSpace: 'normal'},
-                                        pointFormat: '<b>{point.percentage:.2f}%</b>'
+                                        pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>'
                                     },
                                     legend: {
-                                        labelFormatter: function(){return this.name.slice(0, 25)+ '...'}
+                                        itemStyle: {
+                                            width: 250
+                                        }
                                     },
+                                    exporting: {
+                                        chartOptions: {
+                                            legend: {
+                                                enabled: false
+                                            },
+                                            series: {
+                                                dataLabels: {
+                                                    style: {
+                                                        width: '100px'
+                                                    },
+                                                    enabled: true
+                                                }
+                                            }
+
+                                        }
+                                    },
+                                    // legend: {
+                                    //    labelFormatter: function(){return this.name.slice(0, 25)+ '...'}
+                                    // },
                                     plotOptions: {
                                         pie: {
                                             allowPointSelect: true,
                                             cursor: 'pointer',
                                             dataLabels: {
+                                                style: {
+                                                    width: '100px'
+                                                },
                                                 formatter: function(){
-                                                    var words = this.point.name.slice(0, 60)+ '...';
-
-                                                    return words;
-
+                                                    return '<div>' + this.point.name + ' '+
+                                                        Math.round(this.point.percentage) //Highcharts.numberFormat(this.point.percentage, 2)
+                                                        +'% </div>';
                                                 },
                                                 enabled: true
                                             },
@@ -2310,7 +2382,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['sectorcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['donorcode', 'sectorcode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -2672,7 +2744,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['recipientcode', 'donorcode', 'sectorcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['recipientcode', 'donorcode', 'sectorcode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -2776,7 +2848,8 @@ define(function () {
                                 xDimensions: 'sectorcode',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['sectorcode']
+                                seriesDimensions: ['sectorcode'],
+                                sort: false
                             },
                             template: {
                                 //"title": "Top 25..."
@@ -2880,7 +2953,7 @@ define(function () {
                             {
                                 "name": "page",
                                 "parameters": {
-                                    "perPage": 10,  //top 20
+                                    "perPage": 10,  //top 10
                                     "page": 1
                                 }
                             }
@@ -2899,7 +2972,8 @@ define(function () {
                                 xDimensions: 'channelcode',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['channelcode']
+                                seriesDimensions: ['channelcode'],
+                                sort:false
                             },
                             template: {
                                 //"title": "Top 25..."
@@ -2923,7 +2997,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['recipientcode', 'donorcode', 'sectorcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['recipientcode', 'donorcode', 'sectorcode', 'purposecode', 'year'],
                         filter: [
                             {
                                 "name": "filter",
@@ -3021,7 +3095,7 @@ define(function () {
                         ]
                     },
                     {
-                        id: 'item-4',    // Top sub-sectors
+                        id: 'item-4',    // Top sub-sectors pie
                         type: 'chart',
                         class: "fx-timeseries-ecample",
                         //needed if layout = injected
@@ -3050,21 +3124,44 @@ define(function () {
                                     },
                                     tooltip: {
                                         style: {width: '200px', whiteSpace: 'normal'},
-                                        pointFormat: '<b>{point.percentage:.2f}%</b>'
+                                        pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>'
                                     },
                                     legend: {
-                                        labelFormatter: function(){return this.name.slice(0, 25)+ '...'}
+                                        itemStyle: {
+                                            width: 250
+                                        }
                                     },
+                                    exporting: {
+                                        chartOptions: {
+                                            legend: {
+                                                enabled: false
+                                            },
+                                            series: {
+                                                dataLabels: {
+                                                    style: {
+                                                        width: '100px'
+                                                    },
+                                                    enabled: true
+                                                }
+                                            }
+
+                                        }
+                                    },
+                                    // legend: {
+                                    //    labelFormatter: function(){return this.name.slice(0, 25)+ '...'}
+                                    // },
                                     plotOptions: {
                                         pie: {
                                             allowPointSelect: true,
                                             cursor: 'pointer',
                                             dataLabels: {
+                                                style: {
+                                                    width: '100px'
+                                                },
                                                 formatter: function(){
-                                                    var words = this.point.name.slice(0, 60)+ '...';
-
-                                                    return words;
-
+                                                    return '<div>' + this.point.name + ' '+
+                                                        Math.round(this.point.percentage) //Highcharts.numberFormat(this.point.percentage, 2)
+                                                        +'% </div>';
                                                 },
                                                 enabled: true
                                             },
@@ -3075,7 +3172,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['recipientcode', 'donorcode', 'sectorcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['recipientcode', 'donorcode', 'sectorcode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
