@@ -1058,16 +1058,12 @@ define(function () {
                                                 this.series.name +  '</b><br/>' +
                                                 Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
                                         }
-                                    },
-                                   /** legend: {
-                                        fontSize: '10px',
-                                        font: '20pt'
-                                    }   **/
+                                    }
                                 }
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['recipientcode', 'sectorcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['recipientcode', 'sectorcode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -1160,7 +1156,8 @@ define(function () {
                                 xDimensions: 'sectorcode',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['sectorcode']
+                                seriesDimensions: ['sectorcode'],
+                                sort: false
                             },
                             template: {
                                 //"title": "Top 25..."
@@ -1253,7 +1250,7 @@ define(function () {
                             {
                                 "name": "page",
                                 "parameters": {
-                                    "perPage": 10,  //top 20
+                                    "perPage": 10,  //top 10
                                     "page": 1
                                 }
                             }
@@ -1272,7 +1269,8 @@ define(function () {
                                 xDimensions: 'donorcode',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['donorcode']
+                                seriesDimensions: ['donorcode'],
+                                sort: false
                             },
                             template: {
                                 //"title": "Top 25..."
@@ -1376,7 +1374,7 @@ define(function () {
                             {
                                 "name": "page",
                                 "parameters": {
-                                    "perPage": 10,  //top 10
+                                    "perPage": 20,  //top 20
                                     "page": 1
                                 }
                             }
@@ -1552,7 +1550,8 @@ define(function () {
                                 xDimensions: 'channelcode',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['channelcode']
+                                seriesDimensions: ['channelcode'],
+                                sort: false
                             },
                             template: {
                                 //"title": "Top 25..."
