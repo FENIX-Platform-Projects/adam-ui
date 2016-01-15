@@ -23,7 +23,8 @@ define([
         compare: function (params, route) {
             this.view = new CompareView({
                 region: 'main',
-                filter: route.action
+                filter: route.action,
+                page: Backbone.history.fragment
             });
         },
 
