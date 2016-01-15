@@ -7,7 +7,7 @@ define([
     'views/base/view',
     'text!templates/analyze/compare/compare.hbs',
     'text!templates/analyze/error.hbs',
-    'i18n!nls/analyze',
+    'i18n!nls/analyze-compare',
     'i18n!nls/errors',
     'config/Events',
     'config/Config',
@@ -43,6 +43,8 @@ define([
         template: template,
 
         initialize: function (params) {
+            this.analyze_type = params.filter;
+            this.page = params.page;
 
             log.setLevel('info');
 
@@ -77,7 +79,7 @@ define([
             View.prototype.attach.call(this, arguments);
 
             //update State
-            amplify.publish(E.STATE_CHANGE, {menu: 'compare'});
+            amplify.publish(E.STATE_CHANGE, {menu: 'analyze', breadcrumb: this._initMenuBreadcrumbItem()});
 
             this._initVariables();
 
@@ -86,6 +88,17 @@ define([
             this._bindEventListeners();
 
             log.info("Page attached successfully");
+        },
+
+        _initMenuBreadcrumbItem: function() {
+            var label = "";
+            var self = this;
+
+            if (typeof self.analyze_type !== 'undefined') {
+               label = i18nLabels[self.analyze_type];
+            }
+
+            return Utils.createMenuBreadcrumbItem(label, self.analyze_type, self.page);
         },
 
         _initVariables: function () {

@@ -32,11 +32,12 @@ define([
 
             View.prototype.attach.call(this, arguments);
 
+            //remove Breadcrumbs
+            amplify.publish(E.MENU_RESET_BREADCRUMB);
+
             //update State
             amplify.publish(E.STATE_CHANGE, {menu: 'browse'});
 
-            //remove Breadcrumbs
-            amplify.publish(E.MENU_RESET_BREADCRUMB);
 
             this._displayBrowseOptions() ;
 

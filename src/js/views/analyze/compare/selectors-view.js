@@ -6,7 +6,7 @@ define([
     'lib/utils',
     'views/base/view',
     'text!templates/analyze/compare/selectors.hbs',
-    'i18n!nls/analyze',
+    'i18n!nls/analyze-compare',
     'config/Events',
     'config/Config',
     'config/analyze/compare/Config',
