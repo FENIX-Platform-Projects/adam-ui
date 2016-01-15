@@ -14,8 +14,21 @@ define([
     'loglevel',
     //TODO REMOVE ME
     'text!../../../../../submodules/fenix-ui-chart-creator/tests/fenix/data/afo/scattered_data.json',
+	
+	/*OLAP*/
+	
+	
+    'pivot',
+    'pivotRenderers',
+    'pivotAggregators',
+    'text!pivotDataTest',
+    'pivotDataConfig',
+	/*END OF OLAP*/
+	
+	
+	
     'amplify'
-], function ($, _, ChartCreator, View, template, resultTemplate, i18nLabels, E, GC, AC, Handlebars, log, TEST_MODEL) {
+], function ($, _, ChartCreator, View, template, resultTemplate, i18nLabels, E, GC, AC, Handlebars, log, TEST_MODEL,Pivot, pivotRenderers, pivotAggregators, pivotDataTest, pivotDataConfig) {
 
     'use strict';
 
@@ -261,9 +274,18 @@ define([
 
         _tab_table: function (obj) {
             log.info("'Table' callback");
+ var pp=new Pivot();
+ pivotDataConfig = _.extend(pivotDataConfig, {
+			rendererDisplay: pivotRenderers,
+			onDataLoaded: function(){
+				console.log('onDataLoaded')
+			}
+		});
 
-            console.log(obj)
-
+		pivotDataConfig = _.extend(pivotDataConfig, {aggregatorDisplay: pivotAggregators });
+		
+ 
+pp.renderD3S({ container:"fx-tab-table-container-" + obj.id,model:JSON.parse(TEST_MODEL),inputOpts:pivotDataConfig});
 
 
         },
