@@ -471,7 +471,8 @@ define([
 
                     self.filterBrowse.init({
                         container: s.css_classes.FILTER_BROWSE,
-                        layout: 'fluidGrid'
+                       // layout: 'fluidGrid'
+                        layout: 'bootstrapfluidGridSystem'
                     });
 
                     var adapterMap = {};

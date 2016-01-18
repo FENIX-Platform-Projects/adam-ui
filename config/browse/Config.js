@@ -21,6 +21,8 @@ define(function () {
                     "type": "codelist-hierarchy",
                     "containerType": "baseContainer",
                     "title": "Sector",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-sm-4",
                     "components": [
                         {
                             "uid": "crs_dac",
@@ -52,6 +54,8 @@ define(function () {
                     "type": "codelist-hierarchy",
                     "containerType": "baseContainer",
                     "title": "Sub Sector",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-sm-4",
                     "components": [
                         {
                             "uid": "crs_dac",
@@ -79,6 +83,8 @@ define(function () {
                 {
                     "type": "static",
                     "containerType": "baseContainer",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-sm-2",
                     "components": [
                         {
                             "type": "range",
@@ -134,6 +140,8 @@ define(function () {
                     "type": "codelist-hierarchy",
                     "containerType": "baseContainer",
                     "title": "Channel of Delivery",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-sm-4",
                     "components": [
                         {
                             "uid": "crs_channels",
@@ -161,6 +169,8 @@ define(function () {
                     "type": "codelist",
                     "containerType": "baseContainer",
                     "title": "Official Development Assistance (ODA)",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-sm-4",
                     "components": [
                         {
                             "uid": "crs_flow_amounts",
@@ -843,6 +853,8 @@ define(function () {
                     "type": "codelist",
                     "containerType": "baseContainer",
                     "title": "Country",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-sm-4",
                     "components": [
                         {
                             "uid": "crs_recipients",
@@ -868,6 +880,8 @@ define(function () {
                     "type": "codelist-hierarchy",
                     "containerType": "baseContainer",
                     "title": "Sector",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-sm-4",
                     "components": [
                         {
                             "uid": "crs_dac",
@@ -899,6 +913,8 @@ define(function () {
                     "type": "codelist-hierarchy",
                     "containerType": "baseContainer",
                     "title": "Sub Sector",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-sm-4",
                     "components": [
                         {
                             "uid": "crs_dac",
@@ -926,6 +942,8 @@ define(function () {
                 {
                     "type": "static",
                     "containerType": "baseContainer",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-sm-2",
                     "components": [
                         {
                             "type": "range",
@@ -981,6 +999,8 @@ define(function () {
                     "type": "codelist-hierarchy",
                     "containerType": "baseContainer",
                     "title": "Channel of Delivery",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-sm-4",
                     "components": [
                         {
                             "uid": "crs_channels",
@@ -1008,6 +1028,8 @@ define(function () {
                     "type": "codelist",
                     "containerType": "baseContainer",
                     "title": "Official Development Assistance (ODA)",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-sm-4",
                     "components": [
                         {
                             "uid": "crs_flow_amounts",
@@ -1723,6 +1745,8 @@ define(function () {
                     "type": "codelist",
                     "containerType": "baseContainer",
                     "title": "Donor",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-sm-4",
                     "components": [
                         {
                             "uid": "crs_donors",
@@ -1748,6 +1772,8 @@ define(function () {
                     "type": "codelist-hierarchy",
                     "containerType": "baseContainer",
                     "title": "Sector",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-sm-4",
                     "components": [
                         {
                             "uid": "crs_dac",
@@ -1779,6 +1805,8 @@ define(function () {
                     "type": "codelist-hierarchy",
                     "containerType": "baseContainer",
                     "title": "Sub Sector",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-sm-4",
                     "components": [
                         {
                             "uid": "crs_dac",
@@ -1806,6 +1834,8 @@ define(function () {
                 {
                     "type": "static",
                     "containerType": "baseContainer",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-sm-2",
                     "components": [
                         {
                             "type": "range",
@@ -1861,6 +1891,8 @@ define(function () {
                     "type": "codelist-hierarchy",
                     "containerType": "baseContainer",
                     "title": "Channel of Delivery",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-sm-4",
                     "components": [
                         {
                             "uid": "crs_channels",
@@ -1888,6 +1920,8 @@ define(function () {
                     "type": "codelist",
                     "containerType": "baseContainer",
                     "title": "Official Development Assistance (ODA)",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-sm-4",
                     "components": [
                         {
                             "uid": "crs_flow_amounts",
@@ -2476,6 +2510,8 @@ define(function () {
                     "type": "codelist",
                     "containerType": "baseContainer",
                     "title": "Country",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-sm-4",
                     "components": [
                         {
                             "uid": "crs_recipients",
@@ -2501,6 +2537,8 @@ define(function () {
                     "type": "codelist",
                     "containerType": "baseContainer",
                     "title": "Donor",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-sm-4",
                     "components": [
                         {
                             "uid": "crs_donors",
@@ -2526,6 +2564,8 @@ define(function () {
                     "type": "codelist-hierarchy",
                     "containerType": "baseContainer",
                     "title": "Sector",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-sm-4",
                     "components": [
                         {
                             "uid": "crs_dac",
@@ -2557,6 +2597,8 @@ define(function () {
                     "type": "codelist-hierarchy",
                     "containerType": "baseContainer",
                     "title": "Sub Sector",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-sm-4",
                     "components": [
                         {
                             "uid": "crs_dac",
@@ -2584,6 +2626,8 @@ define(function () {
                 {
                     "type": "static",
                     "containerType": "baseContainer",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-sm-2",
                     "components": [
                         {
                             "type": "range",
@@ -2639,6 +2683,8 @@ define(function () {
                     "type": "codelist-hierarchy",
                     "containerType": "baseContainer",
                     "title": "Channel of Delivery",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-sm-4",
                     "components": [
                         {
                             "uid": "crs_channels",
@@ -2666,6 +2712,8 @@ define(function () {
                     "type": "codelist",
                     "containerType": "baseContainer",
                     "title": "Official Development Assistance (ODA)",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-sm-4",
                     "components": [
                         {
                             "uid": "crs_flow_amounts",
