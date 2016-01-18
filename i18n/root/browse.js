@@ -1,6 +1,7 @@
 /*global define*/
 define({
     "title": "Browse By",
+    "filter_btn": "Update",
     "text" : "Change me in 118n/root/browse.js",
     "sector": "By Sector",
     "country_sector": "By Country & Sector",
