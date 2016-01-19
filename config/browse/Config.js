@@ -22,7 +22,7 @@ define(function () {
                     "containerType": "baseContainer",
                     "title": "Sector",
                     "module_class": "fx-filter-grid-module",
-                    "class": "col-sm-4",
+                    "class": "col-sm-3",
                     "components": [
                         {
                             "uid": "crs_dac",
@@ -55,7 +55,7 @@ define(function () {
                     "containerType": "baseContainer",
                     "title": "Sub Sector",
                     "module_class": "fx-filter-grid-module",
-                    "class": "col-sm-4",
+                    "class": "col-sm-3",
                     "components": [
                         {
                             "uid": "crs_dac",
@@ -84,13 +84,12 @@ define(function () {
                     "type": "static",
                     "containerType": "baseContainer",
                     "module_class": "fx-filter-grid-module",
-                    "class": "col-sm-2",
+                    "class": "col-sm-3",
                     "components": [
                         {
                             "type": "range",
                             "name": "year",
                             "componentType": "timeRangeLists-FENIX",
-                            "class" : "timeRangeList",
                             "lang": "EN",
                             "title": {"EN": "Year"},
                             "config": {
@@ -141,7 +140,7 @@ define(function () {
                     "containerType": "baseContainer",
                     "title": "Channel of Delivery",
                     "module_class": "fx-filter-grid-module",
-                    "class": "col-sm-4",
+                    "class": "col-sm-3",
                     "components": [
                         {
                             "uid": "crs_channels",
@@ -168,9 +167,13 @@ define(function () {
                 {
                     "type": "codelist",
                     "containerType": "baseContainer",
-                    "title": "Official Development Assistance (ODA)",
+                    "title": "ODA",
+                    "icon" : {
+                        "class" : "fa fa-info-circle",
+                        "tooltip" : "Official Development Assistance"
+                    },
                     "module_class": "fx-filter-grid-module",
-                    "class": "col-sm-4",
+                    "class": "col-sm-3",
                     "components": [
                         {
                             "uid": "crs_flow_amounts",
@@ -722,8 +725,142 @@ define(function () {
                                 }
                             }
                         ]
-                    }
-                /**, {
+                    },
+                    {
+                        id: 'item-5', // Regional Distribution
+                        type: 'chart',
+                        class: "fx-timeseries-ecample",
+                        container: "#item-5",
+                        config: {
+                            container: "#item-5",
+                            adapter: {
+                                type: "standard",
+                                xDimensions: 'sectorcode',
+                                yDimensions: 'unitname',
+                                valueDimensions: 'value',
+                                seriesDimensions: ['regioncode'],
+                                sort: false
+                            },
+                            template: {
+                                //"title": "Top 25..."
+                            },
+                            creator: {
+                                chartObj: {
+                                    chart: {
+                                        type: "bar"
+                                    },
+                                    plotOptions: {
+                                        series: {
+                                            stacking: 'percent',
+                                            dataLabels: {
+                                                enabled: true,
+                                                color: 'white',
+                                                formatter: function(){
+                                                    var percent =  Math.round(this.point.percentage);
+                                                    if(percent > 0)
+                                                        percent = Math.round(this.point.percentage) + '%';
+
+                                                    return  percent; //Highcharts.numberFormat(this.point.percentage, 2)
+                                                }
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        reversed: true
+                                    },
+                                    subtitle: {
+                                        text: ''
+                                    },
+                                    yAxis: {
+                                      title: {
+                                          text: '%',
+                                          align: 'high'
+                                      }
+                                    },
+                                    xAxis: {
+                                       labels: {
+                                           enabled: false
+                                       }
+                                    },
+                                    tooltip: {
+                                        formatter: function(){
+                                            return '<b>' +this.series.name + ':' + '</b><br/>'  +' <b>'+   Highcharts.numberFormat(this.point.percentage, 4) + '% </b>'+
+                                                  ' ('+ Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil)'
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        // for now it takes the id, TODO: add uid as well
+                        allowedFilter: ['sectorcode', 'purposecode', 'year', 'channelcode'],
+                        filter: [
+                            {
+                                "name": "filter",
+                                "parameters": {
+                                    "rows": {
+                                        "flowcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_flow_types",
+                                                    "version": "2015",
+                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
+                                                    ]   //ODA
+                                                }
+                                            ]
+                                        },
+                                        "sectorcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_sectors",
+                                                    "version": "2015",
+                                                    "codes": [
+                                                        "600"
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "year": {
+                                            "time": [
+                                                {
+                                                    "from": 2000,
+                                                    "to": 2013
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "name": "pggroup",
+                                "parameters": {
+                                    "by": [
+                                        "sectorcode", "regioncode"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": ["value"],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["unitname"],
+                                            "rule": "pgfirst"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "order",
+                                "parameters": {
+                                    "value": "DESC"
+                                }
+                            }
+                        ]
+                    }/**,
+                   {
                         id: 'item-5', // Regional Distribution
                         type: 'chart',
                         class: "fx-timeseries-ecample",
@@ -854,7 +991,7 @@ define(function () {
                     "containerType": "baseContainer",
                     "title": "Country",
                     "module_class": "fx-filter-grid-module",
-                    "class": "col-sm-4",
+                    "class": "col-sm-3",
                     "components": [
                         {
                             "uid": "crs_recipients",
@@ -881,7 +1018,7 @@ define(function () {
                     "containerType": "baseContainer",
                     "title": "Sector",
                     "module_class": "fx-filter-grid-module",
-                    "class": "col-sm-4",
+                    "class": "col-sm-3",
                     "components": [
                         {
                             "uid": "crs_dac",
@@ -914,7 +1051,7 @@ define(function () {
                     "containerType": "baseContainer",
                     "title": "Sub Sector",
                     "module_class": "fx-filter-grid-module",
-                    "class": "col-sm-4",
+                    "class": "col-sm-3",
                     "components": [
                         {
                             "uid": "crs_dac",
@@ -943,13 +1080,12 @@ define(function () {
                     "type": "static",
                     "containerType": "baseContainer",
                     "module_class": "fx-filter-grid-module",
-                    "class": "col-sm-2",
+                    "class": "col-sm-3",
                     "components": [
                         {
                             "type": "range",
                             "name": "year",
                             "componentType": "timeRangeLists-FENIX",
-                            "class" : "timeRangeList",
                             "lang": "EN",
                             "title": {"EN": "Year"},
                             "config": {
@@ -1000,7 +1136,7 @@ define(function () {
                     "containerType": "baseContainer",
                     "title": "Channel of Delivery",
                     "module_class": "fx-filter-grid-module",
-                    "class": "col-sm-4",
+                    "class": "col-sm-3",
                     "components": [
                         {
                             "uid": "crs_channels",
@@ -1027,9 +1163,13 @@ define(function () {
                 {
                     "type": "codelist",
                     "containerType": "baseContainer",
-                    "title": "Official Development Assistance (ODA)",
+                    "title": "ODA",
+                    "icon" : {
+                        "class" : "fa-info-circle",
+                        "tooltip" : "Official Development Assistance"
+                    },
                     "module_class": "fx-filter-grid-module",
-                    "class": "col-sm-4",
+                    "class": "col-sm-3",
                     "components": [
                         {
                             "uid": "crs_flow_amounts",
@@ -1746,7 +1886,7 @@ define(function () {
                     "containerType": "baseContainer",
                     "title": "Donor",
                     "module_class": "fx-filter-grid-module",
-                    "class": "col-sm-4",
+                    "class": "col-sm-3",
                     "components": [
                         {
                             "uid": "crs_donors",
@@ -1773,7 +1913,7 @@ define(function () {
                     "containerType": "baseContainer",
                     "title": "Sector",
                     "module_class": "fx-filter-grid-module",
-                    "class": "col-sm-4",
+                    "class": "col-sm-3",
                     "components": [
                         {
                             "uid": "crs_dac",
@@ -1806,7 +1946,7 @@ define(function () {
                     "containerType": "baseContainer",
                     "title": "Sub Sector",
                     "module_class": "fx-filter-grid-module",
-                    "class": "col-sm-4",
+                    "class": "col-sm-3",
                     "components": [
                         {
                             "uid": "crs_dac",
@@ -1835,13 +1975,12 @@ define(function () {
                     "type": "static",
                     "containerType": "baseContainer",
                     "module_class": "fx-filter-grid-module",
-                    "class": "col-sm-2",
+                    "class": "col-sm-3",
                     "components": [
                         {
                             "type": "range",
                             "name": "year",
                             "componentType": "timeRangeLists-FENIX",
-                            "class" : "timeRangeList",
                             "lang": "EN",
                             "title": {"EN": "Year"},
                             "config": {
@@ -1892,7 +2031,7 @@ define(function () {
                     "containerType": "baseContainer",
                     "title": "Channel of Delivery",
                     "module_class": "fx-filter-grid-module",
-                    "class": "col-sm-4",
+                    "class": "col-sm-3",
                     "components": [
                         {
                             "uid": "crs_channels",
@@ -1919,9 +2058,13 @@ define(function () {
                 {
                     "type": "codelist",
                     "containerType": "baseContainer",
-                    "title": "Official Development Assistance (ODA)",
+                    "title": "ODA",
+                    "icon" : {
+                        "class" : "fa-info-circle",
+                        "tooltip" : "Official Development Assistance"
+                    },
                     "module_class": "fx-filter-grid-module",
-                    "class": "col-sm-4",
+                    "class": "col-sm-3",
                     "components": [
                         {
                             "uid": "crs_flow_amounts",
@@ -2511,7 +2654,7 @@ define(function () {
                     "containerType": "baseContainer",
                     "title": "Country",
                     "module_class": "fx-filter-grid-module",
-                    "class": "col-sm-4",
+                    "class": "col-sm-3",
                     "components": [
                         {
                             "uid": "crs_recipients",
@@ -2538,7 +2681,7 @@ define(function () {
                     "containerType": "baseContainer",
                     "title": "Donor",
                     "module_class": "fx-filter-grid-module",
-                    "class": "col-sm-4",
+                    "class": "col-sm-3",
                     "components": [
                         {
                             "uid": "crs_donors",
@@ -2565,7 +2708,7 @@ define(function () {
                     "containerType": "baseContainer",
                     "title": "Sector",
                     "module_class": "fx-filter-grid-module",
-                    "class": "col-sm-4",
+                    "class": "col-sm-3",
                     "components": [
                         {
                             "uid": "crs_dac",
@@ -2598,7 +2741,7 @@ define(function () {
                     "containerType": "baseContainer",
                     "title": "Sub Sector",
                     "module_class": "fx-filter-grid-module",
-                    "class": "col-sm-4",
+                    "class": "col-sm-3",
                     "components": [
                         {
                             "uid": "crs_dac",
@@ -2627,13 +2770,12 @@ define(function () {
                     "type": "static",
                     "containerType": "baseContainer",
                     "module_class": "fx-filter-grid-module",
-                    "class": "col-sm-2",
+                    "class": "col-sm-3",
                     "components": [
                         {
                             "type": "range",
                             "name": "year",
                             "componentType": "timeRangeLists-FENIX",
-                            "class" : "timeRangeList",
                             "lang": "EN",
                             "title": {"EN": "Year"},
                             "config": {
@@ -2684,7 +2826,7 @@ define(function () {
                     "containerType": "baseContainer",
                     "title": "Channel of Delivery",
                     "module_class": "fx-filter-grid-module",
-                    "class": "col-sm-4",
+                    "class": "col-sm-3",
                     "components": [
                         {
                             "uid": "crs_channels",
@@ -2711,9 +2853,13 @@ define(function () {
                 {
                     "type": "codelist",
                     "containerType": "baseContainer",
-                    "title": "Official Development Assistance (ODA)",
+                    "title": "ODA",
+                    "icon" : {
+                        "class" : "fa-info-circle",
+                        "tooltip" : "Official Development Assistance"
+                    },
                     "module_class": "fx-filter-grid-module",
-                    "class": "col-sm-4",
+                    "class": "col-sm-3",
                     "components": [
                         {
                             "uid": "crs_flow_amounts",
