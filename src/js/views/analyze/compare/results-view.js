@@ -243,6 +243,11 @@ define([
                     yDimensions: 'Element',
                     valueDimensions: 'value',
                     seriesDimensions: []
+
+                    //xDimensions: 'year',
+                   // yDimensions: 'unitname',
+                   // valueDimensions: 'value',
+                    //seriesDimensions: ['sectorcode']
                 },
                 template: {},
                 creator: {}
