@@ -185,7 +185,8 @@ define(function () {
                             "title": {"EN": "Codelist"},
                             config: {
                                 "defaultsource": [],
-                                "defaultcodes": ['usd_commitment'],
+                                "defaultcodes": ['adam_usd_commitment'],
+                                "onlyValueText": true,
                                 "removeFilter": true
                             }
                         }
@@ -755,12 +756,10 @@ define(function () {
                                             dataLabels: {
                                                 enabled: true,
                                                 color: 'white',
-                                                formatter: function(){
+                                                formatter: function(){   // display label in stack if value > 0%
                                                     var percent =  Math.round(this.point.percentage);
                                                     if(percent > 0)
-                                                        percent = Math.round(this.point.percentage) + '%';
-
-                                                    return  percent; //Highcharts.numberFormat(this.point.percentage, 2)
+                                                        return Math.round(this.point.percentage) + '%';
                                                 }
                                             }
                                         }
@@ -859,123 +858,8 @@ define(function () {
                                 }
                             }
                         ]
-                    }/**,
-                   {
-                        id: 'item-5', // Regional Distribution
-                        type: 'chart',
-                        class: "fx-timeseries-ecample",
-                        //needed if layout = injected
-                        container: "#item-5",
-                        config: {
-                            container: "#item-5",
-                            adapter: {
-                                type: "standard",
-                                xDimensions: 'regioncode',
-                                yDimensions: 'unitname',
-                                valueDimensions: 'value',
-                                seriesDimensions: ['regioncode']
-                            },
-                            template: {
-                            },
-                            creator: {
-                                chartObj: {
-                                    chart: {
-                                        type: "column"
-                                    },
-                                    yaxis: {
-                                        min: 0
-                                    },
-                                    legend: {
-                                        reversed: "true"
-                                    },
-                                    plotOptions: {
-                                        series: {
-                                            stacking: 'percent'
-                                        }
-                                    },
-                                    subtitle: {
-                                        text: ''
-                                    },
-                                    tooltip: {
-                                        formatter: function(){
-                                            return '<b>' +this.x + ': ' + '</b><br/>' +
-                                                Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
-                                        }
-                                    }
+                    }
 
-                                }
-                            }
-                        },
-                        // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['sectorcode', 'purposecode', 'year', 'channelcode'],
-                        filter: [
-                            {
-                                "name": "filter",
-                                "parameters": {
-                                    "rows": {
-                                      "flowcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_flow_types",
-                                                    "version": "2015",
-                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                                    ]   //ODA
-                                                }
-                                            ]
-                                        },
-                                        "sectorcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_sectors",
-                                                    "version": "2015",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                        "year": {
-                                            "time": [
-                                                {
-                                                    "from": 2000,
-                                                    "to": 2013
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            },
-                            {
-                                "name": "pggroup",
-                                "parameters": {
-                                    "by": [
-                                        "regioncode", "regionname"
-                                    ],
-                                    "aggregations": [
-                                        {
-                                            "columns": ["value"],
-                                            "rule": "SUM"
-                                        },
-                                         {
-                                            "columns": ["unitcode"],
-                                            "rule": "pgfirst"
-                                        },
-                                        {
-                                            "columns": ["unitname"],
-                                            "rule": "pgfirst"
-                                        }
-
-                                    ]
-                                }
-                            },
-                            {
-                                "name": "order",
-                                "parameters": {
-                                    "regioncode": "ASC"
-                                }
-                            }
-                        ]
-                    } **/
                 ]
             }
         },
@@ -1181,7 +1065,8 @@ define(function () {
                             "title": {"EN": "Codelist"},
                             config: {
                                 "defaultsource": [],
-                                "defaultcodes": ['usd_commitment'],
+                                "defaultcodes": ['adam_usd_commitment'],
+                                "onlyValueText": true,
                                 "removeFilter": true
                             }
                         }
@@ -2076,7 +1961,8 @@ define(function () {
                             "title": {"EN": "Codelist"},
                             config: {
                                 "defaultsource": [],
-                                "defaultcodes": ['usd_commitment'],
+                                "defaultcodes": ['adam_usd_commitment'],
+                                "onlyValueText": true,
                                 "removeFilter": true
                             }
                         }
@@ -2637,6 +2523,149 @@ define(function () {
                                 }
                             }
                         ]
+                    },
+                    {
+                        id: 'item-5', // Regional Distribution
+                        type: 'chart',
+                        class: "fx-timeseries-ecample",
+                        container: "#item-5",
+                        config: {
+                            container: "#item-5",
+                            adapter: {
+                                type: "standard",
+                                xDimensions: 'sectorcode',
+                                yDimensions: 'unitname',
+                                valueDimensions: 'value',
+                                seriesDimensions: ['regioncode'],
+                                sort: false
+                            },
+                            template: {
+                                //"title": "Top 25..."
+                            },
+                            creator: {
+                                chartObj: {
+                                    chart: {
+                                        type: "bar"
+                                    },
+                                    plotOptions: {
+                                        series: {
+                                            stacking: 'percent',
+                                            dataLabels: {
+                                                enabled: true,
+                                                color: 'white',
+                                                formatter: function(){   // display label in stack if value > 0%
+                                                    var percent =  Math.round(this.point.percentage);
+                                                    if(percent > 0)
+                                                        return Math.round(this.point.percentage) + '%';
+                                                }
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        reversed: true
+                                    },
+                                    subtitle: {
+                                        text: ''
+                                    },
+                                    yAxis: {
+                                        title: {
+                                            text: '%',
+                                            align: 'high'
+                                        }
+                                    },
+                                    xAxis: {
+                                        labels: {
+                                            enabled: false
+                                        }
+                                    },
+                                    tooltip: {
+                                        formatter: function(){
+                                            return '<b>' +this.series.name + ':' + '</b><br/>'  +' <b>'+   Highcharts.numberFormat(this.point.percentage, 4) + '% </b>'+
+                                                ' ('+ Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil)'
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        // for now it takes the id, TODO: add uid as well
+                        allowedFilter: ['donorcode', 'sectorcode', 'purposecode', 'year', 'channelcode'],
+                        filter: [
+                            {
+                                "name": "filter",
+                                "parameters": {
+                                    "rows": {
+                                        "flowcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_flow_types",
+                                                    "version": "2015",
+                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
+                                                    ]   //ODA
+                                                }
+                                            ]
+                                        },
+                                        "sectorcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_sectors",
+                                                    "version": "2015",
+                                                    "codes": [
+                                                        "600"
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "donorcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_donors",
+                                                    "version": "2015",
+                                                    "codes": [
+                                                        "1"  //Austria
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "year": {
+                                            "time": [
+                                                {
+                                                    "from": 2000,
+                                                    "to": 2013
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "name": "pggroup",
+                                "parameters": {
+                                    "by": [
+                                        "sectorcode", "regioncode"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": ["value"],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["unitname"],
+                                            "rule": "pgfirst"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "order",
+                                "parameters": {
+                                    "value": "DESC"
+                                }
+                            }
+                        ]
                     }
 
                 ]
@@ -2871,7 +2900,8 @@ define(function () {
                             "title": {"EN": "Codelist"},
                             config: {
                                 "defaultsource": [],
-                                "defaultcodes": ['usd_commitment'],
+                                "defaultcodes": ['adam_usd_commitment'],
+                                "onlyValueText": true,
                                 "removeFilter": true
                             }
                         }
