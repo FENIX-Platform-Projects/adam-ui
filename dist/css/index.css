@@ -13944,4 +13944,20 @@ body {
   background-color: #f1f1f1;
   font-family: "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif; }
 
+/** TITLE BAR, as displayed in Browse **/
+.fx-title-bar {
+  background-color: white;
+  padding-top: 10px;
+  min-height: 60px;
+}
+
+#fx-title {
+  padding-left: 15px;
+}
+
+.fx-title-item {
+}
+
+
+
 /*# sourceMappingURL=index.css.map */
