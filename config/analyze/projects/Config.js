@@ -201,7 +201,7 @@ define(function () {
                                             ]
                                         }
                                     },
-                                    "columns": ["projecttitle", "year"]
+                                    "columns": ["projecttitle", "year", "value"]
                                 }
                             }
                         ]
