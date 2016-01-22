@@ -15,8 +15,9 @@ define([
             }
         },
         css = {
-            TITLE_LIST: 'fx-title-list',
-            BREADCRUMB: 'breadcrumb',
+            LIST: 'list-unstyled list-inline',
+            TITLE_RESUME: 'fx-title-resume',
+            BREADCRUMB: 'breadcrumb'
         },
         events = {
              ADD_ITEM: 'fx.title.item.add',
@@ -36,7 +37,7 @@ define([
 
     Fx_Title_Bar.prototype.render = function () {
         this.bindEventListeners();
-        this.$titlelist = $('<ol class="'+css.TITLE_LIST+' '+css.BREADCRUMB+'" data-role="list"></ol>');
+        this.$titlelist = $('<ul class="'+css.LIST+' '+css.TITLE_RESUME+'" data-role="list"></ul>');
         $(o.container).append(this.$titlelist);
     };
 
@@ -72,7 +73,7 @@ define([
     };
 
     Fx_Title_Bar.prototype.getItem = function(item ){
-        var $obj = $('<li class="fx-title-item" data-module="' + item.name + '" style="display:none">'+ item.text +'</li>');
+        var $obj = $('<li data-module="' + item.name + '" style="display:none">'+ item.text +'</li>');
         return $obj;
     };
 
