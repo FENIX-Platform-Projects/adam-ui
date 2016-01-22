@@ -139,14 +139,10 @@ define(function () {
                         //needed if layout = injected
                         container: "#item-1",
                         config: {
-                            container: "#item-1",
-                            leaflet: {
-                                zoomControl: false,
-                                attributionControl: true,
-                                scrollWheelZoom: false,
-                                minZoom: 2
-                            }//,
-
+                            container: "#item-1",                           
+                            options: {
+                                "columns_order": ["projecttitle", "year", "value"]
+                            }
 
                           //  options: {
                               //  hidden_columns: ["GenderCode",
@@ -201,7 +197,7 @@ define(function () {
                                             ]
                                         }
                                     },
-                                    "columns": ["projecttitle", "year", "value"]
+                                    "columns": ["year", "value", "projecttitle"] // DSD Order
                                 }
                             }
                         ]
