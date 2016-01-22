@@ -13955,9 +13955,10 @@ body {
   padding-left: 15px;
 }
 
-.fx-title-item {
+/** ICON as displayed next to selector's label in filter **/
+.fx-filter-icon {
+  padding: 5px;
 }
-
 
 
 /*# sourceMappingURL=index.css.map */
