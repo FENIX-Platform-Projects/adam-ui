@@ -1,8 +1,11 @@
 /*global define, amplify*/
 define([
+    'jquery',
+    'jquery-ui',
     'views/base/view',
     'fx-ds/start',
     'fx-filter/start',
+    'common/Fx-title-bar',
     'text!templates/browse/browse.hbs',
     'text!templates/browse/dashboard.hbs',
     'i18n!nls/browse',
@@ -15,11 +18,9 @@ define([
     'lib/utils',
     'q',
     'amplify',
-    'select2',
-    'jstree',
-    'packery'
+    'select2'
 
-], function (View, Dashboard, Filter, template, browseByDashboardTemplate, i18nLabels, E, C, BrowseConfig, BrowseFaoSectorsConfig, FilterConfCreator, Handlebars, Utils, Q) {
+], function ($, $UI, View, Dashboard, Filter, TitleBar, template, browseByDashboardTemplate, i18nLabels, E, C, BrowseConfig, BrowseFaoSectorsConfig, FilterConfCreator, Handlebars, Utils, Q) {
 
     'use strict';
 
@@ -31,14 +32,28 @@ define([
 
             SIDE_BROWSE: "#side-browse",
 
-            DASHBOARD_BROWSE_CONTAINER: '#dashboard-adam-container'
+            DASHBOARD_BROWSE_CONTAINER: '#dashboard-adam-container',
+
+            TITLE_BAR: "#fx-title"
         },
         events: {
             SECTOR_LIST_CHANGE: 'fx.filter.list.change.sectorcode',
-            UID_LIST_CHANGE: 'fx.filter.list.change.uid'
+            UID_LIST_CHANGE: 'fx.filter.list.change.uid',
+            LIST_SELECTIONS: 'fx.filter.list.selections.',
+            LIST_CHANGE: 'fx.filter.list.change.',
+            TITLE_ADD_ITEM: 'fx.title.item.add'
         },
-        datasetChanged: false,
-        datasetType: {"uid": "adam_usd_commitment"}
+        listTypes: {
+            SECTOR_LIST: 'sectorcode',
+            UID_LIST: 'uid'
+        },
+
+        writable: true,
+        datasetType: {
+            "uid": "adam_usd_commitment",
+             uidChanged: false,
+             writable: true
+        }
     };
 
     var BrowseByView = View.extend({
@@ -57,10 +72,15 @@ define([
             this.browse_type = params.filter;
             this.page = params.page;
            // this.recipientcode =  params.recipientcode;
-            this.datasetChanged = s.datasetChanged;
+            this.uidChanged =  s.datasetType.uidChanged;
             this.datasetType = s.datasetType;
             this.firstLoad = true;
 
+            // Change JQuery-UI plugin names to fix name collision with Bootstrap
+            $.widget.bridge('uitooltip', $.ui.tooltip);
+
+            console.log("====================initialize this.uidChanged ");
+            console.log(this.uidChanged);
 
             View.prototype.initialize.call(this, arguments);
         },
@@ -100,6 +120,8 @@ define([
 
             this.$filterSubmitBrowse = this.$el.find(s.css_classes.FILTER_SUBMIT_BROWSE);
 
+            this.$titleBar = this.$el.find(s.css_classes.TITLE_BAR);
+
             this.$sideBrowse = this.$el.find(s.css_classes.SIDE_BROWSE);
 
         },
@@ -108,11 +130,14 @@ define([
 
             var self = this;
 
-            amplify.subscribe(s.events.SECTOR_LIST_CHANGE, this, this._onSectorChange);
+           // amplify.subscribe(s.events.SECTOR_LIST_CHANGE, this, this._onSectorChange);
 
-            amplify.subscribe(s.events.UID_LIST_CHANGE, this, this._onDatasetChange);
+           // amplify.subscribe(s.events.UID_LIST_CHANGE, this, this._onDatasetChange);
 
             this.$filterSubmitBrowse.on('click', function (e, data) {
+
+                // show title bar
+                self.titleBar.showItems();
 
                 var filter = {};
                 var values = self.filterBrowse.getValues();
@@ -127,8 +152,10 @@ define([
                     values['purposecode'].codes[0].uid = 'crs_purposes';
                 }
 
+                console.log("==================== _bindEventListeners: $filterSubmitBrowse on click self.uidChanged ");
+                console.log(self.uidChanged);
                 // Update Dashboard Config and Rebuild if uid changed
-                if(self.datasetChanged) {
+                if(self.uidChanged) {
                     self.dashboardConfig.uid = self.datasetType.uid;
                     self.dashboardFAOConfig.uid = self.datasetType.uid;
 
@@ -313,6 +340,8 @@ define([
                     }).done(function() {
                         if(self.firstLoad) {
                             self.firstLoad = false;
+                            // show title
+                            self.titleBar.showItems();
                             self._renderBrowseDashboard(self.dashboardConfig);
                         }
                       }
@@ -322,14 +351,22 @@ define([
         },
 
         _onDatasetChange: function (data) {
+            var self = this;
             if(data.value){
                 if(this.dashboardConfig)  {
+
                     if(data.value !== this.dashboardConfig.uid) {
-                        this.datasetChanged = true;
+                        this.uidChanged = true;
                         this.datasetType.uid = data.value;
                     }
-                    else
-                        this.datasetChanged = false;
+                    else {
+                        this.uidChanged = false;
+                    }
+
+                    console.log("====================_onDatasetChange this.uidChanged ");
+                    console.log(this.uidChanged );
+
+
                 }
             }
         },
@@ -363,9 +400,6 @@ define([
         _showBrowseTopic: function (topic) {
             var self = this;
 
-            //update State
-           // amplify.publish(E.STATE_CHANGE, {menu: 'browse', breadcrumb: this._initMenuBreadcrumbItem()});
-
              //Inject HTML
            var source = $(browseByDashboardTemplate).find("[data-topic='" + topic + "']"),
                template = Handlebars.compile(source.prop('outerHTML'));
@@ -387,8 +421,21 @@ define([
                 return;
             }
 
+           this._renderTitleBar();
+
            this.filterConfig = config.filter;
 
+           // Add List Selection listeners
+           //for(var idx in this.filterConfig) {
+              // amplify.subscribe(s.events.LIST_SELECTIONS + this.filterConfig[idx].components[0].name, this, this._addSelectedItemToTitle);
+          // }
+
+            // Add List Change listeners
+            for(var idx in this.filterConfig) {
+              amplify.subscribe(s.events.LIST_CHANGE + this.filterConfig[idx].components[0].name, this, this._onChangeEvent);
+            }
+
+        
           /** var recipientfilter= _.find(this.filterConfig, function(obj){
                 return obj.components[0].name === 'recipientcode';
            });
@@ -406,6 +453,7 @@ define([
             this.dashboardConfig = config.dashboard;
             this.dashboardFAOConfig = configFao.dashboard;
 
+
             this._renderBrowseFilter(this.filterConfig);
 
            //this._renderBrowseDashboard(this.dashboardConfig);
@@ -413,12 +461,42 @@ define([
 
         },
 
-        _updateDashboardTitles : function (filter) {
 
+        _renderTitleBar: function(){
+
+            this.titleBar = new TitleBar();
+            this.titleBar.init({
+                container: this.$titleBar
+            });
+            this.titleBar.render();
+        },
+
+        _addSelectedItemToTitle: function(item){
+            //update Title
+            amplify.publish(s.events.TITLE_ADD_ITEM, item);
+        },
+
+        _updateDashboardTitles : function (filter) {
             //console.log(filter)
 
 
 
+        },
+
+
+
+        _onChangeEvent: function(item){
+
+            if(item.name === s.listTypes.SECTOR_LIST){
+                this._onSectorChange(item);
+            }
+
+            if(item.name === s.listTypes.UID_LIST){
+                this._onDatasetChange(item);
+            }
+
+            //update Title
+            amplify.publish(s.events.TITLE_ADD_ITEM, item);
         },
 
 
@@ -478,8 +556,13 @@ define([
                     var adapterMap = {};
 
                     self.filterBrowse.add(c, adapterMap);
+                    
+                }).then(function () {
 
-                });
+                // initialize Bootstarp tooltip
+                $('[data-toggle="tooltip"]').tooltip();
+
+            });
 
         },
 
