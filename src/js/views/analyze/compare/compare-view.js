@@ -90,12 +90,12 @@ define([
             log.info("Page attached successfully");
         },
 
-        _initMenuBreadcrumbItem: function() {
+        _initMenuBreadcrumbItem: function () {
             var label = "";
             var self = this;
 
             if (typeof self.analyze_type !== 'undefined') {
-               label = i18nLabels[self.analyze_type];
+                label = i18nLabels[self.analyze_type];
             }
 
             return Utils.createMenuBreadcrumbItem(label, self.analyze_type, self.page);
@@ -212,9 +212,9 @@ define([
                 this._updateAdvancedStats();
 
                 /*if (Array.isArray(this.currentRequest.combinations) && !isNaN(AC.maxCombinations) && this.currentRequest.combinations.length > AC.maxCombinations) {
-                    this._printErrors({ code : 'too_many_combinations' });
-                    this._lockForm();
-                }*/
+                 this._printErrors({ code : 'too_many_combinations' });
+                 this._lockForm();
+                 }*/
             }
 
             this._resetErrors();
@@ -266,11 +266,11 @@ define([
 
             this.currentRequest.valid = typeof valid === 'boolean' ? valid : false;
 
-            if (selection.valid === false || valid !== true ) {
+            if (selection.valid === false || valid !== true) {
 
                 this.currentRequest.errors = valid;
 
-                this._printErrors($.extend(true, {}, selection.errors, valid ));
+                this._printErrors($.extend(true, {}, selection.errors, valid));
 
             } else {
 
@@ -298,7 +298,7 @@ define([
                 return errors;
             }
 
-            if (!s.hasOwnProperty('year-from') || !s.hasOwnProperty('year-to') || !s['year-from']  || !s['year-to']) {
+            if (!s.hasOwnProperty('year-from') || !s.hasOwnProperty('year-to') || !s['year-from'] || !s['year-to']) {
                 errors.code = 'year_missing';
                 return errors;
             }
@@ -341,7 +341,7 @@ define([
 
             _.each(this.currentRequest.requests, _.bind(function (b) {
 
-                this.currentRequest.body = [b];
+                this.currentRequest.body = b;
 
                 r.push(this._createPromise($.extend(true, {}, this.currentRequest)));
 
@@ -458,28 +458,55 @@ define([
 
             _.each(this.currentRequest.combinations, _.bind(function (c) {
 
-                var b = {},
+                var b = [],
+                    filter = {},
                     compare = this.currentRequest.compareField,
                     compareValues = this.currentRequest.compareFilter;
 
                 //Static filter (parse string)
-                $.extend(true, b, JSON.parse(this.currentRequest.staticFilter));
+                $.extend(true, filter, JSON.parse(this.currentRequest.staticFilter));
 
                 //Compare filter
-                $.extend(true, b, this._compileFilter(compare, compareValues));
+                $.extend(true, filter, this._compileFilter(compare, compareValues));
 
                 //Dynamic filter
                 _.each(Object.keys(c), _.bind(function (k) {
 
-                    $.extend(true, b, this._compileFilter(k, c[k]));
+                    $.extend(true, filter, this._compileFilter(k, c[k]));
 
                 }, this));
 
                 //create body
                 var x = $.extend(true, {}, base);
-                x.parameters.rows = this._orderProcesses($.extend(true, x.parameters.rows, b));
+                x.parameters.rows = this._orderProcesses($.extend(true, x.parameters.rows, filter));
 
-                bodies.push(x);
+                //Add filter process to body
+                b.push(x);
+
+                //Add group by process to body
+
+                var id = this._getSelectorIdsBySubject(compare)[0],
+                    sel = this.selectors[id] || {},
+                    f = sel.filter || {},
+                    s = f.dimension || "";
+
+                b.push({
+                    "name": "group",
+                    "parameters": {
+                        "by": [
+                            "year", s
+                        ],
+                        "aggregations": [
+                            {
+                                "columns": ["value"],
+                                "rule": "SUM"
+                            }
+
+                        ]
+                    }
+                });
+
+                bodies.push(b);
 
             }, this));
 

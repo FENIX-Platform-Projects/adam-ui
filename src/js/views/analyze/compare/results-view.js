@@ -6,7 +6,7 @@ define([
     'views/base/view',
     'text!templates/analyze/compare/results.hbs',
     'text!templates/analyze/compare/result.hbs',
-    'i18n!nls/analyze',
+    'i18n!nls/analyze-compare',
     'config/Events',
     'config/Config',
     'config/analyze/compare/Config',
@@ -51,6 +51,9 @@ define([
         },
 
         getTemplateData: function () {
+            console.log("------------------------------")
+            console.log(i18nLabels)
+
             return i18nLabels;
         },
 
@@ -64,6 +67,10 @@ define([
         _initVariables: function () {
 
             this.$list = this.$el.find(s.LIST);
+
+            this.selectors = AC.selectors;
+
+            this.selectorsId = Object.keys(this.selectors);
 
             this.currentObjs = [];
         },
@@ -103,7 +110,6 @@ define([
 
             this._renderObj(obj);
         },
-
 
         _renderObj: function (obj) {
 
@@ -229,8 +235,8 @@ define([
 
             $.when(status.creator.init($.extend(true,
                 {
-                    //model: obj.model, //TODO uncomment
-                    model: JSON.parse(TEST_MODEL)
+                    model: obj.model
+
                 }, status.configuration))
             ).then(function (creator) {
 
@@ -338,19 +344,48 @@ define([
 
         _getChartConfiguration: function (obj) {
 
+            var id = this._getSelectorIdsBySubject(obj.request.selection.compare)[0],
+                sel = this.selectors[id] || {},
+                filter = sel.filter || {},
+                series = filter.dimension || "";
+
             return {
                 adapter: {
                     type: "timeserie",
                     xDimensions: 'year',
-                    yDimensions: 'Element',
+                    yDimensions: 'unitcode',
                     valueDimensions: 'value',
-                    seriesDimensions: []
+                    seriesDimensions: [series]
                 },
                 template: {},
                 creator: {}
             }
 
-        }
+        },
+
+        _getSelectorIdsBySubject: function (sub) {
+
+            var sels = [];
+
+            if (_.contains(this.selectorsId, sub)) {
+
+                sels.push(sub);
+
+            } else {
+
+                _.each(this.selectors, _.bind(function (sel, id) {
+
+                    if (sel.hasOwnProperty("subject") && sel.subject === sub) {
+                        sels.push(id);
+                    }
+
+                }, this));
+
+            }
+
+            return sels;
+
+        },
 
     });
 
