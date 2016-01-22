@@ -26,7 +26,7 @@ define(function () {
                 "selector": {
                     "type": "tree", //tree | list
                     //"source" : "codelist | static" // if type:list
-                    "default": [130] //selected codes by default,
+                    "default": [425, 261, 269] //selected codes by default,
                     //, "max" : 2 //max number of selectable item
                     //"disabled" : true //if present and true the selector is initially disabled
                     //"config" : { core: { multiple: true } } //specific jstree or select2 config
@@ -38,13 +38,13 @@ define(function () {
                 },
 
                 //dependencies with other selectors
-                "dependencies" : {
-                    "compare" : "focus"
+                "dependencies": {
+                    "compare": "focus"
                 },
 
                 // validation
-                "validation" : {
-                    "mandatory" : true //mandatory selector. Default false
+                "validation": {
+                    //"mandatory" : true //mandatory selector. Default false
                 }
             },
 
@@ -61,8 +61,8 @@ define(function () {
                     "type": "tree"
                 },
 
-                "dependencies" : {
-                    "compare" : "focus"
+                "dependencies": {
+                    "compare": "focus"
                 },
 
                 "filter": {
@@ -71,8 +71,8 @@ define(function () {
                     "process": '{"recipientcode": { "codes":[{"uid": "crs_recipients", "version": "2015", "codes": [{{{codes}}}] } ]}}'
                 },
 
-                "validation" : {
-                    "mandatory" : true
+                "validation": {
+                    //"mandatory" : true
                 }
             },
 
@@ -89,8 +89,8 @@ define(function () {
                     "type": "tree"
                 },
 
-                "dependencies" : {
-                    "compare" : "focus"
+                "dependencies": {
+                    "compare": "focus"
                 },
 
                 "filter": {
@@ -99,8 +99,8 @@ define(function () {
                     "process": '{"recipientcode": { "codes":[{"uid": "crs_recipients", "version": "2015", "codes": [{{{codes}}}] } ]}}'
                 },
 
-                "validation" : {
-                    "mandatory" : true
+                "validation": {
+                    //"mandatory" : true
                 }
             },
 
@@ -113,11 +113,11 @@ define(function () {
 
                 "selector": {
                     "type": "tree",
-                    "default": [1012]
+                    //"default": [1012]
                 },
 
-                "dependencies" : {
-                    "compare" : "focus"
+                "dependencies": {
+                    "compare": "focus"
                 },
 
                 "filter": {
@@ -125,8 +125,8 @@ define(function () {
                     "process": '{"donorcode": { "codes":[{"uid": "{{uid}}", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
                 },
 
-                "validation" : {
-                    "mandatory" : true
+                "validation": {
+                    //"mandatory" : true
                 }
             },
 
@@ -141,11 +141,11 @@ define(function () {
 
                 "selector": {
                     "type": "tree",
-                    "default": [44006]
+                   // "default": [44006]
                 },
 
-                "dependencies" : {
-                    "compare" : "focus"
+                "dependencies": {
+                    "compare": "focus"
                 },
 
                 "filter": {
@@ -153,8 +153,8 @@ define(function () {
                     "process": '{"channelcode": { "codes":[{"uid": "{{uid}}", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
                 },
 
-                "validation" : {
-                    "mandatory" : true
+                "validation": {
+                    //"mandatory" : true
                 }
             },
 
@@ -169,11 +169,11 @@ define(function () {
 
                 "selector": {
                     "type": "tree",
-                    "default": [311]
+                    "default": [600]
                 },
 
-                "dependencies" : {
-                    "compare" : "focus"
+                "dependencies": {
+                    "compare": "focus"
                 },
 
                 "filter": {
@@ -182,8 +182,8 @@ define(function () {
                     "process": '{"sectorcode": { "codes":[{"uid": "crs_sectors", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
                 },
 
-                "validation" : {
-                    "mandatory" : true
+                "validation": {
+                    //"mandatory" : true
                 }
             },
 
@@ -198,7 +198,7 @@ define(function () {
 
                 "selector": {
                     "type": "tree",
-                    "default": [31165]
+                    //"default": [31165]
                 },
 
                 "filter": {
@@ -207,13 +207,13 @@ define(function () {
                     "process": '{"purposecode": { "codes":[{"uid": "crs_purposes", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
                 },
 
-                "dependencies" : {
-                    "sector" : "parent",
-                    "compare" : "focus"
+                "dependencies": {
+                    "sector": "parent",
+                    "compare": "focus"
                 },
 
-                "validation" : {
-                    "mandatory" : true
+                "validation": {
+                    //"mandatory" : true
                 }
             },
 
@@ -262,8 +262,8 @@ define(function () {
                     //, "process": '{"year": { "time":[{"from": "{{year-from}}", "to": "{{year-to}}" } ]}}' //Not used
                 },
 
-                "dependencies" : {
-                    "year-from" : "min"
+                "dependencies": {
+                    "year-from": "min"
                 }
 
             }
@@ -286,21 +286,21 @@ define(function () {
             }
         },
 
-        "processesOrder" : ['flowcode', 'year', 'sectorcode', 'recipientcode', 'donorcode', 'purposecode', 'delivery' ],
+        "processesOrder": ['flowcode', 'year', 'sectorcode', 'recipientcode', 'donorcode', 'purposecode', 'delivery'],
 
-        "maxCombinations" : 20, //Max number of requests to d3p
+        "maxCombinations": 20, //Max number of requests to d3p
 
-        "compareBy" : "recipient", //recipient || donor || delivery || sector || sub-sector
+        "compareBy": "recipient", //recipient || donor || delivery || sector || sub-sector
 
-        "selectorFocusedClass" : "selector-focused", //class to highlight a selector
+        "selectorFocusedClass": "selector-focused", //class to highlight a selector
 
-        "mandatorySelectorClass" : "selector-mandatory", // class for mandatory selectors
+        "mandatorySelectorClass": "selector-mandatory", // class for mandatory selectors
 
-        "resultDefaultTab" : "chart", //Default tab to show for result,
+        "resultDefaultTab": "chart", //Default tab to show for result,
 
-        "advancedOptionsSelector" : ".advanced-option",
+        "advancedOptionsSelector": ".advanced-option",
 
-        "showAdvancedOptions" : false
+        "showAdvancedOptions": false
 
     }
 

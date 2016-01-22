@@ -14,21 +14,15 @@ define([
     'loglevel',
     //TODO REMOVE ME
     'text!../../../../../submodules/fenix-ui-chart-creator/tests/fenix/data/afo/scattered_data.json',
-	
-	/*OLAP*/
-	
-	
+    /*OLAP*/
     'pivot',
     'pivotRenderers',
     'pivotAggregators',
     'text!pivotDataTest',
     'pivotDataConfig',
-	/*END OF OLAP*/
-	
-	
-	
+    /*END OF OLAP*/
     'amplify'
-], function ($, _, ChartCreator, View, template, resultTemplate, i18nLabels, E, GC, AC, Handlebars, log, TEST_MODEL,Pivot, pivotRenderers, pivotAggregators, pivotDataTest, pivotDataConfig) {
+], function ($, _, ChartCreator, View, template, resultTemplate, i18nLabels, E, GC, AC, Handlebars, log, TEST_MODEL, Pivot, pivotRenderers, pivotAggregators, pivotDataTest, pivotDataConfig) {
 
     'use strict';
 
@@ -115,12 +109,12 @@ define([
 
             //show default tab
             var $tabs = obj.$el.find(s.TABS_CONTROLLERS),
-                $candidate = $tabs.filter("[data-visualization='"+AC.resultDefaultTab+"']");
+                $candidate = $tabs.filter("[data-visualization='" + AC.resultDefaultTab + "']");
 
             if ($candidate.length < 1) {
                 $candidate = $tabs.first();
 
-                log.warn("Impossible to find default tab '"+AC.resultDefaultTab+"'. Showing first tab instead")
+                log.warn("Impossible to find default tab '" + AC.resultDefaultTab + "'. Showing first tab instead")
             }
 
             $candidate.tab('show');
@@ -171,7 +165,7 @@ define([
             this.removeItem(obj);
         },
 
-        _onReloadClick : function (obj) {
+        _onReloadClick: function (obj) {
             log.info("Requesting reload result id: " + obj.id);
 
             amplify.publish(E.RELOAD_RESULT, obj);
@@ -190,7 +184,7 @@ define([
         _onTabChange: function (obj) {
 
             if (obj.status !== 'ready') {
-                log.warn("Obj does not have a 'ready' state. State found: '" + obj.status +"'" );
+                log.warn("Obj does not have a 'ready' state. State found: '" + obj.status + "'");
                 return;
             }
 
@@ -231,29 +225,16 @@ define([
 
             status.instances = [];
 
-            // Consistent Time series Chart
+            status.configuration = this._getChartConfiguration(obj);
 
-            $.when(status.creator.init({
-                //TODO uncomment
-                //model: obj.model,
-                model: JSON.parse(TEST_MODEL),
-                adapter: {
-                    type: "timeserie",
-                    xDimensions: 'time',
-                    yDimensions: 'Element',
-                    valueDimensions: 'value',
-                    seriesDimensions: []
+            $.when(status.creator.init($.extend(true,
+                {
+                    //model: obj.model, //TODO uncomment
+                    model: JSON.parse(TEST_MODEL)
+                }, status.configuration))
+            ).then(function (creator) {
 
-                    //xDimensions: 'year',
-                   // yDimensions: 'unitname',
-                   // valueDimensions: 'value',
-                    //seriesDimensions: ['sectorcode']
-                },
-                template: {},
-                creator: {}
-            })).then(function (creator) {
-
-                var intance = creator.render({
+                var instance = creator.render({
                     container: obj.$el.find(s.CHART_CONTAINER),
                     creator: {
                         chartObj: {
@@ -269,9 +250,7 @@ define([
                     }
                 });
 
-                status.instances.push(intance);
-
-
+                status.instances.push(instance);
 
             });
 
@@ -279,18 +258,21 @@ define([
 
         _tab_table: function (obj) {
             log.info("'Table' callback");
- var pp=new Pivot();
- pivotDataConfig = _.extend(pivotDataConfig, {
-			rendererDisplay: pivotRenderers,
-			onDataLoaded: function(){
-				console.log('onDataLoaded')
-			}
-		});
+            var pp = new Pivot();
+            pivotDataConfig = _.extend(pivotDataConfig, {
+                rendererDisplay: pivotRenderers,
+                onDataLoaded: function () {
+                    console.log('onDataLoaded')
+                }
+            });
 
-		pivotDataConfig = _.extend(pivotDataConfig, {aggregatorDisplay: pivotAggregators });
-		
- 
-pp.renderD3S({ container:"fx-tab-table-container-" + obj.id,model:JSON.parse(TEST_MODEL),inputOpts:pivotDataConfig});
+            pivotDataConfig = _.extend(pivotDataConfig, {aggregatorDisplay: pivotAggregators});
+
+            pp.renderD3S({
+                container: "fx-tab-table-container-" + obj.id,
+                model: JSON.parse(TEST_MODEL),
+                inputOpts: pivotDataConfig
+            });
 
 
         },
@@ -304,14 +286,14 @@ pp.renderD3S({ container:"fx-tab-table-container-" + obj.id,model:JSON.parse(TES
             //destroy creators
             _.each(obj.tabs, function (status, tab) {
 
-                if (status.instances && Array.isArray(status.instances)){
+                if (status.instances && Array.isArray(status.instances)) {
 
                     _.each(status.instances, function (inst) {
 
-                       if ($.isFunction(inst.destroy)) {
-                           inst.destroy();
-                           log.warn("Visualization instance destroyed.");
-                       }
+                        if ($.isFunction(inst.destroy)) {
+                            inst.destroy();
+                            log.warn("Visualization instance destroyed.");
+                        }
                     });
                 }
 
@@ -328,7 +310,7 @@ pp.renderD3S({ container:"fx-tab-table-container-" + obj.id,model:JSON.parse(TES
             $el.remove();
         },
 
-        _emptyResults : function () {
+        _emptyResults: function () {
 
             _.each(this.currentObjs, _.bind(this._onRemoveItem, this));
 
@@ -350,8 +332,25 @@ pp.renderD3S({ container:"fx-tab-table-container-" + obj.id,model:JSON.parse(TES
             this._emptyResults();
 
             View.prototype.dispose.call(this, arguments);
-        }
+        },
 
+        // utils
+
+        _getChartConfiguration: function (obj) {
+
+            return {
+                adapter: {
+                    type: "timeserie",
+                    xDimensions: 'year',
+                    yDimensions: 'Element',
+                    valueDimensions: 'value',
+                    seriesDimensions: []
+                },
+                template: {},
+                creator: {}
+            }
+
+        }
 
     });
 
