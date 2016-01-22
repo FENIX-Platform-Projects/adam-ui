@@ -1049,7 +1049,7 @@ define(function () {
                     "containerType": "baseContainer",
                     "title": "ODA",
                     "icon" : {
-                        "class" : "fa-info-circle",
+                        "class" : "fa fa-info-circle",
                         "tooltip" : "Official Development Assistance"
                     },
                     "module_class": "fx-filter-grid-module",
@@ -1945,7 +1945,7 @@ define(function () {
                     "containerType": "baseContainer",
                     "title": "ODA",
                     "icon" : {
-                        "class" : "fa-info-circle",
+                        "class" : "fa fa-info-circle",
                         "tooltip" : "Official Development Assistance"
                     },
                     "module_class": "fx-filter-grid-module",
@@ -2884,7 +2884,7 @@ define(function () {
                     "containerType": "baseContainer",
                     "title": "ODA",
                     "icon" : {
-                        "class" : "fa-info-circle",
+                        "class" : "fa fa-info-circle",
                         "tooltip" : "Official Development Assistance"
                     },
                     "module_class": "fx-filter-grid-module",
