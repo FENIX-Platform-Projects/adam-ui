@@ -32,9 +32,12 @@
 /* Pages */
 @import '../../src/css/pages/home';
 @import '../../src/css/pages/analyze-data';
+@import '../../src/css/pages/browse-data';
 
 
-body{
+body {
   background-color: $fenix-light-bg;
-  font-family:  "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif;
+  font-family: "FrutigerLTW02-45Light", Arial, Helvetica, Verdana, sans-serif;
 }
+
+
