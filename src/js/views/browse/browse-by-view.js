@@ -16,11 +16,12 @@ define([
     'fx-filter/Fx-filter-configuration-creator',
     'handlebars',
     'lib/utils',
+    'lib/config-utils',
     'q',
     'amplify',
     'select2'
 
-], function ($, $UI, View, Dashboard, Filter, TitleBar, template, browseByDashboardTemplate, i18nLabels, E, C, BrowseConfig, BrowseFaoSectorsConfig, FilterConfCreator, Handlebars, Utils, Q) {
+], function ($, $UI, View, Dashboard, Filter, TitleBar, template, browseByDashboardTemplate, i18nLabels, E, C, BrowseConfig, BrowseFaoSectorsConfig, FilterConfCreator, Handlebars, Utils, ConfigUtils,  Q) {
 
     'use strict';
 
@@ -41,20 +42,20 @@ define([
             UID_LIST_CHANGE: 'fx.filter.list.change.uid',
             LIST_SELECTIONS: 'fx.filter.list.selections.',
             LIST_CHANGE: 'fx.filter.list.change.',
-            TITLE_ADD_ITEM: 'fx.title.item.add'
+            TITLE_ADD_ITEM: 'fx.title.item.add',
+            SECTOR_CHART_LOADED: 'fx.browse.chart.sector.loaded'
         },
         listTypes: {
             SECTOR_LIST: 'sectorcode',
             UID_LIST: 'uid'
         },
-
-        writable: true,
         datasetType: {
             "uid": "adam_usd_commitment",
-             uidChanged: false,
-             writable: true
+            writable: true
         }
     };
+
+    var uidChanged =  false;
 
     var BrowseByView = View.extend({
 
@@ -72,15 +73,14 @@ define([
             this.browse_type = params.filter;
             this.page = params.page;
            // this.recipientcode =  params.recipientcode;
-            this.uidChanged =  s.datasetType.uidChanged;
+            uidChanged = false;
             this.datasetType = s.datasetType;
             this.firstLoad = true;
 
             // Change JQuery-UI plugin names to fix name collision with Bootstrap
             $.widget.bridge('uitooltip', $.ui.tooltip);
 
-            console.log("====================initialize this.uidChanged ");
-            console.log(this.uidChanged);
+            this.configUtils = new ConfigUtils();
 
             View.prototype.initialize.call(this, arguments);
         },
@@ -129,56 +129,74 @@ define([
         _bindEventListeners: function () {
 
             var self = this;
+          //  self.titleBar.destroy();
 
            // amplify.subscribe(s.events.SECTOR_LIST_CHANGE, this, this._onSectorChange);
 
-           // amplify.subscribe(s.events.UID_LIST_CHANGE, this, this._onDatasetChange);
+            amplify.subscribe(s.events.SECTOR_CHART_LOADED, this, this._sectorChartLoaded);
 
             this.$filterSubmitBrowse.on('click', function (e, data) {
+
+
 
                 // show title bar
                 self.titleBar.showItems();
 
                 var filter = {};
                 var values = self.filterBrowse.getValues();
-                var sectorcodeObj = self._getObjectByValue('9999',values);
 
-                // Set Sectors to crs_sectors
-                if(!self._hasNoSelections('sectorcode', values)){
+                var isFAORelated = self.configUtils.objectContainsValue(values, '9999');
+                var sectorSelected= self._hasSelections('sectorcode', values);
+                var subSectorSelected = self._hasSelections('purposecode', values);
+
+                switch(isFAORelated){
+                    case true:
+                        self.baseDashboardConfig = self.dashboardFAOConfig;
+                      //  self._updateConfigurationsWithFaoRelatedSectors2(values, sectorcodeObj);
+                        break;
+                    case false:
+                        self.baseDashboardConfig = self.dashboardConfig;
+                        var item1 = _.filter(self.dashboardConfig.items, {id:'item-1'})[0];
+                        self._updateItem1ChartConfiguration(item1, sectorSelected, subSectorSelected);
+                        break;
+                }
+
+               if(uidChanged) {
+                    self.baseDashboardConfig.uid = self.datasetType.uid;
+                }
+
+                // Set the sector and sub sector code lists references
+                // Updated to match the references as declared in the dataset metadata for the sectorcode and purposecode fields
+                if(sectorSelected){
                     values['sectorcode'].codes[0].uid = 'crs_sectors';
                 }
+
                 // Set Subsectors to crs_purposes
-                if(!self._hasNoSelections('purposecode', values)){
+                if(subSectorSelected) {
                     values['purposecode'].codes[0].uid = 'crs_purposes';
-                }
+                 }
 
-                console.log("==================== _bindEventListeners: $filterSubmitBrowse on click self.uidChanged ");
-                console.log(self.uidChanged);
-                // Update Dashboard Config and Rebuild if uid changed
-                if(self.uidChanged) {
-                    self.dashboardConfig.uid = self.datasetType.uid;
-                    self.dashboardFAOConfig.uid = self.datasetType.uid;
-
-                    if(sectorcodeObj)   {
-                        self._updateConfigurationsWithFaoRelatedSectors2(values, sectorcodeObj);
-                        self._rebuildBrowseDashboard(self.dashboardFAOConfig, [values]);
-                    }
-                    else
-                      self._rebuildBrowseDashboard(self.dashboardConfig, [values]);
-
-                }
-                else {
-                    // Update Dashboard Config and values if FAO Related Sectors selected
-                    if(sectorcodeObj) {
-                        self._updateConfigurationsWithFaoRelatedSectors2(values, sectorcodeObj);
-                        self._rebuildBrowseDashboard(self.dashboardFAOConfig, [values]);
-                    } else {
-                        self.browseDashboard.filter([values]);
-                    }
-                }
+                 self._rebuildBrowseDashboard(self.baseDashboardConfig, [values]);
+                // IF REBUILD NOT REQUIRED: self.browseDashboard.filter([values]);
 
             });
 
+        },
+
+        _updateItem1ChartConfiguration: function (item1, sectorSelected, subSectorSelected) {
+            // Set either sectorcode or purposecode as the series in the first chart config
+            // Check the current selection via seriesname in config
+            var seriesname = item1.config.adapter.seriesDimensions[0];
+
+            var configFind = subSectorSelected && seriesname !== 'purposecode' ? 'sectorcode': 'purposecode';
+            var configReplace = subSectorSelected && seriesname !== 'purposecode' ? 'purposecode': 'sectorcode';
+
+            // modify chartconfig seriesdimension
+            this.configUtils.findAndReplace(item1.config.adapter, configFind, configReplace);
+
+            // modify group by in filter
+            var grpByConfig = this.configUtils.findByPropValue(item1.filter,  "name", "pggroup");
+            this.configUtils.findAndReplace(grpByConfig, configFind, configReplace);
         },
 
         _updateConfigurationsWithFaoRelatedSectors2: function (values, sectorvaluesobj) {
@@ -356,15 +374,15 @@ define([
                 if(this.dashboardConfig)  {
 
                     if(data.value !== this.dashboardConfig.uid) {
-                        this.uidChanged = true;
+                        uidChanged = true;
                         this.datasetType.uid = data.value;
                     }
                     else {
-                        this.uidChanged = false;
+                        uidChanged = false;
                     }
 
-                    console.log("====================_onDatasetChange this.uidChanged ");
-                    console.log(this.uidChanged );
+                   // console.log("====================_onDatasetChange uidChanged ");
+                   // console.log(uidChanged );
 
 
                 }
@@ -384,6 +402,15 @@ define([
 
                 return childHasValue;
         },
+
+        _hasSelections: function (id, data){
+            if( _.has(data, id)){
+                if (_.has(data[id], 'codes')) {
+                  return true;
+                }
+            }
+        },
+
 
         _hasNoSelections: function (id, data){
             if( _.has(data, id)){
@@ -425,10 +452,6 @@ define([
 
            this.filterConfig = config.filter;
 
-           // Add List Selection listeners
-           //for(var idx in this.filterConfig) {
-              // amplify.subscribe(s.events.LIST_SELECTIONS + this.filterConfig[idx].components[0].name, this, this._addSelectedItemToTitle);
-          // }
 
             // Add List Change listeners
             for(var idx in this.filterConfig) {
@@ -453,7 +476,6 @@ define([
             this.dashboardConfig = config.dashboard;
             this.dashboardFAOConfig = configFao.dashboard;
 
-
             this._renderBrowseFilter(this.filterConfig);
 
            //this._renderBrowseDashboard(this.dashboardConfig);
@@ -463,7 +485,6 @@ define([
 
 
         _renderTitleBar: function(){
-
             this.titleBar = new TitleBar();
             this.titleBar.init({
                 container: this.$titleBar
@@ -472,6 +493,9 @@ define([
         },
 
         _addSelectedItemToTitle: function(item){
+           // console.log("======================== _addSelectedItemToTitle")
+            //console.log(item)
+
             //update Title
             amplify.publish(s.events.TITLE_ADD_ITEM, item);
         },
@@ -495,6 +519,8 @@ define([
                 this._onDatasetChange(item);
             }
 
+           // console.log("======================== _onChangeEvent")
+           // console.log(item)
             //update Title
             amplify.publish(s.events.TITLE_ADD_ITEM, item);
         },
@@ -562,6 +588,7 @@ define([
                 // initialize Bootstarp tooltip
                 $('[data-toggle="tooltip"]').tooltip();
 
+
             });
 
         },
@@ -591,8 +618,33 @@ define([
              if (a.label > b.label)
                 return 1;
            return 0;
-       }
+       },
 
+        _unbindEventListeners: function () {
+          // Remove listeners
+
+            amplify.unsubscribe(s.events.SECTOR_CHART_LOADED, this._sectorChartLoaded);
+
+            for(var idx in this.filterConfig) {
+                amplify.unsubscribe(s.events.LIST_CHANGE + this.filterConfig[idx].components[0].name, this._onChangeEvent);
+            }
+
+        },
+
+        _sectorChartLoaded: function (chart) {
+
+           // if(chart.series[0].name == "FAO")
+            //chart.series[0].update({name: "BeBee"}, false);
+            //chart.redraw();
+        },
+
+
+        dispose: function () {
+
+            this._unbindEventListeners();
+
+            View.prototype.dispose.call(this, arguments);
+        }
 
    });
 

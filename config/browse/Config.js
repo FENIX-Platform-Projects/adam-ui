@@ -76,6 +76,10 @@ define(function () {
                                     "level" : 3,
                                     "levels":3
                                 }
+                            },
+                            creator: {
+                                    allowClear: true,
+                                    placeholder: "Select .."
                             }
                         }
                     ]
@@ -160,6 +164,10 @@ define(function () {
                                     "level" : 3,
                                     "levels":3
                                 }
+                            },
+                            creator: {
+                                allowClear: true,
+                                placeholder: "Select .."
                             }
                         }
                     ]
@@ -215,6 +223,7 @@ define(function () {
                 items: [
                     {
                         id: 'item-1',   // TOTAL ODA
+                        label: 'LABEL_BYSECTOR',  // TOTAL ODA
                         type: 'chart',
                         class: "fx-timeseries-ecample",
                         //needed if layout = injected
@@ -234,8 +243,14 @@ define(function () {
                             creator: {
                                 chartObj: {
                                     chart: {
-                                        type: "line"
+                                        type: "line",
+                                        events: {
+                                            load: function(event) {
+                                                amplify.publish('fx.browse.chart.sector.loaded', this);
+                                            }
+                                        }
                                     },
+
                                     xAxis : {
                                         type: 'datetime'
                                     },
@@ -249,11 +264,12 @@ define(function () {
                                                 Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
                                         }
                                     }
+
                                 }
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['sectorcode', 'year', 'channelcode'],
+                        allowedFilter: ['sectorcode', 'purposecode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -346,6 +362,41 @@ define(function () {
                                     chart: {
                                         type: "column"
                                     },
+                                    colors: [ //Colori delle charts
+                                        '#56adc3',
+                                        '#5691c3',
+                                        '#5663c3',
+                                        '#d2ccbf',
+                                        '#DF3328',
+                                        '#F1E300',
+                                        '#F7AE3C',
+                                        '#DF3328',
+                                        '#2e8bcc',
+                                        '#339933',
+                                        '#e51400',
+                                        '#ffc40d',
+                                        '#f39c12',
+                                        '#e671b8',
+                                        '#7b4f9d',
+                                        '#8cbf26',
+                                        '#ff0097',
+                                        '#00aba9',
+                                        '#1abc9c',
+                                        '#16a085',
+                                        '#2ecc71',
+                                        '#27ae60',
+                                        '#3498db',
+                                        '#2980b9',
+                                        '#9b59b6',
+                                        '#8e44ad',
+                                        '#34495e',
+                                        '#2c3e50',
+                                        '#f1c40f',
+                                        '#e67e22',
+                                        '#d35400',
+                                        '#e74c3c',
+                                        '#c0392b'
+                                    ],
                                     subtitle: {
                                         text: ''
                                     },
