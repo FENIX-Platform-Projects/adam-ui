@@ -709,7 +709,7 @@ define(function () {
                             container: "#item-5",
                             adapter: {
                                 type: "standard",
-                                xDimensions: 'sectorcode',
+                                xDimensions: 'unitcode',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
                                 seriesDimensions: ['regioncode'],
@@ -795,7 +795,7 @@ define(function () {
                                 "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                       "regioncode"
+                                       "unitcode", "regioncode"
                                     ],
                                     "aggregations": [
                                         {
@@ -2453,7 +2453,7 @@ define(function () {
                             container: "#item-5",
                             adapter: {
                                 type: "standard",
-                                xDimensions: 'sectorcode',
+                                xDimensions: 'unitcode',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
                                 seriesDimensions: ['regioncode'],
@@ -2550,7 +2550,7 @@ define(function () {
                                 "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                        "regioncode"
+                                        "unitcode", "regioncode"
                                     ],
                                     "aggregations": [
                                         {

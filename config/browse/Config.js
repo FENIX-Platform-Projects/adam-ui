@@ -871,7 +871,6 @@ define(function () {
 
         "country_sector": {
 
-
             filter: [
                 {
                     "type": "codelist",
