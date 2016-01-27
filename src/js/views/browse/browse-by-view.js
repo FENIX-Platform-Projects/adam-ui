@@ -43,7 +43,7 @@ define([
             LIST_SELECTIONS: 'fx.filter.list.selections.',
             LIST_CHANGE: 'fx.filter.list.change.',
             TITLE_ADD_ITEM: 'fx.title.item.add',
-            SECTOR_CHART_LOADED: 'fx.browse.chart.sector.loaded'
+            FAO_SECTOR_CHART_LOADED: 'fx.browse.chart.faosector.loaded'
         },
         listTypes: {
             SECTOR_LIST: 'sectorcode',
@@ -143,7 +143,7 @@ define([
 
            // amplify.subscribe(s.events.SECTOR_LIST_CHANGE, this, this._onSectorChange);
 
-            amplify.subscribe(s.events.SECTOR_CHART_LOADED, this, this._sectorChartLoaded);
+            amplify.subscribe(s.events.FAO_SECTOR_CHART_LOADED, this, this._sectorChartLoaded);
 
             this.$filterSubmitBrowse.on('click', function (e, data) {
 
@@ -157,22 +157,6 @@ define([
                 var sectorSelected= self._hasSelections('sectorcode', values);
                 var subSectorSelected = self._hasSelections('purposecode', values);
                 var channelsSelected = self._hasSelections('channelcode', values);
-
-                switch(isFAORelated){
-                    case true:
-                        self.baseDashboardConfig = self.dashboardFAOConfig;
-                      //  self._updateConfigurationsWithFaoRelatedSectors2(values, sectorcodeObj);
-                        break;
-                    case false:
-                        self.baseDashboardConfig = self.dashboardConfig;
-                        var item1 = _.filter(self.dashboardConfig.items, {id:'item-1'})[0];
-                        self._updateItem1ChartConfiguration(item1, sectorSelected, subSectorSelected);
-                        break;
-                }
-
-               if(uidChanged) {
-                    self.baseDashboardConfig.uid = self.datasetType.uid;
-                }
 
                 // Set the sector and sub sector code lists references
                 // Updated to match the references as declared in the dataset metadata for the sectorcode and purposecode fields
@@ -189,6 +173,23 @@ define([
                 if(channelsSelected) {
                     values['channelcode'].codes[0].uid = 'crs_channel';
                 }
+
+                switch(isFAORelated){
+                    case true:
+                        self.baseDashboardConfig = self.dashboardFAOConfig;
+                         self._updateConfigurationsWithFaoRelatedSectors2(values, self._getObject('sectorcode', values), subSectorSelected);
+                        break;
+                    case false:
+                        self.baseDashboardConfig = self.dashboardConfig;
+                        var item1 = _.filter(self.dashboardConfig.items, {id:'item-1'})[0];
+                        self._updateItem1ChartConfiguration(item1, sectorSelected, subSectorSelected);
+                        break;
+                }
+
+               if(uidChanged) {
+                    self.baseDashboardConfig.uid = self.datasetType.uid;
+                }
+
 
                  self._rebuildBrowseDashboard(self.baseDashboardConfig, [values]);
                 // IF REBUILD NOT REQUIRED: self.browseDashboard.filter([values]);
@@ -213,9 +214,9 @@ define([
             this.configUtils.findAndReplace(grpByConfig, configFind, configReplace);
         },
 
-        _updateConfigurationsWithFaoRelatedSectors2: function (values, sectorvaluesobj) {
+        _updateConfigurationsWithFaoRelatedSectors2: function (values, sectorvaluesobj, subSectorSelected) {
             // If no purposecodes have been selected
-            if(this._hasNoSelections('purposecode', values)){
+            if(!subSectorSelected){
                 // Get the purposecode filter component, which will contain all
                 // the purposecodes (sub-sectors) associated with the selected 'FAO-related Sectors'
                 var purposeCodeComponent = this.filterBrowse.getDomain("purposecode");
@@ -237,6 +238,7 @@ define([
 
                     values['purposecode'].codes[0].codes = codes;
                     values['purposecode'].codes[0].uid = 'crs_purposes';
+                    values['purposecode'].codes[0].version = '2015';
 
                 }
             }
@@ -417,14 +419,21 @@ define([
                 return childHasValue;
         },
 
-        _hasSelections: function (id, data){
+        _getObject: function (id, data){
             if( _.has(data, id)){
                 if (_.has(data[id], 'codes')) {
-                  return true;
+                  return data[id];
                 }
             }
         },
 
+        _hasSelections: function (id, data){
+            if( _.has(data, id)){
+                if (_.has(data[id], 'codes')) {
+                    return true;
+                }
+            }
+        },
 
         _hasNoSelections: function (id, data){
             if( _.has(data, id)){
@@ -628,7 +637,7 @@ define([
         _unbindEventListeners: function () {
           // Remove listeners
 
-            amplify.unsubscribe(s.events.SECTOR_CHART_LOADED, this._sectorChartLoaded);
+            amplify.unsubscribe(s.events.FAO_SECTOR_CHART_LOADED, this._sectorChartLoaded);
 
             for(var idx in this.filterConfig) {
                 amplify.unsubscribe(s.events.LIST_CHANGE + this.filterConfig[idx].components[0].name, this._onChangeEvent);
@@ -637,10 +646,9 @@ define([
         },
 
         _sectorChartLoaded: function (chart) {
-
            // if(chart.series[0].name == "FAO")
-            //chart.series[0].update({name: "BeBee"}, false);
-            //chart.redraw();
+            chart.series[0].update({name: "FAO-Related Sectors"}, false);
+            chart.redraw();
         },
 
 
