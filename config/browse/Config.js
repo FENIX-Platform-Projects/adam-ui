@@ -12,10 +12,6 @@ define(function () {
 
         "sector": {
 
-            download: {
-                "target": "6.PROTECTIVE FUNCTIONS AND SELECTIVE ECOSYSTEM SERVICES.zip"
-            },
-
             filter: [
                 {
                     "type": "codelist-hierarchy",
@@ -242,12 +238,7 @@ define(function () {
                             creator: {
                                 chartObj: {
                                     chart: {
-                                        type: "line",
-                                        events: {
-                                            load: function(event) {
-                                                amplify.publish('fx.browse.chart.sector.loaded', this);
-                                            }
-                                        }
+                                        type: "line"
                                     },
 
                                     xAxis : {
@@ -879,9 +870,7 @@ define(function () {
         },
 
         "country_sector": {
-            download: {
-                "target": "6.PROTECTIVE FUNCTIONS AND SELECTIVE ECOSYSTEM SERVICES.zip"
-            },
+
 
             filter: [
                 {
@@ -1783,9 +1772,7 @@ define(function () {
         },
 
         "donor_sector": {
-            download: {
-                "target": "6.PROTECTIVE FUNCTIONS AND SELECTIVE ECOSYSTEM SERVICES.zip"
-            },
+
 
             filter: [
                 {
@@ -2704,9 +2691,6 @@ define(function () {
         },
 
         "country_donor_sector": {
-            download: {
-                "target": "6.PROTECTIVE FUNCTIONS AND SELECTIVE ECOSYSTEM SERVICES.zip"
-            },
 
             filter: [
                 {

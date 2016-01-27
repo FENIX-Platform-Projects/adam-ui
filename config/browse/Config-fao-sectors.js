@@ -12,10 +12,6 @@ define(function () {
 
         "sector": {
 
-            download: {
-                "target": "6.PROTECTIVE FUNCTIONS AND SELECTIVE ECOSYSTEM SERVICES.zip"
-            },
-
             filter: [
                 {
                     "type": "codelist-hierarchy",
@@ -245,7 +241,7 @@ define(function () {
                                         type: "line",
                                         events: {
                                             load: function(event) {
-                                                amplify.publish('fx.browse.chart.sector.loaded', this);
+                                                amplify.publish('fx.browse.chart.faosector.loaded', this);
                                             }
                                         }
                                     },
@@ -694,6 +690,13 @@ define(function () {
                                 "parameters": {
                                     "value": "DESC"
                                 }
+                            },
+                            {
+                                "name": "page",
+                                "parameters": {
+                                    "perPage": 10,  //top 10
+                                    "page": 1
+                                }
                             }
                         ]
                     },
@@ -824,9 +827,6 @@ define(function () {
         },
 
         "country_sector": {
-            download: {
-                "target": "6.PROTECTIVE FUNCTIONS AND SELECTIVE ECOSYSTEM SERVICES.zip"
-            },
 
             filter: [
                 {
@@ -1081,7 +1081,12 @@ define(function () {
                             creator: {
                                 chartObj: {
                                     chart: {
-                                        type: "line"
+                                        type: "line",
+                                        events: {
+                                            load: function(event) {
+                                                amplify.publish('fx.browse.chart.faosector.loaded', this);
+                                            }
+                                        }
                                     },
                                     xAxis : {
                                         type: 'datetime'
@@ -1541,6 +1546,13 @@ define(function () {
                                 "parameters": {
                                     "value": "DESC"
                                 }
+                            } ,
+                            {
+                                "name": "page",
+                                "parameters": {
+                                    "perPage": 10,  //top 10
+                                    "page": 1
+                                }
                             }
                         ]
                     },
@@ -1684,9 +1696,6 @@ define(function () {
         },
 
         "donor_sector": {
-            download: {
-                "target": "6.PROTECTIVE FUNCTIONS AND SELECTIVE ECOSYSTEM SERVICES.zip"
-            },
 
             filter: [
                 {
@@ -1942,7 +1951,12 @@ define(function () {
                             creator: {
                                 chartObj: {
                                     chart: {
-                                        type: "line"
+                                        type: "line",
+                                        events: {
+                                            load: function(event) {
+                                                amplify.publish('fx.browse.chart.faosector.loaded', this);
+                                            }
+                                        }
                                     },
                                     xAxis : {
                                         type: 'datetime'
@@ -2420,6 +2434,13 @@ define(function () {
                                 "parameters": {
                                     "value": "DESC"
                                 }
+                            },
+                            {
+                                "name": "page",
+                                "parameters": {
+                                    "perPage": 10,  //top 10
+                                    "page": 1
+                                }
                             }
                         ]
                     },
@@ -2561,9 +2582,6 @@ define(function () {
         },
 
         "country_donor_sector": {
-            download: {
-                "target": "6.PROTECTIVE FUNCTIONS AND SELECTIVE ECOSYSTEM SERVICES.zip"
-            },
 
             filter: [
                 {
@@ -2845,7 +2863,12 @@ define(function () {
                             creator: {
                                 chartObj: {
                                     chart: {
-                                        type: "line"
+                                        type: "line",
+                                        events: {
+                                            load: function(event) {
+                                                amplify.publish('fx.browse.chart.faosector.loaded', this);
+                                            }
+                                        }
                                     },
                                     xAxis : {
                                         type: 'datetime'
@@ -3345,6 +3368,13 @@ define(function () {
                                 "name": "order",
                                 "parameters": {
                                     "value": "DESC"
+                                }
+                            },
+                            {
+                                "name": "page",
+                                "parameters": {
+                                    "perPage": 10,  //top 10
+                                    "page": 1
                                 }
                             }
                         ]
