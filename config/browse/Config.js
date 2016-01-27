@@ -1007,6 +1007,10 @@ define(function () {
                                     "level" : 3,
                                     "levels":3
                                 }
+                            },
+                            creator: {
+                                allowClear: true,
+                                placeholder: "Select .."
                             }
                         }
                     ]
@@ -1091,6 +1095,10 @@ define(function () {
                                     "level" : 3,
                                     "levels":3
                                 }
+                            },
+                            creator: {
+                                allowClear: true,
+                                placeholder: "Select .."
                             }
                         }
                     ]
@@ -1903,7 +1911,12 @@ define(function () {
                                     "level" : 3,
                                     "levels":3
                                 }
+                            },
+                            creator: {
+                                allowClear: true,
+                                placeholder: "Select .."
                             }
+
                         }
                     ]
                 },
@@ -1987,6 +2000,10 @@ define(function () {
                                     "level" : 3,
                                     "levels":3
                                 }
+                            },
+                            creator: {
+                                allowClear: true,
+                                placeholder: "Select .."
                             }
                         }
                     ]
@@ -2842,6 +2859,10 @@ define(function () {
                                     "level" : 3,
                                     "levels":3
                                 }
+                            },
+                            creator: {
+                                allowClear: true,
+                                placeholder: "Select .."
                             }
                         }
                     ]
@@ -2926,6 +2947,10 @@ define(function () {
                                     "level" : 3,
                                     "levels":3
                                 }
+                            },
+                            creator: {
+                                allowClear: true,
+                                placeholder: "Select .."
                             }
                         }
                     ]

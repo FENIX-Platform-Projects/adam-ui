@@ -156,6 +156,7 @@ define([
                 var isFAORelated = self.configUtils.objectContainsValue(values, '9999');
                 var sectorSelected= self._hasSelections('sectorcode', values);
                 var subSectorSelected = self._hasSelections('purposecode', values);
+                var channelsSelected = self._hasSelections('channelcode', values);
 
                 switch(isFAORelated){
                     case true:
@@ -182,7 +183,12 @@ define([
                 // Set Subsectors to crs_purposes
                 if(subSectorSelected) {
                     values['purposecode'].codes[0].uid = 'crs_purposes';
-                 }
+                }
+
+                // Set Channels to crs_channel
+                if(channelsSelected) {
+                    values['channelcode'].codes[0].uid = 'crs_channel';
+                }
 
                  self._rebuildBrowseDashboard(self.baseDashboardConfig, [values]);
                 // IF REBUILD NOT REQUIRED: self.browseDashboard.filter([values]);
