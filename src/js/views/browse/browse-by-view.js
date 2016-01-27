@@ -5,7 +5,7 @@ define([
     'views/base/view',
     'fx-ds/start',
     'fx-filter/start',
-    'common/Fx-title-bar',
+    'views/common/title-view',
     'text!templates/browse/browse.hbs',
     'text!templates/browse/dashboard.hbs',
     'i18n!nls/browse',
@@ -21,7 +21,7 @@ define([
     'amplify',
     'select2'
 
-], function ($, $UI, View, Dashboard, Filter, TitleBar, template, browseByDashboardTemplate, i18nLabels, E, C, BrowseConfig, BrowseFaoSectorsConfig, FilterConfCreator, Handlebars, Utils, ConfigUtils,  Q) {
+], function ($, $UI, View, Dashboard, Filter, TitleSubView, template, browseByDashboardTemplate, i18nLabels, E, C, BrowseConfig, BrowseFaoSectorsConfig, FilterConfCreator, Handlebars, Utils, ConfigUtils,  Q) {
 
     'use strict';
 
@@ -104,6 +104,19 @@ define([
 
         },
 
+        render: function () {
+            View.prototype.render.apply(this, arguments);
+
+            this._initSubView();
+        },
+
+        _initSubView: function() {
+            View.prototype.render.apply(this, arguments);
+
+            this.titleSubView = new TitleSubView({autoRender: true, container: this.$el.find(s.css_classes.TITLE_BAR)});
+
+        },
+
         _initMenuBreadcrumbItem: function() {
             var label = "";
             var self = this;
@@ -120,8 +133,6 @@ define([
 
             this.$filterSubmitBrowse = this.$el.find(s.css_classes.FILTER_SUBMIT_BROWSE);
 
-            this.$titleBar = this.$el.find(s.css_classes.TITLE_BAR);
-
             this.$sideBrowse = this.$el.find(s.css_classes.SIDE_BROWSE);
 
         },
@@ -129,7 +140,6 @@ define([
         _bindEventListeners: function () {
 
             var self = this;
-          //  self.titleBar.destroy();
 
            // amplify.subscribe(s.events.SECTOR_LIST_CHANGE, this, this._onSectorChange);
 
@@ -137,10 +147,8 @@ define([
 
             this.$filterSubmitBrowse.on('click', function (e, data) {
 
-
-
                 // show title bar
-                self.titleBar.showItems();
+                self.titleSubView.show();
 
                 var filter = {};
                 var values = self.filterBrowse.getValues();
@@ -359,7 +367,7 @@ define([
                         if(self.firstLoad) {
                             self.firstLoad = false;
                             // show title
-                            self.titleBar.showItems();
+                            self.titleSubView.show();
                             self._renderBrowseDashboard(self.dashboardConfig);
                         }
                       }
@@ -448,7 +456,6 @@ define([
                 return;
             }
 
-           this._renderTitleBar();
 
            this.filterConfig = config.filter;
 
@@ -483,14 +490,6 @@ define([
 
         },
 
-
-        _renderTitleBar: function(){
-            this.titleBar = new TitleBar();
-            this.titleBar.init({
-                container: this.$titleBar
-            });
-            this.titleBar.render();
-        },
 
         _addSelectedItemToTitle: function(item){
            // console.log("======================== _addSelectedItemToTitle")
