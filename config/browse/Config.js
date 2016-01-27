@@ -689,14 +689,13 @@ define(function () {
                                                 }
                                             ]
                                         },
-                                        "purposecode": {
+                                        "sectorcode": {
                                             "codes": [
                                                 {
-                                                    "uid": "crs_purposes",
+                                                    "uid": "crs_sectors",
                                                     "version": "2015",
                                                     "codes": [
-                                                        "60010", "60020", "60030",
-                                                        "60040", "60061", "60062", "60063"
+                                                        "600"
                                                     ]
                                                 }
                                             ]
@@ -1159,7 +1158,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['recipientcode', 'sectorcode', 'year', 'channelcode'],
+                        allowedFilter: ['recipientcode', 'sectorcode', 'purposecode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -2061,7 +2060,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: [ 'donorcode', 'sectorcode', 'year', 'channelcode'],
+                        allowedFilter: [ 'donorcode', 'sectorcode', 'purposecode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -3008,7 +3007,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['recipientcode', 'donorcode', 'sectorcode', 'year', 'channelcode'],
+                        allowedFilter: ['recipientcode', 'donorcode', 'sectorcode', 'purposecode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",

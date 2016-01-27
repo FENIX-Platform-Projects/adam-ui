@@ -268,7 +268,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['sectorcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['purposecode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -281,17 +281,6 @@ define(function () {
                                                     "version": "2015",
                                                     "codes": [ "10_12", "10_11", "10_13", "10_19"
                                                     ]   //ODA
-                                                }
-                                            ]
-                                        },
-                                        "sectorcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_sectors",
-                                                    "version": "2015",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
                                                 }
                                             ]
                                         },
@@ -310,7 +299,7 @@ define(function () {
                                 "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                        "sectorcode", "year"
+                                        "year"
                                     ],
                                     "aggregations": [
                                         {
@@ -375,7 +364,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['sectorcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['purposecode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -388,17 +377,6 @@ define(function () {
                                                     "version": "2015",
                                                     "codes": [ "10_12", "10_11", "10_13", "10_19"
                                                     ]   //ODA
-                                                }
-                                            ]
-                                        },
-                                        "sectorcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_sectors",
-                                                    "version": "2015",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
                                                 }
                                             ]
                                         },
@@ -509,7 +487,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['sectorcode', 'purposecode', 'year'],
+                        allowedFilter: ['purposecode', 'year'],
                         filter: [
                             {
                                 "name": "filter",
@@ -522,17 +500,6 @@ define(function () {
                                                     "version": "2015",
                                                     "codes": [ "10_12", "10_11", "10_13", "10_19"
                                                     ]   //ODA
-                                                }
-                                            ]
-                                        },
-                                        "sectorcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_sectors",
-                                                    "version": "2015",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
                                                 }
                                             ]
                                         },
@@ -673,7 +640,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['sectorcode', 'year', 'channelcode'],
+                        allowedFilter: ['year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -686,18 +653,6 @@ define(function () {
                                                     "version": "2015",
                                                     "codes": [ "10_12", "10_11", "10_13", "10_19"
                                                     ]   //ODA
-                                                }
-                                            ]
-                                        },
-                                        "purposecode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_purposes",
-                                                    "version": "2015",
-                                                    "codes": [
-                                                        "60010", "60020", "60030",
-                                                        "60040", "60061", "60062", "60063"
-                                                    ]
                                                 }
                                             ]
                                         },
@@ -806,7 +761,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['sectorcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['purposecode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -819,17 +774,6 @@ define(function () {
                                                     "version": "2015",
                                                     "codes": [ "10_12", "10_11", "10_13", "10_19"
                                                     ]   //ODA
-                                                }
-                                            ]
-                                        },
-                                        "sectorcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_sectors",
-                                                    "version": "2015",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
                                                 }
                                             ]
                                         },
@@ -848,7 +792,7 @@ define(function () {
                                 "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                        "sectorcode", "regioncode"
+                                       "regioncode"
                                     ],
                                     "aggregations": [
                                         {
@@ -1159,7 +1103,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['recipientcode', 'sectorcode', 'year', 'channelcode'],
+                        allowedFilter: ['recipientcode', 'purposecode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -1172,17 +1116,6 @@ define(function () {
                                                     "version": "2015",
                                                     "codes": [ "10_12", "10_11", "10_13", "10_19"
                                                     ]   //ODA
-                                                }
-                                            ]
-                                        },
-                                        "sectorcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_sectors",
-                                                    "version": "2015",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
                                                 }
                                             ]
                                         },
@@ -1212,7 +1145,7 @@ define(function () {
                                 "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                        "sectorcode", "year"
+                                        "year"
                                     ],
                                     "aggregations": [
                                         {
@@ -1390,7 +1323,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['recipientcode', 'sectorcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['recipientcode', 'purposecode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -1403,17 +1336,6 @@ define(function () {
                                                     "version": "2015",
                                                     "codes": [ "10_12", "10_11", "10_13", "10_19"
                                                     ]   //ODA
-                                                }
-                                            ]
-                                        },
-                                        "sectorcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_sectors",
-                                                    "version": "2015",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
                                                 }
                                             ]
                                         },
@@ -1554,7 +1476,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['recipientcode', 'sectorcode', 'year', 'channelcode'],
+                        allowedFilter: ['recipientcode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -1567,17 +1489,6 @@ define(function () {
                                                     "version": "2015",
                                                     "codes": [ "10_12", "10_11", "10_13", "10_19"
                                                     ]   //ODA
-                                                }
-                                            ]
-                                        },
-                                        "sectorcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_sectors",
-                                                    "version": "2015",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
                                                 }
                                             ]
                                         },
@@ -1692,7 +1603,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['recipientcode', 'sectorcode', 'purposecode', 'year'],
+                        allowedFilter: ['recipientcode', 'purposecode', 'year'],
                         filter: [
                             {
                                 "name": "filter",
@@ -1705,17 +1616,6 @@ define(function () {
                                                     "version": "2015",
                                                     "codes": [ "10_12", "10_11", "10_13", "10_19"
                                                     ]   //ODA
-                                                }
-                                            ]
-                                        },
-                                        "sectorcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_sectors",
-                                                    "version": "2015",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
                                                 }
                                             ]
                                         },
@@ -2061,7 +1961,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: [ 'donorcode', 'sectorcode', 'year', 'channelcode'],
+                        allowedFilter: [ 'donorcode', 'purposecode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -2074,17 +1974,6 @@ define(function () {
                                                     "version": "2015",
                                                     "codes": [ "10_12", "10_11", "10_13", "10_19"
                                                     ]   //ODA
-                                                }
-                                            ]
-                                        },
-                                        "sectorcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_sectors",
-                                                    "version": "2015",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
                                                 }
                                             ]
                                         },
@@ -2114,7 +2003,7 @@ define(function () {
                                 "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                        "sectorcode", "year"
+                                        "year"
                                     ],
                                     "aggregations": [
                                         {
@@ -2313,7 +2202,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['donorcode', 'sectorcode', 'purposecode', 'year'],
+                        allowedFilter: ['donorcode', 'purposecode', 'year'],
                         filter: [
                             {
                                 "name": "filter",
@@ -2326,17 +2215,6 @@ define(function () {
                                                     "version": "2015",
                                                     "codes": [ "10_12", "10_11", "10_13", "10_19"
                                                     ]   //ODA
-                                                }
-                                            ]
-                                        },
-                                        "sectorcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_sectors",
-                                                    "version": "2015",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
                                                 }
                                             ]
                                         },
@@ -2477,7 +2355,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['donorcode', 'sectorcode', 'year', 'channelcode'],
+                        allowedFilter: ['donorcode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -2490,17 +2368,6 @@ define(function () {
                                                     "version": "2015",
                                                     "codes": [ "10_12", "10_11", "10_13", "10_19"
                                                     ]   //ODA
-                                                }
-                                            ]
-                                        },
-                                        "sectorcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_sectors",
-                                                    "version": "2015",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
                                                 }
                                             ]
                                         },
@@ -2620,7 +2487,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['donorcode', 'sectorcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['donorcode', 'purposecode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -2633,17 +2500,6 @@ define(function () {
                                                     "version": "2015",
                                                     "codes": [ "10_12", "10_11", "10_13", "10_19"
                                                     ]   //ODA
-                                                }
-                                            ]
-                                        },
-                                        "sectorcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_sectors",
-                                                    "version": "2015",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
                                                 }
                                             ]
                                         },
@@ -2673,7 +2529,7 @@ define(function () {
                                 "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                        "sectorcode", "regioncode"
+                                        "regioncode"
                                     ],
                                     "aggregations": [
                                         {
@@ -3008,7 +2864,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['recipientcode', 'donorcode', 'sectorcode', 'year', 'channelcode'],
+                        allowedFilter: ['recipientcode', 'donorcode', 'purposecode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -3021,17 +2877,6 @@ define(function () {
                                                     "version": "2015",
                                                     "codes": [ "10_12", "10_11", "10_13", "10_19"
                                                     ]   //ODA
-                                                }
-                                            ]
-                                        },
-                                        "sectorcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_sectors",
-                                                    "version": "2015",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
                                                 }
                                             ]
                                         },
@@ -3072,7 +2917,7 @@ define(function () {
                                 "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                        "sectorcode", "year"
+                                        "year"
                                     ],
                                     "aggregations": [
                                         {
@@ -3261,7 +3106,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['recipientcode', 'donorcode', 'sectorcode', 'purposecode', 'year'],
+                        allowedFilter: ['recipientcode', 'donorcode', 'purposecode', 'year'],
                         filter: [
                             {
                                 "name": "filter",
@@ -3274,17 +3119,6 @@ define(function () {
                                                     "version": "2015",
                                                     "codes": [ "10_12", "10_11", "10_13", "10_19"
                                                     ]   //ODA
-                                                }
-                                            ]
-                                        },
-                                        "sectorcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_sectors",
-                                                    "version": "2015",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
                                                 }
                                             ]
                                         },
@@ -3436,7 +3270,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['recipientcode', 'donorcode', 'sectorcode', 'year', 'channelcode'],
+                        allowedFilter: ['recipientcode', 'donorcode', 'year', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -3449,17 +3283,6 @@ define(function () {
                                                     "version": "2015",
                                                     "codes": [ "10_12", "10_11", "10_13", "10_19"
                                                     ]   //ODA
-                                                }
-                                            ]
-                                        },
-                                        "sectorcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_sectors",
-                                                    "version": "2015",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
                                                 }
                                             ]
                                         },
