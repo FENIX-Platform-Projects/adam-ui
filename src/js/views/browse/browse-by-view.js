@@ -230,6 +230,7 @@ define([
                     values['purposecode'].codes = [];
                     values['purposecode'].codes[0] = $.extend(true, {}, sectorvaluesobj); // clone the codes configuration of sectorvaluesobj
 
+                   // console.log( values['purposecode'].codes[0]);
                     // Get the source of the purposecode component
                     // and populate the codes array with the IDs of the source items
                     $.each(purposeCodeComponent.options.source, function( index, sourceItem ) {
