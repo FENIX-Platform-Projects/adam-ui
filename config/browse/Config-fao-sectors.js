@@ -1464,8 +1464,7 @@ define(function () {
                                             allowPointSelect: true,
                                             cursor: 'pointer',
                                              dataLabels: {
-                                                distance: -20,
-                                                style: {
+                                                 style: {
                                                    width: '150px'
                                                  },
                                                 formatter: function(){
