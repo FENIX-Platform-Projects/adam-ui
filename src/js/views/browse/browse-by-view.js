@@ -177,7 +177,9 @@ define([
                 switch(isFAORelated){
                     case true:
                         self.baseDashboardConfig = self.dashboardFAOConfig;
-                         self._updateConfigurationsWithFaoRelatedSectors2(values, self._getObject('sectorcode', values), subSectorSelected);
+                        var item1 = _.filter(self.dashboardFAOConfig.items, {id:'item-1'})[0];
+                        self._updateValuesWithFaoSubSectors(values, self._getObject('sectorcode', values), subSectorSelected);
+                        self._updateFAOItem1ChartConfiguration(item1, sectorSelected, subSectorSelected);
                         break;
                     case false:
                         self.baseDashboardConfig = self.dashboardConfig;
@@ -214,7 +216,28 @@ define([
             this.configUtils.findAndReplace(grpByConfig, configFind, configReplace);
         },
 
-        _updateConfigurationsWithFaoRelatedSectors2: function (values, sectorvaluesobj, subSectorSelected) {
+        _updateFAOItem1ChartConfiguration: function (item1, sectorSelected, subSectorSelected) {
+            // Set either sectorcode or purposecode as the series in the first chart config
+            // Check the current selection via seriesname in config
+            var seriesname = item1.config.adapter.seriesDimensions[0];
+
+            var configFind = subSectorSelected && seriesname !== 'purposecode' ? 'sectorcode': 'purposecode';
+            var configReplace = subSectorSelected && seriesname !== 'purposecode' ? 'purposecode': 'sectorcode';
+
+            // modify chartconfig seriesdimension
+            this.configUtils.findAndReplace(item1.config.adapter, configFind, configReplace);
+
+            // modify group by in filter
+            var grpByConfig = this.configUtils.findByPropValue(item1.filter,  "name", "pggroup");
+
+            if(subSectorSelected)
+                grpByConfig.parameters.by = ["purposecode", "year"];
+            else
+                grpByConfig.parameters.by = ["year"];
+
+        },
+
+        _updateValuesWithFaoSubSectors: function (values, sectorvaluesobj, subSectorSelected) {
             // If no purposecodes have been selected
             if(!subSectorSelected){
                 // Get the purposecode filter component, which will contain all
@@ -250,62 +273,6 @@ define([
 
         },
 
-        _updateConfigurationsWithFaoRelatedSectors: function (values, sectorvaluesobj) {
-            // If no purposecodes have been selected
-            if(this._hasNoSelections('purposecode', values)){
-               // Get the purposecode filter component, which will contain all
-               // the purposecodes (sub-sectors) associated with the selected 'FAO-related Sectors'
-                var purposeCodeComponent = this.filterBrowse.getDomain("purposecode");
-
-                if(purposeCodeComponent){
-                    var codes = [];
-
-                    //======= UPDATE VALUES CONFIG
-                    // Add purposecode to values
-                    values['purposecode'] = {};
-                    values['purposecode'].codes = [];
-                    values['purposecode'].codes[0] = $.extend(true, {}, sectorvaluesobj); // clone the codes configuration of sectorvaluesobj
-
-                    // Get the source of the purposecode component
-                    // and populate the codes array with the IDs of the source items
-                    $.each(purposeCodeComponent.options.source, function( index, sourceItem ) {
-                        codes.push(sourceItem.id);
-                    });
-
-                    values['purposecode'].codes[0].codes = codes;
-                    values['purposecode'].codes[0].uid = 'crs_purposes';
-
-                }
-            }
-
-            //======= UPDATE DASHBOARD CONFIG
-            // Get the dashboard items which have a group filter
-            // Then either remove sectorcode from the associated 'by' array (i.e. array size > 1)
-            // Or remove the group filter entirely if the 'by' array only contains sectorcode (i.e. array size = 1)
-            $.each(this.dashboardConfig.items, function(index, dbItem) {
-                var grpFilter = _.filter(dbItem.filter, {name:'group'})[0];
-
-                if (grpFilter) {
-                    if (_.intersection(['sectorcode'], grpFilter.parameters.by).length > 0) {  // Check if sectorcode is present in the 'by' array
-
-                        if (grpFilter.parameters.by.length > 1) {
-                            var arr = grpFilter.parameters.by;
-                            var result = _.without(arr, 'sectorcode'); // Remove sectorcode from Group by array
-                            grpFilter.parameters.by = result;
-                        } else {
-                            // Remove group by filter if sectorcode was the only Group by array item
-                            var filterIdx = this.dashboardConfig.items[index].filter.indexOf(grpFilter);
-                            this.dashboardConfig.items[index].filter.splice(filterIdx, 1);
-                        }
-                    }
-                }
-            });
-
-            // Set Values sectorcode to be removed
-            values['sectorcode'] = {};
-            values['sectorcode'].removeFilter = true;
-
-        },
 
         _resetDashboardConfiguration: function (values, sectorvaluesobj) {
 
@@ -647,9 +614,10 @@ define([
         },
 
         _sectorChartLoaded: function (chart) {
-           // if(chart.series[0].name == "FAO")
-            chart.series[0].update({name: "FAO-Related Sectors"}, false);
-            chart.redraw();
+             if((chart.series[0].name).trim() == "Million USD")    {
+                chart.series[0].update({name: "FAO-Related Sectors"}, false);
+                chart.redraw();
+            }
         },
 
 
