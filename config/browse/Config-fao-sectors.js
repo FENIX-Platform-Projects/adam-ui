@@ -620,7 +620,7 @@ define(function () {
                                             cursor: 'pointer',
                                             dataLabels: {
                                                 style: {
-                                                    width: '200px'
+                                                    width: '150px'
                                                 },
                                                 formatter: function(){
                                                     return '<div>' + this.point.name + ' '+
@@ -2353,7 +2353,7 @@ define(function () {
                                             cursor: 'pointer',
                                             dataLabels: {
                                                 style: {
-                                                    width: '100px'
+                                                    width: '150px'
                                                 },
                                                 formatter: function(){
                                                     return '<div>' + this.point.name + ' '+
@@ -3277,7 +3277,7 @@ define(function () {
                                             cursor: 'pointer',
                                             dataLabels: {
                                                 style: {
-                                                    width: '100px'
+                                                    width: '150px'
                                                 },
                                                 formatter: function(){
                                                     return '<div>' + this.point.name + ' '+
