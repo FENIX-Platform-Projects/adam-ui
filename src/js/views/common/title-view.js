@@ -2,11 +2,10 @@
 define([
     'jquery',
     'views/base/view',
-    'common/Fx-title-bar',
     'text!templates/common/title.hbs',
     'handlebars',
     'amplify'
-], function ($, View, TitleBar, template) {
+], function ($, View, template) {
 
     'use strict';
 
