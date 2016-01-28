@@ -1464,13 +1464,14 @@ define(function () {
                                             allowPointSelect: true,
                                             cursor: 'pointer',
                                              dataLabels: {
+                                                distance: -20,
                                                 style: {
-                                                   width: '100px'
+                                                   width: '150px'
                                                  },
                                                 formatter: function(){
-                                                   return '<div>' + this.point.name + ' '+
+                                                   return '<span>' + this.point.name + ' '+
                                                        Math.round(this.point.percentage) //Highcharts.numberFormat(this.point.percentage, 2)
-                                                      +'% </div>';
+                                                      +'% </span>';
                                                 },
                                                 enabled: true
                                             },
