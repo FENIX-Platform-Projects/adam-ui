@@ -139,7 +139,14 @@ define([
         },
 
         _createListItem: function (item) {
-          return $('<li data-module="' + item.name + '" style="display:none">'+ item.text +'</li>');
+          return $('<li data-module="' + item.name + '" style="display:none">'+ this._formatText(item.text) +'</li>');
+        },
+
+        _formatText: function(text){
+            if(text === text.toUpperCase())
+              return  (text.toLowerCase()).charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+            else
+              return text;
         },
 
         _replaceListItem: function (find, item) {
