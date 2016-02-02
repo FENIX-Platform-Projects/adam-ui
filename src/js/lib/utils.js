@@ -1,9 +1,10 @@
 /*global define, requirejs*/
 define([
+    'jquery',
     'handlebars',
     'underscore',
     'chaplin'
-], function (Handlebars, _, Chaplin) {
+], function ($, Handlebars, _, Chaplin) {
 
     'use strict';
 
@@ -52,6 +53,10 @@ define([
         var lang = requirejs.s.contexts._.config.i18n.locale;
 
         return keyword[lang.toUpperCase()];
+    });
+
+    Handlebars.registerHelper('decimal', function(number) {
+        return number.toFixed(2);
     });
 
 
