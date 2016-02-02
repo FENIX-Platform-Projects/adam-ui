@@ -36,6 +36,7 @@ define([
             DASHBOARD_BROWSE_CONTAINER: '#dashboard-adam-container',
 
             TITLE_BAR: "#fx-title"
+
         },
         events: {
             SECTOR_LIST_CHANGE: 'fx.filter.list.change.sectorcode',
@@ -198,6 +199,57 @@ define([
 
             });
 
+        },
+
+        _updateDashboard: function(){
+            // show title bar
+            this.titleSubView.show();
+
+            var filter = {};
+            var values = this.filterBrowse.getValues();
+
+            var isFAORelated = this.configUtils.objectContainsValue(values, '9999');
+            var sectorSelected= this._hasSelections('sectorcode', values);
+            var subSectorSelected = this._hasSelections('purposecode', values);
+            var channelsSelected = this._hasSelections('channelcode', values);
+
+            // Set the sector and sub sector code lists references
+            // Updated to match the references as declared in the dataset metadata for the sectorcode and purposecode fields
+            if(sectorSelected){
+                values['sectorcode'].codes[0].uid = 'crs_sectors';
+            }
+
+            // Set Subsectors to crs_purposes
+            if(subSectorSelected) {
+                values['purposecode'].codes[0].uid = 'crs_purposes';
+            }
+
+            // Set Channels to crs_channel
+            if(channelsSelected) {
+                values['channelcode'].codes[0].uid = 'crs_channel';
+            }
+
+            switch(isFAORelated){
+                case true:
+                    this.baseDashboardConfig = this.dashboardFAOConfig;
+                    var item1 = _.filter(this.dashboardFAOConfig.items, {id:'item-1'})[0];
+                    this._updateValuesWithFaoSubSectors(values, this._getObject('sectorcode', values), subSectorSelected);
+                    this._updateFAOItem1ChartConfiguration(item1, sectorSelected, subSectorSelected);
+                    break;
+                case false:
+                    this.baseDashboardConfig = this.dashboardConfig;
+                    var item1 = _.filter(this.dashboardConfig.items, {id:'item-1'})[0];
+                    this._updateItem1ChartConfiguration(item1, sectorSelected, subSectorSelected);
+                    break;
+            }
+
+            if(uidChanged) {
+                this.baseDashboardConfig.uid = this.datasetType.uid;
+            }
+
+
+            this._rebuildBrowseDashboard(this.baseDashboardConfig, [values]);
+            // IF REBUILD NOT REQUIRED: this.browseDashboard.filter([values]);
         },
 
         _updateItem1ChartConfiguration: function (item1, sectorSelected, subSectorSelected) {
@@ -501,6 +553,7 @@ define([
                 this._onDatasetChange(item);
             }
 
+
            // console.log("======================== _onChangeEvent")
            // console.log(item)
             //update Title
@@ -617,6 +670,14 @@ define([
              if((chart.series[0].name).trim() == "Million USD")    {
                 chart.series[0].update({name: "FAO-Related Sectors"}, false);
                 chart.redraw();
+            }
+
+            var series = chart.series,
+                i=0;
+
+            for(; i<series.length; i++) {
+                //series[i].legendItem.translate(-15, 0);
+                //series[i].checkbox.style.marginRight = '-12px';
             }
         },
 

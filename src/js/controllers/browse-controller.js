@@ -3,10 +3,11 @@ define([
     'chaplin',
     'controllers/base/controller',
     'views/browse-view',
-    'views/browse/browse-by-view',
+    //'views/browse/browse-by-view',
+    'views/browse/browseby-view',
     'rsvp',
     'globals/AuthManager'
-], function (Chaplin, Controller, View, BrowseByView, RSVP, AuthManager) {
+], function (Chaplin, Controller, View, BrowseByView2, RSVP, AuthManager) {
     'use strict';
 
     var BrowseController = Controller.extend({
@@ -45,7 +46,8 @@ define([
         },
 
         browseby: function (params) {
-            this.view = new BrowseByView({
+            //this.view = new BrowseByView({
+            this.view = new BrowseByView2({
                 region: 'main',
                 filter: params.filter,
                 recipientcode: params.recipientcode,

@@ -238,15 +238,59 @@ define(function () {
                             creator: {
                                 chartObj: {
                                     chart: {
-                                        type: "line"
+                                        type: "line",
+                                        events: {
+                                            load: function(event) {
+                                                amplify.publish('fx.browse.chart.faosector.loaded', this);
+                                            }
+                                        }
                                     },
-
+                                    subtitle: {
+                                        text: 'Click and drag on chart to zoom',
+                                        style: {
+                                            fontStyle: 'italic'
+                                        }
+                                    },
+                                    credits: {
+                                        enabled: true,
+                                        text: 'Source: OECD',
+                                        href: ''
+                                    },
+                                    lang: {
+                                        doptions: "Chart Download options"
+                                    },
+                                    exporting:{
+                                        buttons: {
+                                            contextButton: {
+                                                _titleKey:"doptions",
+                                                text: 'Download'
+                                            }
+                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
+                                        },
+                                        chartOptions:{
+                                            subtitle: {
+                                                text: ''
+                                            },
+                                            legend:{
+                                                enabled:true,
+                                                title: {
+                                                    text: ''
+                                                }
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        title: {
+                                            text: 'Click to hide/show',
+                                            style: {
+                                                fontStyle: 'italic'
+                                            }
+                                        }
+                                    },
                                     xAxis : {
                                         type: 'datetime'
                                     },
-                                    subtitle: {
-                                        text: ''
-                                    },
+
                                     tooltip: {
                                         formatter: function(){
                                             return '<b>' +this.x + ': ' +
@@ -353,8 +397,58 @@ define(function () {
                                         type: "column"
                                     },
                                     subtitle: {
-                                        text: ''
+                                        text: 'Click and drag on chart to zoom',
+                                        style: {
+                                            fontStyle: 'italic'
+                                        }
                                     },
+                                    credits: {
+                                        enabled: true,
+                                        text: 'Source: OECD',
+                                        href: ''
+                                    },
+                                    lang: {
+                                        doptions: "Chart Download options"
+                                    },
+                                    exporting:{
+                                        buttons: {
+                                            contextButton: {
+                                                _titleKey: "doptions",
+                                                text: 'Download'
+                                            }
+                                        },
+                                        chartOptions:{
+                                            subtitle: {
+                                                text: ''
+                                            },
+                                            legend:{
+                                                enabled:false
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        title: {
+                                            text: 'Click to hide/show',
+                                            style: {
+                                                fontStyle: 'italic'
+                                            }
+                                        }
+                                    },
+
+                                   // plotOptions : {
+                                       // series : {
+                                           // showCheckbox: true,
+                                           // events: {
+                                                //checkboxClick: function (event) {
+                                                   // if (event.checked) {
+                                                      //  this.show();
+                                                   // } else {
+                                                    //    this.hide();
+                                                   // }
+                                               // }
+                                            //}
+                                       // }
+                                   // },
                                     tooltip: {
                                         formatter: function(){
                                             return '<b>' +this.x + ': ' + '</b><br/>' +
@@ -467,7 +561,10 @@ define(function () {
                                     },
 
                                     subtitle: {
-                                        text: ''
+                                        text: 'Click and drag on chart to zoom',
+                                        style: {
+                                            fontStyle: 'italic'
+                                        }
                                     },
                                     plotOptions: {
                                         series: {
@@ -476,14 +573,37 @@ define(function () {
                                             }
                                         }
                                     },
-                                    exporting: {
+                                    credits: {
+                                        enabled: true,
+                                        text: 'Source: OECD',
+                                        href: ''
+                                    },
+                                    lang: {
+                                        doptions: "Chart Download options"
+                                    },
+                                    exporting:{
+                                        buttons: {
+                                            contextButton: {
+                                                _titleKey: "doptions",
+                                                text: 'Download'
+                                            }
+                                        },
                                         chartOptions: {
+                                            subtitle: {
+                                                text: '',
+                                            },
                                             legend: {
                                                 enabled: false
                                             }
                                         }
                                     },
                                     legend: {
+                                        title: {
+                                            text: 'Click to hide/show',
+                                            style: {
+                                                fontStyle: 'italic'
+                                            }
+                                        },
                                         itemStyle: {
                                             width: 250
                                         }
@@ -609,7 +729,10 @@ define(function () {
                                         type: 'pie'
                                     },
                                     subtitle: {
-                                        text: ''
+                                        text: 'Click and drag on chart to zoom',
+                                        style: {
+                                            fontStyle: 'italic'
+                                        }
                                     },
                                     title: {
                                         //text: 'Browser market shares January, 2015 to May, 2015'
@@ -619,12 +742,35 @@ define(function () {
                                         pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>'
                                     },
                                     legend: {
+                                        title: {
+                                            text: 'Click to hide/show',
+                                            style: {
+                                                fontStyle: 'italic'
+                                            }
+                                        },
                                         itemStyle: {
                                             width: 250
                                         }
                                     },
-                                    exporting: {
+                                    credits: {
+                                        enabled: true,
+                                        text: 'Source: OECD',
+                                        href: ''
+                                    },
+                                    lang: {
+                                        doptions: "Chart Download options"
+                                    },
+                                    exporting:{
+                                        buttons: {
+                                            contextButton: {
+                                                _titleKey: "doptions",
+                                                text: 'Download'
+                                            }
+                                        },
                                         chartOptions: {
+                                            subtitle: {
+                                                text: '',
+                                            },
                                             legend: {
                                                 enabled: false
                                             },
@@ -769,11 +915,47 @@ define(function () {
                                             }
                                         }
                                     },
+                                    credits: {
+                                        enabled: true,
+                                        text: 'Source: OECD',
+                                        href: ''
+                                    },
+                                    lang: {
+                                        doptions: "Chart Download options"
+                                    },
+                                    exporting:{
+                                        buttons: {
+                                            contextButton: {
+                                                _titleKey: "doptions",
+                                                text: 'Download'
+                                            }
+                                        },
+                                        chartOptions:{
+                                            subtitle: {
+                                                text: '',
+                                            },
+                                            legend:{
+                                                enabled:true,
+                                                title: {
+                                                    text: ''
+                                                }
+                                            }
+                                        }
+                                    },
                                     legend: {
-                                        reversed: true
+                                        reversed: true,
+                                        title: {
+                                           text: 'Click to hide/show',
+                                           style: {
+                                                fontStyle: 'italic'
+                                           }
+                                        }
                                     },
                                     subtitle: {
-                                        text: ''
+                                        text: 'Click and drag on chart to zoom',
+                                        style: {
+                                            fontStyle: 'italic'
+                                        }
                                     },
                                     yAxis: {
                                       title: {
