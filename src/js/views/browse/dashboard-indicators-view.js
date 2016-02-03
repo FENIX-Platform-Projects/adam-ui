@@ -35,11 +35,28 @@ define([
         // In the end you might want to used precompiled templates.
         template: template,
 
+        events: {
+            'click .footnote-anchor': 'anchor'
+        },
+
         initialize: function (params) {
             this.topic = params.topic
 
             View.prototype.initialize.call(this, arguments);
         },
+
+       anchor: function(e) {
+
+          e.preventDefault();
+          e.stopPropagation();
+
+           var nameLink = e.currentTarget.name;
+
+           $('html, body').animate({
+            scrollTop: $('#'+nameLink).offset().top
+           }, 2000);
+
+       },
 
         attach: function () {
 
@@ -115,8 +132,10 @@ define([
 
         _showCountryIndicators: function (payload) {
 
-            var data = this._processData(payload.model.data);
+            var metadata = payload.model.metadata.dsd.columns;
+            var data = this._processData(payload.model.data, metadata);
 
+           //console.log(payload);
 
            this.indicatortemplate = Handlebars.compile(indicatorsTemplate);
            var html = this.indicatortemplate({data: data});
@@ -125,14 +144,18 @@ define([
 
         },
 
-        _processData: function (data, indicatorIndex, sourceIndex) {
 
+        _processData: function (data, metadata) {
+
+            var valueIndex = this._findIndexForPropValue(metadata, "id", "value"),
+                indicatorIndex = this._findIndexForPropValue(metadata, "id", "projecttitle"),
+                sourceIndex = this._findIndexForPropValue(metadata, "id", "year"),
+                noteIndex = this._findIndexForPropValue(metadata, "id", "purposecode"),
+                periodIndex = this._findIndexForPropValue(metadata, "id", "year");
 
             var newdata = {};
             var indicators = [];
             var footnote = [];
-
-            var valueIndex = 1, indicatorIndex = 2,sourceIndex = 0, noteIndex = 3, periodIndex = 0;
 
             var results = [], results2 = [], count = 1;
             for (var i = 0, len = data.length; i < len; ++i) {
@@ -142,7 +165,6 @@ define([
                 indicatorObj.period = data[i][periodIndex];
                 indicatorObj.source = data[i][sourceIndex];
                 indicatorObj.note = data[i][noteIndex];
-
 
                 if ($.inArray(indicatorObj.source+indicatorObj.note, results) < 0) {
                     var sourceObj =  {};
@@ -171,9 +193,24 @@ define([
             newdata.indicators = indicators;
             newdata.footnotes = footnote;
 
-           // console.log(newdata.indicators);
-            //console.log(newdata.footnotes);
+            //console.log(newdata.indicators);
+           // console.log(newdata.footnotes);
             return newdata;
+        },
+
+        _findIndexForPropValue: function (columns, prop, value) {
+
+           var valueIdx = -1;
+
+           for (var i = 0, len = columns.length; i < len; ++i) {
+                var obj = columns[i];
+                if(obj[prop] === value){
+                    valueIdx = i;
+                    break;
+                }
+           }
+
+            return valueIdx;
         },
 
         dispose: function () {
