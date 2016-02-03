@@ -48,6 +48,17 @@ define([
         return out;
     });
 
+    Handlebars.registerHelper('divideBy12', function(size) {
+        var modulus = 12 % size;
+
+       if(modulus == 0){
+           return 12 / size;
+        }
+       else {
+            return Math.floor(12 / size); // round down
+        }
+    });
+
     Handlebars.registerHelper('i18n', function (keyword) {
 
         var lang = requirejs.s.contexts._.config.i18n.locale;
