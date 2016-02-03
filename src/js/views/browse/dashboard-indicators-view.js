@@ -19,7 +19,7 @@ define([
             INDICATORS_DASHBOARD_BROWSE_CONTAINER: '#dashboard-indicators-container'
         },
         events: {
-            CUSTOM_ITEM_RESPONSE: 'fx.dashboard.custom.item.response'
+            CUSTOM_ITEM_COUNTRY_RESPONSE: 'fx.dashboard.custom.item.response.country-indicator-1'
         }
     };
 
@@ -102,18 +102,18 @@ define([
 
         _bindEventListeners: function () {
             // Add List Change listeners
-            amplify.subscribe(s.events.CUSTOM_ITEM_RESPONSE, this, this._showIndicators);
+            amplify.subscribe(s.events.CUSTOM_ITEM_COUNTRY_RESPONSE, this, this._showCountryIndicators);
         },
 
 
 
         _unbindEventListeners: function () {
             // Remove listeners
-            amplify.unsubscribe(s.events.CUSTOM_ITEM_RESPONSE, this._showIndicators);
+            amplify.unsubscribe(s.events.CUSTOM_ITEM_COUNTRY_RESPONSE, this._showCountryIndicators);
         },
 
 
-        _showIndicators: function (payload) {
+        _showCountryIndicators: function (payload) {
 
             var data = this._processData(payload.model.data);
 
@@ -127,11 +127,12 @@ define([
 
         _processData: function (data, indicatorIndex, sourceIndex) {
 
+
             var newdata = {};
             var indicators = [];
             var footnote = [];
 
-            var valueIndex = 1, indicatorIndex = 2,sourceIndex = 0, periodIndex = 0;
+            var valueIndex = 1, indicatorIndex = 2,sourceIndex = 0, noteIndex = 3, periodIndex = 0;
 
             var results = [], results2 = [], count = 1;
             for (var i = 0, len = data.length; i < len; ++i) {
@@ -140,20 +141,26 @@ define([
                 indicatorObj.value = data[i][valueIndex];
                 indicatorObj.period = data[i][periodIndex];
                 indicatorObj.source = data[i][sourceIndex];
+                indicatorObj.note = data[i][noteIndex];
 
 
-
-                if ($.inArray(indicatorObj.source, results) < 0) {
+                if ($.inArray(indicatorObj.source+indicatorObj.note, results) < 0) {
                     var sourceObj =  {};
                     indicatorObj.footnote = count;
-                    sourceObj.source = indicatorObj.source;
+                    sourceObj.sourceid = indicatorObj.source+indicatorObj.note;
+
+                    if(indicatorObj.source.length === 0)
+                        sourceObj.source = indicatorObj.note;
+                    else
+                        sourceObj.source = indicatorObj.source + ": " +indicatorObj.note;
+
                     sourceObj.footnote = count;
 
-                    results.push(indicatorObj.source);
+                    results.push(indicatorObj.source+indicatorObj.note);
                     footnote.push(sourceObj);
                     count ++;
                 } else {
-                    var result = _.findWhere(footnote, {source: indicatorObj.source});
+                    var result = _.findWhere(footnote, {sourceid: indicatorObj.source+indicatorObj.note});
 
                     indicatorObj.footnote = result.footnote;
                 }
@@ -164,6 +171,8 @@ define([
             newdata.indicators = indicators;
             newdata.footnotes = footnote;
 
+           // console.log(newdata.indicators);
+            //console.log(newdata.footnotes);
             return newdata;
         },
 
