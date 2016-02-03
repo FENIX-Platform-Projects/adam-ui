@@ -35,15 +35,7 @@ define(function () {
                         container: "#indicator-1",
                         config: {
                             container: "#indicator-1",
-                            options: {
-                                "columns_order": ["projecttitle", "year", "value"]
-                            }
-
-                            //  options: {
-                            //  hidden_columns: ["GenderCode",
-                            //      "AgeRangeCode"
-                            //  ]
-                            // }
+                            eventId: "country-indicator-1"
                         },
                         // for now it takes the id, TODO: add uid as well
                         allowedFilter: [],
@@ -92,7 +84,7 @@ define(function () {
                                             ]
                                         }
                                     },
-                                    "columns": ["year", "value", "projecttitle"] // DSD Order
+                                    "columns": ["year", "value", "projecttitle", "purposecode"] // DSD Order
                                 }
                             }
                         ]
