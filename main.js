@@ -18,18 +18,19 @@ require.config({
             }
         }
     },
-    paths : {
-        compilerPaths : pathProjectRoot + '/submodules/fenix-ui-common/js/Compiler',
+    paths: {
+        compilerPaths: pathProjectRoot + '/submodules/fenix-ui-common/js/Compiler',
         //compilerPaths : './submodules/fenix-ui-common/js/Compiler',
-        commonPaths : pathProjectRoot + '/submodules/fenix-ui-common/js/paths',
+        commonPaths: pathProjectRoot + '/submodules/fenix-ui-common/js/paths',
         menuPaths: pathProjectRoot + '/submodules/fenix-ui-menu/js/paths',
-        dashboardPaths :pathProjectRoot + '/submodules/fenix-ui-dashboard/src/js/paths',
-        chartPaths :pathProjectRoot + '/submodules/fenix-ui-chart-creator/src/js/paths',
-        mapPaths :pathProjectRoot + '/submodules/fenix-ui-map-creator/src/js/paths',
-        tablePaths : pathProjectRoot + '/submodules/fenix-ui-table-creator/src/js/paths',
-        filterPaths :pathProjectRoot + '/submodules/fenix-ui-filter/src/js/paths',
-		 olapPaths :pathProjectRoot + '/submodules/fenix-ui-olap/js/paths',
-		}
+        dashboardPaths: pathProjectRoot + '/submodules/fenix-ui-dashboard/src/js/paths',
+        chartPaths: pathProjectRoot + '/submodules/fenix-ui-chart-creator/src/js/paths',
+        mapPaths: pathProjectRoot + '/submodules/fenix-ui-map-creator/src/js/paths',
+        tablePaths: pathProjectRoot + '/submodules/fenix-ui-table-creator/src/js/paths',
+        filterPaths: pathProjectRoot + '/submodules/fenix-ui-filter/src/js/paths',
+        olapPaths: pathProjectRoot + '/submodules/fenix-ui-olap/js/paths',
+        reportPaths: pathProjectRoot + '/submodules/fenix-ui-reports/src/js/paths'
+    }
 });
 
 require([
@@ -41,8 +42,9 @@ require([
     "mapPaths",
     "tablePaths",
     "filterPaths",
-	'olapPaths'
-	], function (Compiler, Common, Menu, Dashboard, Chart, Map, Table, Filter,Olap) {
+    'olapPaths',
+    "reportPaths"
+], function (Compiler, Common, Menu, Dashboard, Chart, Map, Table, Filter, Olap, Reports) {
 
     'use strict';
     var submodules_path = projectRoot + '/submodules';
@@ -67,11 +69,14 @@ require([
 
     var filterConfig = Filter;
     filterConfig.baseUrl = submodules_path + '/fenix-ui-filter/';
-  
-  var olapConfig = Olap;
+
+    var olapConfig = Olap;
     olapConfig.baseUrl = submodules_path + '/fenix-ui-olap/js';
 
-    Compiler.resolve([commonConfig, menuConfig, dashboardConfig, chartConfig, tableConfig, mapConfig, filterConfig,olapConfig],
+    var reoprtsConfig = Reports;
+    reoprtsConfig.baseUrl = submodules_path + '/fenix-ui-reports/src/js';
+
+    Compiler.resolve([commonConfig, menuConfig, dashboardConfig, chartConfig, tableConfig, mapConfig, filterConfig, olapConfig, reoprtsConfig],
         {
             placeholders: {
                 "FENIX_CDN": "http://www.fao.org/fenixrepo/cdn"
@@ -103,45 +108,45 @@ require([
                     i18n: "{FENIX_CDN}/js/requirejs/plugins/i18n/2.0.4/i18n",
                     text: '{FENIX_CDN}/js/requirejs/plugins/text/2.0.12/text',
                     rsvp: '{FENIX_CDN}/js/rsvp/3.0.17/rsvp',
-                    select2 : '{FENIX_CDN}/js/select2/3.5.4/select2.min',
-                    "bootstrap-list-filter" :'{FENIX_CDN}/js/bootstrap-list-filter/0.2.1/bootstrap-list-filter.min',
+                    select2: '{FENIX_CDN}/js/select2/3.5.4/select2.min',
+                    "bootstrap-list-filter": '{FENIX_CDN}/js/bootstrap-list-filter/0.2.1/bootstrap-list-filter.min',
 
                     amplify: '{FENIX_CDN}/js/amplify/1.1.2/amplify.min',
 
-                    'fx-c-c/config/creators/highcharts_template' : projectRoot + '/config/submodules/fx-chart/highcharts_template',
+                    'fx-c-c/config/creators/highcharts_template': projectRoot + '/config/submodules/fx-chart/highcharts_template',
 
-                    'fx-ds/config/config' : projectRoot + "/config/submodules/fx-dashboard/Config",
+                    'fx-ds/config/config': projectRoot + "/config/submodules/fx-dashboard/Config",
 
-                    'fenix-ui-map' : projectRoot + '/submodules/fenix-ui-map/dist/fenix-ui-map.src',
-                    'fenix-ui-map-config' : projectRoot + '/config/submodules/fx-map/Config' ,
+                    'fenix-ui-map': projectRoot + '/submodules/fenix-ui-map/dist/fenix-ui-map.src',
+                    'fenix-ui-map-config': projectRoot + '/config/submodules/fx-map/Config',
 
-                    'fx-m-c/config/config' : projectRoot + '/config/submodules/fx-chart-creator/Config' ,
+                    'fx-m-c/config/config': projectRoot + '/config/submodules/fx-chart-creator/Config',
 
-                    'fx-filter/config/config' : projectRoot + '/config/submodules/fx-filter/Config' ,
+                    'fx-filter/config/config': projectRoot + '/config/submodules/fx-filter/Config',
 
                     nls: projectRoot + "/i18n",
                     config: projectRoot + "/config",
                     json: projectRoot + "/json",
 
-                    'fx-common/config/auth_users' :  projectRoot + '/config/auth_users.json',
-					
+                    'fx-common/config/auth_users': projectRoot + '/config/auth_users.json',
+
 
                     //OLAP DEPS
-					pivot:      "../../submodules/fenix-ui-olap/js/pivot",
-				gt_msg:     "../../submodules/fenix-ui-olap/lib/grid/gt_msg_en",					
-					jqueryui:   "../../submodules/fenix-ui-olap/lib/jquery-ui-1.9.2.custom.min",
-					gt_msg_grid:"../../submodules/fenix-ui-olap/lib/grid/gt_grid_all",
-					HPivot:     "//fenixapps.fao.org/repository/js/jbpivot/0.1.0-olap/jbpivot.min",
-					highcharts: "//fenixapps.fao.org/repository/js/highcharts/4.0.4/js/highcharts",					
+                    pivot: "../../submodules/fenix-ui-olap/js/pivot",
+                    gt_msg: "../../submodules/fenix-ui-olap/lib/grid/gt_msg_en",
+                    jqueryui: "../../submodules/fenix-ui-olap/lib/jquery-ui-1.9.2.custom.min",
+                    gt_msg_grid: "../../submodules/fenix-ui-olap/lib/grid/gt_grid_all",
+                    HPivot: "//fenixapps.fao.org/repository/js/jbpivot/0.1.0-olap/jbpivot.min",
+                    highcharts: "//fenixapps.fao.org/repository/js/highcharts/4.0.4/js/highcharts",
 
-				"nls/pivot":  "../../i18n/pivot",
+                    "nls/pivot": "../../i18n/pivot",
 
-					pivotRenderersFuncs:   "../../submodules/fenix-ui-olap/js/rend/function_rendererers",
-					pivotRenderers:        "../../submodules/fenix-ui-olap/js/rend/rendererers",
-					pivotAggregatorsFuncs: "../../submodules/fenix-ui-olap/js/rend/function_aggregators",
-					pivotAggregators:      "../../submodules/fenix-ui-olap/js/rend/aggregators",
-					pivotDataConfig:         '../../config/submodules/fx-olap/dataConfig',
-					pivotDataTest:       '../../submodules/fenix-ui-olap/tests/data/test.json',
+                    pivotRenderersFuncs: "../../submodules/fenix-ui-olap/js/rend/function_rendererers",
+                    pivotRenderers: "../../submodules/fenix-ui-olap/js/rend/rendererers",
+                    pivotAggregatorsFuncs: "../../submodules/fenix-ui-olap/js/rend/function_aggregators",
+                    pivotAggregators: "../../submodules/fenix-ui-olap/js/rend/aggregators",
+                    pivotDataConfig: '../../config/submodules/fx-olap/dataConfig',
+                    pivotDataTest: '../../submodules/fenix-ui-olap/tests/data/test.json',
                     'fx-olap/config/gridoption': '../../config/submodules/fx-olap/gridoption',
 
                 },
@@ -166,28 +171,28 @@ require([
                         exports: 'Handlebars'
                     }
                 }
-				
-				,
-				//OLAP DEP
-				jqueryui: ['jquery'],
-					highcharts:  ['jquery'],
-					gt_msg:      ['jquery'],
-					gt_msg_grid: ['jquery','gt_msg'],
-					pivotRenderers: ['pivotRenderersFuncs'],	
-					pivotAggregators: ['pivotAggregatorsFuncs','jquery'],			
-					pivot: {
-					    deps: [
-					        'jquery',
-					        'jqueryui',
-							'gt_msg','gt_msg_grid',
-							'HPivot',
-							'pivotRenderers',
-							'nls/pivot'
-					    ]
-					},
-					HPivot: ['jquery','jqueryui']                    
-				
-				/*,
+
+                ,
+                //OLAP DEP
+                jqueryui: ['jquery'],
+                highcharts: ['jquery'],
+                gt_msg: ['jquery'],
+                gt_msg_grid: ['jquery', 'gt_msg'],
+                pivotRenderers: ['pivotRenderersFuncs'],
+                pivotAggregators: ['pivotAggregatorsFuncs', 'jquery'],
+                pivot: {
+                    deps: [
+                        'jquery',
+                        'jqueryui',
+                        'gt_msg', 'gt_msg_grid',
+                        'HPivot',
+                        'pivotRenderers',
+                        'nls/pivot'
+                    ]
+                },
+                HPivot: ['jquery', 'jqueryui']
+
+                /*,
                  map: {
                  // '*' means all modules will get 'jquery-private'
                  // for their 'jquery' dependency.

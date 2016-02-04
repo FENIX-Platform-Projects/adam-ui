@@ -13923,6 +13923,8 @@ footer h4 {
     display: block; }
   .fx-result[data-status="loading"] [data-content="loading"] {
     display: block; }
+  .fx-result[data-status="empty"] [data-content="empty"] {
+    display: block; }
 
 /* FINE DANI*/
 [data-container="chart"] [data-role="content"] {

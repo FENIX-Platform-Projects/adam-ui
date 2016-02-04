@@ -30,6 +30,7 @@ define([
         TAB: ".tab-container [data-visualization]",
         REMOVE_BTN: "[data-control='remove']",
         RELOAD_BTN: "[data-control='reload']",
+        DOWNLOAD_BTN: "[data-control='download']",
         TABLE_CONTAINER: "[data-content='ready'] [data-visualization='table'] [data-container='table']",
         CHART_CONTAINER: "[data-content='ready'] [data-visualization='chart'] [data-container='chart']"
     };
@@ -76,12 +77,27 @@ define([
 
         },
 
+        _getInfoLabels: function (selection) {
+
+            var result = {},
+                labels = $.extend(true, {}, selection.labels);
+
+            for (var k in labels) {
+                if (labels.hasOwnProperty(k)) {
+                    result['info_' + k] = Array.isArray(labels[k]) ? labels[k].join(", ") : labels[k]
+
+                }
+            }
+
+            return result;
+        },
+
         add: function (obj) {
             log.info("Add result:");
             log.info(obj);
 
             var template = Handlebars.compile(resultTemplate),
-                $li = $(template($.extend(true, {}, i18nLabels, obj.request.selection.labels, obj))),
+                $li = $(template($.extend(true, {}, i18nLabels, obj.request.selection.labels, obj, this._getInfoLabels(obj.request.selection)))),
                 o = $.extend(true, obj, {$el: $li});
 
             this._bindObjEventListeners(o);
@@ -101,9 +117,17 @@ define([
             log.info("Render result:");
             log.info(obj);
 
-            this._setStatus(obj, "ready");
+            if (!obj.model || !obj.model.data) {
 
-            this._renderObj(obj);
+                this._setStatus(obj, "empty");
+
+            } else {
+
+                this._setStatus(obj, "ready");
+
+                this._renderObj(obj);
+
+            }
         },
 
         _renderObj: function (obj) {
@@ -139,6 +163,8 @@ define([
 
             $el.find(s.RELOAD_BTN).on('click', _.bind(this._onReloadClick, this, obj));
 
+            $el.find(s.DOWNLOAD_BTN).on('click', _.bind(this._onDownloadClick, this, obj));
+
         },
 
         _setStatus: function (obj, status) {
@@ -152,12 +178,10 @@ define([
         _onSwitchChange: function (obj, e) {
             log.info("Change visualization for result id: " + obj.id);
 
-            obj.tab = $(e.target).attr("data-visualization"); // newly activated tab
-            obj.previousTab = $(e.relatedTarget).attr("data-visualization"); // previous active tab
+            var currentTab = $(e.target).attr("data-visualization"), // newly activated tab
+                previousTab = $(e.relatedTarget).attr("data-visualization"); // previous active tab
 
-            log.info("Show tab: " + obj.tab);
-
-            this._onTabChange(obj);
+            this._onTabChange(obj, currentTab, previousTab);
         },
 
         _onRemoveItem: function (obj) {
@@ -172,6 +196,41 @@ define([
             amplify.publish(E.RELOAD_RESULT, obj);
         },
 
+        _onDownloadClick: function (obj) {
+            log.info("Downloading result id: " + obj.id);
+
+            if (obj.ready === true && obj.model && obj.model.metadata && obj.model.metadata.uid) {
+
+                var fileName = "adma_download_"+ obj.id ;
+
+                fileName = fileName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+
+                log.info("File name: " + fileName);
+
+                log.info("Check if 'table' tab is ready");
+
+                if (!obj.tabs.hasOwnProperty('table') || obj.tabs.table.ready !== true) {
+                    log.info("'table' tab was not ready.");
+
+                    this._initTab(obj, 'table');
+                }
+
+                var tableObj = obj.tabs.table;
+
+                if (tableObj.hasOwnProperty('creator') && $.isFunction(tableObj.creator.exportExcel)) {
+
+                    tableObj.creator.exportExcel(fileName);
+                    //pivot.exportCSV(fileName);
+                } else {
+                    log.warn("Impossible to download file: export function not found")
+                }
+
+            } else {
+                log.warn('Impossible to download: resource is not in "ready" state or resource does not contain the model.uid.');
+            }
+
+        },
+
         _unbindObjEventListeners: function (obj) {
 
             var $el = obj.$el;
@@ -180,37 +239,54 @@ define([
 
             $el.find(s.REMOVE_BTN).off();
 
+            $el.find(s.DOWNLOAD_BTN).off();
+
         },
 
-        _onTabChange: function (obj) {
+        _onTabChange: function (obj, currentTab, previousTab) {
 
-            if (obj.status !== 'ready') {
+            obj.tab = currentTab;
+            obj.previousTab = previousTab;
+
+            log.info("Show tab: " + obj.tab);
+
+            if (obj.ready !== true && obj.ready !== 'ready') {
                 log.warn("Obj does not have a 'ready' state. State found: '" + obj.status + "'");
                 return;
             }
 
-            if (obj.status === 'ready' && obj.tabs.hasOwnProperty(obj.tab) && obj.tabs[obj.tab].ready === true) {
+            if (obj.ready === true && obj.status === 'ready' && obj.tabs.hasOwnProperty(obj.tab) && obj.tabs[obj.tab].ready === true) {
                 log.info("Tab '" + obj.tab + "' already initialized");
                 return;
             }
 
-            log.info("Initializing tab '" + obj.tab + "'");
+            this._initTab(obj, obj.tab);
 
-            //Init tab status
-            obj.tabs[obj.tab] = {
-                ready: true
-            };
+        },
+
+        _initTab: function (obj, tab) {
 
             //tab callback
-            if ($.isFunction(this["_tab_" + obj.tab])) {
+            if ($.isFunction(this["_tab_" + tab])) {
 
-                log.info("Invoking '" + obj.tab + "' tab callback");
+                log.info("Initializing tab '" + tab + "'");
 
-                this["_tab_" + obj.tab].call(this, obj);
+                obj.tabs[tab] = {};
+
+                log.info("Invoking '" + tab + "' tab callback");
+
+                this["_tab_" + tab].call(this, obj);
+
+                //Init tab status
+                obj.tabs[tab] = $.extend(true, obj.tabs[tab], {
+                    ready: true
+                });
+
+                log.info("Initialized tab '" + tab + "'");
 
             } else {
 
-                log.info("Callback for '" + obj.tab + "' tab not found");
+                log.info("Callback for '" + tab + "' tab not found");
             }
 
         },
@@ -220,7 +296,7 @@ define([
         _tab_chart: function (obj) {
             log.info("'Chart' callback");
 
-            var status = obj.tabs[obj.tab];
+            var status = obj.tabs['chart'];
 
             status.creator = new ChartCreator();
 
@@ -242,6 +318,12 @@ define([
                             chart: {
                                 type: 'line'
                             },
+                            title: {
+                                text: '' //Edit title here
+                            },
+                            subtitle: {
+                                text: '' //
+                            },
                             plotOptions: {
                                 column: {
                                     stacking: 'normal'
@@ -259,23 +341,29 @@ define([
 
         _tab_table: function (obj) {
             log.info("'Table' callback");
-            var pp = new Pivot();
-            pivotDataConfig = _.extend(pivotDataConfig, {
+
+            var status = obj.tabs['table'];
+
+            status.creator = new Pivot();
+
+            status.configuration = _.extend(pivotDataConfig, {
                 rendererDisplay: pivotRenderers,
+                aggregatorDisplay: pivotAggregators,
                 onDataLoaded: function () {
-                    console.log('onDataLoaded')
+                    log.info('OLAP: data loaded')
                 }
             });
 
-            pivotDataConfig = _.extend(pivotDataConfig, {aggregatorDisplay: pivotAggregators});
-
-            pp.renderD3S({
+            status.creator.renderD3S({
                 container: "fx-tab-table-container-" + obj.id,
                 model: obj.model,
-                inputOpts: pivotDataConfig
+                inputOpts: status.configuration
             });
 
+        },
 
+        _tab_info: function (obj) {
+            log.info("'Info' callback");
         },
 
         // end tab callback
@@ -323,7 +411,6 @@ define([
         reset: function () {
 
             this._emptyResults();
-
 
             log.info("Results reset");
         },
@@ -380,7 +467,7 @@ define([
 
             return sels;
 
-        },
+        }
 
     });
 

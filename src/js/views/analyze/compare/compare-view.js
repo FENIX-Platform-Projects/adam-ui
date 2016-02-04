@@ -404,12 +404,13 @@ define([
         },
 
         _onPromiseSuccess: function (obj, result) {
-
             log.info("Request success: [obj/result]");
             log.info(obj);
             log.info(result);
 
             obj.model = result;
+
+            obj.ready = true;
 
             this.subview('results').renderObj(obj);
 
@@ -646,10 +647,18 @@ define([
 
             this.currentRequest.selectionValues = selectionValues;
 
-            //create combination of the dynamic values
+            //Check that selectionValues is Array of Array
+            if (Array.isArray(this.currentRequest.selectionValues) && this.currentRequest.selectionValues.every(function (element) {return Array.isArray(element);})) {
 
-            //TODO check that selectionValues is Array of Array
-            this.currentRequest.valuesCombinations = this._cartesian(this.currentRequest.selectionValues);
+                //create combination of the dynamic values
+                this.currentRequest.valuesCombinations = this._cartesian(this.currentRequest.selectionValues);
+
+            } else {
+
+                log.warn("The selection model is not an array of array! Selection is set to null");
+                log.warn(this.currentRequest);
+                return [];
+            }
 
             this.dynamicFiltersModels = [];
 

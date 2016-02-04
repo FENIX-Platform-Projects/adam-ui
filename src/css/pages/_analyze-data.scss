@@ -222,7 +222,7 @@
   }
 
   //show only the status only correspondent tab content
-  $statuses: "ready" "error" "loading";
+  $statuses: "ready" "error" "loading" "empty";
 
   @each $status in $statuses {
 
