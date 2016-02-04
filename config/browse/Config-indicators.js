@@ -10,7 +10,7 @@ define(function () {
 
             dashboard: {
                 //data cube's uid
-                uid: "adam_usd_commitment",
+                uid: "adam_country_indicators",
 
                 //data base filter
                 filter: [],
@@ -35,7 +35,8 @@ define(function () {
                         container: "#indicator-1",
                         config: {
                             container: "#indicator-1",
-                            eventId: "country-indicator-1"
+                            eventId: "country-indicator-1",
+                            order: ["period", "value", "indicatorcode", "source", "note"]
                         },
                         // for now it takes the id, TODO: add uid as well
                         allowedFilter: [],
@@ -44,47 +45,25 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "flowcode": {
+                                        "countrycode": {
                                             "codes": [
                                                 {
-                                                    "uid": "crs_flow_types",
-                                                    "version": "2015",
-                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"]
-                                                }
-                                            ]
-                                        },
-                                        "sectorcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_sectors",
-                                                    "version": "2015",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                        "recipientcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_recipients",
+                                                    "uid": "crs_recipientdonors",
                                                     "version": "2015",
                                                     "codes": [
                                                         "625"  //Afghanistan
                                                     ]
                                                 }
                                             ]
-                                        },
-                                        "year": {
-                                            "time": [
-                                                {
-                                                    "from": 2000,
-                                                    "to": 2013
-                                                }
-                                            ]
                                         }
                                     },
-                                    "columns": ["year", "value", "projecttitle", "purposecode"] // DSD Order
+                                    "columns": ["period", "value", "indicatorcode", "source", "note"]
+                                }
+                            },
+                            {
+                                "name": "order",
+                                "parameters": {
+                                    "indicatorcode": "ASC"
                                 }
                             }
                         ]
