@@ -3,15 +3,15 @@
         <div class="row">
             {{#each this }}
                   <div class="col-sm-4 adam-entry-point-content">
-                     <div class="col-sm-8"><p>{{this.name}} ({{this.period}}) <a href="#" name="{{this.footnote}}" class="footnote-anchor"><sup>{{this.footnote}}</sup></a></p></div>
-                     <div class="col-sm-4"><p>{{decimal this.value}}</p></div>
+                     <div class="col-sm-8"><p>{{this.name}} ({{this.period}}) <a href="#" name="{{this.footnote}}" class="anchor"><sup>{{this.footnote}}</sup></a></p></div>
+                     <div class="col-sm-4"><p>{{commaSeparator this.value}}</p></div>
                   </div>
             {{/each}}
         </div>
          {{/grouped_each}}
 
          <div class="row">
-            <div><p>Source:</p></div>
+            <div><p>{{data.source}}:</p></div>
           </div>
            <div class="row">
            {{#each data.footnotes}}

@@ -29,12 +29,16 @@ define([
         codeLists: {
             SECTORS: {uid: 'crs_sectors', version: '2015'},
             SUB_SECTORS: {uid: 'crs_purposes', version: '2015'},
-            CHANNELS: {uid: 'crs_channel', version: '2015'}
+            CHANNELS: {uid: 'crs_channel', version: '2015'},
+            RECIPIENT_DONORS: {uid: 'crs_recipientdonors', version: '2015'}
         },
         ids: {
             SECTORS: 'sectorcode',
             SUB_SECTORS: 'purposecode',
-            CHANNELS: 'channelcode'
+            CHANNELS: 'channelcode',
+            COUNTRY: 'countrycode',
+            DONOR: 'donorcode',
+            RECIPIENT_COUNTRY: 'recipientcode'
         },
         values: {
             FAO_SECTORS: '9999'
@@ -103,8 +107,10 @@ define([
             });
         },
 
-        getValues: function(){
-            var values = this.filter.getValues();
+
+       getOECDValues: function(){
+
+           var values = this.filter.getValues();
 
             var sectorSelected= this._hasSelections(s.ids.SECTORS, values);
             var subSectorSelected = this._hasSelections(s.ids.SUB_SECTORS, values);
@@ -126,7 +132,48 @@ define([
                 values['channelcode'].codes[0].uid = s.codeLists.CHANNELS.uid;
             }
 
-           return this._updateValues(values, subSectorSelected);
+            return this._updateValues(values, subSectorSelected);
+        },
+
+        getSelectedValues: function (filterId){
+            var values = this.filter.getValues();
+            var selectedValues = {};
+            var itemSelected= this._hasSelections(filterId, values);
+            if(itemSelected){
+                var filterObj = this._getObject(filterId, values);
+                selectedValues = this._getSelected(filterObj);
+            }
+
+            console.log(selectedValues);
+            return selectedValues;
+        },
+
+        getIndicatorsValues: function(){
+            var values = this.filter.getValues();
+
+            var donorSelected= this._hasSelections(s.ids.DONOR, values);
+            var cloneObj = this._getObject(s.ids.RECIPIENT_COUNTRY, values);
+
+            if(donorSelected)
+                cloneObj = this._getObject(s.ids.DONOR, values);
+
+            //======= UPDATE VALUES CONFIG
+            values[s.ids.COUNTRY] = {};
+            values[s.ids.COUNTRY].codes = [];
+            values[s.ids.COUNTRY].codes[0] = $.extend(true, {}, cloneObj); // clone the codes configuration
+            values[s.ids.COUNTRY].codes[0].uid = s.codeLists.RECIPIENT_DONORS.uid;
+            values[s.ids.COUNTRY].codes[0].version = s.codeLists.RECIPIENT_DONORS.version;
+
+
+            //======= Set everything in the values to be removed except the country
+            for(var filter in values) {
+                if(filter !== s.ids.COUNTRY){
+                    values[filter] = {};
+                    values[filter].removeFilter = true;
+                }
+            }
+
+            return values;
         },
 
         isFilterSelected: function(id){
@@ -266,6 +313,18 @@ define([
                     return data[id];
                 }
             }
+        },
+
+        _getSelected: function (o) {
+            var allChildren = _.flatten(_.pluck(o,'codes'));
+
+            var values = _.find(allChildren,function(child){
+                if(child) {
+                    return child.codes[0];
+                }
+            });
+
+            return values;
         },
 
         _containsValue: function (o, value) {
