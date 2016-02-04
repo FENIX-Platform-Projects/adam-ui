@@ -137,7 +137,7 @@ define(function () {
             "delivery": {
 
                 "cl": {
-                    "uid": "crs_channels",
+                    "uid": "crs_channel",
                     "version": "2015",
                     "level": 3,
                     "levels": 3
