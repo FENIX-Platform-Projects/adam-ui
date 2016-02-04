@@ -12,8 +12,6 @@ define([
     'config/analyze/compare/Config',
     'handlebars',
     'loglevel',
-    //TODO REMOVE ME
-    'text!../../../../../submodules/fenix-ui-chart-creator/tests/fenix/data/afo/scattered_data.json',
     /*OLAP*/
     'pivot',
     'pivotRenderers',
@@ -22,7 +20,7 @@ define([
     'pivotDataConfig',
     /*END OF OLAP*/
     'amplify'
-], function ($, _, ChartCreator, View, template, resultTemplate, i18nLabels, E, GC, AC, Handlebars, log, TEST_MODEL, Pivot, pivotRenderers, pivotAggregators, pivotDataTest, pivotDataConfig) {
+], function ($, _, ChartCreator, View, template, resultTemplate, i18nLabels, E, GC, AC, Handlebars, log, Pivot, pivotRenderers, pivotAggregators, pivotDataTest, pivotDataConfig) {
 
     'use strict';
 
@@ -51,9 +49,6 @@ define([
         },
 
         getTemplateData: function () {
-            console.log("------------------------------")
-            console.log(i18nLabels)
-
             return i18nLabels;
         },
 
@@ -276,7 +271,7 @@ define([
 
             pp.renderD3S({
                 container: "fx-tab-table-container-" + obj.id,
-                model: JSON.parse(TEST_MODEL),
+                model: obj.model,
                 inputOpts: pivotDataConfig
             });
 

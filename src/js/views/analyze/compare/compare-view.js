@@ -281,6 +281,8 @@ define([
 
         _onResultReload: function (obj) {
 
+            this._resetErrors();
+
             log.info("Reloading resource id: " + obj.id);
 
             return this._getResource(obj);
@@ -491,7 +493,7 @@ define([
                     s = f.dimension || "";
 
                 b.push({
-                    "name": "group",
+                    "name": "pggroup",
                     "parameters": {
                         "by": [
                             "year", s

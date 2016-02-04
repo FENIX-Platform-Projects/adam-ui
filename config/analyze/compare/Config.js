@@ -308,7 +308,7 @@ define(function () {
 
         "advancedOptionsSelector": ".advanced-option",
 
-        "showAdvancedOptions": false
+        "showAdvancedOptions": true
 
     }
 
