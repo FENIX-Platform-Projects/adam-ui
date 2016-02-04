@@ -70,6 +70,10 @@ define([
         return number.toFixed(2);
     });
 
+    Handlebars.registerHelper('commaSeparator', function(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    });
+
 
     utils.getLabel = function (obj) {
         return obj[requirejs.s.contexts._.config.i18n.locale.toUpperCase()];

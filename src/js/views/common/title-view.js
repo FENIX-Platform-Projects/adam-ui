@@ -5,7 +5,7 @@ define([
     'text!templates/common/title.hbs',
     'handlebars',
     'amplify'
-], function ($, View, template) {
+], function ($, View, template, Handlebars) {
 
     'use strict';
 
@@ -33,6 +33,8 @@ define([
 
         initialize: function () {
             View.prototype.initialize.call(this, arguments);
+
+            this.render();
         },
 
         attach: function () {
@@ -45,6 +47,17 @@ define([
 
         },
 
+        getTemplateFunction: function() {
+            var source = $(this.template).prop('outerHTML');
+            return Handlebars.compile(source);
+        },
+
+        render: function () {
+            this.setElement(this.container);
+
+            $(this.container).html(this.getTemplateFunction());
+        },
+
         show : function(){
             this._cleanUpDuplications();
 
@@ -52,6 +65,10 @@ define([
                 $(this).show();
             });
 
+        },
+
+        getItemText: function (modulename) {
+            return this._findListItem(modulename).text();
         },
 
         _cleanUpDuplications: function(){
@@ -83,7 +100,7 @@ define([
 
 
     _initVariables: function () {
-            this.$titleItemsList = this.$el.find(s.css_classes.TITLE_ITEMS_LIST);
+           this.$titleItemsList = this.container.find(s.css_classes.TITLE_ITEMS_LIST);
         },
 
         _bindEventListeners: function () {
