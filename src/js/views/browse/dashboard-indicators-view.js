@@ -7,10 +7,11 @@ define([
     'text!templates/browse/indicators.hbs',
     'fx-ds/start',
     'lib/utils',
+    'i18n!nls/browse',
     'handlebars',
     'lib/config-utils',
     'amplify'
-], function ($, _, View, template, indicatorsTemplate, Dashboard, Utils, Handlebars, ConfigUtils) {
+], function ($, _, View, template, indicatorsTemplate, Dashboard, Utils, i18nLabels, Handlebars, ConfigUtils) {
 
     'use strict';
 
@@ -36,27 +37,39 @@ define([
         template: template,
 
         events: {
-            'click .footnote-anchor': 'anchor'
+            'click .anchor': 'anchor'
         },
 
-        initialize: function (params) {
-            this.topic = params.topic
+        initialize: function () {
+            this.model.on("change", this.render, this);
+            this.model.on("change", this.render);
 
             View.prototype.initialize.call(this, arguments);
+
+            this.render();
+        },
+
+        getTemplateData: function () {
+            return i18nLabels;
         },
 
        anchor: function(e) {
+           e.preventDefault();
+           e.stopPropagation();
 
-          e.preventDefault();
-          e.stopPropagation();
+          var nameLink = e.currentTarget.name;
 
-           var nameLink = e.currentTarget.name;
-
-           $('html, body').animate({
-            scrollTop: $('#'+nameLink).offset().top
-           }, 2000);
+          $('html, body').animate({
+           scrollTop: $('#'+nameLink).offset().top
+          }, 2000);
 
        },
+
+        render: function () {
+            this.setElement(this.container);
+
+            $(this.el).html(this.getTemplateFunction());
+        },
 
         attach: function () {
 
@@ -69,8 +82,13 @@ define([
         },
 
         getTemplateFunction: function() {
-            var source = $(this.template).find("[data-topic='" + this.topic + "']");
-            return Handlebars.compile(source.prop('outerHTML'));
+            var source = $(this.template).find("[data-topic='" + this.model.toJSON().topic + "']").prop('outerHTML');
+            var template = Handlebars.compile(source);
+
+            var model = this.model.toJSON();
+            var data = $.extend(true, model, i18nLabels);
+
+            return template(data);
         },
 
         setDashboardConfig: function(config){
@@ -94,11 +112,6 @@ define([
             this.indicatorsDashboard.render(this.config);
         },
 
-        updateDashboardConfig: function(uid, sectorSelected, subSectorSelected){
-
-            this.config.uid = uid;
-
-        },
 
         rebuildDashboard: function (filter) {
 
@@ -113,7 +126,8 @@ define([
                 layout: "injected"
             });
 
-            this.indicatorsDashboard.rebuild(this.config, filter);
+
+           this.indicatorsDashboard.rebuild(this.config, filter);
         },
 
 
@@ -131,11 +145,13 @@ define([
 
 
         _showCountryIndicators: function (payload) {
+          //  console.log("process Data");
+          //  console.log(payload);
 
             var metadata = payload.model.metadata.dsd.columns;
-            var data = this._processData(payload.model.data, metadata);
+            var data = this._processData(payload.model.data, payload.config.order);
 
-           //console.log(payload);
+            data = $.extend(true, data, i18nLabels);
 
            this.indicatortemplate = Handlebars.compile(indicatorsTemplate);
            var html = this.indicatortemplate({data: data});
@@ -145,13 +161,12 @@ define([
         },
 
 
-        _processData: function (data, metadata) {
+        _processData: function (data, order) {
 
-            var valueIndex = this._findIndexForPropValue(metadata, "id", "value"),
-                indicatorIndex = this._findIndexForPropValue(metadata, "id", "projecttitle"),
-                sourceIndex = this._findIndexForPropValue(metadata, "id", "year"),
-                noteIndex = this._findIndexForPropValue(metadata, "id", "purposecode"),
-                periodIndex = this._findIndexForPropValue(metadata, "id", "year");
+            var valueIndex = this._findArrayItemIndex(order, "value"),
+                sourceIndex = this._findArrayItemIndex(order, "source"),
+                noteIndex = this._findArrayItemIndex(order, "note"),
+                periodIndex = this._findArrayItemIndex(order, "period");
 
             var newdata = {};
             var indicators = [];
@@ -160,13 +175,19 @@ define([
             var results = [], results2 = [], count = 1;
             for (var i = 0, len = data.length; i < len; ++i) {
                 var indicatorObj =  {};
-                indicatorObj.name = data[i][indicatorIndex];
+
+                indicatorObj.name = data[i][data[i].length-1];
                 indicatorObj.value = data[i][valueIndex];
                 indicatorObj.period = data[i][periodIndex];
                 indicatorObj.source = data[i][sourceIndex];
                 indicatorObj.note = data[i][noteIndex];
 
+                if(indicatorObj.source === null){
+                    indicatorObj.source = "";
+                }
+
                 if ($.inArray(indicatorObj.source+indicatorObj.note, results) < 0) {
+
                     var sourceObj =  {};
                     indicatorObj.footnote = count;
                     sourceObj.sourceid = indicatorObj.source+indicatorObj.note;
@@ -188,8 +209,16 @@ define([
                 }
 
                 indicators.push(indicatorObj);
+
+               // console.log(indicators);
+
             }
 
+            //console.log(indicators);
+            indicators.sort(this._sortByName);
+
+           // console.log("AFTER==========");
+            //console.log(indicators);
             newdata.indicators = indicators;
             newdata.footnotes = footnote;
 
@@ -197,6 +226,13 @@ define([
            // console.log(newdata.footnotes);
             return newdata;
         },
+
+        _sortByName: function (a, b) {
+           var aName = a.name.toLowerCase();
+           var bName = b.name.toLowerCase();
+            return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+        },
+
 
         _findIndexForPropValue: function (columns, prop, value) {
 
@@ -209,6 +245,21 @@ define([
                     break;
                 }
            }
+
+            return valueIdx;
+        },
+
+        _findArrayItemIndex: function (columns, value) {
+
+            var valueIdx = -1;
+
+            for (var i = 0, len = columns.length; i < len; ++i) {
+                var obj = columns[i];
+                if(obj === value){
+                    valueIdx = i;
+                    break;
+                }
+            }
 
             return valueIdx;
         },
