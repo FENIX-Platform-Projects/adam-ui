@@ -6,7 +6,7 @@ define({
 		"Value",
 		"Flag"],
 	"hiddenAttributes":["Value",
-		"Flag"],
+		"Flag","Unit"],
 	/*"rows": [
 		"Element",
 		"Area",
@@ -30,6 +30,7 @@ define({
 		"VarOrder4"
 	]
 	,*/
+	 "derivedAttributes": {"Unit":function(ret){return ""},"Flag":function(ret){return ""}},
 	"InstanceRenderers":[{label:"Table",func:"Table"},{label:"line chart",func:"line chart"}]
 	,"InstanceAggregators":[{label:"Sum2",func:"Sum2"},{label:"Sum",func:"Sum"}],
 	  "showAgg": false,
