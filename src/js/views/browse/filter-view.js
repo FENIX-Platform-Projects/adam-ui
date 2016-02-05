@@ -151,19 +151,20 @@ define([
         getIndicatorsValues: function(){
             var values = this.filter.getValues();
 
+
             var donorSelected= this._hasSelections(s.ids.DONOR, values);
             var cloneObj = this._getObject(s.ids.RECIPIENT_COUNTRY, values);
 
             if(donorSelected)
                 cloneObj = this._getObject(s.ids.DONOR, values);
 
+
             //======= UPDATE VALUES CONFIG
             values[s.ids.COUNTRY] = {};
             values[s.ids.COUNTRY].codes = [];
-            values[s.ids.COUNTRY].codes[0] = $.extend(true, {}, cloneObj); // clone the codes configuration
+            values[s.ids.COUNTRY].codes[0] = $.extend(true, {}, cloneObj["codes"][0]); // clone the codes configuration
             values[s.ids.COUNTRY].codes[0].uid = s.codeLists.RECIPIENT_DONORS.uid;
             values[s.ids.COUNTRY].codes[0].version = s.codeLists.RECIPIENT_DONORS.version;
-
 
             //======= Set everything in the values to be removed except the country
             for(var filter in values) {

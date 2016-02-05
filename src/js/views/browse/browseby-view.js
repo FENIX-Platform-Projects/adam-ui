@@ -138,9 +138,8 @@ define([
 
                 this.indicatorsDashboardConfig = configIndicators.dashboard;
                 this.indicatorsModel = new IndicatorsModel();
-                this._updateIndicatorDashboardModel(s.indicatorDashboardModel.TOPIC, this.browse_type);
 
-                var dashboardIndicatorsSubView = new DashboardIndicatorsSubView({autoRender: true, container: this.$el.find(s.css_classes.DASHBOARD_INDICATORS_HOLDER), model:this.indicatorsModel});
+                var dashboardIndicatorsSubView = new DashboardIndicatorsSubView({autoRender: false, container: this.$el.find(s.css_classes.DASHBOARD_INDICATORS_HOLDER), topic: this.browse_type, model:this.indicatorsModel});
                 dashboardIndicatorsSubView.setDashboardConfig(this.indicatorsDashboardConfig);
                 this.subview('indicatorsDashboard', dashboardIndicatorsSubView);
             }
@@ -175,9 +174,8 @@ define([
         _updateDashboard: function (item){
             amplify.publish(s.events.TITLE_ADD_ITEM, item);
             this.subview('title').show();
-            var selectedCountry = "";
 
-            if(!this.firstLoad) {
+           // if(!this.firstLoad) {
                 switch (this.subview('filters').isFAOSectorsSelected()) {
                     case true:
                         this.subview('oecdDashboard').setDashboardConfig(this.faoDashboardConfig);
@@ -191,21 +189,24 @@ define([
                     this.datasetType.oecd_uid = item.value;
                 }
 
-                if(this.browse_type === 'country_sector' || this.browse_type === 'donor_sector')
-                    this._setIndicatorDashboardModelCountry();
-
-                this.subview('oecdDashboard').updateDashboardConfig(this.datasetType.oecd_uid, this.subview('filters').isFilterSelected('sectorcode'), this.subview('filters').isFilterSelected('purposecode'));
 
                 // REBUILD DASHBOARD 1
-                var ovalues = this.subview('filters').getOECDValues();
-                this.subview('oecdDashboard').rebuildDashboard([ovalues]);
+               if(!this.firstLoad) {
+                   this.subview('oecdDashboard').updateDashboardConfig(this.datasetType.oecd_uid, this.subview('filters').isFilterSelected('sectorcode'), this.subview('filters').isFilterSelected('purposecode'));
+                   var ovalues = this.subview('filters').getOECDValues();
+                   this.subview('oecdDashboard').rebuildDashboard([ovalues]);
+               }
 
                 // REBUILD DASHBOARD 2
                 if(this.browse_type === 'country_sector' || this.browse_type === 'donor_sector'){
-                    var ivalues = this.subview('filters').getIndicatorsValues();
-                    this.subview('indicatorsDashboard').rebuildDashboard([ivalues]);
+                    if(item.name === 'recipientcode' || item.name === 'donorcode') {
+                        console.log("REBUILD DASHBOARD INDICATORS ")
+                        this._setIndicatorDashboardModelCountry();
+                        var ivalues = this.subview('filters').getIndicatorsValues();
+                        this.subview('indicatorsDashboard').rebuildDashboard([ivalues]);
+                    }
                 }
-            }
+          //  }
         },
 
         _unbindEventListeners: function () {
@@ -223,20 +224,20 @@ define([
 
         },
 
-        _subSectorFilterLoaded: function (chart) {
+      _subSectorFilterLoaded: function (chart) {
             if(this.firstLoad) {
-                this.firstLoad = false;
+                 this.firstLoad = false;
                 // show title
-                this.subview('title').show();
+               // this.subview('title').show();
 
 
 
-                this.subview('oecdDashboard').renderDashboard();
+               this.subview('oecdDashboard').renderDashboard();
 
-                if(this.browse_type === 'country_sector' || this.browse_type === 'donor_sector'){
-                    this._setIndicatorDashboardModelCountry();
-                    this.subview('indicatorsDashboard').renderDashboard();
-                }
+               // if(this.browse_type === 'country_sector' || this.browse_type === 'donor_sector'){
+                 //   this._setIndicatorDashboardModelCountry();
+                  //  this.subview('indicatorsDashboard').renderDashboard();
+               // }
 
             }
         },

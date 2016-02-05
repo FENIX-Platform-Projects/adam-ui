@@ -27,7 +27,7 @@ define([
     var DashboardIndicatorsView = View.extend({
 
         // Automatically render after initialize
-        autoRender: true,
+        autoRender: false,
 
         className: 'dashboard-indicators',
 
@@ -40,13 +40,15 @@ define([
             'click .anchor': 'anchor'
         },
 
-        initialize: function () {
+        initialize: function (params) {
+            this.topic = params.topic;
+
             this.model.on("change", this.render, this);
-            this.model.on("change", this.render);
+            //this.model.on("change", this.render);
 
             View.prototype.initialize.call(this, arguments);
 
-            this.render();
+            //this.render();
         },
 
         getTemplateData: function () {
@@ -67,12 +69,13 @@ define([
 
         render: function () {
             this.setElement(this.container);
+            this._unbindEventListeners();
 
+            $(this.el).hide();
             $(this.el).html(this.getTemplateFunction());
         },
 
         attach: function () {
-
             View.prototype.attach.call(this, arguments);
 
             this.configUtils = new ConfigUtils();
@@ -82,7 +85,7 @@ define([
         },
 
         getTemplateFunction: function() {
-            var source = $(this.template).find("[data-topic='" + this.model.toJSON().topic + "']").prop('outerHTML');
+            var source = $(this.template).find("[data-topic='" + this.topic + "']").prop('outerHTML');
             var template = Handlebars.compile(source);
 
             var model = this.model.toJSON();
@@ -126,7 +129,6 @@ define([
                 layout: "injected"
             });
 
-
            this.indicatorsDashboard.rebuild(this.config, filter);
         },
 
@@ -145,18 +147,19 @@ define([
 
 
         _showCountryIndicators: function (payload) {
-          //  console.log("process Data");
-          //  console.log(payload);
 
             var metadata = payload.model.metadata.dsd.columns;
             var data = this._processData(payload.model.data, payload.config.order);
 
             data = $.extend(true, data, i18nLabels);
 
-           this.indicatortemplate = Handlebars.compile(indicatorsTemplate);
-           var html = this.indicatortemplate({data: data});
+            this.indicatortemplate = Handlebars.compile(indicatorsTemplate);
+            var html = this.indicatortemplate({data: data});
 
-            $(payload.container).html(html);
+            if(payload.model.size > 0) {
+                $(this.el).show();
+                $(payload.container).html(html);
+            }
 
         },
 

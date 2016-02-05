@@ -39,7 +39,7 @@ define(function () {
                             order: ["period", "value", "indicatorcode", "source", "note"]
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: [],
+                        allowedFilter: ["countrycode"],
                         filter: [
                             {
                                 "name": "filter",
@@ -105,7 +105,7 @@ define(function () {
                             order: ["period", "value", "indicatorcode", "source", "note"]
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: [],
+                        allowedFilter: ["countrycode"],
                         filter: [
                             {
                                 "name": "filter",
