@@ -3,7 +3,7 @@ define(function () {
 
     'use strict';
 
-    var SERVER = 'http://fenix.fao.org/',
+    var SERVER = 'http://fenix.fao.org/d3s_dev',
         CODELIST_PREFIX = SERVER+ 'msd/resources/';
 
     return {

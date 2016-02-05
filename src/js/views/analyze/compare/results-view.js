@@ -217,11 +217,11 @@ define([
 
                 var tableObj = obj.tabs.table;
 
-                if (tableObj.hasOwnProperty('creator') && $.isFunction(tableObj.creator.exportCSV)) {
+                if (tableObj.hasOwnProperty('creator') && $.isFunction(tableObj.creator.exportExcel)) {
 
                     log.info("Start download: " + fileName);
 
-                    tableObj.creator.exportCSV(fileName);
+                    tableObj.creator.exportExcel(fileName);
                     //pivot.exportCSV(fileName);
                 } else {
                     log.warn("Impossible to download the file: export function not found")
