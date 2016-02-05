@@ -26,7 +26,7 @@ define(function () {
                 "selector": {
                     "type": "tree", //tree | list
                     //"source" : "codelist | static" // if type:list
-                    "default": [425 /*, 261, 269 */] //selected codes by default,
+                    "default": [625 /*, 261, 269 */] //selected codes by default,
                     //, "max" : 2 //max number of selectable item
                     //"disabled" : true //if present and true the selector is initially disabled
                     //"config" : { core: { multiple: true } } //specific jstree or select2 config
@@ -290,7 +290,7 @@ define(function () {
                         ]
                     }
                 },
-                "columns" : [] // dynamically filled by controller
+                //"columns" : [] // dynamically filled by controller
             }
         },
 
