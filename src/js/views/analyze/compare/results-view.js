@@ -217,12 +217,14 @@ define([
 
                 var tableObj = obj.tabs.table;
 
-                if (tableObj.hasOwnProperty('creator') && $.isFunction(tableObj.creator.exportExcel)) {
+                if (tableObj.hasOwnProperty('creator') && $.isFunction(tableObj.creator.exportCSV)) {
 
-                    tableObj.creator.exportExcel(fileName);
+                    log.info("Start download: " + fileName);
+
+                    tableObj.creator.exportCSV(fileName);
                     //pivot.exportCSV(fileName);
                 } else {
-                    log.warn("Impossible to download file: export function not found")
+                    log.warn("Impossible to download the file: export function not found")
                 }
 
             } else {
@@ -350,7 +352,7 @@ define([
                 rendererDisplay: pivotRenderers,
                 aggregatorDisplay: pivotAggregators,
                 onDataLoaded: function () {
-                    log.info('OLAP: data loaded')
+                    //log.info('OLAP: data loaded')
                 }
             });
 

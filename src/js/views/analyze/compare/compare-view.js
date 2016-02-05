@@ -387,7 +387,7 @@ define([
 
         _onAllSuccess: function () {
 
-            log.info("All requests returned successfully");
+            log.info("All requests returned.");
 
             this._unlockForm();
         },
