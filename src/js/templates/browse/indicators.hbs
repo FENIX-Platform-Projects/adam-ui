@@ -18,4 +18,13 @@
                 <div class="col-sm-{{divideBy12 ../data.footnotes.length}}" id="{{this.footnote}}"><p>{{this.footnote}}  {{this.source}}</p></div>
             {{/each}}
           </div>
+
+           <div class="row">
+            <div class="col-sm-1"><p>{{data.source}}:</p></div>
+            <div class="col-sm-11">
+                     {{#each data.footnotes}}
+                          <span id="{{this.footnote}}">{{this.footnote}}  {{this.source}}</span>
+                      {{/each}}
+            </div>
+           </div>
 </div>

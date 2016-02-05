@@ -1071,7 +1071,7 @@ define(function () {
                                 "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                        "recipientcode"
+                                        "gaul0"
                                     ],
                                     "aggregations": [
                                         {
