@@ -10,7 +10,7 @@ define(function () {
 
         SERVER: SERVER,
         CODES_POSTFIX : '/codes/filter',
-        D3P_POSTFIX : "/processes/",
+        D3P_POSTFIX : "d3s/processes/",
 
         //Chaplin JS configuration
         CHAPLINJS_CONTROLLER_SUFFIX: '-controller',
