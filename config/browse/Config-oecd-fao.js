@@ -245,13 +245,46 @@ define(function () {
                                             }
                                         }
                                     },
-
+                                    subtitle: {
+                                        text: 'Click and drag on chart to zoom'
+                                    },
+                                    credits: {
+                                        enabled: true,
+                                        text: 'Source: OECD',
+                                        href: ''
+                                    },
+                                    lang: {
+                                        doptions: "Chart Download options"
+                                    },
+                                    exporting:{
+                                        buttons: {
+                                            contextButton: {
+                                                _titleKey:"doptions",
+                                                text: 'Download'
+                                            }
+                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
+                                        },
+                                        chartOptions:{
+                                            subtitle: {
+                                                text: ''
+                                            },
+                                            legend:{
+                                                enabled:true,
+                                                title: {
+                                                    text: ''
+                                                }
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        title: {
+                                            text: 'Click to hide/show'
+                                        }
+                                    },
                                     xAxis : {
                                         type: 'datetime'
                                     },
-                                    subtitle: {
-                                        text: ''
-                                    },
+
                                     tooltip: {
                                         formatter: function(){
                                             return '<b>' +this.x + ': ' +
@@ -347,8 +380,56 @@ define(function () {
                                         type: "column"
                                     },
                                     subtitle: {
-                                        text: ''
+                                        text: 'Click and drag on chart to zoom'
                                     },
+                                    credits: {
+                                        enabled: true,
+                                        text: 'Source: OECD',
+                                        href: ''
+                                    },
+                                    lang: {
+                                        doptions: "Chart Download options"
+                                    },
+                                    exporting:{
+                                        buttons: {
+                                            contextButton: {
+                                                _titleKey:"doptions",
+                                                text: 'Download'
+                                            }
+                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
+                                        },
+                                        chartOptions:{
+                                            subtitle: {
+                                                text: ''
+                                            },
+                                            legend:{
+                                                enabled:false,
+                                                title: {
+                                                    text: ''
+                                                }
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        title: {
+                                            text: 'Click to hide/show'
+                                        }
+                                    },
+
+                                   // plotOptions : {
+                                       // series : {
+                                           // showCheckbox: true,
+                                           // events: {
+                                                //checkboxClick: function (event) {
+                                                   // if (event.checked) {
+                                                      //  this.show();
+                                                   // } else {
+                                                    //    this.hide();
+                                                   // }
+                                               // }
+                                            //}
+                                       // }
+                                   // },
                                     tooltip: {
                                         formatter: function(){
                                             return '<b>' +this.x + ': ' + '</b><br/>' +
@@ -448,25 +529,41 @@ define(function () {
                                     chart: {
                                         type: "column"
                                     },
-
                                     subtitle: {
-                                        text: ''
+                                        text: 'Click and drag on chart to zoom'
                                     },
-                                    plotOptions: {
-                                        series: {
-                                            dataLabels: {
-                                                enabled: true
+                                    credits: {
+                                        enabled: true,
+                                        text: 'Source: OECD',
+                                        href: ''
+                                    },
+                                    lang: {
+                                        doptions: "Chart Download options"
+                                    },
+                                    exporting:{
+                                        buttons: {
+                                            contextButton: {
+                                                _titleKey:"doptions",
+                                                text: 'Download'
                                             }
-                                        }
-                                    },
-                                    exporting: {
-                                        chartOptions: {
-                                            legend: {
-                                                enabled: false
+                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
+                                        },
+                                        chartOptions:{
+                                            subtitle: {
+                                                text: ''
+                                            },
+                                            legend:{
+                                                enabled:false,
+                                                title: {
+                                                    text: ''
+                                                }
                                             }
                                         }
                                     },
                                     legend: {
+                                        title: {
+                                            text: 'Click to hide/show'
+                                        },
                                         itemStyle: {
                                             width: 250
                                         }
@@ -581,24 +678,33 @@ define(function () {
                                         type: 'pie'
                                     },
                                     subtitle: {
-                                        text: ''
+                                        text: 'Click and drag on chart to zoom'
                                     },
-                                    title: {
-                                        //text: 'Browser market shares January, 2015 to May, 2015'
+                                    credits: {
+                                        enabled: true,
+                                        text: 'Source: OECD',
+                                        href: ''
                                     },
-                                    tooltip: {
-                                        style: {width: '200px', whiteSpace: 'normal'},
-                                        pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>'
+                                    lang: {
+                                        doptions: "Chart Download options"
                                     },
-                                    legend: {
-                                        itemStyle: {
-                                            width: 250
-                                        }
-                                    },
-                                    exporting: {
-                                        chartOptions: {
-                                            legend: {
-                                                enabled: false
+                                    exporting:{
+                                        buttons: {
+                                            contextButton: {
+                                                _titleKey:"doptions",
+                                                text: 'Download'
+                                            }
+                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
+                                        },
+                                        chartOptions:{
+                                            subtitle: {
+                                                text: ''
+                                            },
+                                            legend:{
+                                                enabled: false,
+                                                title: {
+                                                    text: ''
+                                                }
                                             },
                                             series: {
                                                 dataLabels: {
@@ -608,8 +714,19 @@ define(function () {
                                                     enabled: true
                                                 }
                                             }
-
                                         }
+                                    },
+                                    legend: {
+                                        title: {
+                                            text: 'Click to hide/show'
+                                        },
+                                        itemStyle: {
+                                            width: 250
+                                        }
+                                    },
+                                    tooltip: {
+                                        style: {width: '200px', whiteSpace: 'normal'},
+                                        pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>'
                                     },
                                     // legend: {
                                     //    labelFormatter: function(){return this.name.slice(0, 25)+ '...'}
@@ -737,11 +854,43 @@ define(function () {
                                             }
                                         }
                                     },
-                                    legend: {
-                                        reversed: true
-                                    },
                                     subtitle: {
-                                        text: ''
+                                        text: 'Click and drag on chart to zoom'
+                                    },
+                                    credits: {
+                                        enabled: true,
+                                        text: 'Source: OECD',
+                                        href: ''
+                                    },
+                                    lang: {
+                                        doptions: "Chart Download options"
+                                    },
+                                    exporting:{
+                                        //sourceWidth: 1000,
+                                        buttons: {
+                                            contextButton: {
+                                                _titleKey:"doptions",
+                                                text: 'Download'
+                                            }
+                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
+                                        },
+                                        chartOptions:{
+                                            subtitle: {
+                                                text: ''
+                                            },
+                                            legend:{
+                                                enabled:true,
+                                                title: {
+                                                    text: ''
+                                                }
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        reversed: true,
+                                        title: {
+                                           text: 'Click to hide/show'
+                                        }
                                     },
                                     yAxis: {
                                       title: {
@@ -1088,14 +1237,44 @@ define(function () {
                                             }
                                         }
                                     },
+                                    subtitle: {
+                                        text: 'Click and drag on chart to zoom'
+                                    },
+                                    credits: {
+                                        enabled: true,
+                                        text: 'Source: OECD',
+                                        href: ''
+                                    },
+                                    lang: {
+                                        doptions: "Chart Download options"
+                                    },
+                                    exporting:{
+                                        buttons: {
+                                            contextButton: {
+                                                _titleKey:"doptions",
+                                                text: 'Download'
+                                            }
+                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
+                                        },
+                                        chartOptions:{
+                                            subtitle: {
+                                                text: ''
+                                            },
+                                            legend:{
+                                                enabled:true,
+                                                title: {
+                                                    text: ''
+                                                }
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        title: {
+                                            text: 'Click to hide/show'
+                                        }
+                                    },
                                     xAxis : {
                                         type: 'datetime'
-                                    },
-                                    exporting : {
-                                      enabled: true
-                                    },
-                                    subtitle: {
-                                        text: ''
                                     },
                                     tooltip: {
                                         formatter: function(){
@@ -1202,7 +1381,40 @@ define(function () {
                                         type: "column"
                                     },
                                     subtitle: {
-                                        text: ''
+                                        text: 'Click and drag on chart to zoom'
+                                    },
+                                    credits: {
+                                        enabled: true,
+                                        text: 'Source: OECD',
+                                        href: ''
+                                    },
+                                    lang: {
+                                        doptions: "Chart Download options"
+                                    },
+                                    exporting:{
+                                        buttons: {
+                                            contextButton: {
+                                                _titleKey:"doptions",
+                                                text: 'Download'
+                                            }
+                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
+                                        },
+                                        chartOptions:{
+                                            subtitle: {
+                                                text: ''
+                                            },
+                                            legend:{
+                                                enabled:false,
+                                                title: {
+                                                    text: ''
+                                                }
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        title: {
+                                            text: 'Click to hide/show'
+                                        }
                                     },
                                     tooltip: {
                                         formatter: function(){
@@ -1315,7 +1527,40 @@ define(function () {
                                         type: "column"
                                     },
                                     subtitle: {
-                                        text: ''
+                                        text: 'Click and drag on chart to zoom'
+                                    },
+                                    credits: {
+                                        enabled: true,
+                                        text: 'Source: OECD',
+                                        href: ''
+                                    },
+                                    lang: {
+                                        doptions: "Chart Download options"
+                                    },
+                                    exporting:{
+                                        buttons: {
+                                            contextButton: {
+                                                _titleKey:"doptions",
+                                                text: 'Download'
+                                            }
+                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
+                                        },
+                                        chartOptions:{
+                                            subtitle: {
+                                                text: ''
+                                            },
+                                            legend:{
+                                                enabled:false,
+                                                title: {
+                                                    text: ''
+                                                }
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        title: {
+                                            text: 'Click to hide/show'
+                                        }
                                     },
                                     tooltip: {
                                         formatter: function(){
@@ -1426,22 +1671,28 @@ define(function () {
                                         type: 'pie'
                                     },
                                     subtitle: {
-                                        text: ''
+                                        text: 'Click and drag on chart to zoom'
                                     },
-                                    title: {
-                                        //text: 'Browser market shares January, 2015 to May, 2015'
+                                    credits: {
+                                        enabled: true,
+                                        text: 'Source: OECD',
+                                        href: ''
                                     },
-                                    tooltip: {
-                                        style: {width: '200px', whiteSpace: 'normal'},
-                                        pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>'
+                                    lang: {
+                                        doptions: "Chart Download options"
                                     },
-                                    legend: {
-                                        itemStyle: {
-                                            width: 250
-                                        }
-                                    },
-                                    exporting: {
-                                        chartOptions: {
+                                    exporting:{
+                                        buttons: {
+                                            contextButton: {
+                                                _titleKey:"doptions",
+                                                text: 'Download'
+                                            }
+                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
+                                        },
+                                        chartOptions:{
+                                            subtitle: {
+                                                text: ''
+                                            },
                                             legend: {
                                                 enabled: false
                                             },
@@ -1453,9 +1704,21 @@ define(function () {
                                                     enabled: true
                                                 }
                                             }
-
                                         }
                                     },
+                                    legend: {
+                                        title: {
+                                            text: 'Click to hide/show'
+                                        },
+                                        itemStyle: {
+                                            width: 250
+                                        }
+                                    },
+                                    tooltip: {
+                                        style: {width: '200px', whiteSpace: 'normal'},
+                                        pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>'
+                                    },
+
                                    // legend: {
                                    //    labelFormatter: function(){return this.name.slice(0, 25)+ '...'}
                                    // },
@@ -1580,27 +1843,50 @@ define(function () {
                                     chart: {
                                         type: "column"
                                     },
-
                                     subtitle: {
-                                        text: ''
+                                        text: 'Click and drag on chart to zoom'
+                                    },
+                                    credits: {
+                                        enabled: true,
+                                        text: 'Source: OECD',
+                                        href: ''
+                                    },
+                                    lang: {
+                                        doptions: "Chart Download options"
+                                    },
+                                    exporting:{
+                                        buttons: {
+                                            contextButton: {
+                                                _titleKey:"doptions",
+                                                text: 'Download'
+                                            }
+                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
+                                        },
+                                        chartOptions:{
+                                            subtitle: {
+                                                text: ''
+                                            },
+                                            legend:{
+                                                enabled:false,
+                                                title: {
+                                                    text: ''
+                                                }
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        title: {
+                                            text: 'Click to hide/show'
+                                        },
+                                        itemStyle: {
+                                            width: 250
+                                        }
                                     },
                                     plotOptions: {
                                         series: {
                                             dataLabels: {
                                                 enabled: true
                                             }
-                                        }
-                                    },
-                                    exporting: {
-                                       chartOptions: {
-                                           legend: {
-                                               enabled: false
-                                           }
-                                       }
-                                    },
-                                    legend: {
-                                        itemStyle: {
-                                            width: 250
                                         }
                                     },
                                     tooltip: {
@@ -1696,6 +1982,7 @@ define(function () {
         },
 
         "donor_sector": {
+
 
             filter: [
                 {
@@ -1958,11 +2245,44 @@ define(function () {
                                             }
                                         }
                                     },
+                                    subtitle: {
+                                        text: 'Click and drag on chart to zoom'
+                                    },
+                                    credits: {
+                                        enabled: true,
+                                        text: 'Source: OECD',
+                                        href: ''
+                                    },
+                                    lang: {
+                                        doptions: "Chart Download options"
+                                    },
+                                    exporting:{
+                                        buttons: {
+                                            contextButton: {
+                                                _titleKey:"doptions",
+                                                text: 'Download'
+                                            }
+                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
+                                        },
+                                        chartOptions:{
+                                            subtitle: {
+                                                text: ''
+                                            },
+                                            legend:{
+                                                enabled:true,
+                                                title: {
+                                                    text: ''
+                                                }
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        title: {
+                                            text: 'Click to hide/show'
+                                        }
+                                    },
                                     xAxis : {
                                         type: 'datetime'
-                                    },
-                                    subtitle: {
-                                        text: ''
                                     },
                                     tooltip: {
                                         formatter: function(){
@@ -2069,7 +2389,40 @@ define(function () {
                                         type: "column"
                                     },
                                     subtitle: {
-                                        text: ''
+                                        text: 'Click and drag on chart to zoom'
+                                    },
+                                    credits: {
+                                        enabled: true,
+                                        text: 'Source: OECD',
+                                        href: ''
+                                    },
+                                    lang: {
+                                        doptions: "Chart Download options"
+                                    },
+                                    exporting:{
+                                        buttons: {
+                                            contextButton: {
+                                                _titleKey:"doptions",
+                                                text: 'Download'
+                                            }
+                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
+                                        },
+                                        chartOptions:{
+                                            subtitle: {
+                                                text: ''
+                                            },
+                                            legend:{
+                                                enabled:false,
+                                                title: {
+                                                    text: ''
+                                                }
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        title: {
+                                            text: 'Click to hide/show'
+                                        }
                                     },
                                     tooltip: {
                                         formatter: function(){
@@ -2181,27 +2534,51 @@ define(function () {
                                     chart: {
                                         type: "column"
                                     },
-
                                     subtitle: {
-                                        text: ''
+                                        text: 'Click and drag on chart to zoom'
                                     },
+                                    credits: {
+                                        enabled: true,
+                                        text: 'Source: OECD',
+                                        href: ''
+                                    },
+                                    lang: {
+                                        doptions: "Chart Download options"
+                                    },
+                                    exporting:{
+                                        buttons: {
+                                            contextButton: {
+                                                _titleKey:"doptions",
+                                                text: 'Download'
+                                            }
+                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
+                                        },
+                                        chartOptions:{
+                                            subtitle: {
+                                                text: ''
+                                            },
+                                            legend:{
+                                                enabled:false,
+                                                title: {
+                                                    text: ''
+                                                }
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        title: {
+                                            text: 'Click to hide/show'
+                                        },
+                                        itemStyle: {
+                                            width: 250
+                                        }
+                                    },
+
                                     plotOptions: {
                                         series: {
                                             dataLabels: {
                                                 enabled: true
                                             }
-                                        }
-                                    },
-                                    exporting: {
-                                        chartOptions: {
-                                            legend: {
-                                                enabled: false
-                                            }
-                                        }
-                                    },
-                                    legend: {
-                                        itemStyle: {
-                                            width: 250
                                         }
                                     },
                                     tooltip: {
@@ -2314,22 +2691,28 @@ define(function () {
                                         type: 'pie'
                                     },
                                     subtitle: {
-                                        text: ''
+                                        text: 'Click and drag on chart to zoom'
                                     },
-                                    title: {
-                                        //text: 'Browser market shares January, 2015 to May, 2015'
+                                    credits: {
+                                        enabled: true,
+                                        text: 'Source: OECD',
+                                        href: ''
                                     },
-                                    tooltip: {
-                                        style: {width: '200px', whiteSpace: 'normal'},
-                                        pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>'
+                                    lang: {
+                                        doptions: "Chart Download options"
                                     },
-                                    legend: {
-                                        itemStyle: {
-                                            width: 250
-                                        }
-                                    },
-                                    exporting: {
-                                        chartOptions: {
+                                    exporting:{
+                                        buttons: {
+                                            contextButton: {
+                                                _titleKey:"doptions",
+                                                text: 'Download'
+                                            }
+                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
+                                        },
+                                        chartOptions:{
+                                            subtitle: {
+                                                text: ''
+                                            },
                                             legend: {
                                                 enabled: false
                                             },
@@ -2341,8 +2724,19 @@ define(function () {
                                                     enabled: true
                                                 }
                                             }
-
                                         }
+                                    },
+                                    legend: {
+                                        title: {
+                                            text: 'Click to hide/show'
+                                        },
+                                        itemStyle: {
+                                            width: 250
+                                        }
+                                    },
+                                    tooltip: {
+                                        style: {width: '200px', whiteSpace: 'normal'},
+                                        pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>'
                                     },
                                     // legend: {
                                     //    labelFormatter: function(){return this.name.slice(0, 25)+ '...'}
@@ -2481,11 +2875,43 @@ define(function () {
                                             }
                                         }
                                     },
-                                    legend: {
-                                        reversed: true
-                                    },
                                     subtitle: {
-                                        text: ''
+                                        text: 'Click and drag on chart to zoom'
+                                    },
+                                    credits: {
+                                        enabled: true,
+                                        text: 'Source: OECD',
+                                        href: ''
+                                    },
+                                    lang: {
+                                        doptions: "Chart Download options"
+                                    },
+                                    exporting:{
+                                        //sourceWidth: 1000,
+                                        buttons: {
+                                            contextButton: {
+                                                _titleKey:"doptions",
+                                                text: 'Download'
+                                            }
+                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
+                                        },
+                                        chartOptions:{
+                                            subtitle: {
+                                                text: ''
+                                            },
+                                            legend:{
+                                                enabled:true,
+                                                title: {
+                                                    text: ''
+                                                }
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        reversed: true,
+                                        title: {
+                                            text: 'Click to hide/show'
+                                        }
                                     },
                                     yAxis: {
                                         title: {
@@ -2870,11 +3296,44 @@ define(function () {
                                             }
                                         }
                                     },
+                                    subtitle: {
+                                        text: 'Click and drag on chart to zoom'
+                                    },
+                                    credits: {
+                                        enabled: true,
+                                        text: 'Source: OECD',
+                                        href: ''
+                                    },
+                                    lang: {
+                                        doptions: "Chart Download options"
+                                    },
+                                    exporting:{
+                                        buttons: {
+                                            contextButton: {
+                                                _titleKey:"doptions",
+                                                text: 'Download'
+                                            }
+                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
+                                        },
+                                        chartOptions:{
+                                            subtitle: {
+                                                text: ''
+                                            },
+                                            legend:{
+                                                enabled:true,
+                                                title: {
+                                                    text: ''
+                                                }
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        title: {
+                                            text: 'Click to hide/show'
+                                        }
+                                    },
                                     xAxis : {
                                         type: 'datetime'
-                                    },
-                                    subtitle: {
-                                        text: ''
                                     },
                                     tooltip: {
                                         formatter: function(){
@@ -2992,7 +3451,40 @@ define(function () {
                                         type: "column"
                                     },
                                     subtitle: {
-                                        text: ''
+                                        text: 'Click and drag on chart to zoom'
+                                    },
+                                    credits: {
+                                        enabled: true,
+                                        text: 'Source: OECD',
+                                        href: ''
+                                    },
+                                    lang: {
+                                        doptions: "Chart Download options"
+                                    },
+                                    exporting:{
+                                        buttons: {
+                                            contextButton: {
+                                                _titleKey:"doptions",
+                                                text: 'Download'
+                                            }
+                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
+                                        },
+                                        chartOptions:{
+                                            subtitle: {
+                                                text: ''
+                                            },
+                                            legend:{
+                                                enabled:false,
+                                                title: {
+                                                    text: ''
+                                                }
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        title: {
+                                            text: 'Click to hide/show'
+                                        }
                                     },
                                     tooltip: {
                                         formatter: function(){
@@ -3116,7 +3608,40 @@ define(function () {
                                         type: "column"
                                     },
                                     subtitle: {
-                                        text: ''
+                                        text: 'Click and drag on chart to zoom'
+                                    },
+                                    credits: {
+                                        enabled: true,
+                                        text: 'Source: OECD',
+                                        href: ''
+                                    },
+                                    lang: {
+                                        doptions: "Chart Download options"
+                                    },
+                                    exporting:{
+                                        buttons: {
+                                            contextButton: {
+                                                _titleKey:"doptions",
+                                                text: 'Download'
+                                            }
+                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
+                                        },
+                                        chartOptions:{
+                                            subtitle: {
+                                                text: ''
+                                            },
+                                            legend:{
+                                                enabled:false,
+                                                title: {
+                                                    text: ''
+                                                }
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        title: {
+                                            text: 'Click to hide/show'
+                                        }
                                     },
                                     tooltip: {
                                         formatter: function(){
@@ -3238,22 +3763,28 @@ define(function () {
                                         type: 'pie'
                                     },
                                     subtitle: {
-                                        text: ''
+                                        text: 'Click and drag on chart to zoom'
                                     },
-                                    title: {
-                                        //text: 'Browser market shares January, 2015 to May, 2015'
+                                    credits: {
+                                        enabled: true,
+                                        text: 'Source: OECD',
+                                        href: ''
                                     },
-                                    tooltip: {
-                                        style: {width: '200px', whiteSpace: 'normal'},
-                                        pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>'
+                                    lang: {
+                                        doptions: "Chart Download options"
                                     },
-                                    legend: {
-                                        itemStyle: {
-                                            width: 250
-                                        }
-                                    },
-                                    exporting: {
-                                        chartOptions: {
+                                    exporting:{
+                                        buttons: {
+                                            contextButton: {
+                                                _titleKey:"doptions",
+                                                text: 'Download'
+                                            }
+                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
+                                        },
+                                        chartOptions:{
+                                            subtitle: {
+                                                text: ''
+                                            },
                                             legend: {
                                                 enabled: false
                                             },
@@ -3265,8 +3796,19 @@ define(function () {
                                                     enabled: true
                                                 }
                                             }
-
                                         }
+                                    },
+                                    legend: {
+                                        title: {
+                                            text: 'Click to hide/show'
+                                        },
+                                        itemStyle: {
+                                            width: 250
+                                        }
+                                    },
+                                    tooltip: {
+                                        style: {width: '200px', whiteSpace: 'normal'},
+                                        pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>'
                                     },
                                     // legend: {
                                     //    labelFormatter: function(){return this.name.slice(0, 25)+ '...'}

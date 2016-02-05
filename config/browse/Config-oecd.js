@@ -1012,6 +1012,84 @@ define(function () {
                                 }
                             }
                         ]
+                    },
+                    {
+                        id: 'item-6',
+                        type: 'map',
+                        class: "fx-map-chart",
+                        //needed if layout = injected
+                        container: "#item-6",
+                        config: {
+                            container: "#item-6",
+                            leaflet: {
+                                zoomControl: false,
+                                attributionControl: true,
+                                scrollWheelZoom: false,
+                                minZoom: 2
+                            }
+                        },
+                        // for now it takes the id, TODO: add uid as well
+                        allowedFilter: ['sectorcode', 'purposecode', 'year', 'channelcode'],
+                        filter: [
+                            {
+                                "name": "filter",
+                                "parameters": {
+                                    "rows": {
+                                        "flowcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_flow_types",
+                                                    "version": "2015",
+                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
+                                                    ]   //ODA
+                                                }
+                                            ]
+                                        },
+                                        "sectorcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_sectors",
+                                                    "version": "2015",
+                                                    "codes": [
+                                                        "600"
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "year": {
+                                            "time": [
+                                                {
+                                                    "from": 2000,
+                                                    "to": 2013
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "name": "pggroup",
+                                "parameters": {
+                                    "by": [
+                                        "recipientcode"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": ["value"],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["unitname"],
+                                            "rule": "pgfirst"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
                     }
 
                 ]
