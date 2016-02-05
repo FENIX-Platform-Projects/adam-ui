@@ -31,8 +31,8 @@ define({
 	]
 	,*/
 	 "derivedAttributes": {"Unit":function(ret){return ""},"Flag":function(ret){return ""}},
-	"InstanceRenderers":[{label:"Table",func:"Table"},{label:"line chart",func:"line chart"}]
-	,"InstanceAggregators":[{label:"Sum2",func:"Sum2"},{label:"Sum",func:"Sum"}],
+	"InstanceRenderers":[{label:"Table",func:"Table"},{label:"line chart",func:"line chart"}],
+	"InstanceAggregators":[{label:"Sum2",func:"Sum2"},{label:"Sum",func:"Sum"}],
 	  "showAgg": false,
     "showRender": false,
     "showUnit": false,
