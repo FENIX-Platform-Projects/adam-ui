@@ -266,7 +266,7 @@ define([
         _getPromise: function (body) {
 
             return Q($.ajax({
-                url: GC.SERVER + GC.CODES_POSTFIX,
+                url: GC.SERVER + GC.CODELIST_SERVICE + GC.CODES_POSTFIX,
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify(body),

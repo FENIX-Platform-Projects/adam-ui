@@ -155,7 +155,7 @@ define(function () {
                 "filter": {
                     "dimension" : "channelcode",
                     "type": "dynamic",
-                    "process": '{"channelcode": { "codes":[{"uid": "{{uid}}", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
+                    "process": '{"channelcode": { "codes":[{"uid": "crs_channel", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
                 },
 
                 "validation": {

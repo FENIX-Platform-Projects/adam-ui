@@ -3,13 +3,13 @@ define(function () {
 
     'use strict';
 
-    var SERVER = 'http://fenix.fao.org/d3s_dev',
+    var SERVER = 'http://fenix.fao.org/',
         CODELIST_PREFIX = SERVER+ 'msd/resources/';
 
     return {
 
         SERVER: SERVER,
-        CODES_POSTFIX : '/msd/codes/filter',
+        CODES_POSTFIX : '/codes/filter',
         D3P_POSTFIX : "/processes/",
 
         //Chaplin JS configuration
