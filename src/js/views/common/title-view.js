@@ -9,6 +9,9 @@ define([
 
     'use strict';
 
+    var defaults= {
+        title: ''
+    };
     var s = {
         css_classes: {
             TITLE_ITEMS_LIST: "#fx-title-items-list"
@@ -31,8 +34,9 @@ define([
         // In the end you might want to used precompiled templates.
         template: template,
 
-        initialize: function () {
+        initialize: function (config) {
             View.prototype.initialize.call(this, arguments);
+            this.options = $.extend({}, defaults, config);
 
             this.render();
         },
@@ -49,7 +53,8 @@ define([
 
         getTemplateFunction: function() {
             var source = $(this.template).prop('outerHTML');
-            return Handlebars.compile(source);
+            var template = Handlebars.compile(source);
+            return template({title:  this.options.title});
         },
 
         render: function () {
