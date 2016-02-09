@@ -68,6 +68,7 @@ define([
 
             this.$titleItemsList.find('li').each(function(){
                 $(this).show();
+                $(this).addClass('current-sel-element');
             });
 
         },

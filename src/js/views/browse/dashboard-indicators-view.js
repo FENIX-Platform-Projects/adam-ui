@@ -63,7 +63,7 @@ define([
 
           $('html, body').animate({
            scrollTop: $('#'+nameLink).offset().top
-          }, 2000);
+          }, 1000);
 
        },
 

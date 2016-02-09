@@ -49,3 +49,32 @@
 .fx-filter-icon {
   padding-left: 5px;
 }
+
+.current-sel-element{
+  //margin-right: 0;
+
+  &:after{
+    content: ' /';
+    color: #999;
+    position: relative;
+    right: -3px;
+  }
+
+}
+
+.indicator-value{
+  font-weight: bold;
+  font-size: 18px;
+  color: $light-text;
+}
+
+
+.adam-entry-point-content{
+
+  .anchor{
+    position: relative;
+    left: 2px;
+  }
+
+}
+
