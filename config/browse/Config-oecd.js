@@ -1026,7 +1026,15 @@ define(function () {
                                 attributionControl: true,
                                 scrollWheelZoom: false,
                                 minZoom: 2
-                            }
+                            },
+                           join: {
+                               style: {
+                                   colorramp: "Reds"
+                                }
+                            },
+                            layer: {
+                                layertitle: "Commitment Current Prices"
+                           }
                         },
                         // for now it takes the id, TODO: add uid as well
                         allowedFilter: ['sectorcode', 'purposecode', 'year', 'channelcode'],
@@ -1087,6 +1095,13 @@ define(function () {
                                             "rule": "pgfirst"
                                         }
                                     ]
+                                }
+                            },
+                            {
+                                "name": "select",
+                                "parameters": {
+                                    "query": "WHERE gaul0<>?",
+                                    "queryParameters": [{"value": "NA"}]
                                 }
                             }
                         ]
