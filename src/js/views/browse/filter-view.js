@@ -144,7 +144,7 @@ define([
                 selectedValues = this._getSelected(filterObj);
             }
 
-            console.log(selectedValues);
+            //console.log(selectedValues);
             return selectedValues;
         },
 
@@ -202,6 +202,7 @@ define([
         },
 
         _updateValuesWithSubSectors: function (values, sectorvaluesobj, subSectorSelected) {
+          // console.log("_updateValuesWithSubSectors");
             // If no purposecodes have been selected
             if(!subSectorSelected){
                 // Get the purposecode filter component, which will contain all
@@ -221,6 +222,7 @@ define([
                     // Get the source of the purposecode component
                     // and populate the codes array with the IDs of the source items
                     $.each(purposeCodeComponent.options.source, function( index, sourceItem ) {
+                       // console.log(sourceItem);
                         codes.push(sourceItem.id);
                     });
 
@@ -300,6 +302,37 @@ define([
                 }
             }
         },
+
+      /**  _onRecipientChange: function (recipient) {
+            var self = this;
+
+            if(sector.value){
+                var pcfilter= _.find(this.config, function(obj){
+                    return obj.components[0].name === 'recipientcode';
+                });
+
+                if(pcfilter){
+                    var filter =   pcfilter.components[0].config.filter;
+                    console.log(filter);
+                    filter.codes = [];
+                    filter.codes.push(recipient.value);
+                    delete filter["level"];
+
+                    pcfilter.components[0].config.filter = filter;
+
+                    Q.all([
+                        self.filterConfCreator._createCodelistHierarchyPromiseData(pcfilter)
+                    ]).spread(function(result1) {
+
+                       console.log(result1)
+
+                    }).done(function() {
+
+                        }
+                    );
+                }
+            }
+        },**/
 
         _hasSelections: function (id, data){
             if( _.has(data, id)){

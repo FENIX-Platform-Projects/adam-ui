@@ -191,7 +191,7 @@ define([
 
 
                 // REBUILD DASHBOARD 1
-               if(!this.firstLoad) {
+               if(!this.firstLoad  && item.name != 'sectorcode') {
                    this.subview('oecdDashboard').updateDashboardConfig(this.datasetType.oecd_uid, this.subview('filters').isFilterSelected('sectorcode'), this.subview('filters').isFilterSelected('purposecode'));
                    var ovalues = this.subview('filters').getOECDValues();
                    this.subview('oecdDashboard').rebuildDashboard([ovalues]);
@@ -200,7 +200,7 @@ define([
                 // REBUILD DASHBOARD 2
                 if(this.browse_type === 'country_sector' || this.browse_type === 'donor_sector'){
                     if(item.name === 'recipientcode' || item.name === 'donorcode') {
-                        console.log("REBUILD DASHBOARD INDICATORS ")
+                      //  console.log("REBUILD DASHBOARD INDICATORS ")
                         this._setIndicatorDashboardModelCountry();
                         var ivalues = this.subview('filters').getIndicatorsValues();
                         this.subview('indicatorsDashboard').rebuildDashboard([ivalues]);
@@ -225,6 +225,7 @@ define([
         },
 
       _subSectorFilterLoaded: function (chart) {
+         //  console.log("SUB SECTOR FILTER LOADED ");
             if(this.firstLoad) {
                  this.firstLoad = false;
                 // show title
@@ -239,6 +240,11 @@ define([
                   //  this.subview('indicatorsDashboard').renderDashboard();
                // }
 
+            }
+            else {
+                    this.subview('oecdDashboard').updateDashboardConfig(this.datasetType.oecd_uid, this.subview('filters').isFilterSelected('sectorcode'), this.subview('filters').isFilterSelected('purposecode'));
+                    var ovalues = this.subview('filters').getOECDValues();
+                    this.subview('oecdDashboard').rebuildDashboard([ovalues]);
             }
         },
 
