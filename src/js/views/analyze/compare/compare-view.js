@@ -343,9 +343,9 @@ define([
 
             _.each(this.currentRequest.requests, _.bind(function (b) {
 
-                this.currentRequest.body = b;
+                this.currentRequest.body = b.body;
 
-                r.push(this._createPromise($.extend(true, {}, this.currentRequest)));
+                r.push(this._createPromise($.extend(true, { current : b }, this.currentRequest )));
 
             }, this));
 
@@ -431,6 +431,10 @@ define([
 
             this.currentRequest.requests = [];
 
+            this.currentRequest.tempCurrentCombination = {
+                'oda' : [this.currentRequest.selection['oda']]
+            };
+
             this.currentRequest.staticFilter = this._createStaticFilter();
 
             log.info("Static filter: ");
@@ -443,14 +447,20 @@ define([
 
             this.currentRequest.requests = this._createRequestBodies() || [];
 
-            log.info("Requests: [length=" + this.currentRequest.requests.length + "]");
+            log.info("Requests: [length=" + Object.keys(this.currentRequest.requests).length + "]");
             log.info(JSON.stringify(this.currentRequest.requests));
 
         },
 
         _createStaticFilter: function () {
 
-            return this._createFilterProcess('year-from', this.currentRequest.selection);
+            var yearFrom = 'year-from',
+                yearTo = 'year-to';
+
+            this.currentRequest.tempCurrentCombination[yearFrom] = [this.currentRequest.selection[yearFrom]];
+            this.currentRequest.tempCurrentCombination[yearTo] = [this.currentRequest.selection[yearTo]];
+
+            return this._createFilterProcess(yearFrom, this.currentRequest.selection);
 
         },
 
@@ -461,7 +471,8 @@ define([
 
             _.each(this.currentRequest.combinations, _.bind(function (c) {
 
-                var b = [],
+                var request = {},
+                    b = [],
                     filter = {},
                     compare = this.currentRequest.compareField,
                     compareValues = this.currentRequest.compareFilter;
@@ -509,7 +520,11 @@ define([
                     }
                 });
 
-                bodies.push(b);
+                request.body = b;
+
+                request.combination = $.extend(true, {}, c, this.currentRequest.tempCurrentCombination);
+
+                bodies.push(request);
 
             }, this));
 
@@ -560,6 +575,8 @@ define([
                 sel = Array.isArray(id) ? id[0] : id,
                 m = $.extend(true, this.selectors[sel].cl,
                     {codes: '"' + values.join('","') + '"'});
+
+            this.currentRequest.tempCurrentCombination[s] = values;
 
             return JSON.parse(this._createFilterProcess(sel, m));
         },

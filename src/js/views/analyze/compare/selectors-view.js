@@ -42,11 +42,15 @@ define([
 
         template: template,
 
+        getTemplateData: function () {
+            return i18nLabels;
+        },
+
         // API
 
         /**
          * Return the current selection
-         * @return {Object}
+         * @return {Object} Selection
          */
         getSelection: function () {
 
@@ -63,16 +67,30 @@ define([
             return this._configureVisibilityAdvancedOptions(show)
         },
 
+        /**
+         * Reset the view content
+         * @return {null}
+         */
+        reset: function () {
+
+            this._destroyDependencies();
+
+            //reset trees
+            _.each(this.trees, this._printTreeDefaultSelection, this);
+
+            //reset dropdown
+            _.each(this.dropdown, this._printDropdownDefaultSelection, this);
+
+            this._initDependencies();
+
+            //reset checkbox
+            this._printCheckboxDefaultSelection();
+
+            log.info("Selector View reset");
+
+        },
+
         // end API
-
-        initialize: function (params) {
-
-            View.prototype.initialize.call(this, arguments);
-        },
-
-        getTemplateData: function () {
-            return i18nLabels;
-        },
 
         _initVariables: function () {
 
@@ -350,10 +368,10 @@ define([
 
                         result[cl] = selection;
 
-                        result.labels[cl] = [];
+                        result.labels[cl] = {};
 
                         _.each(result[cl], function (c) {
-                            result.labels[cl].push(instance.get_node(c).text);
+                            result.labels[cl][c] = instance.get_node(c).text;
                         });
 
                     }
@@ -372,7 +390,9 @@ define([
 
                     result[cl] = sel.id;
 
-                    result.labels[cl] = sel.text;
+                    result.labels[cl] = {};
+
+                    result.labels[cl][sel.id] = sel.text;
                 }
 
             }, this));
@@ -388,7 +408,7 @@ define([
 
             if (result[activeTab] && Array.isArray(result[activeTab])) {
                 recipientValues = result[activeTab].slice(0);
-                recipientsLabels = result.labels[activeTab].slice(0);
+                recipientsLabels = $.extend(true, {}, result.labels[activeTab]);
             }
 
             _.each(sels, function (f) {
@@ -1108,25 +1128,6 @@ define([
 
             //advanced mode selectors switches
             this.$switches.off();
-
-        },
-
-        reset: function () {
-
-            this._destroyDependencies();
-
-            //reset trees
-            _.each(this.trees, this._printTreeDefaultSelection, this);
-
-            //reset dropdown
-            _.each(this.dropdown, this._printDropdownDefaultSelection, this);
-
-            this._initDependencies();
-
-            //reset checkbox
-            this._printCheckboxDefaultSelection();
-
-            log.info("Selector View reset");
 
         },
 

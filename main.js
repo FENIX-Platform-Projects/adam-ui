@@ -79,8 +79,8 @@ require([
     Compiler.resolve([commonConfig, menuConfig, dashboardConfig, chartConfig, tableConfig, mapConfig, filterConfig, olapConfig, reoprtsConfig],
         {
             placeholders: {
-                "FENIX_CDN": "http://www.fao.org/fenixrepo/cdn"
-                //"FENIX_CDN": "//fenixrepo.fao.org/cdn"
+                //"FENIX_CDN": "http://www.fao.org/fenixrepo/cdn"
+                "FENIX_CDN": "//fenixrepo.fao.org/cdn"
                 //"FENIX_CDN": "http://lprapp16.fao.org/external/fenixrepo/cdn"
             },
 

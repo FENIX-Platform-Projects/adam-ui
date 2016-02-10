@@ -33,7 +33,7 @@ define(function () {
                 },
 
                 "filter": {
-                    "dimension" : "recipientcode",
+                    "dimension": "recipientcode",
                     "type": "dynamic", //dynamic | static: for dynamic or static section of D3P filter
                     "process": '{"recipientcode": { "codes":[{"uid": "{{uid}}", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
                 },
@@ -67,7 +67,7 @@ define(function () {
                 },
 
                 "filter": {
-                    "dimension" : "recipientcode",
+                    "dimension": "recipientcode",
                     "type": "dynamic",
                     //TODO change to template uid and version as in 'country-country'
                     "process": '{"recipientcode": { "codes":[{"uid": "crs_recipients", "version": "2015", "codes": [{{{codes}}}] } ]}}'
@@ -96,7 +96,7 @@ define(function () {
                 },
 
                 "filter": {
-                    "dimension" : "recipientcode",
+                    "dimension": "recipientcode",
                     "type": "dynamic",
                     //TODO change to template uid and version as in 'country-country'
                     "process": '{"recipientcode": { "codes":[{"uid": "crs_recipients", "version": "2015", "codes": [{{{codes}}}] } ]}}'
@@ -124,7 +124,7 @@ define(function () {
                 },
 
                 "filter": {
-                    "dimension" : "donorcode",
+                    "dimension": "donorcode",
                     "type": "dynamic",
                     "process": '{"donorcode": { "codes":[{"uid": "{{uid}}", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
                 },
@@ -145,7 +145,7 @@ define(function () {
 
                 "selector": {
                     "type": "tree",
-                   // "default": [44006]
+                    // "default": [44006]
                 },
 
                 "dependencies": {
@@ -153,7 +153,7 @@ define(function () {
                 },
 
                 "filter": {
-                    "dimension" : "channelcode",
+                    "dimension": "channelcode",
                     "type": "dynamic",
                     "process": '{"channelcode": { "codes":[{"uid": "crs_channel", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
                 },
@@ -182,7 +182,7 @@ define(function () {
                 },
 
                 "filter": {
-                    "dimension" : "sectorcode",
+                    "dimension": "sectorcode",
                     "type": "dynamic",
                     //TODO change to template uid and version as in 'country-country'
                     "process": '{"sectorcode": { "codes":[{"uid": "crs_sectors", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
@@ -208,7 +208,7 @@ define(function () {
                 },
 
                 "filter": {
-                    "dimension" : "purposecode",
+                    "dimension": "purposecode",
                     "type": "dynamic",
                     //TODO change to template uid and version as in 'country-country'
                     "process": '{"purposecode": { "codes":[{"uid": "crs_purposes", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'

@@ -1,6 +1,7 @@
 /*global define, amplify*/
 define([
     'jquery',
+    'jquery-ui',
     'underscore',
     'fx-c-c/start',
     'views/base/view',
@@ -20,7 +21,7 @@ define([
     'pivotDataConfig',
     /*END OF OLAP*/
     'amplify'
-], function ($, _, ChartCreator, View, template, resultTemplate, i18nLabels, E, GC, AC, Handlebars, log, Pivot, pivotRenderers, pivotAggregators, pivotDataTest, pivotDataConfig) {
+], function ($, jUI, _, ChartCreator, View, template, resultTemplate, i18nLabels, E, GC, AC, Handlebars, log, Pivot, pivotRenderers, pivotAggregators, pivotDataTest, pivotDataConfig) {
 
     'use strict';
 
@@ -45,6 +46,9 @@ define([
         template: template,
 
         initialize: function (params) {
+
+            // Change JQuery-UI plugin names to fix name collision with Bootstrap
+            $.widget.bridge('uitooltip', $.ui.tooltip);
 
             View.prototype.initialize.call(this, arguments);
         },
@@ -77,17 +81,46 @@ define([
 
         },
 
-        _getInfoLabels: function (selection) {
+        _getInfoLabels: function (obj) {
 
-            var result = {},
-                labels = $.extend(true, {}, selection.labels);
+            var req = obj.request || {},
+                current = req.current || {},
+                combination = current.combination || {},
+                result = {},
+                labels = req.selection.labels;
 
-            for (var k in labels) {
-                if (labels.hasOwnProperty(k)) {
-                    result['info_' + k] = Array.isArray(labels[k]) ? labels[k].join(", ") : labels[k]
+            for (var k in combination) {
+
+                if (combination.hasOwnProperty(k)) {
+
+                    var l = labels[k],
+                        labs = [];
+
+                    _.each(combination[k], function (ki) {
+
+                        labs.push(l[ki]);
+
+                    }, this);
+
+                    result['info_' + k] = labs.join(' - ');
 
                 }
             }
+
+            //result['info_title'] = result['info_oda'] + " [" +result['info_year-from'] + " - " + result['info_year-to']+  "]";
+
+            var title = [];
+
+            for (var c in combination) {
+                if (c !==  obj.request.compareField) {
+                    title.push(result['info_' + c]);
+                }
+
+
+            }
+
+
+            result['info_title'] = title.join(" - ") ;
 
             return result;
         },
@@ -97,7 +130,7 @@ define([
             log.info(obj);
 
             var template = Handlebars.compile(resultTemplate),
-                $li = $(template($.extend(true, {}, i18nLabels, obj.request.selection.labels, obj, this._getInfoLabels(obj.request.selection)))),
+                $li = $(template($.extend(true, {}, i18nLabels, obj.request.selection.labels, obj, this._getInfoLabels(obj)))),
                 o = $.extend(true, obj, {$el: $li});
 
             this._bindObjEventListeners(o);
@@ -108,6 +141,9 @@ define([
 
             //Add obj to current objs
             this.currentObjs.push(obj);
+
+            //Init tooltip
+            $li.find('[data-toggle="tooltip"]').tooltip();
 
             return $li;
 
@@ -201,7 +237,7 @@ define([
 
             if (obj.ready === true && obj.model && obj.model.metadata && obj.model.metadata.uid) {
 
-                var fileName = "adma_download_"+ obj.id ;
+                var fileName = "adma_download_" + obj.id;
 
                 fileName = fileName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
 
@@ -222,7 +258,7 @@ define([
                     log.info("Start download: " + fileName);
 
                     tableObj.creator.exportExcel(fileName);
-                    //pivot.exportCSV(fileName);
+                    //tableObj.creator.exportCSV(fileName);
                 } else {
                     log.warn("Impossible to download the file: export function not found")
                 }
@@ -326,9 +362,19 @@ define([
                             subtitle: {
                                 text: '' //
                             },
+                            xAxis: {
+                                type: 'datetime'
+                            },
                             plotOptions: {
                                 column: {
                                     stacking: 'normal'
+                                }
+                            },
+                            tooltip: {
+                                formatter: function () {
+                                    return '<b>' + this.x + ': ' +
+                                        this.series.name + '</b><br/>' +
+                                        Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
                                 }
                             }
                         }
@@ -435,7 +481,7 @@ define([
 
             return {
                 adapter: {
-                    type: "timeserie",
+                    type: "standard",
                     xDimensions: 'year',
                     yDimensions: 'unitcode',
                     valueDimensions: 'value',
