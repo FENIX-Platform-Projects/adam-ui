@@ -338,10 +338,6 @@ define(function () {
                                         {
                                             "columns": ["unitcode"],
                                             "rule": "pgfirst"
-                                        },
-                                        {
-                                            "columns": ["unitname"],
-                                            "rule": "pgfirst"
                                         }
                                     ]
                                 }
@@ -969,6 +965,88 @@ define(function () {
                                 }
                             }
                         ]
+                    },
+                    {
+                        id: 'item-6',
+                        type: 'map',
+                        class: "fx-map-chart",
+                        //needed if layout = injected
+                        container: "#item-6",
+                        config: {
+                            container: "#item-6",
+                            leaflet: {
+                                zoomControl: false,
+                                attributionControl: true,
+                                scrollWheelZoom: false,
+                                minZoom: 2
+                            },
+                            join: {
+                                style: {
+                                    colorramp: "PuBuGn"
+                                }
+                            },
+                            layer: {
+                                layertitle: "Commitment Current Prices"
+                            }
+                        },
+                        // for now it takes the id, TODO: add uid as well
+                        allowedFilter: ['purposecode', 'year', 'channelcode'],
+                        filter: [
+                            {
+                                "name": "filter",
+                                "parameters": {
+                                    "rows": {
+                                        "flowcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_flow_types",
+                                                    "version": "2015",
+                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
+                                                    ]   //ODA
+                                                }
+                                            ]
+                                        },
+                                        "year": {
+                                            "time": [
+                                                {
+                                                    "from": 2000,
+                                                    "to": 2013
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "name": "pggroup",
+                                "parameters": {
+                                    "by": [
+                                        "gaul0"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": ["value"],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["unitname"],
+                                            "rule": "pgfirst"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "select",
+                                "parameters": {
+                                    "query": "WHERE gaul0<>? AND  gaul0<>?",
+                                    "queryParameters": [{"value": "NA"}, {"value": "147295+147296"}]
+                                }
+                            }
+                        ]
                     }
 
                 ]
@@ -1338,10 +1416,6 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitcode"],
-                                            "rule": "pgfirst"
-                                        },
-                                        {
-                                            "columns": ["unitname"],
                                             "rule": "pgfirst"
                                         }
                                     ]
@@ -2347,10 +2421,6 @@ define(function () {
                                         {
                                             "columns": ["unitcode"],
                                             "rule": "pgfirst"
-                                        },
-                                        {
-                                            "columns": ["unitname"],
-                                            "rule": "pgfirst"
                                         }
                                     ]
                                 }
@@ -3001,6 +3071,95 @@ define(function () {
                                 }
                             }
                         ]
+                    },
+                    {
+                        id: 'item-6',
+                        type: 'map',
+                        class: "fx-map-chart",
+                        //needed if layout = injected
+                        container: "#item-6",
+                        config: {
+                            container: "#item-6",
+                            leaflet: {
+                                zoomControl: false,
+                                attributionControl: true,
+                                scrollWheelZoom: false,
+                                minZoom: 2
+                            },
+                            join: {
+                                style: {
+                                    colorramp: "PuBuGn"
+                                }
+                            },
+                            layer: {
+                                layertitle: "Commitment Current Prices"
+                            }
+                        },
+                        // for now it takes the id, TODO: add uid as well
+                        allowedFilter: ['donorcode', 'purposecode', 'year', 'channelcode'],
+                        filter: [
+                            {
+                                "name": "filter",
+                                "parameters": {
+                                    "rows": {
+                                        "flowcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_flow_types",
+                                                    "version": "2015",
+                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
+                                                    ]   //ODA
+                                                }
+                                            ]
+                                        },
+                                        "donorcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_donors",
+                                                    "version": "2015",
+                                                    "codes": [
+                                                        "1"  //Austria
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "year": {
+                                            "time": [
+                                                {
+                                                    "from": 2000,
+                                                    "to": 2013
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "name": "pggroup",
+                                "parameters": {
+                                    "by": [
+                                        "gaul0"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": ["value"],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "pgfirst"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "select",
+                                "parameters": {
+                                    "query": "WHERE gaul0<>? AND  gaul0<>?",
+                                    "queryParameters": [{"value": "NA"}, {"value": "147295+147296"}]
+                                }
+                            }
+                        ]
                     }
 
                 ]
@@ -3408,10 +3567,6 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitcode"],
-                                            "rule": "pgfirst"
-                                        },
-                                        {
-                                            "columns": ["unitname"],
                                             "rule": "pgfirst"
                                         }
                                     ]

@@ -95,6 +95,8 @@ define([
 
         _updateFAOItem1ChartConfiguration: function (item1, sectorSelected, subSectorSelected) {
 
+           // console.log("_updateFAOItem1ChartConfiguration");
+
             // Set either sectorcode or purposecode as the series in the first chart config
             // Check the current selection via seriesname in config
             var seriesname = item1.config.adapter.seriesDimensions[0];
