@@ -1,7 +1,7 @@
 /*global define, amplify*/
 define([
     'jquery',
-    'jquery-ui',
+    //'jquery-ui',
     'underscore',
     'fx-c-c/start',
     'views/base/view',
@@ -21,7 +21,7 @@ define([
     'pivotDataConfig',
     /*END OF OLAP*/
     'amplify'
-], function ($, jUI, _, ChartCreator, View, template, resultTemplate, i18nLabels, E, GC, AC, Handlebars, log, Pivot, pivotRenderers, pivotAggregators, pivotDataTest, pivotDataConfig) {
+], function ($, /* jUI,*/ _, ChartCreator, View, template, resultTemplate, i18nLabels, E, GC, AC, Handlebars, log, Pivot, pivotRenderers, pivotAggregators, pivotDataTest, pivotDataConfig) {
 
     'use strict';
 
@@ -48,7 +48,7 @@ define([
         initialize: function (params) {
 
             // Change JQuery-UI plugin names to fix name collision with Bootstrap
-            $.widget.bridge('uitooltip', $.ui.tooltip);
+            //$.widget.bridge('uitooltip', $.ui.tooltip);
 
             View.prototype.initialize.call(this, arguments);
         },
@@ -58,6 +58,7 @@ define([
         },
 
         attach: function () {
+
             View.prototype.attach.call(this, arguments);
 
             this._initVariables();
@@ -112,13 +113,12 @@ define([
             var title = [];
 
             for (var c in combination) {
+
                 if (c !==  obj.request.compareField) {
                     title.push(result['info_' + c]);
                 }
 
-
             }
-
 
             result['info_title'] = title.join(" - ") ;
 
@@ -143,7 +143,7 @@ define([
             this.currentObjs.push(obj);
 
             //Init tooltip
-            $li.find('[data-toggle="tooltip"]').tooltip();
+            //$li.find('[data-toggle="tooltip"]').tooltip();
 
             return $li;
 
