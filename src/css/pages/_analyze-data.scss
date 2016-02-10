@@ -1,5 +1,8 @@
 /* Analyze Data */
 
+
+
+
 .compare-title{
   display: inline-block;
 
@@ -239,6 +242,94 @@
 
 }
 
+[data-content="ready"]{
+
+  .tab-content{
+    height: 380px !important;
+  }
+
+
+
+
+  &:before{
+    content: "";
+    height: 1px;
+    background-color: $fenix-hr;
+    width: 100%;
+    position: absolute;
+    top: 42px;
+    left: 0px;
+  }
+
+  .tab-content{
+    margin-top: 8px;
+
+    [data-container="table"]{
+      .gt-grid{
+        height: 290px !important;
+
+
+        .gt-viewport{
+          height: 250px !important;
+
+          .gt-body-div{
+            height: 225px !important;
+          }
+
+        }
+
+
+      }
+
+
+    }
+
+    .selection-info{
+      margin-top: 10px;
+
+    }
+
+  }
+
+
+
+
+}
+
+.remove-widget-btn{
+
+}
+
+.small-icons-analysis{
+
+
+  .fx-widget-icons.icojam_download_1{
+    position: absolute;
+    top: -26px;
+    left: auto;
+    right: 15px;
+  }
+}
+
+.fx-analysis-item{
+  padding: 22px 0 0 0;
+  margin-bottom: 25px;
+}
+
+.fx-dataset-details-container{
+  right: 0;
+  width: 100%;
+
+  .fx-widget-icons{
+    position: absolute;
+    font-size: 18px;
+    right: 6px;
+    top: 1px;
+    cursor: pointer;
+  }
+
+}
+
 /* FINE DANI*/
 
 
@@ -251,6 +342,16 @@
   }
 
 }
+
+.analyze-compare-results{
+  .fx-widget{
+    &:before{
+      display: none;
+
+    }
+  }
+}
+
 
 
 

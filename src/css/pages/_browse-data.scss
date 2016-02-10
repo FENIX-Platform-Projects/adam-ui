@@ -18,16 +18,22 @@
   float: left;
 }
 
-.fx-arrow-time{
-  position: relative;
-  display: block;
-  width: 10%;
-  margin: 0 5%;
-  top: 25px;
-  //left: 35%;
-  height: 5px;
-  float: left;
+
+.filter-container{
+  .fx-arrow-time{
+    position: relative;
+    display: block;
+    width: 10%;
+    margin: 0 5%;
+    top: 25px;
+    //left: 35%;
+    height: 5px;
+    float: left;
+  }
+
 }
+
+
 
 .fx-filter-range-to-holder{
   width: 40%;

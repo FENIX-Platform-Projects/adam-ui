@@ -13926,9 +13926,53 @@ footer h4 {
   .fx-result[data-status="empty"] [data-content="empty"] {
     display: block; }
 
+[data-content="ready"] .tab-content {
+  height: 380px !important; }
+[data-content="ready"]:before {
+  content: "";
+  height: 1px;
+  background-color: #D2D0D0;
+  width: 100%;
+  position: absolute;
+  top: 42px;
+  left: 0px; }
+[data-content="ready"] .tab-content {
+  margin-top: 8px; }
+  [data-content="ready"] .tab-content [data-container="table"] .gt-grid {
+    height: 290px !important; }
+    [data-content="ready"] .tab-content [data-container="table"] .gt-grid .gt-viewport {
+      height: 250px !important; }
+      [data-content="ready"] .tab-content [data-container="table"] .gt-grid .gt-viewport .gt-body-div {
+        height: 225px !important; }
+  [data-content="ready"] .tab-content .selection-info {
+    margin-top: 10px; }
+
+.small-icons-analysis .fx-widget-icons.icojam_download_1 {
+  position: absolute;
+  top: -26px;
+  left: auto;
+  right: 15px; }
+
+.fx-analysis-item {
+  padding: 22px 0 0 0;
+  margin-bottom: 25px; }
+
+.fx-dataset-details-container {
+  right: 0;
+  width: 100%; }
+  .fx-dataset-details-container .fx-widget-icons {
+    position: absolute;
+    font-size: 18px;
+    right: 6px;
+    top: 1px;
+    cursor: pointer; }
+
 /* FINE DANI*/
 [data-container="chart"] [data-role="content"] {
   height: 100%; }
+
+.analyze-compare-results .fx-widget:before {
+  display: none; }
 
 /* Extra small devices (phones, less than 768px) */
 /* No media query since this is the default in Bootstrap */
@@ -13954,7 +13998,7 @@ footer h4 {
   width: 40%;
   float: left; }
 
-.fx-arrow-time {
+.filter-container .fx-arrow-time {
   position: relative;
   display: block;
   width: 10%;

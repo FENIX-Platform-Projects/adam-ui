@@ -1,25 +1,20 @@
 <li class="fx-analysis-item fit fx-result" data-status="loading">
 
-    <div class="fx-handle"></div>
+    <!--<div class="fx-handle"></div>-->
 
-    <div class="fx-dataset-details-container">
+    <div class="fx-dataset-details-container clearfix">
         <!-- Result Title -->
-        <span class="fx-dataset-details truncate" data-toggle="tooltip" data-placement="top" title="{{info_title}}">{{info_title}}</span>
+        <span class="fx-dataset-details truncate pull-left" data-toggle="tooltip" data-placement="top" title="{{info_title}}">{{info_title}}</span>
 
-        <ul class="nav nav-tabs small-icons-analysis" role="tablist">
-
-            <li role="presentation" class="pull-right">
-                <a data-control='remove'>
-                    <span class="fx-widget-icons icojam_button_delete_1"></span>
-                </a>
-            </li>
-        </ul>
+        <a data-control='remove' class="pull-right remove-widget-btn">
+            <span class="fx-widget-icons icojam_button_delete_1"></span>
+        </a>
 
     </div>
 
-    <div class='fx-widget row fit-height'>
+    <div class='fx-widget fit-height'>
 
-        <div class="col-xs-12 fit-height">
+        <div class="fit-height">
 
             <div data-content="ready" class="fixed-height">
 
@@ -66,9 +61,9 @@
                     </div>
 
                     <div id="fx-tab-info-{{id}}" role="tabpanel" data-visualization="info"
-                         class="tab-pane fade fit-height">
+                         class="tab-pane fade">
 
-                        <h3>{{ info_current_selection }}</h3>
+                        <h2 class="selection-info">{{ info_current_selection }}</h2>
 
                         <dl class="dl-horizontal">
 
@@ -125,7 +120,7 @@
 
                         </dl>
 
-                        <button data-control='download' class="btn btn-default pull-right"> {{download}}</button>
+                        <!--<button data-control='download' class="btn btn-default"> {{download}}</button>-->
 
                     </div>
                 </div>
