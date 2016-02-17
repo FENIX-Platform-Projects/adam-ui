@@ -17,7 +17,7 @@ define(function () {
                 //body sent to msd/codes/filter
                 "cl": {
                     "uid": "crs_recipients",
-                    "version": "2015"
+                    "version": "2016"
                     //, level: 3,
                     //levels: 3
                 },
@@ -55,7 +55,7 @@ define(function () {
 
                 "cl": {
                     "uid": "crs_regions_countries",
-                    "version": "2015"
+                    "version": "2016"
                 },
 
                 "selector": {
@@ -70,7 +70,7 @@ define(function () {
                     "dimension": "recipientcode",
                     "type": "dynamic",
                     //TODO change to template uid and version as in 'country-country'
-                    "process": '{"recipientcode": { "codes":[{"uid": "crs_recipients", "version": "2015", "codes": [{{{codes}}}] } ]}}'
+                    "process": '{"recipientcode": { "codes":[{"uid": "crs_recipients", "version": "{{{version}}}", "codes": [{{{codes}}}] } ]}}'
                 },
 
                 "validation": {
@@ -84,7 +84,7 @@ define(function () {
 
                 "cl": {
                     "uid": "crs_regional_projects",
-                    "version": "2015"
+                    "version": "2016"
                 },
 
                 "selector": {
@@ -99,7 +99,7 @@ define(function () {
                     "dimension": "recipientcode",
                     "type": "dynamic",
                     //TODO change to template uid and version as in 'country-country'
-                    "process": '{"recipientcode": { "codes":[{"uid": "crs_recipients", "version": "2015", "codes": [{{{codes}}}] } ]}}'
+                    "process": '{"recipientcode": { "codes":[{"uid": "crs_recipients", "version": "{{{version}}}", "codes": [{{{codes}}}] } ]}}'
                 },
 
                 "validation": {
@@ -111,7 +111,7 @@ define(function () {
 
                 "cl": {
                     "uid": "crs_donors",
-                    "version": "2015"
+                    "version": "2016"
                 },
 
                 "selector": {
@@ -138,7 +138,7 @@ define(function () {
 
                 "cl": {
                     "uid": "crs_channels",
-                    "version": "2015",
+                    "version": "2016",
                     "level": 3,
                     "levels": 3
                 },
@@ -167,7 +167,7 @@ define(function () {
 
                 "cl": {
                     "uid": "crs_dac",
-                    "version": "2015",
+                    "version": "2016",
                     "level": 1,
                     "levels": 1
                 },
@@ -197,7 +197,7 @@ define(function () {
 
                 "cl": {
                     "uid": "crs_dac",
-                    "version": "2015",
+                    "version": "2016",
                     "level": 2,
                     "levels": 2
                 },
@@ -227,7 +227,7 @@ define(function () {
             "oda": {
                 "cl": {
                     "uid": "crs_flow_amounts",
-                    "version": "2015"
+                    "version": "2016"
                 },
                 "selector": {
                     "type": "dropdown",
@@ -284,7 +284,7 @@ define(function () {
                         "codes": [
                             {
                                 "uid": "crs_flow_types",
-                                "version": "2015",
+                                "version": "2016",
                                 "codes": ["10_12", "10_11", "10_13", "10_19"]
                             }
                         ]
