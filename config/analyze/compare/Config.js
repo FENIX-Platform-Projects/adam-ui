@@ -16,26 +16,27 @@ define(function () {
 
                 //body sent to msd/codes/filter
                 "cl": {
-                    "uid": "crs_recipients",
+                    "uid": "crs_recipientcountries", //for pure country list "crs_recipients"
                     "version": "2016"
                     //, level: 3,
-                    //levels: 3
+                    //levels: 3,
                 },
 
                 //html selector configuration
                 "selector": {
                     "type": "tree", //tree | list
                     //"source" : "codelist | static" // if type:list
-                    "default": [625 /*, 261, 269 */] //selected codes by default,
+                    "default": [625 /*, 261, 269 */], //selected codes by default,
                     //, "max" : 2 //max number of selectable item
                     //"disabled" : true //if present and true the selector is initially disabled
                     //"config" : { core: { multiple: true } } //specific jstree or select2 config
+                    "blacklist": [] //code to exclude from the codelist
                 },
 
                 "filter": {
                     "dimension": "recipientcode",
                     "type": "dynamic", //dynamic | static: for dynamic or static section of D3P filter
-                    "process": '{"recipientcode": { "codes":[{"uid": "{{uid}}", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
+                    "process": '{"recipientcode": { "codes":[{"uid": "crs_recipients", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
                 },
 
                 //dependencies with other selectors
@@ -59,7 +60,8 @@ define(function () {
                 },
 
                 "selector": {
-                    "type": "tree"
+                    "type": "tree",
+                    "blacklist": [298, 189, 289, 498, 389, 380, 489, 798, 789, 689, 619, 679, 89, 589, 889] //code to exclude from the codelist
                 },
 
                 "dependencies": {
@@ -155,7 +157,7 @@ define(function () {
                 "filter": {
                     "dimension": "channelcode",
                     "type": "dynamic",
-                    "process": '{"channelcode": { "codes":[{"uid": "crs_channel", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
+                    "process": '{"channelcode": { "codes":[{"uid": "{{{uid}}}", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
                 },
 
                 "validation": {
@@ -185,7 +187,7 @@ define(function () {
                     "dimension": "sectorcode",
                     "type": "dynamic",
                     //TODO change to template uid and version as in 'country-country'
-                    "process": '{"sectorcode": { "codes":[{"uid": "crs_sectors", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
+                    "process": '{"parentsector_code": { "codes":[{"uid": "{{{uid}}}", "version": "{{version}}", "codes": [{{{codes}}}] } ]}}'
                 },
 
                 "validation": {
@@ -279,17 +281,7 @@ define(function () {
         "filter": {
             "name": "filter",
             "parameters": {
-                "rows": {
-                    "flowcode": {
-                        "codes": [
-                            {
-                                "uid": "crs_flow_types",
-                                "version": "2016",
-                                "codes": ["10_12", "10_11", "10_13", "10_19"]
-                            }
-                        ]
-                    }
-                },
+                "rows": {},
                 //"columns" : [] // dynamically filled by controller
             }
         },

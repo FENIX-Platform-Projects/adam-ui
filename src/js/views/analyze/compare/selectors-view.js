@@ -311,7 +311,7 @@ define([
             _.each(this.trees, _.bind(function (cl) {
 
                 var rawCl = amplify.store.sessionStorage(cl),
-                    data = this._buildTreeModel(rawCl),
+                    data = this._buildTreeModel(rawCl, null, cl),
                     conf = this.selectors[cl];
 
                 this._renderTree({id: cl, data: data, conf: conf});
@@ -326,7 +326,7 @@ define([
 
                 this._renderDropdown({
                     id: cl,
-                    data: rawCl ? this._buildDropdownModel(rawCl) : null,
+                    data: rawCl ? this._buildDropdownModel(rawCl, null, cl) : null,
                     conf: conf
                 });
 
@@ -539,20 +539,31 @@ define([
 
         //tree
 
-        _buildTreeModel: function (fxResource, parent) {
+        _buildTreeModel: function (fxResource, parent, cl) {
 
-            var data = [];
+            var data = [],
+                selector = this.selectors[cl],
+                selectorConfig = selector.selector || {},
+                blacklist = selectorConfig.blacklist || [],
+                bl = blacklist.map(function (item) { return item.toString()});
 
             _.each(fxResource, _.bind(function (item) {
 
-                data.push({
-                    id: item.code,
-                    text: item.title[Utils.getLocale()],
-                    parent: parent || '#'
-                });
+                if (!_.contains(bl, item.code.toString())) {
 
-                if (Array.isArray(item.children) && item.children.length > 0) {
-                    data = _.union(data, this._buildTreeModel(item.children, item.code));
+                    data.push({
+                        id: item.code,
+                        text: item.title[Utils.getLocale()],
+                        parent: parent || '#'
+                    });
+
+                    if (Array.isArray(item.children) && item.children.length > 0) {
+                        data = _.union(data, this._buildTreeModel(item.children, item.code, cl));
+                    }
+
+                } else {
+
+                    log.warn("code [" + item.code + "] excluded from " + cl);
                 }
 
             }, this));
@@ -705,7 +716,7 @@ define([
             if ($container.length > 0 && Array.isArray(model)) {
 
                 tree = $container.find(s.TREE_CONTAINER).jstree(true);
-                tree.settings.core.data = this._buildTreeModel(model);
+                tree.settings.core.data = this._buildTreeModel(model, null, o.target);
                 tree.refresh(true);
                 tree.redraw(true);
 
@@ -746,9 +757,9 @@ define([
 
         //dropdown
 
-        _buildDropdownModel: function (fxResource) {
+        _buildDropdownModel: function (fxResource, parent, cl) {
 
-            return this._buildTreeModel(fxResource);
+            return this._buildTreeModel(fxResource, parent, cl);
         },
 
         _renderDropdown: function (o) {
