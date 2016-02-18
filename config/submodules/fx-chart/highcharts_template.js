@@ -97,11 +97,22 @@ define(function () {
             '#c0392b'
         ],
         credits: {
-            enabled: false //Attiva o disattiva il link di HighCharts dalla chart
+            enabled: true,
+            position: {
+                align: 'left',
+                x: 10
+            },
+            text: 'Source: OECD',
+            href: ''
+        },
+        lang: {
+            doptions: "Chart Download options"
         },
         exporting: {
             buttons: {
                 contextButton: {
+                    _titleKey:"doptions",
+                    text: 'Download',
                     menuItems: [{
                         textKey: 'downloadPNG',
                         onclick: function () {
@@ -116,120 +127,38 @@ define(function () {
                         }
                     }]
                 }
-            }
-        },
-        navigation: { //Modifica lo stile dei bottoni e spesso del solo bottone dell'esportazione (lo sfondo)
-            buttonOptions: {
-                theme: {
-                    'stroke-width': 1, // Peso stroke del bottone
-                    stroke: '#666666', // Colore stroke del bottone
-                    r: 0, // Smusso stroke del bottone,
-                    states: {
-                        hover: {
-                            stroke: '#666666', // Press stroke del bottone
-                            fill: '#e6e6e6' // Rollover del bottone
-                        },
-                        select: {
-                            stroke: '#666666', // Press stroke del bottone
-                            fill: '#e6e6e6' // Press Fill del bottone
-                        }
+              },
+            chartOptions:{
+                subtitle: {
+                    text: ''
+                },
+                legend:{
+                    title: {
+                        text: ''
                     }
                 }
             }
-        },
-        legend: { //Modifica style della legenda
-            enabled: true, //Attiva la legenda
-            floating: false, // IMPORTANTE - Permette alla plot area di stare sotto alla legenda - si guadagna molto spazio
-
-            //margin: 100, //Margine dell'intero blocco legenda dall'area di PLOT (Solo quando non è floating)
-            //padding: 20, //Padding del box legenda (Ingrandisce il box)
-            backgroundColor: '#FFFFFF', //Colore di sfondo della legenda
-            //layout: 'horizontal', //Tipologia di legenda
-            align: 'center', //Allineamento orizzontale del box della legenda (left, center, right)
-            verticalAlign: 'bottom', //allineamento verticale della legenda (top, middle, bottom)
-            //width: 200, //Larghezza della legenda (Aggiunge Margini e padding)
-            //x: -8,//Offset della posizione della legenda rispetto all'allineamento (valori positivi > destra)
-            //y: -8,//Offset della posizione della legenda rispetto all'allineamento (valori positivi > verso il basso)
-            //maxHeight: 90, //IMPORTANTE - Indica l'altezza massima della legenda, se superata, mostra la paginazione (vedi sotto)
-            //borderColor: '#666666', //Colore del bordo della legenda
-            borderWidth: 0, //Spessore bordo della legenda
-            //borderRadius: 3, //Smusso della legenda
-            //itemDistance: 10, //Distanza X degli elementi quando la legenda è in verticale
-            //symbolWidth: 20, //Larghezza del simbolo rettangolo quando la legenda ne ha uno (accanto al nome - default 16)
-            //symbolHeight: 20, //Altezza del simbolo rettangolo quando la legenda ne ha uno (accanto al nome - default 12)
-            //symbolRadius: 3, //Smusso del simbolo rettangolo quando la legenda ne ha uno (default 2)
-            symbolPadding: 10, //Distanza tra simbolo e legenda (default 5)
-            //itemMarginBottom: 5, //Margine inferiore di ogni elemento della legenda
-            //itemMarginTop: 5, //Margine superiore di ogni elemento della legenda
-            //lineHeight: 20, //Altezza di ogni elemento della legenda (il valore di default è 16)
+          },
+        legend: {
+            align: 'right',
+            verticalAlign: 'top',
+            layout: 'vertical',
+            x:0,
+            y:100,
             itemStyle: {
-                cursor: 'pointer',
-                color: '#666666',
-                fontSize: '14px',
-                fontWeight: 300
+                fontWeight: 'normal'
             },
-            itemHiddenStyle: { //Colore dell'elemento legenda quando è disattivato
-                color: '#eeeeee'
-            },
-            itemHoverStyle: { //Colore dell'elemento legenda in rollover
-                color: '#3ca7da'
-            },
-            navigation: { //Paginazione Legenda - stilizzazione
-                activeColor: '#3ca7da', //Colore freccia attiva legenda
-                inactiveColor: '#666666', //Colore freccia disattiva legenda
-                arrowSize: 8, //Dimensioni freccia
-                animation: true, //Attiva/Disattiva animazione
-                style: { //Stile CSS applicato solo alla navigazione della legenda
-                    color: '#666666',
-                    fontSize: '10px'
-                }
+            title: {
+                text: 'Click to hide/show'
             }
         },
-/*        plotOptions: {
-            series: {
-                allowPointSelect: true, //Permette di selezionare i punti della chart
-                //pointPlacement: "on", Per partire dall'origine
-                animation: { // Configura l'animazione di entrata
-                    duration: 1000,
-                    easing: 'swing'
-                },
-                connectNulls: true,
-                cropThreshold: 3,
-                lineWidth: 1, // IMPORTANTE - Cambia lo spessore delle linee della chart
-                states: {
-                    hover: {
-                        lineWidth: 1
-                    }
-                },
-                fillColor: {
-                },
-                marker: {
-                    enabled: false, //Attiva o disattiva i marker
-                    //symbol: 'url(http://www.mentaltoy.com/resources/logoChart.png)', //Questo paramentro carica un simbolo personalizzato. Si può anche avere una chart con marker diverse sulle linee
-                    symbol: 'circle', // Tipologia di marker
-                    radius: 4,
-                    lineWidth: 1,
-                    states: {
-                        hover: {
-                            enabled: true, // Attiva o disattiva il marker quando si passa sopra la chart
-                            symbol: 'circle',
-                            radius: 5,
-                            lineWidth: 2
-                        }
-                    }
-                }
-            }
-        },*/
-
-
         title: {
             //enabled: false,
             text: '',
             x: -20 //center
         },
         subtitle: {
-            text: 'FRA Data',
-            x: -20
+            text: '<b>Hover for values and click and drag to zoom</b>'
         },
         xAxis: {
             gridLineWidth: 1, // IMPORTANTE - Attiva le linee verticali
