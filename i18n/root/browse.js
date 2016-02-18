@@ -4,6 +4,7 @@ define({
     "filter_btn": "Update",
     "source": "Source",
     "selections" : "Current Selections",
+    "backToTop" : "Back to Top",
     "development_indicators": "Development Indicators",
     "text" : "Change me in 118n/root/browse.js",
     "sector": "By Sector",

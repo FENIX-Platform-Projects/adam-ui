@@ -22,12 +22,12 @@ define(function () {
                     "components": [
                         {
                             "uid": "crs_dac",
-                            "version": "2015",
+                            "version": "2016",
                             "type": "codelist-hierarchy",
                             "componentType": "dropDownList-FENIX",
                             "lang": "EN",
                             "title": {"EN": "Codelist"},
-                            "name": "sectorcode",
+                            "name": "parentsector_code",
                             config: {
                                 "defaultsource": [
                                     //{"value": null, "label": "All", "selected": true},
@@ -37,7 +37,7 @@ define(function () {
                                 "enableMultiselection": false,
                                 "filter": {
                                     "uid": "crs_dac",
-                                    "version": "2015",
+                                    "version": "2016",
                                     "level" : 1,
                                     "levels":3
                                 }
@@ -55,7 +55,7 @@ define(function () {
                     "components": [
                         {
                             "uid": "crs_dac",
-                            "version": "2015",
+                            "version": "2016",
                             "type": "codelist-hierarchy",
                             "componentType": "dropDownList-FENIX",
                             "lang": "EN",
@@ -68,14 +68,14 @@ define(function () {
                                 "onlyValueText": true,
                                 "filter": {
                                     "uid": "crs_dac",
-                                    "version": "2015",
+                                    "version": "2016",
                                     "level" : 3,
                                     "levels":3
                                 }
                             },
                             creator: {
                                     allowClear: true,
-                                    placeholder: "Select .."
+                                    placeholder: "All"
                             }
                         }
                     ]
@@ -109,13 +109,15 @@ define(function () {
                                         {"value": "2010", "label": "2010", "selected": false},
                                         {"value": "2011", "label": "2011", "selected": false},
                                         {"value": "2012", "label": "2012", "selected": false},
-                                        {"value": "2013", "label": "2013", "selected": false}
+                                        {"value": "2013", "label": "2013", "selected": false},
+                                        {"value": "2014", "label": "2014", "selected": false}
                                     ]
                                 },
                                 "to" : {
                                     "title":  {"EN": "To"},
                                     "defaultsource": [
-                                        {"value": "2013", "label": "2013", "selected": true},
+                                        {"value": "2014", "label": "2014", "selected": true},
+                                        {"value": "2013", "label": "2013", "selected": false},
                                         {"value": "2012", "label": "2012", "selected": false},
                                         {"value": "2011", "label": "2011", "selected": false},
                                         {"value": "2010", "label": "2010", "selected": false},
@@ -138,13 +140,46 @@ define(function () {
                 {
                     "type": "codelist-hierarchy",
                     "containerType": "baseContainer",
+                    "title": "Channel Parent Category",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-md-3 col-lg-2",
+                    "components": [
+                        {
+                            "uid": "crs_channels",
+                            "version": "2016",
+                            "type": "codelist-hierarchy",
+                            "name": "channelsubcategory_code",
+                            "componentType": "dropDownList-FENIX",
+                            "lang": "EN",
+                            "title": {"EN": "Codelist"},
+
+                            config: {
+                                "defaultsource": [],
+                                "onlyValueText": true,
+                                "filter": {
+                                    "uid": "crs_channels",
+                                    "version": "2016",
+                                    "level" : 2,
+                                    "levels":3
+                                }
+                            },
+                            creator: {
+                                allowClear: true,
+                                placeholder: "All"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "codelist-hierarchy",
+                    "containerType": "baseContainer",
                     "title": "Channel of Delivery",
                     "module_class": "fx-filter-grid-module",
                     "class": "col-md-3 col-lg-2",
                     "components": [
                         {
                             "uid": "crs_channels",
-                            "version": "2015",
+                            "version": "2016",
                             "type": "codelist-hierarchy",
                             "name": "channelcode",
                             "componentType": "dropDownList-FENIX",
@@ -156,14 +191,14 @@ define(function () {
                                 "onlyValueText": true,
                                 "filter": {
                                     "uid": "crs_channels",
-                                    "version": "2015",
+                                    "version": "2016",
                                     "level" : 3,
                                     "levels":3
                                 }
                             },
                             creator: {
                                 allowClear: true,
-                                placeholder: "Select .."
+                                placeholder: "All"
                             }
                         }
                     ]
@@ -174,14 +209,14 @@ define(function () {
                     "title": "ODA",
                     "icon" : {
                         "class" : "fa fa-info-circle",
-                        "tooltip" : "Official Development Assistance"
+                        "tooltip" : "Official Development Assistance - Grants, Grant-Like, Loans and Equity Investment"
                     },
                     "module_class": "fx-filter-grid-module",
                     "class": "col-md-3 col-lg-2",
                     "components": [
                         {
                             "uid": "crs_flow_amounts",
-                            "version": "2015",
+                            "version": "2016",
                             "type": "codelist",
                             "name": "uid",
                             "componentType": "dropDownList-FENIX",
@@ -230,7 +265,7 @@ define(function () {
                                 xDimensions: 'year',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['sectorcode']
+                                seriesDimensions: ['parentsector_code']
                             },
                             template: {
                                 //"title": "Top 25..."
@@ -245,8 +280,8 @@ define(function () {
                                             }
                                         }
                                     },
-                                    subtitle: {
-                                        text: 'Click and drag on chart to zoom'
+                                   /** subtitle: {
+                                        text: '<b>Click and drag on chart to zoom</b>'
                                     },
                                     credits: {
                                         enabled: true,
@@ -255,32 +290,39 @@ define(function () {
                                     },
                                     lang: {
                                         doptions: "Chart Download options"
-                                    },
+                                    },**/
                                     exporting:{
-                                        buttons: {
+                                       /** buttons: {
                                             contextButton: {
                                                 _titleKey:"doptions",
                                                 text: 'Download'
                                             }
                                             //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },
+                                        },**/
                                         chartOptions:{
-                                            subtitle: {
+                                          /**  subtitle: {
                                                 text: ''
-                                            },
+                                            },**/
                                             legend:{
-                                                enabled:true,
-                                                title: {
+                                                enabled:true//,
+                                             /**   title: {
                                                     text: ''
-                                                }
+                                                }**/
                                             }
                                         }
                                     },
                                     legend: {
+                                        align: 'center',
+                                        verticalAlign: 'bottom',
+                                        layout: 'horizontal',
+                                        x:0,
+                                        y:0
+                                    },
+                                   /** legend: {
                                         title: {
                                             text: 'Click to hide/show'
                                         }
-                                    },
+                                    },**/
                                     xAxis : {
                                         type: 'datetime'
                                     },
@@ -297,22 +339,12 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['purposecode', 'year',  'channelsubcategory_code', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "flowcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_flow_types",
-                                                    "version": "2015",
-                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                                    ]   //ODA
-                                                }
-                                            ]
-                                        },
                                         "year": {
                                             "time": [
                                                 {
@@ -338,7 +370,7 @@ define(function () {
                                         {
                                             "columns": ["unitcode"],
                                             "rule": "pgfirst"
-                                        }
+                                        } /** dont include unitname for FAO Sectors **/
                                     ]
                                 }
                             },
@@ -364,7 +396,7 @@ define(function () {
                                 xDimensions: 'donorcode',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['donorcode'],
+                                seriesDimensions: ['unitname'],
                                 sort: false
                             },
                             template: {
@@ -375,43 +407,52 @@ define(function () {
                                     chart: {
                                         type: "column"
                                     },
-                                    subtitle: {
-                                        text: 'Click and drag on chart to zoom'
+                                 /**   subtitle: {
+                                        text: '<b>Click and drag on chart to zoom</b>'
                                     },
                                     credits: {
                                         enabled: true,
+                                        position: {
+                                            align: 'left',
+                                            x: 10
+                                        },
                                         text: 'Source: OECD',
                                         href: ''
                                     },
                                     lang: {
                                         doptions: "Chart Download options"
-                                    },
+                                    },**/
                                     exporting:{
-                                        buttons: {
+                                       /** buttons: {
                                             contextButton: {
                                                 _titleKey:"doptions",
                                                 text: 'Download'
                                             }
                                             //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },
+                                        },**/
                                         chartOptions:{
-                                            subtitle: {
+                                           /** subtitle: {
                                                 text: ''
-                                            },
+                                            },**/
                                             legend:{
-                                                enabled:false,
-                                                title: {
+                                                enabled:false//,
+                                              /**  title: {
                                                     text: ''
-                                                }
+                                                }**/
                                             }
                                         }
                                     },
                                     legend: {
-                                        title: {
+                                        enabled: false//,
+                                       /** title: {
                                             text: 'Click to hide/show'
-                                        }
+                                        }**/
                                     },
-
+                                    plotOptions: {
+                                      column: {
+                                          colorByPoint: true
+                                      }
+                                    },
                                    // plotOptions : {
                                        // series : {
                                            // showCheckbox: true,
@@ -437,22 +478,12 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['purposecode', 'year', 'channelsubcategory_code', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "flowcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_flow_types",
-                                                    "version": "2015",
-                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                                    ]   //ODA
-                                                }
-                                            ]
-                                        },
                                         "year": {
                                             "time": [
                                                 {
@@ -495,7 +526,7 @@ define(function () {
                             {
                                 "name": "page",
                                 "parameters": {
-                                    "perPage": 20,  //top 20
+                                    "perPage": 10,  //top 10
                                     "page": 1
                                 }
                             }
@@ -511,10 +542,10 @@ define(function () {
                             container: "#item-3",
                             adapter: {
                                 type: "standard",
-                                xDimensions: 'channelcode',
+                                xDimensions: 'channelsubcategory_code',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['channelcode'],
+                                seriesDimensions: ['unitcode'],
                                 sort: false
                             },
                             template: {
@@ -525,8 +556,8 @@ define(function () {
                                     chart: {
                                         type: "column"
                                     },
-                                    subtitle: {
-                                        text: 'Click and drag on chart to zoom'
+                                   /** subtitle: {
+                                        text: '<b>Click and drag on chart to zoom</b>'
                                     },
                                     credits: {
                                         enabled: true,
@@ -535,33 +566,39 @@ define(function () {
                                     },
                                     lang: {
                                         doptions: "Chart Download options"
-                                    },
+                                    },**/
                                     exporting:{
-                                        buttons: {
+                                      /**  buttons: {
                                             contextButton: {
                                                 _titleKey:"doptions",
                                                 text: 'Download'
                                             }
                                             //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },
+                                        },**/
                                         chartOptions:{
-                                            subtitle: {
+                                          /**  subtitle: {
                                                 text: ''
-                                            },
+                                            },**/
                                             legend:{
-                                                enabled:false,
-                                                title: {
+                                                enabled:false//,
+                                              /**  title: {
                                                     text: ''
-                                                }
+                                                }**/
                                             }
                                         }
                                     },
                                     legend: {
-                                        title: {
+                                        enabled: false,
+                                       /** title: {
                                             text: 'Click to hide/show'
-                                        },
+                                        },**/
                                         itemStyle: {
                                             width: 250
+                                        }
+                                    },
+                                    plotOptions: {
+                                        column: {
+                                            colorByPoint: true
                                         }
                                     },
                                     tooltip: {
@@ -582,21 +619,11 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "flowcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_flow_types",
-                                                    "version": "2015",
-                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                                    ]   //ODA
-                                                }
-                                            ]
-                                        },
                                         "recipientcode": {
                                             "codes": [
                                                 {
                                                     "uid": "crs_recipients",
-                                                    "version": "2015",
+                                                    "version": "2016",
                                                     "codes": [
                                                         "625"  //Afghanistan
                                                     ]
@@ -618,7 +645,7 @@ define(function () {
                                 "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                        "channelcode"
+                                        "channelsubcategory_code"
                                     ],
                                     "aggregations": [
                                         {
@@ -674,7 +701,10 @@ define(function () {
                                         type: 'pie'
                                     },
                                     subtitle: {
-                                        text: 'Click and drag on chart to zoom'
+                                        text: '<b>Hover for values</b>'
+                                    },
+                                   /** subtitle: {
+                                        text: '<b>Hover over each slice of the chart to view values </b>'
                                     },
                                     credits: {
                                         enabled: true,
@@ -683,39 +713,39 @@ define(function () {
                                     },
                                     lang: {
                                         doptions: "Chart Download options"
-                                    },
+                                    },**/
                                     exporting:{
-                                        buttons: {
+                                      /**  buttons: {
                                             contextButton: {
                                                 _titleKey:"doptions",
                                                 text: 'Download'
                                             }
                                             //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },
+                                        },**/
                                         chartOptions:{
-                                            subtitle: {
+                                          /**  subtitle: {
                                                 text: ''
-                                            },
+                                            },**/
                                             legend:{
-                                                enabled: false,
-                                                title: {
+                                                enabled: false//,
+                                              /**  title: {
                                                     text: ''
-                                                }
+                                                }**/
                                             },
                                             series: {
                                                 dataLabels: {
                                                     style: {
                                                         width: '200px'
                                                     },
-                                                    enabled: true
+                                                    enabled: false
                                                 }
                                             }
                                         }
                                     },
                                     legend: {
-                                        title: {
+                                       /** title: {
                                             text: 'Click to hide/show'
-                                        },
+                                        },**/
                                         itemStyle: {
                                             width: 250
                                         }
@@ -733,14 +763,14 @@ define(function () {
                                             cursor: 'pointer',
                                             dataLabels: {
                                                 style: {
-                                                    width: '150px'
+                                                    width: '200px'
                                                 },
                                                 formatter: function(){
                                                     return '<div>' + this.point.name + ' '+
                                                         Math.round(this.point.percentage) //Highcharts.numberFormat(this.point.percentage, 2)
                                                         +'% </div>';
                                                 },
-                                                enabled: true
+                                                enabled: false
                                             },
                                             showInLegend: true
                                         }
@@ -749,22 +779,12 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['year', 'channelcode'],
+                        allowedFilter: ['year', 'channelsubcategory_code', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "flowcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_flow_types",
-                                                    "version": "2015",
-                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                                    ]   //ODA
-                                                }
-                                            ]
-                                        },
                                         "year": {
                                             "time": [
                                                 {
@@ -807,7 +827,7 @@ define(function () {
                             {
                                 "name": "page",
                                 "parameters": {
-                                    "perPage": 10,  //top 10
+                                    "perPage": 10,  //top 10 FAO sub-sectors
                                     "page": 1
                                 }
                             }
@@ -825,7 +845,7 @@ define(function () {
                                 xDimensions: 'unitcode',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['regioncode'],
+                                seriesDimensions: ['un_continent_code'],
                                 sort: false
                             },
                             template: {
@@ -850,8 +870,8 @@ define(function () {
                                             }
                                         }
                                     },
-                                    subtitle: {
-                                        text: 'Click and drag on chart to zoom'
+                                   /** subtitle: {
+                                        text: '<b>Click and drag on chart to zoom</b>'
                                     },
                                     credits: {
                                         enabled: true,
@@ -860,33 +880,33 @@ define(function () {
                                     },
                                     lang: {
                                         doptions: "Chart Download options"
-                                    },
+                                    },**/
                                     exporting:{
                                         //sourceWidth: 1000,
-                                        buttons: {
+                                       /** buttons: {
                                             contextButton: {
                                                 _titleKey:"doptions",
                                                 text: 'Download'
                                             }
                                             //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },
+                                        },**/
                                         chartOptions:{
-                                            subtitle: {
+                                           /** subtitle: {
                                                 text: ''
-                                            },
+                                            },**/
                                             legend:{
-                                                enabled:true,
-                                                title: {
+                                                enabled:true//,
+                                              /**  title: {
                                                     text: ''
-                                                }
+                                                }**/
                                             }
                                         }
                                     },
                                     legend: {
-                                        reversed: true,
-                                        title: {
+                                        reversed: true//,
+                                       /** title: {
                                            text: 'Click to hide/show'
-                                        }
+                                        }**/
                                     },
                                     yAxis: {
                                       title: {
@@ -909,22 +929,12 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['purposecode', 'year', 'channelsubcategory_code', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "flowcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_flow_types",
-                                                    "version": "2015",
-                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                                    ]   //ODA
-                                                }
-                                            ]
-                                        },
                                         "year": {
                                             "time": [
                                                 {
@@ -940,7 +950,7 @@ define(function () {
                                 "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                       "unitcode", "regioncode"
+                                       "unitcode", "un_continent_code"
                                     ],
                                     "aggregations": [
                                         {
@@ -959,6 +969,13 @@ define(function () {
                                 }
                             },
                             {
+                                "name": "select",
+                                "parameters": {
+                                    "query": "WHERE un_continent_code<>?",
+                                    "queryParameters": [{"value": ''}]
+                                }
+                            },
+                            {
                                 "name": "order",
                                 "parameters": {
                                     "value": "DESC"
@@ -966,7 +983,7 @@ define(function () {
                             }
                         ]
                     },
-                    {
+                  {
                         id: 'item-6',
                         type: 'map',
                         class: "fx-map-chart",
@@ -980,32 +997,22 @@ define(function () {
                                 scrollWheelZoom: false,
                                 minZoom: 2
                             },
-                            join: {
-                                style: {
-                                    colorramp: "PuBuGn"
+                           join: {
+                               style: {
+                                   colorramp: "PuBuGn"
                                 }
                             },
                             layer: {
                                 layertitle: "Commitment Current Prices"
-                            }
+                           }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['purposecode', 'year', 'channelsubcategory_code', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "flowcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_flow_types",
-                                                    "version": "2015",
-                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                                    ]   //ODA
-                                                }
-                                            ]
-                                        },
                                         "year": {
                                             "time": [
                                                 {
@@ -1065,7 +1072,7 @@ define(function () {
                     "components": [
                         {
                             "uid": "crs_recipients",
-                            "version": "2015",
+                            "version": "2016",
                             "type": "codelist",
                             "componentType": "dropDownList-FENIX",
                             "lang": "EN",
@@ -1092,12 +1099,12 @@ define(function () {
                     "components": [
                         {
                             "uid": "crs_dac",
-                            "version": "2015",
+                            "version": "2016",
                             "type": "codelist-hierarchy",
                             "componentType": "dropDownList-FENIX",
                             "lang": "EN",
                             "title": {"EN": "Codelist"},
-                            "name": "sectorcode",
+                            "name": "parentsector_code",
                             config: {
                                 "defaultsource": [
                                     //{"value": null, "label": "All", "selected": true},
@@ -1107,7 +1114,7 @@ define(function () {
                                 "enableMultiselection": false,
                                 "filter": {
                                     "uid": "crs_dac",
-                                    "version": "2015",
+                                    "version": "2016",
                                     "level" : 1,
                                     "levels":3
                                 }
@@ -1125,7 +1132,7 @@ define(function () {
                     "components": [
                         {
                             "uid": "crs_dac",
-                            "version": "2015",
+                            "version": "2016",
                             "type": "codelist-hierarchy",
                             "componentType": "dropDownList-FENIX",
                             "lang": "EN",
@@ -1138,14 +1145,14 @@ define(function () {
                                 "onlyValueText": true,
                                 "filter": {
                                     "uid": "crs_dac",
-                                    "version": "2015",
+                                    "version": "2016",
                                     "level" : 3,
                                     "levels":3
                                 }
                             },
                             creator: {
                                 allowClear: true,
-                                placeholder: "Select .."
+                                placeholder: "All"
                             }
                         }
                     ]
@@ -1179,13 +1186,15 @@ define(function () {
                                         {"value": "2010", "label": "2010", "selected": false},
                                         {"value": "2011", "label": "2011", "selected": false},
                                         {"value": "2012", "label": "2012", "selected": false},
-                                        {"value": "2013", "label": "2013", "selected": false}
+                                        {"value": "2013", "label": "2013", "selected": false},
+                                        {"value": "2014", "label": "2014", "selected": false}
                                     ]
                                 },
                                 "to" : {
                                     "title":  {"EN": "To"},
                                     "defaultsource": [
-                                        {"value": "2013", "label": "2013", "selected": true},
+                                        {"value": "2014", "label": "2014", "selected": true},
+                                        {"value": "2013", "label": "2013", "selected": false},
                                         {"value": "2012", "label": "2012", "selected": false},
                                         {"value": "2011", "label": "2011", "selected": false},
                                         {"value": "2010", "label": "2010", "selected": false},
@@ -1208,13 +1217,46 @@ define(function () {
                 {
                     "type": "codelist-hierarchy",
                     "containerType": "baseContainer",
+                    "title": "Channel Parent Category",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-md-3 col-lg-2",
+                    "components": [
+                        {
+                            "uid": "crs_channels",
+                            "version": "2016",
+                            "type": "codelist-hierarchy",
+                            "name": "channelsubcategory_code",
+                            "componentType": "dropDownList-FENIX",
+                            "lang": "EN",
+                            "title": {"EN": "Codelist"},
+
+                            config: {
+                                "defaultsource": [],
+                                "onlyValueText": true,
+                                "filter": {
+                                    "uid": "crs_channels",
+                                    "version": "2016",
+                                    "level" : 2,
+                                    "levels":3
+                                }
+                            },
+                            creator: {
+                                allowClear: true,
+                                placeholder: "All"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "codelist-hierarchy",
+                    "containerType": "baseContainer",
                     "title": "Channel of Delivery",
                     "module_class": "fx-filter-grid-module",
                     "class": "col-md-3 col-lg-2",
                     "components": [
                         {
                             "uid": "crs_channels",
-                            "version": "2015",
+                            "version": "2016",
                             "type": "codelist-hierarchy",
                             "name": "channelcode",
                             "componentType": "dropDownList-FENIX",
@@ -1226,14 +1268,14 @@ define(function () {
                                 "onlyValueText": true,
                                 "filter": {
                                     "uid": "crs_channels",
-                                    "version": "2015",
+                                    "version": "2016",
                                     "level" : 3,
                                     "levels":3
                                 }
                             },
                             creator: {
                                 allowClear: true,
-                                placeholder: "Select .."
+                                placeholder: "All"
                             }
                         }
                     ]
@@ -1244,14 +1286,14 @@ define(function () {
                     "title": "ODA",
                     "icon" : {
                         "class" : "fa fa-info-circle",
-                        "tooltip" : "Official Development Assistance"
+                        "tooltip" : "Official Development Assistance - Grants, Grant-Like, Loans and Equity Investment"
                     },
                     "module_class": "fx-filter-grid-module",
                     "class": "col-md-3 col-lg-2",
                     "components": [
                         {
                             "uid": "crs_flow_amounts",
-                            "version": "2015",
+                            "version": "2016",
                             "type": "codelist",
                             "name": "uid",
                             "componentType": "dropDownList-FENIX",
@@ -1300,7 +1342,7 @@ define(function () {
                                 xDimensions: 'year',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['sectorcode']
+                                seriesDimensions: ['parentsector_code']
                             },
                             template: {
                                 //"title": "Top 25..."
@@ -1315,42 +1357,53 @@ define(function () {
                                             }
                                         }
                                     },
-                                    subtitle: {
-                                        text: 'Click and drag on chart to zoom'
-                                    },
-                                    credits: {
+                                   /** subtitle: {
+                                        text: '<b>Hover for values and click and drag to zoom</b>'
+                                    },**/
+                                   /** credits: {
                                         enabled: true,
                                         text: 'Source: OECD',
                                         href: ''
                                     },
                                     lang: {
                                         doptions: "Chart Download options"
-                                    },
+                                    },**/
                                     exporting:{
-                                        buttons: {
+                                      /**  buttons: {
                                             contextButton: {
                                                 _titleKey:"doptions",
                                                 text: 'Download'
                                             }
                                             //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },
+                                        },**/
                                         chartOptions:{
-                                            subtitle: {
+                                          /**  subtitle: {
                                                 text: ''
-                                            },
+                                            },**/
                                             legend:{
-                                                enabled:true,
-                                                title: {
+                                                enabled:true//,
+                                              /**  title: {
                                                     text: ''
-                                                }
+                                                }**/
                                             }
                                         }
                                     },
                                     legend: {
-                                        title: {
-                                            text: 'Click to hide/show'
-                                        }
+                                        align: 'center',
+                                        verticalAlign: 'bottom',
+                                        layout: 'horizontal',
+                                        x:0,
+                                        y:0
                                     },
+                                   /** legend: {
+                                       title: {
+                                            text: 'Click to hide/show'
+                                        },
+                                        itemStyle: {
+                                            fontSize: '11px'
+                                        }
+
+                                    },**/
                                     xAxis : {
                                         type: 'datetime'
                                     },
@@ -1365,27 +1418,17 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['recipientcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['recipientcode', 'purposecode', 'year', 'channelsubcategory_code', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "flowcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_flow_types",
-                                                    "version": "2015",
-                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                                    ]   //ODA
-                                                }
-                                            ]
-                                        },
                                         "recipientcode": {
                                             "codes": [
                                                 {
                                                     "uid": "crs_recipients",
-                                                    "version": "2015",
+                                                    "version": "2016",
                                                     "codes": [
                                                         "625"  //Afghanistan
                                                     ]
@@ -1417,7 +1460,7 @@ define(function () {
                                         {
                                             "columns": ["unitcode"],
                                             "rule": "pgfirst"
-                                        }
+                                        }/** FAO Sectors, don't need unitname **/
                                     ]
                                 }
                             },
@@ -1440,10 +1483,10 @@ define(function () {
                             container: "#item-2",
                             adapter: {
                                 type: "standard",
-                                xDimensions: 'sectorcode',
+                                xDimensions: 'parentsector_code',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['sectorcode'],
+                                seriesDimensions: ['unitname'],
                                 sort: false
                             },
                             template: {
@@ -1454,29 +1497,29 @@ define(function () {
                                     chart: {
                                         type: "column"
                                     },
-                                    subtitle: {
-                                        text: 'Click and drag on chart to zoom'
-                                    },
-                                    credits: {
+                                    /**subtitle: {
+                                        text: '<b>Click and drag on chart to zoom</b>'
+                                    },**/
+                                   /** credits: {
                                         enabled: true,
                                         text: 'Source: OECD',
                                         href: ''
                                     },
                                     lang: {
                                         doptions: "Chart Download options"
-                                    },
+                                    },**/
                                     exporting:{
-                                        buttons: {
+                                       /** buttons: {
                                             contextButton: {
                                                 _titleKey:"doptions",
                                                 text: 'Download'
                                             }
                                             //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },
+                                        },**/
                                         chartOptions:{
-                                            subtitle: {
+                                         /**   subtitle: {
                                                 text: ''
-                                            },
+                                            },**/
                                             legend:{
                                                 enabled:false,
                                                 title: {
@@ -1486,8 +1529,14 @@ define(function () {
                                         }
                                     },
                                     legend: {
-                                        title: {
+                                        enabled: false
+                                      /** title: {
                                             text: 'Click to hide/show'
+                                        }**/
+                                    },
+                                    plotOptions: {
+                                        column: {
+                                            colorByPoint: true
                                         }
                                     },
                                     tooltip: {
@@ -1501,27 +1550,17 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['recipientcode', 'year', 'channelcode'],
+                        allowedFilter: ['recipientcode', 'year', 'channelsubcategory_code', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "flowcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_flow_types",
-                                                    "version": "2015",
-                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                                    ]   //ODA
-                                                }
-                                            ]
-                                        },
                                         "recipientcode": {
                                             "codes": [
                                                 {
                                                     "uid": "crs_recipients",
-                                                    "version": "2015",
+                                                    "version": "2016",
                                                     "codes": [
                                                         "625"  //Afghanistan
                                                     ]
@@ -1543,7 +1582,7 @@ define(function () {
                                 "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                        "sectorcode"
+                                        "parentsector_code"
                                     ],
                                     "aggregations": [
                                         {
@@ -1589,7 +1628,7 @@ define(function () {
                                 xDimensions: 'donorcode',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['donorcode'],
+                                seriesDimensions: ['unitname'],
                                 sort: false
                             },
                             template: {
@@ -1600,42 +1639,48 @@ define(function () {
                                     chart: {
                                         type: "column"
                                     },
-                                    subtitle: {
-                                        text: 'Click and drag on chart to zoom'
-                                    },
-                                    credits: {
+                                   /** subtitle: {
+                                        text: '<b>Click and drag on chart to zoom</b>'
+                                    },**/
+                                   /** credits: {
                                         enabled: true,
                                         text: 'Source: OECD',
                                         href: ''
                                     },
                                     lang: {
                                         doptions: "Chart Download options"
-                                    },
+                                    },**/
                                     exporting:{
-                                        buttons: {
+                                      /**  buttons: {
                                             contextButton: {
                                                 _titleKey:"doptions",
                                                 text: 'Download'
                                             }
                                             //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },
+                                        },**/
                                         chartOptions:{
-                                            subtitle: {
+                                          /**  subtitle: {
                                                 text: ''
-                                            },
+                                            },**/
                                             legend:{
-                                                enabled:false,
-                                                title: {
+                                                enabled:false//,
+                                               /** title: {
                                                     text: ''
-                                                }
+                                                }**/
                                             }
                                         }
                                     },
-                                    legend: {
-                                        title: {
+                                   legend: {
+                                       enabled: false
+                                      /**  title: {
                                             text: 'Click to hide/show'
-                                        }
+                                        }**/
                                     },
+                                   plotOptions: {
+                                       column: {
+                                           colorByPoint: true
+                                       }
+                                   },
                                     tooltip: {
                                         formatter: function(){
                                             return '<b>' +this.x + ': ' + '</b><br/>' +
@@ -1647,27 +1692,17 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['recipientcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['recipientcode', 'purposecode', 'year', 'channelsubcategory_code', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "flowcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_flow_types",
-                                                    "version": "2015",
-                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                                    ]   //ODA
-                                                }
-                                            ]
-                                        },
                                         "recipientcode": {
                                             "codes": [
                                                 {
                                                     "uid": "crs_recipients",
-                                                    "version": "2015",
+                                                    "version": "2016",
                                                     "codes": [
                                                         "625"  //Afghanistan
                                                     ]
@@ -1716,7 +1751,7 @@ define(function () {
                             {
                                 "name": "page",
                                 "parameters": {
-                                    "perPage": 20,  //top 20
+                                    "perPage": 10,  //top 10
                                     "page": 1
                                 }
                             }
@@ -1745,28 +1780,28 @@ define(function () {
                                         type: 'pie'
                                     },
                                     subtitle: {
-                                        text: 'Click and drag on chart to zoom'
+                                        text: '<b>Hover for values</b>'
                                     },
-                                    credits: {
+                                   /** credits: {
                                         enabled: true,
                                         text: 'Source: OECD',
                                         href: ''
                                     },
                                     lang: {
                                         doptions: "Chart Download options"
-                                    },
+                                    },**/
                                     exporting:{
-                                        buttons: {
+                                      /**  buttons: {
                                             contextButton: {
                                                 _titleKey:"doptions",
                                                 text: 'Download'
                                             }
                                             //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },
+                                        },**/
                                         chartOptions:{
-                                            subtitle: {
+                                          /**  subtitle: {
                                                 text: ''
-                                            },
+                                            },**/
                                             legend: {
                                                 enabled: false
                                             },
@@ -1781,9 +1816,9 @@ define(function () {
                                         }
                                     },
                                     legend: {
-                                        title: {
+                                      /**  title: {
                                             text: 'Click to hide/show'
-                                        },
+                                        },**/
                                         itemStyle: {
                                             width: 250
                                         }
@@ -1801,15 +1836,15 @@ define(function () {
                                             allowPointSelect: true,
                                             cursor: 'pointer',
                                              dataLabels: {
-                                                 style: {
-                                                   width: '150px'
+                                                style: {
+                                                   width: '100px'
                                                  },
                                                 formatter: function(){
-                                                   return '<span>' + this.point.name + ' '+
+                                                   return '<div>' + this.point.name + ' '+
                                                        Math.round(this.point.percentage) //Highcharts.numberFormat(this.point.percentage, 2)
-                                                      +'% </span>';
+                                                      +'% </div>';
                                                 },
-                                                enabled: true
+                                                enabled: false
                                             },
                                             showInLegend: true
                                         }
@@ -1818,27 +1853,17 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['recipientcode', 'year', 'channelcode'],
+                        allowedFilter: ['recipientcode', 'year', 'channelsubcategory_code', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "flowcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_flow_types",
-                                                    "version": "2015",
-                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                                    ]   //ODA
-                                                }
-                                            ]
-                                        },
                                         "recipientcode": {
                                             "codes": [
                                                 {
                                                     "uid": "crs_recipients",
-                                                    "version": "2015",
+                                                    "version": "2016",
                                                     "codes": [
                                                         "625"  //Afghanistan
                                                     ]
@@ -1883,11 +1908,11 @@ define(function () {
                                 "parameters": {
                                     "value": "DESC"
                                 }
-                            } ,
+                            },
                             {
                                 "name": "page",
                                 "parameters": {
-                                    "perPage": 10,  //top 10
+                                    "perPage": 10,  //top 10 FAO sub-sectors
                                     "page": 1
                                 }
                             }
@@ -1903,10 +1928,10 @@ define(function () {
                             container: "#item-5",
                             adapter: {
                                 type: "standard",
-                                xDimensions: 'channelcode',
+                                xDimensions: 'channelsubcategory_code',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['channelcode'],
+                                seriesDimensions: ['unitname'],
                                 sort: false
                             },
                             template: {
@@ -1917,46 +1942,49 @@ define(function () {
                                     chart: {
                                         type: "column"
                                     },
-                                    subtitle: {
-                                        text: 'Click and drag on chart to zoom'
-                                    },
-                                    credits: {
+                                   /** subtitle: {
+                                        text: '<b>Click and drag on chart to zoom</b>'
+                                    },**/
+                                  /**  credits: {
                                         enabled: true,
                                         text: 'Source: OECD',
                                         href: ''
                                     },
                                     lang: {
                                         doptions: "Chart Download options"
-                                    },
+                                    },**/
                                     exporting:{
-                                        buttons: {
+                                      /**  buttons: {
                                             contextButton: {
                                                 _titleKey:"doptions",
                                                 text: 'Download'
                                             }
-                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },
+                                         },**/
                                         chartOptions:{
-                                            subtitle: {
+                                          /**  subtitle: {
                                                 text: ''
-                                            },
+                                            },**/
                                             legend:{
-                                                enabled:false,
-                                                title: {
+                                                enabled:false//,
+                                               /** title: {
                                                     text: ''
-                                                }
+                                                }**/
                                             }
                                         }
                                     },
                                     legend: {
-                                        title: {
+                                        enabled: false,
+                                       /** title: {
                                             text: 'Click to hide/show'
-                                        },
+                                        },**/
                                         itemStyle: {
                                             width: 250
                                         }
                                     },
                                     plotOptions: {
+                                        column: {
+                                            colorByPoint: true
+                                        },
                                         series: {
                                             dataLabels: {
                                                 enabled: true
@@ -1981,21 +2009,11 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "flowcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_flow_types",
-                                                    "version": "2015",
-                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                                    ]   //ODA
-                                                }
-                                            ]
-                                        },
                                         "recipientcode": {
                                             "codes": [
                                                 {
                                                     "uid": "crs_recipients",
-                                                    "version": "2015",
+                                                    "version": "2016",
                                                     "codes": [
                                                         "625"  //Afghanistan
                                                     ]
@@ -2017,7 +2035,7 @@ define(function () {
                                 "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                        "channelcode"
+                                        "channelsubcategory_code"
                                     ],
                                     "aggregations": [
                                         {
@@ -2049,6 +2067,94 @@ define(function () {
                                 }
                             }
                         ]
+                    },
+                  {
+                        id: 'item-6',
+                        type: 'map',
+                        class: "fx-map-chart",
+                        name: 'region-map',
+                        //needed if layout = injected
+                        container: "#item-6",
+                        config: {
+                            container: "#item-6",
+                            leaflet: {
+                                zoomControl: false,
+                                attributionControl: true,
+                                scrollWheelZoom: false,
+                                minZoom: 2
+                            },
+                            join: {
+                                style: {
+                                    colorramp: "YlOrBr"
+                                }
+                            },
+                            layer: {
+                                layertitle: "Commitment Current Prices"
+                            }
+                        },
+                        // for now it takes the id, TODO: add uid as well
+                        allowedFilter: ['regioncode', 'purposecode', 'channelsubcategory_code', 'channelcode', 'year'],
+                        filter: [
+                            {
+                                "name": "filter",
+                                "parameters": {
+                                    "rows": {
+                                          "regioncode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_regions_countries",
+                                                    "level": "1",
+                                                    "version": "2016",
+                                                    "codes": [
+                                                        "10009"
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "year": {
+                                            "time": [
+                                                {
+                                                    "from": 2000,
+                                                    "to": 2013
+                                                }
+                                            ]
+                                        }
+                                    }
+
+                                }
+                            },
+                            {
+                                "name": "pggroup",
+                                "parameters": {
+                                    "by": [
+                                        "gaul0", "regioncode"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": ["value"],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["unitname"],
+                                            "rule": "pgfirst"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "select",
+                                "parameters": {
+                                    "query": "WHERE gaul0<>? AND  gaul0<>?",
+                                    "queryParameters": [{"value": "NA"}, {"value": "147295+147296"}]
+                                    /**"query": "WHERE gaul0<>? AND regioncode=?",
+                                    "queryParameters": [{"value": "NA"}, {"value": "10009"}]**/
+                                }
+                            }
+                        ]
                     }
 
                 ]
@@ -2068,7 +2174,7 @@ define(function () {
                     "components": [
                         {
                             "uid": "crs_donors",
-                            "version": "2015",
+                            "version": "2016",
                             "type": "codelist",
                             "componentType": "dropDownList-FENIX",
                             "lang": "EN",
@@ -2095,12 +2201,12 @@ define(function () {
                     "components": [
                         {
                             "uid": "crs_dac",
-                            "version": "2015",
+                            "version": "2016",
                             "type": "codelist-hierarchy",
                             "componentType": "dropDownList-FENIX",
                             "lang": "EN",
                             "title": {"EN": "Codelist"},
-                            "name": "sectorcode",
+                            "name": "parentsector_code",
                             config: {
                                 "defaultsource": [
                                     //{"value": null, "label": "All", "selected": true},
@@ -2110,7 +2216,7 @@ define(function () {
                                 "enableMultiselection": false,
                                 "filter": {
                                     "uid": "crs_dac",
-                                    "version": "2015",
+                                    "version": "2016",
                                     "level" : 1,
                                     "levels":3
                                 }
@@ -2128,7 +2234,7 @@ define(function () {
                     "components": [
                         {
                             "uid": "crs_dac",
-                            "version": "2015",
+                            "version": "2016",
                             "type": "codelist-hierarchy",
                             "componentType": "dropDownList-FENIX",
                             "lang": "EN",
@@ -2141,14 +2247,14 @@ define(function () {
                                 "onlyValueText": true,
                                 "filter": {
                                     "uid": "crs_dac",
-                                    "version": "2015",
+                                    "version": "2016",
                                     "level" : 3,
                                     "levels":3
                                 }
                             },
                             creator: {
                                 allowClear: true,
-                                placeholder: "Select .."
+                                placeholder: "All"
                             }
 
                         }
@@ -2183,13 +2289,15 @@ define(function () {
                                         {"value": "2010", "label": "2010", "selected": false},
                                         {"value": "2011", "label": "2011", "selected": false},
                                         {"value": "2012", "label": "2012", "selected": false},
-                                        {"value": "2013", "label": "2013", "selected": false}
+                                        {"value": "2013", "label": "2013", "selected": false},
+                                        {"value": "2014", "label": "2014", "selected": false}
                                     ]
                                 },
                                 "to" : {
                                     "title":  {"EN": "To"},
                                     "defaultsource": [
-                                        {"value": "2013", "label": "2013", "selected": true},
+                                        {"value": "2014", "label": "2014", "selected": true},
+                                        {"value": "2013", "label": "2013", "selected": false},
                                         {"value": "2012", "label": "2012", "selected": false},
                                         {"value": "2011", "label": "2011", "selected": false},
                                         {"value": "2010", "label": "2010", "selected": false},
@@ -2212,13 +2320,46 @@ define(function () {
                 {
                     "type": "codelist-hierarchy",
                     "containerType": "baseContainer",
+                    "title": "Channel Parent Category",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-md-3 col-lg-2",
+                    "components": [
+                        {
+                            "uid": "crs_channels",
+                            "version": "2016",
+                            "type": "codelist-hierarchy",
+                            "name": "channelsubcategory_code",
+                            "componentType": "dropDownList-FENIX",
+                            "lang": "EN",
+                            "title": {"EN": "Codelist"},
+
+                            config: {
+                                "defaultsource": [],
+                                "onlyValueText": true,
+                                "filter": {
+                                    "uid": "crs_channels",
+                                    "version": "2016",
+                                    "level" : 2,
+                                    "levels":3
+                                }
+                            },
+                            creator: {
+                                allowClear: true,
+                                placeholder: "All"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "codelist-hierarchy",
+                    "containerType": "baseContainer",
                     "title": "Channel of Delivery",
                     "module_class": "fx-filter-grid-module",
                     "class": "col-md-3 col-lg-2",
                     "components": [
                         {
                             "uid": "crs_channels",
-                            "version": "2015",
+                            "version": "2016",
                             "type": "codelist-hierarchy",
                             "name": "channelcode",
                             "componentType": "dropDownList-FENIX",
@@ -2230,14 +2371,14 @@ define(function () {
                                 "onlyValueText": true,
                                 "filter": {
                                     "uid": "crs_channels",
-                                    "version": "2015",
+                                    "version": "2016",
                                     "level" : 3,
                                     "levels":3
                                 }
                             },
                             creator: {
                                 allowClear: true,
-                                placeholder: "Select .."
+                                placeholder: "All"
                             }
                         }
                     ]
@@ -2248,14 +2389,14 @@ define(function () {
                     "title": "ODA",
                     "icon" : {
                         "class" : "fa fa-info-circle",
-                        "tooltip" : "Official Development Assistance"
+                        "tooltip" : "Official Development Assistance - Grants, Grant-Like, Loans and Equity Investment"
                     },
                     "module_class": "fx-filter-grid-module",
                     "class": "col-md-3 col-lg-2",
                     "components": [
                         {
                             "uid": "crs_flow_amounts",
-                            "version": "2015",
+                            "version": "2016",
                             "type": "codelist",
                             "name": "uid",
                             "componentType": "dropDownList-FENIX",
@@ -2304,7 +2445,7 @@ define(function () {
                                 xDimensions: 'year',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['sectorcode']
+                                seriesDimensions: ['parentsector_code']
                             },
                             template: {
                                 //"title": "Top 25..."
@@ -2319,8 +2460,8 @@ define(function () {
                                             }
                                         }
                                     },
-                                    subtitle: {
-                                        text: 'Click and drag on chart to zoom'
+                                  /**  subtitle: {
+                                        text: '<b>Click and drag on chart to zoom</b>'
                                     },
                                     credits: {
                                         enabled: true,
@@ -2329,31 +2470,33 @@ define(function () {
                                     },
                                     lang: {
                                         doptions: "Chart Download options"
-                                    },
+                                    },**/
                                     exporting:{
-                                        buttons: {
+                                       /** buttons: {
                                             contextButton: {
                                                 _titleKey:"doptions",
                                                 text: 'Download'
                                             }
                                             //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },
+                                        },**/
                                         chartOptions:{
-                                            subtitle: {
+                                          /**  subtitle: {
                                                 text: ''
-                                            },
+                                            },**/
                                             legend:{
-                                                enabled:true,
-                                                title: {
+                                                enabled:true//,
+                                               /** title: {
                                                     text: ''
-                                                }
+                                                } **/
                                             }
                                         }
                                     },
                                     legend: {
-                                        title: {
-                                            text: 'Click to hide/show'
-                                        }
+                                        align: 'center',
+                                        verticalAlign: 'bottom',
+                                        layout: 'horizontal',
+                                        x:0,
+                                        y:0
                                     },
                                     xAxis : {
                                         type: 'datetime'
@@ -2369,27 +2512,17 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: [ 'donorcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: [ 'donorcode', 'purposecode', 'year', 'channelsubcategory_code', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "flowcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_flow_types",
-                                                    "version": "2015",
-                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                                    ]   //ODA
-                                                }
-                                            ]
-                                        },
                                         "donorcode": {
                                             "codes": [
                                                 {
                                                     "uid": "crs_donors",
-                                                    "version": "2015",
+                                                    "version": "2016",
                                                     "codes": [
                                                         "1"  //Austria
                                                     ]
@@ -2421,7 +2554,7 @@ define(function () {
                                         {
                                             "columns": ["unitcode"],
                                             "rule": "pgfirst"
-                                        }
+                                        } /** Don't need unitname for FAO sectors **/
                                     ]
                                 }
                             },
@@ -2444,10 +2577,10 @@ define(function () {
                             container: "#item-2",
                             adapter: {
                                 type: "standard",
-                                xDimensions: 'sectorcode',
+                                xDimensions: 'parentsector_code',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['sectorcode'],
+                                seriesDimensions: ['unitname'],
                                 sort: false
                             },
                             template: {
@@ -2458,8 +2591,8 @@ define(function () {
                                     chart: {
                                         type: "column"
                                     },
-                                    subtitle: {
-                                        text: 'Click and drag on chart to zoom'
+                                    /**subtitle: {
+                                        text: '<b>Click and drag on chart to zoom</b>'
                                     },
                                     credits: {
                                         enabled: true,
@@ -2468,31 +2601,37 @@ define(function () {
                                     },
                                     lang: {
                                         doptions: "Chart Download options"
-                                    },
+                                    },**/
                                     exporting:{
-                                        buttons: {
+                                       /** buttons: {
                                             contextButton: {
                                                 _titleKey:"doptions",
                                                 text: 'Download'
                                             }
                                             //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },
+                                        },**/
                                         chartOptions:{
-                                            subtitle: {
+                                           /** subtitle: {
                                                 text: ''
-                                            },
+                                            },**/
                                             legend:{
-                                                enabled:false,
-                                                title: {
+                                                enabled:false//,
+                                               /** title: {
                                                     text: ''
-                                                }
+                                                }**/
                                             }
                                         }
                                     },
-                                    legend: {
-                                        title: {
+                                   legend: {
+                                       enabled: false
+                                       /** title: {
                                             text: 'Click to hide/show'
-                                        }
+                                        }**/
+                                    },
+                                    plotOptions: {
+                                       column: {
+                                           colorByPoint: true
+                                       }
                                     },
                                     tooltip: {
                                         formatter: function(){
@@ -2505,27 +2644,17 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['donorcode', 'year', 'channelcode'],
+                        allowedFilter: ['donorcode', 'year', 'channelsubcategory_code', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "flowcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_flow_types",
-                                                    "version": "2015",
-                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                                    ]   //ODA
-                                                }
-                                            ]
-                                        },
                                         "donorcode": {
                                             "codes": [
                                                 {
                                                     "uid": "crs_donors",
-                                                    "version": "2015",
+                                                    "version": "2016",
                                                     "codes": [
                                                         "1"  //Austria
                                                     ]
@@ -2547,7 +2676,7 @@ define(function () {
                                 "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                        "sectorcode"
+                                        "parentsector_code"
                                     ],
                                     "aggregations": [
                                         {
@@ -2590,10 +2719,10 @@ define(function () {
                             container: "#item-3",
                             adapter: {
                                 type: "standard",
-                                xDimensions: 'channelcode',
+                                xDimensions: 'channelsubcategory_code',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['channelcode'],
+                                seriesDimensions: ['unitname'],
                                 sort: false
                             },
                             template: {
@@ -2604,8 +2733,8 @@ define(function () {
                                     chart: {
                                         type: "column"
                                     },
-                                    subtitle: {
-                                        text: 'Click and drag on chart to zoom'
+                                   /** subtitle: {
+                                        text: '<b>Click and drag on chart to zoom</b>'
                                     },
                                     credits: {
                                         enabled: true,
@@ -2614,37 +2743,41 @@ define(function () {
                                     },
                                     lang: {
                                         doptions: "Chart Download options"
-                                    },
+                                    },**/
                                     exporting:{
-                                        buttons: {
+                                      /**  buttons: {
                                             contextButton: {
                                                 _titleKey:"doptions",
                                                 text: 'Download'
                                             }
                                             //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },
+                                        },**/
                                         chartOptions:{
-                                            subtitle: {
+                                           /** subtitle: {
                                                 text: ''
-                                            },
+                                            },**/
                                             legend:{
-                                                enabled:false,
-                                                title: {
+                                                enabled:false//,
+                                               /** title: {
                                                     text: ''
-                                                }
+                                                }**/
                                             }
                                         }
                                     },
                                     legend: {
-                                        title: {
+                                        enabled: false,
+                                       /** title: {
                                             text: 'Click to hide/show'
-                                        },
+                                        },**/
                                         itemStyle: {
                                             width: 250
                                         }
                                     },
 
                                     plotOptions: {
+                                        column: {
+                                           colorByPoint: true
+                                        },
                                         series: {
                                             dataLabels: {
                                                 enabled: true
@@ -2669,21 +2802,11 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "flowcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_flow_types",
-                                                    "version": "2015",
-                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                                    ]   //ODA
-                                                }
-                                            ]
-                                        },
                                         "donorcode": {
                                             "codes": [
                                                 {
                                                     "uid": "crs_donors",
-                                                    "version": "2015",
+                                                    "version": "2016",
                                                     "codes": [
                                                         "1"  //Austria
                                                     ]
@@ -2705,7 +2828,7 @@ define(function () {
                                 "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                        "channelcode"
+                                        "channelsubcategory_code"
                                     ],
                                     "aggregations": [
                                         {
@@ -2761,28 +2884,28 @@ define(function () {
                                         type: 'pie'
                                     },
                                     subtitle: {
-                                        text: 'Click and drag on chart to zoom'
+                                        text: '<b>Hover for values</b>'
                                     },
-                                    credits: {
+                                   /** credits: {
                                         enabled: true,
                                         text: 'Source: OECD',
                                         href: ''
                                     },
                                     lang: {
                                         doptions: "Chart Download options"
-                                    },
+                                    },**/
                                     exporting:{
-                                        buttons: {
+                                       /** buttons: {
                                             contextButton: {
                                                 _titleKey:"doptions",
                                                 text: 'Download'
                                             }
                                             //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },
+                                        },**/
                                         chartOptions:{
-                                            subtitle: {
+                                          /**  subtitle: {
                                                 text: ''
-                                            },
+                                            },**/
                                             legend: {
                                                 enabled: false
                                             },
@@ -2797,9 +2920,9 @@ define(function () {
                                         }
                                     },
                                     legend: {
-                                        title: {
+                                       /** title: {
                                             text: 'Click to hide/show'
-                                        },
+                                        },**/
                                         itemStyle: {
                                             width: 250
                                         }
@@ -2817,14 +2940,14 @@ define(function () {
                                             cursor: 'pointer',
                                             dataLabels: {
                                                 style: {
-                                                    width: '150px'
+                                                    width: '100px'
                                                 },
                                                 formatter: function(){
                                                     return '<div>' + this.point.name + ' '+
                                                         Math.round(this.point.percentage) //Highcharts.numberFormat(this.point.percentage, 2)
                                                         +'% </div>';
                                                 },
-                                                enabled: true
+                                                enabled: false
                                             },
                                             showInLegend: true
                                         }
@@ -2833,27 +2956,17 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['donorcode', 'year', 'channelcode'],
+                        allowedFilter: ['donorcode', 'year', 'channelsubcategory_code', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "flowcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_flow_types",
-                                                    "version": "2015",
-                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                                    ]   //ODA
-                                                }
-                                            ]
-                                        },
                                         "donorcode": {
                                             "codes": [
                                                 {
                                                     "uid": "crs_donors",
-                                                    "version": "2015",
+                                                    "version": "2016",
                                                     "codes": [
                                                         "1"  //Austria
                                                     ]
@@ -2902,7 +3015,7 @@ define(function () {
                             {
                                 "name": "page",
                                 "parameters": {
-                                    "perPage": 10,  //top 10
+                                    "perPage": 10,  //top 10 FAO sub-sectors
                                     "page": 1
                                 }
                             }
@@ -2920,7 +3033,7 @@ define(function () {
                                 xDimensions: 'unitcode',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['regioncode'],
+                                seriesDimensions: ['un_continent_code'],
                                 sort: false
                             },
                             template: {
@@ -2945,8 +3058,8 @@ define(function () {
                                             }
                                         }
                                     },
-                                    subtitle: {
-                                        text: 'Click and drag on chart to zoom'
+                                   /** subtitle: {
+                                        text: '<b>Click and drag on chart to zoom</b>'
                                     },
                                     credits: {
                                         enabled: true,
@@ -2955,33 +3068,33 @@ define(function () {
                                     },
                                     lang: {
                                         doptions: "Chart Download options"
-                                    },
+                                    },**/
                                     exporting:{
                                         //sourceWidth: 1000,
-                                        buttons: {
+                                      /**  buttons: {
                                             contextButton: {
                                                 _titleKey:"doptions",
                                                 text: 'Download'
                                             }
                                             //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },
+                                        },**/
                                         chartOptions:{
-                                            subtitle: {
+                                           /** subtitle: {
                                                 text: ''
-                                            },
+                                            },**/
                                             legend:{
-                                                enabled:true,
-                                                title: {
+                                                enabled:true//,
+                                               /** title: {
                                                     text: ''
-                                                }
+                                                }**/
                                             }
                                         }
                                     },
                                     legend: {
                                         reversed: true,
-                                        title: {
+                                       /** title: {
                                             text: 'Click to hide/show'
-                                        }
+                                        }**/
                                     },
                                     yAxis: {
                                         title: {
@@ -3004,27 +3117,17 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['donorcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['donorcode', 'purposecode', 'year', 'channelsubcategory_code', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "flowcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_flow_types",
-                                                    "version": "2015",
-                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                                    ]   //ODA
-                                                }
-                                            ]
-                                        },
                                         "donorcode": {
                                             "codes": [
                                                 {
                                                     "uid": "crs_donors",
-                                                    "version": "2015",
+                                                    "version": "2016",
                                                     "codes": [
                                                         "1"  //Austria
                                                     ]
@@ -3046,7 +3149,7 @@ define(function () {
                                 "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                        "unitcode", "regioncode"
+                                        "unitcode", "un_continent_code"
                                     ],
                                     "aggregations": [
                                         {
@@ -3062,6 +3165,13 @@ define(function () {
                                             "rule": "pgfirst"
                                         }
                                     ]
+                                }
+                            },
+                            {
+                                "name": "select",
+                                "parameters": {
+                                    "query": "WHERE un_continent_code<>?",
+                                    "queryParameters": [{"value": ''}]
                                 }
                             },
                             {
@@ -3096,27 +3206,17 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['donorcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['donorcode', 'purposecode', 'year', 'channelsubcategory_code', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "flowcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_flow_types",
-                                                    "version": "2015",
-                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                                    ]   //ODA
-                                                }
-                                            ]
-                                        },
                                         "donorcode": {
                                             "codes": [
                                                 {
                                                     "uid": "crs_donors",
-                                                    "version": "2015",
+                                                    "version": "2016",
                                                     "codes": [
                                                         "1"  //Austria
                                                     ]
@@ -3148,6 +3248,10 @@ define(function () {
                                         {
                                             "columns": ["unitcode"],
                                             "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["unitname"],
+                                            "rule": "pgfirst"
                                         }
                                     ]
                                 }
@@ -3178,7 +3282,7 @@ define(function () {
                     "components": [
                         {
                             "uid": "crs_recipients",
-                            "version": "2015",
+                            "version": "2016",
                             "type": "codelist",
                             "componentType": "dropDownList-FENIX",
                             "lang": "EN",
@@ -3205,7 +3309,7 @@ define(function () {
                     "components": [
                         {
                             "uid": "crs_donors",
-                            "version": "2015",
+                            "version": "2016",
                             "type": "codelist",
                             "componentType": "dropDownList-FENIX",
                             "lang": "EN",
@@ -3232,12 +3336,12 @@ define(function () {
                     "components": [
                         {
                             "uid": "crs_dac",
-                            "version": "2015",
+                            "version": "2016",
                             "type": "codelist-hierarchy",
                             "componentType": "dropDownList-FENIX",
                             "lang": "EN",
                             "title": {"EN": "Codelist"},
-                            "name": "sectorcode",
+                            "name": "parentsector_code",
                             config: {
                                 "defaultsource": [
                                     //{"value": null, "label": "All", "selected": true},
@@ -3247,7 +3351,7 @@ define(function () {
                                 "enableMultiselection": false,
                                 "filter": {
                                     "uid": "crs_dac",
-                                    "version": "2015",
+                                    "version": "2016",
                                     "level" : 1,
                                     "levels":3
                                 }
@@ -3265,7 +3369,7 @@ define(function () {
                     "components": [
                         {
                             "uid": "crs_dac",
-                            "version": "2015",
+                            "version": "2016",
                             "type": "codelist-hierarchy",
                             "componentType": "dropDownList-FENIX",
                             "lang": "EN",
@@ -3278,14 +3382,14 @@ define(function () {
                                 "onlyValueText": true,
                                 "filter": {
                                     "uid": "crs_dac",
-                                    "version": "2015",
+                                    "version": "2016",
                                     "level" : 3,
                                     "levels":3
                                 }
                             },
                             creator: {
                                 allowClear: true,
-                                placeholder: "Select .."
+                                placeholder: "All"
                             }
                         }
                     ]
@@ -3319,13 +3423,15 @@ define(function () {
                                         {"value": "2010", "label": "2010", "selected": false},
                                         {"value": "2011", "label": "2011", "selected": false},
                                         {"value": "2012", "label": "2012", "selected": false},
-                                        {"value": "2013", "label": "2013", "selected": false}
+                                        {"value": "2013", "label": "2013", "selected": false},
+                                        {"value": "2014", "label": "2014", "selected": false}
                                     ]
                                 },
                                 "to" : {
                                     "title":  {"EN": "To"},
                                     "defaultsource": [
-                                        {"value": "2013", "label": "2013", "selected": true},
+                                        {"value": "2014", "label": "2014", "selected": true},
+                                        {"value": "2013", "label": "2013", "selected": false},
                                         {"value": "2012", "label": "2012", "selected": false},
                                         {"value": "2011", "label": "2011", "selected": false},
                                         {"value": "2010", "label": "2010", "selected": false},
@@ -3348,13 +3454,46 @@ define(function () {
                 {
                     "type": "codelist-hierarchy",
                     "containerType": "baseContainer",
+                    "title": "Channel Parent Category",
+                    "module_class": "fx-filter-grid-module",
+                    "class": "col-md-3 col-lg-2",
+                    "components": [
+                        {
+                            "uid": "crs_channels",
+                            "version": "2016",
+                            "type": "codelist-hierarchy",
+                            "name": "channelsubcategory_code",
+                            "componentType": "dropDownList-FENIX",
+                            "lang": "EN",
+                            "title": {"EN": "Codelist"},
+
+                            config: {
+                                "defaultsource": [],
+                                "onlyValueText": true,
+                                "filter": {
+                                    "uid": "crs_channels",
+                                    "version": "2016",
+                                    "level" : 2,
+                                    "levels":3
+                                }
+                            },
+                            creator: {
+                                allowClear: true,
+                                placeholder: "All"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "codelist-hierarchy",
+                    "containerType": "baseContainer",
                     "title": "Channel of Delivery",
                     "module_class": "fx-filter-grid-module",
                     "class": "col-md-3 col-lg-2",
                     "components": [
                         {
                             "uid": "crs_channels",
-                            "version": "2015",
+                            "version": "2016",
                             "type": "codelist-hierarchy",
                             "name": "channelcode",
                             "componentType": "dropDownList-FENIX",
@@ -3366,14 +3505,14 @@ define(function () {
                                 "onlyValueText": true,
                                 "filter": {
                                     "uid": "crs_channels",
-                                    "version": "2015",
+                                    "version": "2016",
                                     "level" : 3,
                                     "levels":3
                                 }
                             },
                             creator: {
                                 allowClear: true,
-                                placeholder: "Select .."
+                                placeholder: "All"
                             }
                         }
                     ]
@@ -3384,14 +3523,14 @@ define(function () {
                     "title": "ODA",
                     "icon" : {
                         "class" : "fa fa-info-circle",
-                        "tooltip" : "Official Development Assistance"
+                        "tooltip" : "Official Development Assistance - Grants, Grant-Like, Loans and Equity Investment"
                     },
                     "module_class": "fx-filter-grid-module",
                     "class": "col-md-3 col-lg-2",
                     "components": [
                         {
                             "uid": "crs_flow_amounts",
-                            "version": "2015",
+                            "version": "2016",
                             "type": "codelist",
                             "name": "uid",
                             "componentType": "dropDownList-FENIX",
@@ -3440,7 +3579,7 @@ define(function () {
                                 xDimensions: 'year',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['sectorcode']
+                                seriesDimensions: ['parentsector_code']
                             },
                             template: {
                                 //"title": "Top 25..."
@@ -3455,8 +3594,8 @@ define(function () {
                                             }
                                         }
                                     },
-                                    subtitle: {
-                                        text: 'Click and drag on chart to zoom'
+                                   /** subtitle: {
+                                        text: '<b>Click and drag on chart to zoom</b>'
                                     },
                                     credits: {
                                         enabled: true,
@@ -3465,31 +3604,33 @@ define(function () {
                                     },
                                     lang: {
                                         doptions: "Chart Download options"
-                                    },
+                                    },**/
                                     exporting:{
-                                        buttons: {
+                                       /** buttons: {
                                             contextButton: {
                                                 _titleKey:"doptions",
                                                 text: 'Download'
                                             }
                                             //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },
+                                        },**/
                                         chartOptions:{
-                                            subtitle: {
+                                           /** subtitle: {
                                                 text: ''
-                                            },
+                                            },**/
                                             legend:{
-                                                enabled:true,
-                                                title: {
+                                                enabled:true//,
+                                               /** title: {
                                                     text: ''
-                                                }
+                                                }**/
                                             }
                                         }
                                     },
                                     legend: {
-                                        title: {
-                                            text: 'Click to hide/show'
-                                        }
+                                        align: 'center',
+                                        verticalAlign: 'bottom',
+                                        layout: 'horizontal',
+                                        x:0,
+                                        y:0
                                     },
                                     xAxis : {
                                         type: 'datetime'
@@ -3505,27 +3646,17 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['recipientcode', 'donorcode', 'purposecode', 'year', 'channelcode'],
+                        allowedFilter: ['recipientcode', 'donorcode', 'purposecode', 'year', 'channelsubcategory_code', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "flowcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_flow_types",
-                                                    "version": "2015",
-                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                                    ]   //ODA
-                                                }
-                                            ]
-                                        },
-                                        "recipientcode": {
+                                       "recipientcode": {
                                             "codes": [
                                                 {
                                                     "uid": "crs_recipients",
-                                                    "version": "2015",
+                                                    "version": "2016",
                                                     "codes": [
                                                         "238"  //Ethiopia
                                                     ]
@@ -3536,7 +3667,7 @@ define(function () {
                                             "codes": [
                                                 {
                                                     "uid": "crs_donors",
-                                                    "version": "2015",
+                                                    "version": "2016",
                                                     "codes": [
                                                         "1"  //Austria
                                                     ]
@@ -3568,7 +3699,8 @@ define(function () {
                                         {
                                             "columns": ["unitcode"],
                                             "rule": "pgfirst"
-                                        }
+                                        }/** Don't need unitname for FAO Sectors **/
+
                                     ]
                                 }
                             },
@@ -3591,10 +3723,10 @@ define(function () {
                             container: "#item-2",
                             adapter: {
                                 type: "standard",
-                                xDimensions: 'sectorcode',
+                                xDimensions: 'parentsector_code',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['sectorcode'],
+                                seriesDimensions: ['unitname'],
                                 sort: false
                             },
                             template: {
@@ -3605,8 +3737,8 @@ define(function () {
                                     chart: {
                                         type: "column"
                                     },
-                                    subtitle: {
-                                        text: 'Click and drag on chart to zoom'
+                                  /**  subtitle: {
+                                        text: '<b>Click and drag on chart to zoom</b>'
                                     },
                                     credits: {
                                         enabled: true,
@@ -3615,19 +3747,19 @@ define(function () {
                                     },
                                     lang: {
                                         doptions: "Chart Download options"
-                                    },
+                                    },**/
                                     exporting:{
-                                        buttons: {
+                                       /** buttons: {
                                             contextButton: {
                                                 _titleKey:"doptions",
                                                 text: 'Download'
                                             }
                                             //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },
+                                        },**/
                                         chartOptions:{
-                                            subtitle: {
+                                           /** subtitle: {
                                                 text: ''
-                                            },
+                                            },**/
                                             legend:{
                                                 enabled:false,
                                                 title: {
@@ -3637,8 +3769,14 @@ define(function () {
                                         }
                                     },
                                     legend: {
-                                        title: {
+                                        enabled: false
+                                       /** title: {
                                             text: 'Click to hide/show'
+                                        }**/
+                                    },
+                                    plotOptions: {
+                                        column: {
+                                            colorByPoint: true
                                         }
                                     },
                                     tooltip: {
@@ -3652,27 +3790,17 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['recipientcode', 'donorcode', 'year', 'channelcode'],
+                        allowedFilter: ['recipientcode', 'donorcode', 'year', 'channelsubcategory_code', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "flowcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_flow_types",
-                                                    "version": "2015",
-                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                                    ]   //ODA
-                                                }
-                                            ]
-                                        },
                                         "recipientcode": {
                                             "codes": [
                                                 {
                                                     "uid": "crs_recipients",
-                                                    "version": "2015",
+                                                    "version": "2016",
                                                     "codes": [
                                                         "238"  //Ethiopia
                                                     ]
@@ -3683,7 +3811,7 @@ define(function () {
                                             "codes": [
                                                 {
                                                     "uid": "crs_donors",
-                                                    "version": "2015",
+                                                    "version": "2016",
                                                     "codes": [
                                                         "1"  //Austria
                                                     ]
@@ -3705,7 +3833,7 @@ define(function () {
                                 "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                        "sectorcode"
+                                        "parentsector_code"
                                     ],
                                     "aggregations": [
                                         {
@@ -3748,10 +3876,10 @@ define(function () {
                             container: "#item-3",
                             adapter: {
                                 type: "standard",
-                                xDimensions: 'channelcode',
+                                xDimensions: 'channelsubcategory_code',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['channelcode'],
+                                seriesDimensions: ['unitname'],
                                 sort:false
                             },
                             template: {
@@ -3762,8 +3890,8 @@ define(function () {
                                     chart: {
                                         type: "column"
                                     },
-                                    subtitle: {
-                                        text: 'Click and drag on chart to zoom'
+                                   /** subtitle: {
+                                        text: '<b>Click and drag on chart to zoom</b>'
                                     },
                                     credits: {
                                         enabled: true,
@@ -3772,19 +3900,19 @@ define(function () {
                                     },
                                     lang: {
                                         doptions: "Chart Download options"
-                                    },
+                                    },**/
                                     exporting:{
-                                        buttons: {
+                                       /** buttons: {
                                             contextButton: {
                                                 _titleKey:"doptions",
                                                 text: 'Download'
                                             }
                                             //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },
+                                        },**/
                                         chartOptions:{
-                                            subtitle: {
+                                          /**  subtitle: {
                                                 text: ''
-                                            },
+                                            },**/
                                             legend:{
                                                 enabled:false,
                                                 title: {
@@ -3794,8 +3922,14 @@ define(function () {
                                         }
                                     },
                                     legend: {
-                                        title: {
+                                        enabled: false
+                                       /** title: {
                                             text: 'Click to hide/show'
+                                        }**/
+                                    },
+                                    plotOptions: {
+                                        column: {
+                                            colorByPoint: true
                                         }
                                     },
                                     tooltip: {
@@ -3815,21 +3949,11 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "flowcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_flow_types",
-                                                    "version": "2015",
-                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                                    ]   //ODA
-                                                }
-                                            ]
-                                        },
                                         "recipientcode": {
                                             "codes": [
                                                 {
                                                     "uid": "crs_recipients",
-                                                    "version": "2015",
+                                                    "version": "2016",
                                                     "codes": [
                                                         "238"  //Ethiopia
                                                     ]
@@ -3840,7 +3964,7 @@ define(function () {
                                             "codes": [
                                                 {
                                                     "uid": "crs_donors",
-                                                    "version": "2015",
+                                                    "version": "2016",
                                                     "codes": [
                                                         "1"  //Austria
                                                     ]
@@ -3862,7 +3986,7 @@ define(function () {
                                 "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                        "channelcode"
+                                        "channelsubcategory_code"
                                     ],
                                     "aggregations": [
                                         {
@@ -3918,28 +4042,28 @@ define(function () {
                                         type: 'pie'
                                     },
                                     subtitle: {
-                                        text: 'Click and drag on chart to zoom'
+                                        text: '<b>Hover for values</b>'
                                     },
-                                    credits: {
+                                  /**  credits: {
                                         enabled: true,
                                         text: 'Source: OECD',
                                         href: ''
                                     },
                                     lang: {
                                         doptions: "Chart Download options"
-                                    },
+                                    },**/
                                     exporting:{
-                                        buttons: {
+                                      /**  buttons: {
                                             contextButton: {
                                                 _titleKey:"doptions",
                                                 text: 'Download'
                                             }
                                             //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },
+                                        },**/
                                         chartOptions:{
-                                            subtitle: {
+                                           /** subtitle: {
                                                 text: ''
-                                            },
+                                            },**/
                                             legend: {
                                                 enabled: false
                                             },
@@ -3954,9 +4078,9 @@ define(function () {
                                         }
                                     },
                                     legend: {
-                                        title: {
+                                       /** title: {
                                             text: 'Click to hide/show'
-                                        },
+                                        },**/
                                         itemStyle: {
                                             width: 250
                                         }
@@ -3974,14 +4098,14 @@ define(function () {
                                             cursor: 'pointer',
                                             dataLabels: {
                                                 style: {
-                                                    width: '150px'
+                                                    width: '100px'
                                                 },
                                                 formatter: function(){
                                                     return '<div>' + this.point.name + ' '+
                                                         Math.round(this.point.percentage) //Highcharts.numberFormat(this.point.percentage, 2)
                                                         +'% </div>';
                                                 },
-                                                enabled: true
+                                                enabled: false
                                             },
                                             showInLegend: true
                                         }
@@ -3990,27 +4114,17 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['recipientcode', 'donorcode', 'year', 'channelcode'],
+                        allowedFilter: ['recipientcode', 'donorcode', 'year', 'channelsubcategory_code', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "flowcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_flow_types",
-                                                    "version": "2015",
-                                                    "codes": [ "10_12", "10_11", "10_13", "10_19"
-                                                    ]   //ODA
-                                                }
-                                            ]
-                                        },
                                         "recipientcode": {
                                             "codes": [
                                                 {
                                                     "uid": "crs_recipients",
-                                                    "version": "2015",
+                                                    "version": "2016",
                                                     "codes": [
                                                         "238"  //Ethiopia
                                                     ]
@@ -4021,7 +4135,7 @@ define(function () {
                                             "codes": [
                                                 {
                                                     "uid": "crs_donors",
-                                                    "version": "2015",
+                                                    "version": "2016",
                                                     "codes": [
                                                         "1"  //Austria
                                                     ]
@@ -4070,7 +4184,7 @@ define(function () {
                             {
                                 "name": "page",
                                 "parameters": {
-                                    "perPage": 10,  //top 10
+                                    "perPage": 10,  //top 10 FAO sub-sectors
                                     "page": 1
                                 }
                             }

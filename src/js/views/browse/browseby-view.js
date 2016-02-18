@@ -15,7 +15,8 @@ define([
     'config/browse/Config-oecd-fao',
     'config/browse/Config-indicators',
     'lib/utils',
-    'amplify'
+    'amplify',
+    'bootstrap'
 
 ], function ($, $UI, View, TitleSubView, FilterSubView, DashboardOecdSubView, DashboardIndicatorsSubView, IndicatorsModel, template, i18nLabels, E, BrowseOecdConfig, BrowseOecdFaoSectorsConfig, BrowseIndicatorsConfig, Utils) {
 
@@ -25,6 +26,8 @@ define([
         css_classes: {
             TITLE_BAR: "#fx-title",
             TITLE_BAR_ITEMS: "#fx-title-items",
+            TITLE_BAR_ITEMS_FIXED: "#browse-title-bar-fixed",
+            BACK_TO_TOP_FIXED: "#browse-top-link-fixed",
             FILTER_HOLDER: "#browse-filter-holder",
             DASHBOARD_OECD_HOLDER: "#browse-oecd-content",
             DASHBOARD_INDICATORS_HOLDER: "#browse-indicator-content"
@@ -33,8 +36,10 @@ define([
             TITLE_ADD_ITEM: 'fx.title.item.add',
             FAO_SECTOR_CHART_LOADED: 'fx.browse.chart.faosector.loaded',
             SUB_SECTORS_FILTERS_READY: 'fx.filters.list.subsectors.ready',
-            FILTER_ON_CHANGE: 'fx.filter.list.onchange'
+            FILTER_ON_CHANGE: 'fx.filter.list.onchange',
+            FILTER_ON_RESET: 'fx.filter.list.onreset'
         },
+
         indicatorDashboardModel: {
             COUNTRY:'country',
             TOPIC: 'topic'
@@ -62,6 +67,10 @@ define([
         // This is overwritten with the compiled template function.
         // In the end you might want to used precompiled templates.
         template: template,
+
+        events: {
+            'click #backToTopBtn': 'backToTop'
+        },
 
         initialize: function (params) {
             this.browse_type = params.filter;
@@ -104,10 +113,8 @@ define([
         _initSubViews: function() {
             View.prototype.render.apply(this, arguments);
 
-
             var config = BrowseOecdConfig[this.browse_type];
             var configFao = BrowseOecdFaoSectorsConfig[this.browse_type];
-
 
             if (!config || !config.dashboard || !config.filter) {
                 alert(" HERE Impossible to find configuration for topic: " + this.browse_type);
@@ -159,6 +166,15 @@ define([
 
         _initVariables: function () {
 
+            // Initialize bootstrap affix: Locks ('sticks') section, appears when scrolling
+          //  $(s.css_classes.TITLE_BAR_ITEMS_FIXED).affix({});
+          //  $(s.css_classes.BACK_TO_TOP_FIXED).affix({});
+
+
+            //DELETE THIS --- updated in updateDashboard
+           // $(s.css_classes.TITLE_BAR_ITEMS_FIXED).empty();
+          //  $('ul[class*="fx-title-items"]').clone().removeClass('list-inline fx-title-resume').appendTo(s.css_classes.TITLE_BAR_ITEMS_FIXED);
+
         },
 
         _bindEventListeners: function () {
@@ -169,11 +185,17 @@ define([
 
             amplify.subscribe(s.events.FILTER_ON_CHANGE, this, this._updateDashboard);
 
+            amplify.subscribe(s.events.FILTER_ON_RESET, this, this._resetDashboard);
+
+
         },
 
         _updateDashboard: function (item){
+
             amplify.publish(s.events.TITLE_ADD_ITEM, item);
             this.subview('title').show();
+            //this._updateFixedTitle();
+
 
            // if(!this.firstLoad) {
                 switch (this.subview('filters').isFAOSectorsSelected()) {
@@ -189,10 +211,24 @@ define([
                     this.datasetType.oecd_uid = item.value;
                 }
 
+                if(item.name === 'recipientcode') {
+                    if(item.regioncode)
+                        this.regioncode = item.regioncode;
+                    else
+                        this.regioncode = null;
+                }
+
+                //if(item.name === 'recipientcode') {
+                 // console.log('recipientcode has been activated');
+               // }
+
 
                 // REBUILD DASHBOARD 1
-               if(!this.firstLoad  && item.name != 'sectorcode') {
-                   this.subview('oecdDashboard').updateDashboardConfig(this.datasetType.oecd_uid, this.subview('filters').isFilterSelected('sectorcode'), this.subview('filters').isFilterSelected('purposecode'));
+               if(!this.firstLoad  && item.name != 'parentsector_code') {
+                  // var regionValue = this.subview('filters').getRecipentRegionValue();
+
+
+                   this.subview('oecdDashboard').updateDashboardConfig(this.datasetType.oecd_uid, this.subview('filters').isFilterSelected('parentsector_code'), this.subview('filters').isFilterSelected('purposecode'), this.subview('filters').isFilterSelected('recipientcode'), this.regioncode);
                    var ovalues = this.subview('filters').getOECDValues();
                    this.subview('oecdDashboard').rebuildDashboard([ovalues]);
                }
@@ -216,8 +252,13 @@ define([
             amplify.unsubscribe(s.events.FILTER_ON_CHANGE, this._updateDashboard);
         },
 
+        _updateFixedTitle: function () {
+            $(s.css_classes.TITLE_BAR_ITEMS_FIXED).empty();
+            this.subview('title').cloneTitle().appendTo(s.css_classes.TITLE_BAR_ITEMS_FIXED);
+        },
+
         _sectorChartLoaded: function (chart) {
-             if((chart.series[0].name).trim() == "Million USD")    {
+            if((chart.series[0].name).trim() == "Million USD")    {
                 chart.series[0].update({name: "FAO-Related Sectors"}, false);
                 chart.redraw();
             }
@@ -231,8 +272,6 @@ define([
                 // show title
                // this.subview('title').show();
 
-
-
                this.subview('oecdDashboard').renderDashboard();
 
                // if(this.browse_type === 'country_sector' || this.browse_type === 'donor_sector'){
@@ -242,10 +281,16 @@ define([
 
             }
             else {
-                    this.subview('oecdDashboard').updateDashboardConfig(this.datasetType.oecd_uid, this.subview('filters').isFilterSelected('sectorcode'), this.subview('filters').isFilterSelected('purposecode'));
+                    this.subview('oecdDashboard').updateDashboardConfig(this.datasetType.oecd_uid, this.subview('filters').isFilterSelected('parentsector_code'), this.subview('filters').isFilterSelected('purposecode'),  this.subview('filters').isFilterSelected('recipientcode'), this.regioncode);
                     var ovalues = this.subview('filters').getOECDValues();
                     this.subview('oecdDashboard').rebuildDashboard([ovalues]);
             }
+        },
+
+        _resetDashboard: function () {
+            this.subview('oecdDashboard').updateDashboardConfig(this.datasetType.oecd_uid, this.subview('filters').isFilterSelected('parentsector_code'), this.subview('filters').isFilterSelected('purposecode'),  this.subview('filters').isFilterSelected('recipientcode'), this.regioncode);
+            var ovalues = this.subview('filters').getOECDValues();
+            this.subview('oecdDashboard').rebuildDashboard([ovalues]);
         },
 
          _updateIndicatorDashboardModel: function(key, value){
@@ -260,6 +305,15 @@ define([
                 this._updateIndicatorDashboardModel(s.indicatorDashboardModel.COUNTRY, donor);
             else
                 this._updateIndicatorDashboardModel(s.indicatorDashboardModel.COUNTRY, country);
+
+        },
+
+        backToTop: function(e) {
+
+          e.preventDefault();
+          e.stopPropagation();
+
+          $('html, body').animate({scrollTop: 0}, 'slow');return false;
 
         },
 

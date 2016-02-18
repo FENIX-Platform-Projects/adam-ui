@@ -49,7 +49,7 @@ define(function () {
                                             "codes": [
                                                 {
                                                     "uid": "crs_recipientdonors",
-                                                    "version": "2015",
+                                                    "version": "2016",
                                                     "codes": [
                                                         "625"  //Afghanistan
                                                     ]
@@ -115,7 +115,7 @@ define(function () {
                                             "codes": [
                                                 {
                                                     "uid": "crs_recipientdonors",
-                                                    "version": "2015",
+                                                    "version": "2016",
                                                     "codes": [
                                                         "1"  //Australia
                                                     ]
