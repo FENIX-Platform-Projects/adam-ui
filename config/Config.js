@@ -4,12 +4,14 @@ define(function () {
     'use strict';
 
     var SERVER = 'http://fenix.fao.org/',
-        CODELIST_PREFIX = SERVER+ 'msd/resources/';
+        CODELIST_PREFIX = SERVER+ 'msd/resources/',
+        CODELIST_HIERARCHY_PREFIX = SERVER+ 'msd/codes/hierarchy/';
 
     return {
 
         SERVER: SERVER,
         CODES_POSTFIX : '/codes/filter',
+        HIERARCHY_CODES_POSTFIX : '/codes/hierarchy',
         D3P_POSTFIX : "d3s_dev/processes/",
 
         //Chaplin JS configuration
@@ -45,8 +47,6 @@ define(function () {
         //D3S_CODELIST_URL:( C.SERVICE_BASE_ADDRESS || DC.SERVICE_BASE_ADDRESS) + "/resources/",
 
         CODELIST_POSTFIX: "/resources/",
-
-
 
         CODELIST_SERVICE: "d3s_dev/msd"
 

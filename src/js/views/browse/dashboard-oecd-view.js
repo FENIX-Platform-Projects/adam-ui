@@ -77,8 +77,9 @@ define([
             this.browseDashboard.render(this.config);
         },
 
-        updateDashboardConfig: function(uid, sectorSelected, subSectorSelected){
+        updateDashboardConfig: function(uid, sectorSelected, subSectorSelected, recipientSelected, regioncode){
             var item1 = _.filter(this.config.items, {id:'item-1'})[0];
+
 
             switch(this.config_type == s.config_types.FAO){
                 case true:
@@ -89,7 +90,31 @@ define([
                     break;
             }
 
+
+            if(recipientSelected) {
+                this._updateRegionalMapConfiguration(regioncode);
+            }
+
             this.config.uid = uid;
+
+        },
+
+        _updateRegionalMapConfiguration: function (regioncode) {
+             var map = _.filter(this.config.items, {name:'region-map'})[0];
+
+            console.log(regioncode);
+             if(map){
+                 // modify regioncode
+                 var filterConfig = this.configUtils.findByPropValue(map.filter,  "name", "filter");
+
+                 if(filterConfig.parameters.rows.regioncode){
+                     filterConfig.parameters.rows.regioncode.codes[0].codes = [];
+
+                     if(regioncode)
+                        filterConfig.parameters.rows.regioncode.codes[0].codes.push(regioncode)
+                 }
+
+             }
 
         },
 
@@ -97,12 +122,12 @@ define([
 
            // console.log("_updateFAOItem1ChartConfiguration");
 
-            // Set either sectorcode or purposecode as the series in the first chart config
+            // Set either parentsector_code or purposecode as the series in the first chart config
             // Check the current selection via seriesname in config
             var seriesname = item1.config.adapter.seriesDimensions[0];
 
-            var configFind = subSectorSelected && seriesname !== 'purposecode' ? 'sectorcode': 'purposecode';
-            var configReplace = subSectorSelected && seriesname !== 'purposecode' ? 'purposecode': 'sectorcode';
+            var configFind = subSectorSelected && seriesname !== 'purposecode' ? 'parentsector_code': 'purposecode';
+            var configReplace = subSectorSelected && seriesname !== 'purposecode' ? 'purposecode': 'parentsector_code';
 
             // modify chartconfig seriesdimension
             this.configUtils.findAndReplace(item1.config.adapter, configFind, configReplace);
@@ -117,12 +142,12 @@ define([
 
         },
         _updateItem1ChartConfiguration: function (item1, sectorSelected, subSectorSelected) {
-            // Set either sectorcode or purposecode as the series in the first chart config
+            // Set either parentsector_code or purposecode as the series in the first chart config
             // Check the current selection via seriesname in config
             var seriesname = item1.config.adapter.seriesDimensions[0];
 
-            var configFind = subSectorSelected && seriesname !== 'purposecode' ? 'sectorcode': 'purposecode';
-            var configReplace = subSectorSelected && seriesname !== 'purposecode' ? 'purposecode': 'sectorcode';
+            var configFind = subSectorSelected && seriesname !== 'purposecode' ? 'parentsector_code': 'purposecode';
+            var configReplace = subSectorSelected && seriesname !== 'purposecode' ? 'purposecode': 'parentsector_code';
 
             // modify chartconfig seriesdimension
             this.configUtils.findAndReplace(item1.config.adapter, configFind, configReplace);
