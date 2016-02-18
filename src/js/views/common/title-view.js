@@ -64,7 +64,7 @@ define([
         },
 
         show : function(){
-            this._cleanUpDuplications();
+           this._cleanUpDuplications();
 
             this.$titleItemsList.find('li').each(function(){
                 $(this).show();
@@ -104,6 +104,14 @@ define([
         });
     },
 
+     cloneTitle: function (){
+         var clonedTitle = this.$titleItemsList.clone().prop('id', 'clone');
+         clonedTitle.find('li').removeAttr('data-module');
+         clonedTitle.removeClass('list-inline fx-title-resume');
+         clonedTitle.find('li').removeClass('current-sel-element');
+
+      return clonedTitle; //$('ul[class*="fx-title-items"]').clone().appendTo('#title-bar-block');
+     },
 
     _initVariables: function () {
            this.$titleItemsList = this.container.find(s.css_classes.TITLE_ITEMS_LIST);
@@ -151,6 +159,7 @@ define([
         },
 
         _updateList: function (item) {
+
             var hiddenItem = this._findHiddenItem(item.name);
 
             if(hiddenItem) {
