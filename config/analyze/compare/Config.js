@@ -247,7 +247,7 @@ define(function () {
                     "type": "dropdown",
                     "source": "static",
                     "from": 2000,
-                    "to": 2013
+                    "to": 2014
                 },
 
                 "filter": {
@@ -262,8 +262,8 @@ define(function () {
                     "type": "dropdown",
                     "source": "static",
                     "from": 2000,
-                    "to": 2013,
-                    "default": [2013]
+                    "to": 2014,
+                    "default": [2014]
                 },
 
                 "filter": {
