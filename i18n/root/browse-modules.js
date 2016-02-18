@@ -8,6 +8,19 @@ define({
                 "EN": "Browse by"
             },
             "title": {
+                "EN": "Sector"
+            },
+            "body": {
+                "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
+            },
+            "link": "#browse/sector",
+            "img": "http://fenixrepo.fao.org/cdn/images/modules/monitoring/kenya/timeseries/kenya_monitoring_timeseries.png"
+        },
+        {
+            "header": {
+                "EN": "Browse by"
+            },
+            "title": {
                 "EN": "Country and Sector"
             },
             "body": {
@@ -41,19 +54,6 @@ define({
             },
             "link": "#browse/country_donor_sector",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/env_AFG/environmental_AFG.png"
-        },
-        {
-            "header": {
-                "EN": "Browse by"
-            },
-            "title": {
-                "EN": "Sector"
-            },
-            "body": {
-                "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
-            },
-            "link": "#browse/sector",
-            "img": "http://fenixrepo.fao.org/cdn/images/modules/monitoring/kenya/timeseries/kenya_monitoring_timeseries.png"
         }
     ]
 });
