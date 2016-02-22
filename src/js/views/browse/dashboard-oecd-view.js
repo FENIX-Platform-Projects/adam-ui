@@ -48,8 +48,6 @@ define([
         initialize: function (params) {
             this.topic = params.topic;
 
-           console.log("initialize "+this.topic);
-
             this.model.on("change", this.render, this);
             //this.model.on("change", this.render);
 
@@ -63,8 +61,6 @@ define([
         },
 
         render: function () {
-            console.log("render");
-
             this.setElement(this.container);
             this._unbindEventListeners();
 
@@ -84,8 +80,6 @@ define([
             var source = $(this.template).find("[data-topic='" + this.topic + "']").prop('outerHTML');
             var template = Handlebars.compile(source);
 
-            console.log(template);
-
             var model = this.model.toJSON();
             var data = $.extend(true, model, i18nLabels);
 
@@ -98,8 +92,6 @@ define([
         },
 
         renderDashboard: function () {
-
-            console.log("RENDER DASHBOARD ");
 
             if (this.browseDashboard && this.browseDashboard.destroy) {
                 this.browseDashboard.destroy();
@@ -144,7 +136,7 @@ define([
         _updateRegionalMapConfiguration: function (regioncode) {
              var map = _.filter(this.config.items, {name:'region-map'})[0];
 
-            console.log(regioncode);
+            //console.log(regioncode);
              if(map){
                  // modify regioncode
                  var filterConfig = this.configUtils.findByPropValue(map.filter,  "name", "filter");
