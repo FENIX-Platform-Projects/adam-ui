@@ -6,10 +6,11 @@ define([
     'text!templates/browse/oecd-dashboard.hbs',
     'fx-ds/start',
     'lib/utils',
+    'i18n!nls/browse',
     'handlebars',
     'lib/config-utils',
     'amplify'
-], function ($, _, View, template, Dashboard, Utils, Handlebars, ConfigUtils) {
+], function ($, _, View, template, Dashboard, Utils, i18nLabels, Handlebars, ConfigUtils) {
 
     'use strict';
 
@@ -29,7 +30,7 @@ define([
     var DashboardView = View.extend({
 
         // Automatically render after initialize
-        autoRender: true,
+        autoRender: false,
 
         className: 'dashboard-browse',
 
@@ -38,14 +39,39 @@ define([
         // In the end you might want to used precompiled templates.
         template: template,
 
-        initialize: function (params) {
+       /** initialize: function (params) {
             this.topic = params.topic
 
             View.prototype.initialize.call(this, arguments);
+        },**/
+
+        initialize: function (params) {
+            this.topic = params.topic;
+
+           console.log("initialize "+this.topic);
+
+            this.model.on("change", this.render, this);
+            //this.model.on("change", this.render);
+
+            View.prototype.initialize.call(this, arguments);
+
+            //this.render();
+        },
+
+        getTemplateData: function () {
+            return i18nLabels;
+        },
+
+        render: function () {
+            console.log("render");
+
+            this.setElement(this.container);
+            this._unbindEventListeners();
+
+            $(this.el).html(this.getTemplateFunction());
         },
 
         attach: function () {
-
             View.prototype.attach.call(this, arguments);
 
             this.configUtils = new ConfigUtils();
@@ -54,12 +80,26 @@ define([
 
         },
 
+        getTemplateFunction: function() {
+            var source = $(this.template).find("[data-topic='" + this.topic + "']").prop('outerHTML');
+            var template = Handlebars.compile(source);
+
+            console.log(template);
+
+            var model = this.model.toJSON();
+            var data = $.extend(true, model, i18nLabels);
+
+            return template(data);
+        },
+
         setDashboardConfig: function(config, type){
             this.config = config;
             this.config_type = type || s.config_types.BASE;
         },
 
         renderDashboard: function () {
+
+            console.log("RENDER DASHBOARD ");
 
             if (this.browseDashboard && this.browseDashboard.destroy) {
                 this.browseDashboard.destroy();
@@ -76,6 +116,8 @@ define([
 
             this.browseDashboard.render(this.config);
         },
+
+
 
         updateDashboardConfig: function(uid, sectorSelected, subSectorSelected, recipientSelected, regioncode){
             var item1 = _.filter(this.config.items, {id:'item-1'})[0];
@@ -174,10 +216,10 @@ define([
         },
 
 
-        getTemplateFunction: function() {
-            var source = $(this.template).find("[data-topic='" + this.topic + "']");
-            return Handlebars.compile(source.prop('outerHTML'));
-        },
+      //  getTemplateFunction: function() {
+       //     var source = $(this.template).find("[data-topic='" + this.topic + "']");
+       //     return Handlebars.compile(source.prop('outerHTML'));
+      //  },
 
 
         _bindEventListeners: function () {
