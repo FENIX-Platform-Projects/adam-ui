@@ -36,7 +36,7 @@ define(function () {
                         config: {
                             container: "#indicator-1",
                             eventId: "country-indicator-1",
-                            order: ["period", "value", "indicatorcode", "source", "note"]
+                            order: ["period", "value", "indicatorcode", "source", "note", "link", "itemcode"]
                         },
                         // for now it takes the id, TODO: add uid as well
                         allowedFilter: ["countrycode"],
@@ -57,7 +57,7 @@ define(function () {
                                             ]
                                         }
                                     },
-                                    "columns": ["period", "value", "indicatorcode", "source", "note"]
+                                    "columns": ["period", "value", "indicatorcode", "source", "note", "link", "itemcode"]
                                 }
                             },
                             {
@@ -102,7 +102,7 @@ define(function () {
                         config: {
                             container: "#indicator-1",
                             eventId: "country-indicator-1",
-                            order: ["period", "value", "indicatorcode", "source", "note"]
+                            order: ["period", "value", "indicatorcode", "source", "note", "link", "itemcode"]
                         },
                         // for now it takes the id, TODO: add uid as well
                         allowedFilter: ["countrycode"],
@@ -123,7 +123,7 @@ define(function () {
                                             ]
                                         }
                                     },
-                                    "columns": ["period", "value", "indicatorcode", "source", "note"]
+                                    "columns": ["period", "value", "indicatorcode", "source", "note", "link", "itemcode"]
                                 }
                             },
                             {

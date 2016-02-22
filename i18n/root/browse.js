@@ -3,6 +3,7 @@ define({
     "title": "Browse By",
     "filter_btn": "Update",
     "source": "Source",
+    "and": "and",
     "selections" : "Current Selections",
     "backToTop" : "Back to Top",
     "development_indicators": "Development Indicators",
