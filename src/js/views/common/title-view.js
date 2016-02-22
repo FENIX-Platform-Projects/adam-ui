@@ -113,6 +113,16 @@ define([
       return clonedTitle; //$('ul[class*="fx-title-items"]').clone().appendTo('#title-bar-block');
      },
 
+     getTitleAsArray: function (){
+             this._cleanUpDuplications();
+
+             var arr = this.$titleItemsList.find('li').map(function(i, el) {
+             return $(el).text();
+             }).get();
+
+            return arr.join(' / ');
+     },
+
     _initVariables: function () {
            this.$titleItemsList = this.container.find(s.css_classes.TITLE_ITEMS_LIST);
         },
