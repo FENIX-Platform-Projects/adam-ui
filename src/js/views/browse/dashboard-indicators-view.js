@@ -149,7 +149,7 @@ define([
         _showCountryIndicators: function (payload) {
 
             var metadata = payload.model.metadata.dsd.columns;
-            var data = this._processData(payload.model.data, payload.config.order);
+            var data = this._processData(payload.model.data, metadata, payload.config.order);
 
             data = $.extend(true, data, i18nLabels);
 
@@ -164,26 +164,37 @@ define([
         },
 
 
-        _processData: function (data, order) {
-
+        _processData: function (data, metadata, order) {
             var valueIndex = this._findArrayItemIndex(order, "value"),
                 sourceIndex = this._findArrayItemIndex(order, "source"),
                 noteIndex = this._findArrayItemIndex(order, "note"),
-                periodIndex = this._findArrayItemIndex(order, "period");
+                periodIndex = this._findArrayItemIndex(order, "period"),
+                linkIndex = this._findArrayItemIndex(order, "link"),
+                itemnameIndex = this._findWithAttr(metadata, "id", "itemcode_"+Utils.getLocale()),
+                indicatornameIndex = this._findWithAttr(metadata, "id", "indicatorcode_"+Utils.getLocale());
 
             var newdata = {};
-            var indicators = [];
-            var footnote = [];
+            var indicators = [],
+                footnote = [],
+                linkArray = [],
+                sourceArray = [];
 
             var results = [], results2 = [], count = 1;
             for (var i = 0, len = data.length; i < len; ++i) {
                 var indicatorObj =  {};
 
-                indicatorObj.name = data[i][data[i].length-1];
+                //indicatorObj.name = data[i][data[i].length-1];
+                indicatorObj.name = data[i][indicatornameIndex];
+                indicatorObj.item = data[i][itemnameIndex];
                 indicatorObj.value = data[i][valueIndex];
                 indicatorObj.period = data[i][periodIndex];
                 indicatorObj.source = data[i][sourceIndex];
                 indicatorObj.note = data[i][noteIndex];
+                indicatorObj.link = data[i][linkIndex];
+
+                if(indicatorObj.value === null && indicatorObj.item){
+                    indicatorObj.value = indicatorObj.item;
+                }
 
                 if(indicatorObj.source === null){
                     indicatorObj.source = "";
@@ -194,6 +205,21 @@ define([
                     var sourceObj =  {};
                     indicatorObj.footnote = count;
                     sourceObj.sourceid = indicatorObj.source+indicatorObj.note;
+
+                    if(indicatorObj.source.split(";").length > 0){
+                        sourceObj.sourceArray = indicatorObj.source.split(";")
+                    } else if (indicatorObj.source) {
+                        sourceObj.sourceArray = sourceArray.push(indicatorObj.source);
+                    }
+
+                    if(indicatorObj.link.split(";").length > 0){
+                        sourceObj.linkArray = indicatorObj.link.split(";")
+                    } else if (indicatorObj.link) {
+                        sourceObj.linkArray = linkArray.push(indicatorObj.link);
+                    }
+
+                    sourceObj.link = indicatorObj.link;
+                    sourceObj.note = indicatorObj.note;
 
                     if(indicatorObj.source.length === 0)
                         sourceObj.source = indicatorObj.note;
@@ -213,22 +239,23 @@ define([
 
                 indicators.push(indicatorObj);
 
-               // console.log(indicators);
+                // console.log(indicators);
 
             }
 
             //console.log(indicators);
             indicators.sort(this._sortByName);
 
-           // console.log("AFTER==========");
+            // console.log("AFTER==========");
             //console.log(indicators);
             newdata.indicators = indicators;
             newdata.footnotes = footnote;
 
-            //console.log(newdata.indicators);
+           // console.log(newdata.indicators);
            // console.log(newdata.footnotes);
             return newdata;
         },
+
 
         _sortByName: function (a, b) {
            var aName = a.name.toLowerCase();
@@ -266,6 +293,16 @@ define([
 
             return valueIdx;
         },
+
+
+        _findWithAttr: function (array, attr, value) {
+            for(var i = 0; i < array.length; i += 1) {
+                if(array[i][attr] === value) {
+                    return i;
+                }
+            }
+       },
+
 
         dispose: function () {
             this._unbindEventListeners();
