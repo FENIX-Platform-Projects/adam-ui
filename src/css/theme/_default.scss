@@ -187,3 +187,17 @@ h2{
 
 
 }
+
+#browse-top-link-fixed{
+  position: fixed;
+  left: -150px;
+  bottom: 100px;
+  opacity: 0;
+  @include animate();
+}
+
+#browse-top-link-fixed.affix{
+  left: 15px;
+  opacity: 1;
+}
+

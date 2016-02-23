@@ -172,7 +172,7 @@ define([
 
             // Initialize bootstrap affix: Locks ('sticks') section, appears when scrolling
           // $(s.css_classes.TITLE_BAR_ITEMS_FIXED).affix({});
-         // $(s.css_classes.BACK_TO_TOP_FIXED).affix({});
+          $(s.css_classes.BACK_TO_TOP_FIXED).affix({});
            //$('#test').affix({});
 
 
