@@ -1,62 +1,25 @@
-/* Icons Definition */
-
-.NYGNPPCAPCD{
+/* Indicator Icon Definition */
+.NY_GNP_ATLS_CD, .NY_GNP_PCAP_CD {
   @extend .icojam_coins;
 }
 
-.icojam_D{
-  @extend .icojam_fork_spoon_baby;
+.NODA, .ODA_GNI, .NET_ODA_REC, .NET_ODA_REC_PC, .DT_ODA_ODAT_GN_ZS{
+  @extend .icojam_coins;
 }
 
-.icojam_E{
-  @extend .icojam_geography_earth;
+.SI_POV_GINI {
+  @extend .icojam_coins;
 }
 
-.icojam_F{
-  @extend .icojam_news_3;
+.POP_TOT, .RUR_POP_PERC{
+  @extend .icojam_coins;
 }
 
-.icojam_FB{
-  @extend .icojam_scales_baby;
+.AGRI_LAND_PERC {
+  @extend .icojam_coins;
 }
 
-.icojam_G1{
-  @extend .icojam_cloud_connect;
-}
-
-.icojam_G2{
-  @extend .icojam_cloud_connect;
-}
-
-.icojam_I{
-  @extend .icojam_moneys_3;
-}
-
-.icojam_M{
-  @extend .icojam_chart_2;
-}
-
-.icojam_O{
-  @extend .icojam_people_crowd;
-}
-
-.icojam_P{
-  @extend .icojam_coin_dollar;
-}
-
-.icojam_Q{
-  @extend .icojam_wheat;
-}
-
-.icojam_R{
-  @extend .icojam_plant;
-}
-
-.icojam_T{
-  @extend .icojam_change;
-}
-
-.icojam_X{
-  @extend .icojam_ambulance;
+.INCOME_LEVEL{
+  @extend .icojam_coins;
 }
 

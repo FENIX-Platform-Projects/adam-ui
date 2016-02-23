@@ -4,7 +4,7 @@
         {{#each this }}
             <div class="col-sm-4 adam-entry-point-content">
                 <div class="row">
-                    <div class="col-xs-7 indicator-name"><p>{{this.name}} ({{this.period}})<a href="#" name="{{this.footnote}}" class="anchor"><sup>{{this.footnote}}</sup></a></p></div>
+                    <div class="col-xs-7 indicator-name"><p><span class="{{this.css}}"></span> {{this.name}} ({{this.period}})<a href="#" name="{{this.footnote}}" class="anchor"><sup>{{this.footnote}}</sup></a></p></div>
                     <div class="col-xs-5 indicator-value"><p>{{commaSeparator this.value}}</p></div>
                 </div>
             </div>

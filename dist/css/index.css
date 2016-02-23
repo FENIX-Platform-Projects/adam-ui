@@ -6225,7 +6225,7 @@ button.close {
 .icojam_fertilization_sperm_ovum:before {
   content: "\e640"; }
 
-.icojam_fork_spoon_baby:before, .icojam_D:before {
+.icojam_fork_spoon_baby:before {
   content: "\e641"; }
 
 .icojam_girl:before {
@@ -6261,7 +6261,7 @@ button.close {
 .icojam_RC_car_radiocontrolled:before {
   content: "\e64c"; }
 
-.icojam_scales_baby:before, .icojam_FB:before {
+.icojam_scales_baby:before {
   content: "\e64d"; }
 
 .icojam_shirt:before {
@@ -6666,7 +6666,7 @@ button.close {
 .icojam_planetarium_observatory:before {
   content: "\e6d3"; }
 
-.icojam_plant:before, .icojam_R:before {
+.icojam_plant:before {
   content: "\e6d4"; }
 
 .icojam_police:before {
@@ -7365,7 +7365,7 @@ button.close {
 .icojam_geography:before {
   content: "\e7bc"; }
 
-.icojam_geography_earth:before, .icojam_E:before {
+.icojam_geography_earth:before {
   content: "\e7bd"; }
 
 .icojam_geography_globe:before {
@@ -7569,13 +7569,13 @@ button.close {
 .icojam_chair:before {
   content: "\e800"; }
 
-.icojam_change:before, .icojam_T:before {
+.icojam_change:before {
   content: "\e801"; }
 
 .icojam_coin_amero:before {
   content: "\e802"; }
 
-.icojam_coin_dollar:before, .icojam_P:before {
+.icojam_coin_dollar:before {
   content: "\e803"; }
 
 .icojam_coin_euro:before {
@@ -7590,7 +7590,7 @@ button.close {
 .icojam_coin_yuan:before {
   content: "\e807"; }
 
-.icojam_coins:before, .NYGNPPCAPCD:before {
+.icojam_coins:before, .NY_GNP_ATLS_CD:before, .NY_GNP_PCAP_CD:before, .NODA:before, .ODA_GNI:before, .NET_ODA_REC:before, .NET_ODA_REC_PC:before, .DT_ODA_ODAT_GN_ZS:before, .SI_POV_GINI:before, .POP_TOT:before, .RUR_POP_PERC:before, .AGRI_LAND_PERC:before, .INCOME_LEVEL:before {
   content: "\e808"; }
 
 .icojam_crisis:before {
@@ -7653,7 +7653,7 @@ button.close {
 .icojam_moneys_2:before {
   content: "\e81c"; }
 
-.icojam_moneys_3:before, .icojam_I:before {
+.icojam_moneys_3:before {
   content: "\e81d"; }
 
 .icojam_object_child:before {
@@ -7947,7 +7947,7 @@ button.close {
 .icojam_watermelon_2:before {
   content: "\e87e"; }
 
-.icojam_wheat:before, .icojam_Q:before {
+.icojam_wheat:before {
   content: "\e87f"; }
 
 .icojam_barbecue:before {
@@ -9249,7 +9249,7 @@ button.close {
 .icojam_cloud:before {
   content: "\ea31"; }
 
-.icojam_cloud_connect:before, .icojam_G1:before, .icojam_G2:before {
+.icojam_cloud_connect:before {
   content: "\ea32"; }
 
 .icojam_cloud_delete:before {
@@ -9540,7 +9540,7 @@ button.close {
 .icojam_chart_1:before {
   content: "\ea94"; }
 
-.icojam_chart_2:before, .icojam_M:before {
+.icojam_chart_2:before {
   content: "\ea95"; }
 
 .icojam_chart_3:before {
@@ -9636,7 +9636,7 @@ button.close {
 .icojam_news_2:before {
   content: "\eab4"; }
 
-.icojam_news_3:before, .icojam_F:before {
+.icojam_news_3:before {
   content: "\eab5"; }
 
 .icojam_news_newspaper_1:before {
@@ -9867,7 +9867,7 @@ button.close {
 .icojam_parking_2:before {
   content: "\eb01"; }
 
-.icojam_people_crowd:before, .icojam_O:before {
+.icojam_people_crowd:before {
   content: "\eb02"; }
 
 .icojam_pharmacy:before {
@@ -10245,7 +10245,7 @@ button_new_2:before {
 .icojam_airliner:before {
   content: "\eb80"; }
 
-.icojam_ambulance:before, .icojam_X:before {
+.icojam_ambulance:before {
   content: "\eb81"; }
 
 .icojam_bicycle:before {
@@ -13565,7 +13565,7 @@ footer.fao-footer {
   .input-group-btn .btn:hover {
     border-color: transparent; }
 
-/* Icons Definition */
+/* Indicator Icon Definition */
 /* Jstree Mood */
 /* Preload CSS */
 .loading {
@@ -13803,7 +13803,7 @@ footer h4 {
   text-indent: -.7em;
   line-height: 20px; }
 .custom-list-content li:before {
-  content: "• ";
+  content: "ÔÇó ";
   color: #2686ba;
   /* or whatever color you prefer */
   position: relative;
