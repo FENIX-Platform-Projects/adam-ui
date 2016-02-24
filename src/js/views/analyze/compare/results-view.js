@@ -401,12 +401,25 @@ define([
                     //log.info('OLAP: data loaded')
                 }
             });
-
             status.creator.renderD3S({
                 container: "fx-tab-table-container-" + obj.id,
                 model: obj.model,
                 inputOpts: status.configuration
             });
+			
+			/*
+			status.configuration.aggregator=function(a){return a}
+				status.configuration.filter=function(a){return true}
+			console.log(status.configuration,"TESTOYONS",status.configuration);
+			status.creator.PivotData([["un","deux","Value"],[1,1,3],[1,2,5],[2,1,2],[2,2,5]],
+			{
+			rows:["un"],
+			cols:["deux"],
+			vals:["Value"],
+			aggregator:function(a){return a},
+			filter:function(a){return true}
+			});
+			console.log(status.creator)*/
 
         },
 

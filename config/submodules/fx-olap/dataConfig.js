@@ -1,12 +1,9 @@
 /*global define*/
 define({
-	"rows":[],
-	"cols":[],
-	"vals":[
-		"Value",
-		"Flag"],
-	"hiddenAttributes":["Value",
-		"Flag","Unit"],
+	"rows":["recipientcode","recipientcode_EN"],
+	"cols":["year"],
+	"vals":["Value","Flag"],
+	"hiddenAttributes":["Value","Flag","Unit"],
 	/*"rows": [
 		"Element",
 		"Area",
@@ -30,28 +27,20 @@ define({
 		"VarOrder4"
 	]
 	,*/
-	 "derivedAttributes": {"Unit":function(ret){return ""},"Flag":function(ret){return ""}},
+	 "derivedAttributes": {"Unit":function(ret){return " "},"Flag":function(ret){return ""}},
 	"InstanceRenderers":[{label:"Table",func:"Table"},{label:"line chart",func:"line chart"}],
 	"InstanceAggregators":[{label:"Sum2",func:"Sum2"},{label:"Sum",func:"Sum"}],
-	  "showAgg": false,
+	"showAgg": false,
     "showRender": false,
     "showUnit": false,
-    "showCode": false,
+    "showCode": true,
     "showFlags": false,
     "csvText": "ADAM",
     "cellRenderFunction": function (value, unit, flag, showUnit, showFlag) {
         var ret = "";
-
-        ret += "<div class='result-value'>" + value + "</div>";
-
-        if (showUnit) {
-            ret += " [" + unit + "]";
-        }
-
-        if (showFlag && flag!="") {
-            ret += "<div class='result-amount'>(" + flag + ")</div>";
-        }
-
+        ret += "<div class='result-value'>"+ Math.floor(value.replace(" ","")*100)/100 + "</div>";
+        if (showUnit) {ret += " [" + unit + "]";}
+        if (showFlag && flag!="") {ret += "<div class='result-amount'>(" + flag + ")</div>";}
         return ret + "";
     }
 }
