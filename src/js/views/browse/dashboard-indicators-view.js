@@ -21,6 +21,9 @@ define([
         },
         events: {
             CUSTOM_ITEM_COUNTRY_RESPONSE: 'fx.dashboard.custom.item.response.country-indicator-1'
+        },
+        indicatorIds : {
+          INCOME_LEVEL: 'INCOME.LEVEL'
         }
     };
 
@@ -170,6 +173,7 @@ define([
                 noteIndex = this._findArrayItemIndex(order, "note"),
                 periodIndex = this._findArrayItemIndex(order, "period"),
                 linkIndex = this._findArrayItemIndex(order, "link"),
+                indicatorcodeIndex = this._findArrayItemIndex(order, "indicatorcode"),
                 itemnameIndex = this._findWithAttr(metadata, "id", "itemcode_"+Utils.getLocale()),
                 indicatornameIndex = this._findWithAttr(metadata, "id", "indicatorcode_"+Utils.getLocale());
 
@@ -185,12 +189,15 @@ define([
 
                 //indicatorObj.name = data[i][data[i].length-1];
                 indicatorObj.name = data[i][indicatornameIndex];
+                indicatorObj.css = data[i][indicatorcodeIndex];
+                indicatorObj.code = data[i][indicatorcodeIndex];
                 indicatorObj.item = data[i][itemnameIndex];
                 indicatorObj.value = data[i][valueIndex];
                 indicatorObj.period = data[i][periodIndex];
                 indicatorObj.source = data[i][sourceIndex];
                 indicatorObj.note = data[i][noteIndex];
                 indicatorObj.link = data[i][linkIndex];
+
 
                 if(indicatorObj.value === null && indicatorObj.item){
                     indicatorObj.value = indicatorObj.item;
@@ -199,6 +206,9 @@ define([
                 if(indicatorObj.source === null){
                     indicatorObj.source = "";
                 }
+
+                if(indicatorObj.css)
+                  indicatorObj.css = indicatorObj.css.replace(/\./g, "_");
 
                 if ($.inArray(indicatorObj.source+indicatorObj.note, results) < 0) {
 
@@ -239,12 +249,17 @@ define([
 
                 indicators.push(indicatorObj);
 
-                // console.log(indicators);
+                 //console.log(indicators);
 
             }
 
             //console.log(indicators);
             indicators.sort(this._sortByName);
+
+            // Move Income Level to the first position
+            var toIndex = 0;
+            var fromIndex = _.chain(indicators).pluck("code").indexOf(s.indicatorIds.INCOME_LEVEL).value();
+            indicators.splice(toIndex,0,indicators.splice(fromIndex,1)[0]);
 
             // console.log("AFTER==========");
             //console.log(indicators);
