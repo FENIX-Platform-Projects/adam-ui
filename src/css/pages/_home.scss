@@ -56,14 +56,13 @@
   }
 
   li:before {
-    content: "• ";
+    content: "•";
     color: $fx-cool-blue; /* or whatever color you prefer */
     position: relative;
     left: -7px;
 
   }
 }
-
 
 .factsheets{
   margin-bottom: 15px;

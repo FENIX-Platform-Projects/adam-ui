@@ -7590,7 +7590,7 @@ button.close {
 .icojam_coin_yuan:before {
   content: "\e807"; }
 
-.icojam_coins:before, .NY_GNP_ATLS_CD:before, .NY_GNP_PCAP_CD:before, .NODA:before, .ODA_GNI:before, .NET_ODA_REC:before, .NET_ODA_REC_PC:before, .DT_ODA_ODAT_GN_ZS:before, .SI_POV_GINI:before, .POP_TOT:before, .RUR_POP_PERC:before, .AGRI_LAND_PERC:before, .INCOME_LEVEL:before {
+.icojam_coins:before, .icojam_INCOME_LEVEL:before {
   content: "\e808"; }
 
 .icojam_crisis:before {
@@ -7626,7 +7626,7 @@ button.close {
 .icojam_hierarchy_2:before {
   content: "\e813"; }
 
-.icojam_income_1:before {
+.icojam_income_1:before, .icojam_NY_GNP_ATLS_CD:before, .icojam_NY_GNP_PCAP_CD:before {
   content: "\e814"; }
 
 .icojam_income_2:before {
@@ -7662,7 +7662,7 @@ button.close {
 .icojam_object_root:before {
   content: "\e81f"; }
 
-.icojam_payment_1:before {
+.icojam_payment_1:before, .icojam_SI_POV_GINI:before {
   content: "\e820"; }
 
 .icojam_payment_2:before {
@@ -7947,7 +7947,7 @@ button.close {
 .icojam_watermelon_2:before {
   content: "\e87e"; }
 
-.icojam_wheat:before {
+.icojam_wheat:before, .icojam_AGRI_LAND_PERC:before {
   content: "\e87f"; }
 
 .icojam_barbecue:before {
@@ -9813,7 +9813,7 @@ button.close {
 .icojam_father_son_1:before {
   content: "\eaef"; }
 
-.icojam_father_son_2:before {
+.icojam_father_son_2:before, .icojam_NODA:before, .icojam_ODA_GNI:before, .icojam_NET_ODA_REC:before, .icojam_NET_ODA_REC_PC:before, .icojam_DT_ODA_ODAT_GN_ZS:before {
   content: "\eaf0"; }
 
 .icojam_female:before {
@@ -10398,7 +10398,7 @@ button_new_2:before {
 .icojam_forefinger_up:before {
   content: "\ebb3"; }
 
-.icojam_friends:before {
+.icojam_friends:before, .icojam_POP_TOT:before, .icojam_RUR_POP_PERC:before {
   content: "\ebb4"; }
 
 .icojam_group:before {
@@ -13566,6 +13566,10 @@ footer.fao-footer {
     border-color: transparent; }
 
 /* Indicator Icon Definition */
+.indicators-icons {
+  font-size: 20px;
+  position: absolute; }
+
 /* Jstree Mood */
 /* Preload CSS */
 .loading {
@@ -13803,7 +13807,7 @@ footer h4 {
   text-indent: -.7em;
   line-height: 20px; }
 .custom-list-content li:before {
-  content: "ÔÇó ";
+  content: "•";
   color: #2686ba;
   /* or whatever color you prefer */
   position: relative;

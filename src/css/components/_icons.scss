@@ -1,14 +1,15 @@
 /* Indicator Icon Definition */
 .indicators-icons{
   font-size: 20px;
+  position: absolute;
 }
 
 .icojam_NY_GNP_ATLS_CD, .icojam_NY_GNP_PCAP_CD {
-  @extend .icojam_coins;
+  @extend .icojam_income_1;
 }
 
 .icojam_NODA, .icojam_ODA_GNI, .icojam_NET_ODA_REC, .icojam_NET_ODA_REC_PC, .icojam_DT_ODA_ODAT_GN_ZS{
-  @extend .icojam_coins;
+  @extend .icojam_father_son_2;
 }
 
 .icojam_INCOME_LEVEL{
@@ -17,15 +18,15 @@
 
 
 .icojam_SI_POV_GINI {
-  @extend .icojam_coins;
+  @extend .icojam_payment_1;
 }
 
 .icojam_POP_TOT, .icojam_RUR_POP_PERC{
-  @extend .icojam_coins;
+  @extend .icojam_friends;
 }
 
 .icojam_AGRI_LAND_PERC {
-  @extend .icojam_coins;
+  @extend .icojam_wheat;
 }
 
 
