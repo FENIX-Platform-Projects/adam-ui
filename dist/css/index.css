@@ -14048,10 +14048,14 @@ footer h4 {
   position: relative;
   right: -3px; }
 
+.indicator-name .name {
+  padding-left: 30px; }
+
 .indicator-value {
   font-weight: bold;
   font-size: 18px;
-  color: #aab5b7; }
+  color: #aab5b7;
+  padding-left: 0; }
 
 .adam-entry-point-content .anchor {
   position: relative;

@@ -68,10 +68,19 @@
 
 }
 
+
+.indicator-name{
+  .name{
+    padding-left: 30px;
+  }
+
+}
+
 .indicator-value{
   font-weight: bold;
   font-size: 18px;
   color: $light-text;
+  padding-left: 0;
 }
 
 
@@ -83,4 +92,6 @@
   }
 
 }
+
+
 
