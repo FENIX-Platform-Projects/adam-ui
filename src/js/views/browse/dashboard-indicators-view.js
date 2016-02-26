@@ -175,7 +175,8 @@ define([
                 linkIndex = this._findArrayItemIndex(order, "link"),
                 indicatorcodeIndex = this._findArrayItemIndex(order, "indicatorcode"),
                 itemnameIndex = this._findWithAttr(metadata, "id", "itemcode_"+Utils.getLocale()),
-                indicatornameIndex = this._findWithAttr(metadata, "id", "indicatorcode_"+Utils.getLocale());
+                indicatornameIndex = this._findWithAttr(metadata, "id", "indicatorcode_"+Utils.getLocale()),
+                unitnameIndex = this._findWithAttr(metadata, "id", "unitcode_"+Utils.getLocale());
 
             var newdata = {};
             var indicators = [],
@@ -197,7 +198,11 @@ define([
                 indicatorObj.source = data[i][sourceIndex];
                 indicatorObj.note = data[i][noteIndex];
                 indicatorObj.link = data[i][linkIndex];
+                indicatorObj.unit = data[i][unitnameIndex];
 
+                if(indicatorObj.unit === null){
+                    indicatorObj.unit = "";
+                }
 
                 if(indicatorObj.value === null && indicatorObj.item){
                     indicatorObj.value = indicatorObj.item;

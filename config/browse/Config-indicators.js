@@ -6,7 +6,7 @@ define(function () {
 
     return {
 
-        "country_sector": {
+        "country": {
 
             dashboard: {
                 //data cube's uid
@@ -36,7 +36,7 @@ define(function () {
                         config: {
                             container: "#indicator-1",
                             eventId: "country-indicator-1",
-                            order: ["period", "value", "indicatorcode", "source", "note", "link", "itemcode"]
+                            order: ["period", "value", "indicatorcode", "source", "note", "link", "itemcode", "unitcode"]
                         },
                         // for now it takes the id, TODO: add uid as well
                         allowedFilter: ["countrycode"],
@@ -57,7 +57,7 @@ define(function () {
                                             ]
                                         }
                                     },
-                                    "columns": ["period", "value", "indicatorcode", "source", "note", "link", "itemcode"]
+                                    "columns": ["period", "value", "indicatorcode", "source", "note", "link", "itemcode", "unitcode"]
                                 }
                             },
                             {
@@ -72,7 +72,7 @@ define(function () {
                 ]
             }
         },
-        "donor_sector": {
+        "donor": {
 
             dashboard: {
                 //data cube's uid

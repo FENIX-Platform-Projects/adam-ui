@@ -253,17 +253,17 @@ define(function () {
 
                 items: [
                     {
-                        id: 'item-1',   // TOTAL ODA
+                        id: 'tot-oda',   // TOTAL ODA
                         type: 'chart',
                         class: "fx-timeseries-ecample",
                         //needed if layout = injected
-                        container: "#item-1",
+                        container: "#tot-oda",
                         config: {
-                            container: "#item-1",
+                            container: "#tot-oda",
                             adapter: {
                                 type: "standard",
                                 xDimensions: 'year',
-                                yDimensions: 'unitname',
+                                yDimensions: 'unitcode',
                                 valueDimensions: 'value',
                                 seriesDimensions: ['parentsector_code']
                             },
@@ -280,34 +280,10 @@ define(function () {
                                             }
                                         }
                                     },
-                                   /** subtitle: {
-                                        text: '<b>Click and drag on chart to zoom</b>'
-                                    },
-                                    credits: {
-                                        enabled: true,
-                                        text: 'Source: OECD',
-                                        href: ''
-                                    },
-                                    lang: {
-                                        doptions: "Chart Download options"
-                                    },**/
                                     exporting:{
-                                       /** buttons: {
-                                            contextButton: {
-                                                _titleKey:"doptions",
-                                                text: 'Download'
-                                            }
-                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },**/
                                         chartOptions:{
-                                          /**  subtitle: {
-                                                text: ''
-                                            },**/
                                             legend:{
-                                                enabled:true//,
-                                             /**   title: {
-                                                    text: ''
-                                                }**/
+                                                enabled:false//, only one series and all info in title and subtitle
                                             }
                                         }
                                     },
@@ -318,11 +294,6 @@ define(function () {
                                         x:0,
                                         y:0
                                     },
-                                   /** legend: {
-                                        title: {
-                                            text: 'Click to hide/show'
-                                        }
-                                    },**/
                                     xAxis : {
                                         type: 'datetime'
                                     },
@@ -370,7 +341,7 @@ define(function () {
                                         {
                                             "columns": ["unitcode"],
                                             "rule": "pgfirst"
-                                        } /** dont include unitname for FAO Sectors **/
+                                        }
                                     ]
                                 }
                             },
@@ -384,19 +355,19 @@ define(function () {
                         ]
                     },
                     {
-                        id: 'item-2', // TOP DONORS
+                        id: 'top-partners', // TOP DONORS
                         type: 'chart',
                         class: "fx-timeseries-ecample",
                         //needed if layout = injected
-                        container: "#item-2",
+                        container: "#top-partners",
                         config: {
-                            container: "#item-2",
+                            container: "#top-partners",
                             adapter: {
                                 type: "standard",
                                 xDimensions: 'donorcode',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['unitname'],
+                                seriesDimensions: ['flowcategory'],
                                 sort: false
                             },
                             template: {
@@ -405,74 +376,97 @@ define(function () {
                             creator: {
                                 chartObj: {
                                     chart: {
-                                        type: "column"
-                                    },
-                                 /**   subtitle: {
-                                        text: '<b>Click and drag on chart to zoom</b>'
-                                    },
-                                    credits: {
-                                        enabled: true,
-                                        position: {
-                                            align: 'left',
-                                            x: 10
-                                        },
-                                        text: 'Source: OECD',
-                                        href: ''
-                                    },
-                                    lang: {
-                                        doptions: "Chart Download options"
-                                    },**/
-                                    exporting:{
-                                       /** buttons: {
-                                            contextButton: {
-                                                _titleKey:"doptions",
-                                                text: 'Download'
+                                        type: "column",
+
+                                        events: {
+                                            load: function(event) {
+                                              //  amplify.publish('fx.browse.chart.bar.loaded', this);
                                             }
-                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },**/
+                                        }
+                                    },
+                                    xAxis: {
+                                        labels: {
+                                            //useHTML: true,
+                                            events: {
+                                                click: function () {
+                                                   // console.log(this);
+                                                    //var chart = $('#item-2').highcharts();
+                                                   // console.log(chart);
+                                                    //chart.series[0].data[0].graphic.hide();
+                                                    //chart.series[0].data[0].dataLabel.hide();
+
+                                                   // var third = series[0].data[2];
+                                                    //third.graphic.hide();
+                                                    //return this.value
+                                                   // reloadFlash();
+                                                   // $('#report').html('click on xAxis label');
+                                                }
+                                                                                          }
+                                            //formatter: function() {
+                                               //return '<a href="javascript:alert(\'hello\')">'+
+                                                  //  this.value +'</a>';
+                                           // }
+                                        }
+                                    },
+                                    exporting:{
                                         chartOptions:{
-                                           /** subtitle: {
-                                                text: ''
-                                            },**/
                                             legend:{
-                                                enabled:false//,
-                                              /**  title: {
-                                                    text: ''
-                                                }**/
+                                                enabled:true
+                                            },
+                                            plotOptions: {
+                                                series: {
+                                                    dataLabels: {
+                                                        enabled: false
+                                                    }
+                                                }
+                                            }
+
+                                          /**  xAxis: [{
+                                                labels: {
+                                                    useHTML: true,
+                                                    style: {
+                                                       fontSize: '6px'
+                                                    }
+                                                }
+                                            }]**/
+                                        }
+                                    },
+                                    plotOptions: {
+                                        series: {
+                                            dataLabels: {
+                                                enabled: true
                                             }
                                         }
                                     },
                                     legend: {
-                                        enabled: false//,
-                                       /** title: {
-                                            text: 'Click to hide/show'
-                                        }**/
+                                        enabled: false
                                     },
-                                    plotOptions: {
-                                      column: {
-                                          colorByPoint: true
-                                      }
-                                    },
-                                   // plotOptions : {
-                                       // series : {
-                                           // showCheckbox: true,
-                                           // events: {
-                                                //checkboxClick: function (event) {
-                                                   // if (event.checked) {
-                                                      //  this.show();
-                                                   // } else {
-                                                    //    this.hide();
-                                                   // }
-                                               // }
-                                            //}
-                                       // }
+                                   // plotOptions: {
+                                       // column: {
+                                         //   colorByPoint: true
+                                        //}
                                    // },
+                                    // plotOptions : {
+                                    // series : {
+                                    // showCheckbox: true,
+                                    // events: {
+                                    //checkboxClick: function (event) {
+                                    // if (event.checked) {
+                                    //  this.show();
+                                    // } else {
+                                    //    this.hide();
+                                    // }
+                                    // }
+                                    //}
+                                    // }
+                                    // },
                                     tooltip: {
                                         formatter: function(){
                                             return '<b>' +this.x + ': ' + '</b><br/>' +
                                                 Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
                                         }
-                                    }
+                                    },
+                                    colors: ['#56adc3']
 
                                 }
                             }
@@ -513,6 +507,10 @@ define(function () {
                                         {
                                             "columns": ["unitname"],
                                             "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["flowcategory"],
+                                            "rule": "pgfirst"
                                         }
                                     ]
                                 }
@@ -533,19 +531,317 @@ define(function () {
                         ]
                     },
                     {
-                        id: 'item-3', // TOP Channels
+                        id: 'top-recipients', // TOP RECIPIENTS
+                        type: 'chart',
+                        class: "fx-timeseries-ecample",
+                        title: '',
+                        //needed if layout = injected
+                        container: "#top-recipients",
+                        config: {
+                            container: "#top-recipients",
+                            adapter: {
+                                type: "standard",
+                                xDimensions: 'recipientcode',
+                                yDimensions: 'unitname',
+                                valueDimensions: 'value',
+                                seriesDimensions: ['flowcategory'],
+                                sort: false
+                            },
+                            template: {
+                                //"title": "Top 25..."
+                            },
+                            creator: {
+                                chartObj: {
+                                    chart: {
+                                        type: "column",
+                                        events: {
+                                            load: function(event) {
+                                                //  amplify.publish('fx.browse.chart.bar.loaded', this);
+                                            }
+                                        }
+                                    },
+                                    xAxis: {
+                                        labels: {
+                                            //useHTML: true,
+                                            style: {
+                                                fontSize:'11px'
+                                            },
+                                            events: {
+                                                click: function () {
+                                                    // console.log(this);
+                                                    //var chart = $('#item-2').highcharts();
+                                                    // console.log(chart);
+                                                    //chart.series[0].data[0].graphic.hide();
+                                                    //chart.series[0].data[0].dataLabel.hide();
+
+                                                    // var third = series[0].data[2];
+                                                    //third.graphic.hide();
+                                                    //return this.value
+                                                    // reloadFlash();
+                                                    // $('#report').html('click on xAxis label');
+                                                }
+                                            }
+                                            //formatter: function() {
+                                            //return '<a href="javascript:alert(\'hello\')">'+
+                                            //  this.value +'</a>';
+                                            // }
+                                        }
+                                    },
+                                    exporting:{
+                                        chartOptions:{
+                                            legend:{
+                                                enabled:true
+                                            },
+                                            xAxis: {
+                                                labels: {
+                                                    style: {
+                                                        //  fontSize: '6px'
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        enabled: true
+                                    },
+                                    // plotOptions: {
+                                    // column: {
+                                    //   colorByPoint: true
+                                    //}
+                                    // },
+                                    // plotOptions : {
+                                    // series : {
+                                    // showCheckbox: true,
+                                    // events: {
+                                    //checkboxClick: function (event) {
+                                    // if (event.checked) {
+                                    //  this.show();
+                                    // } else {
+                                    //    this.hide();
+                                    // }
+                                    // }
+                                    //}
+                                    // }
+                                    // },
+                                    tooltip: {
+                                        formatter: function(){
+                                            return '<b>' +this.x + ': ' + '</b><br/>' +
+                                                Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
+                                        }
+                                    },
+                                    colors: ['#5691c3']
+
+                                }
+                            }
+                        },
+                        // for now it takes the id, TODO: add uid as well
+                        allowedFilter: ['purposecode', 'year', 'channelsubcategory_code', 'channelcode'],
+                        filter: [
+                            {
+                                "name": "filter",
+                                "parameters": {
+                                    "rows": {
+                                        "year": {
+                                            "time": [
+                                                {
+                                                    "from": 2000,
+                                                    "to": 2014
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "name": "pggroup",
+                                "parameters": {
+                                    "by": [
+                                        "recipientcode"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": ["value"],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["unitname"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["flowcategory"],
+                                            "rule": "pgfirst"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "order",
+                                "parameters": {
+                                    "value": "DESC"
+                                }
+                            },
+                            {
+                                "name": "page",
+                                "parameters": {
+                                    "perPage": 10,  //top 10
+                                    "page": 1
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        id: 'top-subsectors',  // Top sub-sectors pie
                         type: 'chart',
                         class: "fx-timeseries-ecample",
                         //needed if layout = injected
-                        container: "#item-3",
+                        container: "#top-subsectors",
                         config: {
-                            container: "#item-3",
+                            container: "#top-subsectors",
+                            adapter: {
+                                type: "pie",
+                                valueDimensions: 'value',
+                                seriesDimensions: ['purposecode']
+                            },
+                            template: {},
+                            creator: {
+                                chartObj: {
+                                    chart: {
+                                        plotBackgroundColor: null,
+                                        plotBorderWidth: null,
+                                        plotShadow: false,
+                                        type: 'pie'
+                                    },
+                                    subtitle: {
+                                        text: '<b>Hover for values</b>'
+                                    },
+                                    exporting:{
+                                        chartOptions:{
+                                            title: {
+                                                text: ''
+                                            },
+                                            legend: {
+                                                align: 'center',
+                                                verticalAlign: 'bottom',
+                                                layout: 'vertical',
+                                                x:0,
+                                                y:0,
+                                                useHTML: true,
+                                                labelFormatter: function() {
+                                                    return '<div style="width:200px"><span style="float:left">' + this.name.trim() +': '+ Highcharts.numberFormat(this.percentage, 2) + '% (' + Highcharts.numberFormat(this.y, 2)+ ' USD Mil)</b></span></div>';
+                                                }
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        align: 'center',
+                                        verticalAlign: 'bottom',
+                                        layout: 'horizontal',
+                                        x:0,
+                                        y:0//,
+                                        /**itemStyle: {
+                                            width: 250
+                                        },**/
+                                    },
+                                    tooltip: {
+                                        style: {width: '200px', whiteSpace: 'normal'},
+                                        pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>'
+                                    },
+                                    plotOptions: {
+                                        pie: {
+                                            allowPointSelect: true,
+                                            cursor: 'pointer',
+                                            dataLabels: {
+                                                style: {
+                                                    width: '200px'
+                                                },
+                                                formatter: function(){
+                                                    return '<div>' + this.point.name + ' '+
+                                                        Math.round(this.point.percentage)
+                                                        +'% </div>';
+                                                },
+                                                enabled: false
+                                            },
+                                            showInLegend: true
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        // for now it takes the id, TODO: add uid as well
+                        //Need to pass in purposecode to get FAO sub sectors
+                        allowedFilter: ['year', 'purposecode', 'channelsubcategory_code', 'channelcode'],
+                        filter: [
+                            {
+                                "name": "filter",
+                                "parameters": {
+                                    "rows": {
+                                        "year": {
+                                            "time": [
+                                                {
+                                                    "from": 2000,
+                                                    "to": 2014
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "name": "pggroup",
+                                "parameters": {
+                                    "by": [
+                                        "purposecode"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": ["value"],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["unitname"],
+                                            "rule": "pgfirst"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "order",
+                                "parameters": {
+                                    "value": "DESC"
+                                }
+                            },
+                            {
+                                "name": "page",
+                                "parameters": {
+                                    "perPage": 10,  //top 10
+                                    "page": 1
+                                }
+                            }
+
+                        ]
+                    },
+                    {
+                        id: 'top-channels', // TOP Channels
+                        type: 'chart',
+                        class: "fx-timeseries-ecample",
+                        //needed if layout = injected
+                        container: "#top-channels",
+                        config: {
+                            container: "#top-channels",
                             adapter: {
                                 type: "standard",
                                 xDimensions: 'channelsubcategory_code',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['unitcode'],
+                                seriesDimensions: ['flowcategory'],
                                 sort: false
                             },
                             template: {
@@ -556,58 +852,38 @@ define(function () {
                                     chart: {
                                         type: "column"
                                     },
-                                   /** subtitle: {
-                                        text: '<b>Click and drag on chart to zoom</b>'
-                                    },
-                                    credits: {
-                                        enabled: true,
-                                        text: 'Source: OECD',
-                                        href: ''
-                                    },
-                                    lang: {
-                                        doptions: "Chart Download options"
-                                    },**/
                                     exporting:{
-                                      /**  buttons: {
-                                            contextButton: {
-                                                _titleKey:"doptions",
-                                                text: 'Download'
-                                            }
-                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },**/
                                         chartOptions:{
-                                          /**  subtitle: {
-                                                text: ''
-                                            },**/
                                             legend:{
-                                                enabled:false//,
-                                              /**  title: {
-                                                    text: ''
-                                                }**/
+                                                enabled:true
                                             }
                                         }
                                     },
                                     legend: {
-                                        enabled: false,
-                                       /** title: {
-                                            text: 'Click to hide/show'
-                                        },**/
-                                        itemStyle: {
+                                        enabled: true,
+                                        align: 'center',
+                                        verticalAlign: 'bottom',
+                                        layout: 'horizontal',
+                                        x:0,
+                                        y:0//,
+                                        /**itemStyle: {
                                             width: 250
-                                        }
+                                        },**/
                                     },
-                                    plotOptions: {
-                                        column: {
-                                            colorByPoint: true
-                                        }
-                                    },
+
+                                   // plotOptions: {
+                                       // column: {
+                                       //     colorByPoint: true
+                                      // }
+                                   // },
                                     tooltip: {
                                         useHTML:true,
                                         formatter: function(){
                                             return '<div style="width: 200px; white-space:normal"><b>' +this.x + ': ' + '</b><br/>' +
                                                 Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil' + '</div>';
                                         }
-                                    }
+                                    },
+                                    colors: ['#5663c3']
 
                                 }
                             }
@@ -659,6 +935,10 @@ define(function () {
                                         {
                                             "columns": ["unitname"],
                                             "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["flowcategory"],
+                                            "rule": "pgfirst"
                                         }
                                     ]
                                 }
@@ -679,167 +959,12 @@ define(function () {
                         ]
                     },
                     {
-                        id: 'item-4',  // Top sub-sectors pie
+                        id: 'oda-regional', // Regional Distribution
                         type: 'chart',
                         class: "fx-timeseries-ecample",
-                        //needed if layout = injected
-                        container: "#item-4",
+                        container: "#oda-regional",
                         config: {
-                            container: "#item-4",
-                            adapter: {
-                                type: "pie",
-                                valueDimensions: 'value',
-                                seriesDimensions: ['purposecode']
-                            },
-                            template: {},
-                            creator: {
-                                chartObj: {
-                                    chart: {
-                                        plotBackgroundColor: null,
-                                        plotBorderWidth: null,
-                                        plotShadow: false,
-                                        type: 'pie'
-                                    },
-                                    subtitle: {
-                                        text: '<b>Hover for values</b>'
-                                    },
-                                   /** subtitle: {
-                                        text: '<b>Hover over each slice of the chart to view values </b>'
-                                    },
-                                    credits: {
-                                        enabled: true,
-                                        text: 'Source: OECD',
-                                        href: ''
-                                    },
-                                    lang: {
-                                        doptions: "Chart Download options"
-                                    },**/
-                                    exporting:{
-                                      /**  buttons: {
-                                            contextButton: {
-                                                _titleKey:"doptions",
-                                                text: 'Download'
-                                            }
-                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },**/
-                                        chartOptions:{
-                                          /**  subtitle: {
-                                                text: ''
-                                            },**/
-                                            legend:{
-                                                enabled: false//,
-                                              /**  title: {
-                                                    text: ''
-                                                }**/
-                                            },
-                                            series: {
-                                                dataLabels: {
-                                                    style: {
-                                                        width: '200px'
-                                                    },
-                                                    enabled: false
-                                                }
-                                            }
-                                        }
-                                    },
-                                    legend: {
-                                       /** title: {
-                                            text: 'Click to hide/show'
-                                        },**/
-                                        itemStyle: {
-                                            width: 250
-                                        }
-                                    },
-                                    tooltip: {
-                                        style: {width: '200px', whiteSpace: 'normal'},
-                                        pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>'
-                                    },
-                                    // legend: {
-                                    //    labelFormatter: function(){return this.name.slice(0, 25)+ '...'}
-                                    // },
-                                    plotOptions: {
-                                        pie: {
-                                            allowPointSelect: true,
-                                            cursor: 'pointer',
-                                            dataLabels: {
-                                                style: {
-                                                    width: '200px'
-                                                },
-                                                formatter: function(){
-                                                    return '<div>' + this.point.name + ' '+
-                                                        Math.round(this.point.percentage) //Highcharts.numberFormat(this.point.percentage, 2)
-                                                        +'% </div>';
-                                                },
-                                                enabled: false
-                                            },
-                                            showInLegend: true
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['year', 'channelsubcategory_code', 'channelcode'],
-                        filter: [
-                            {
-                                "name": "filter",
-                                "parameters": {
-                                    "rows": {
-                                        "year": {
-                                            "time": [
-                                                {
-                                                    "from": 2000,
-                                                    "to": 2014
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            },
-                            {
-                                "name": "pggroup",
-                                "parameters": {
-                                    "by": [
-                                        "purposecode"
-                                    ],
-                                    "aggregations": [
-                                        {
-                                            "columns": ["value"],
-                                            "rule": "SUM"
-                                        },
-                                        {
-                                            "columns": ["unitcode"],
-                                            "rule": "pgfirst"
-                                        },
-                                        {
-                                            "columns": ["unitname"],
-                                            "rule": "pgfirst"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                "name": "order",
-                                "parameters": {
-                                    "value": "DESC"
-                                }
-                            },
-                            {
-                                "name": "page",
-                                "parameters": {
-                                    "perPage": 10,  //top 10 FAO sub-sectors
-                                    "page": 1
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        id: 'item-5', // Regional Distribution
-                        type: 'chart',
-                        class: "fx-timeseries-ecample",
-                        container: "#item-5",
-                        config: {
-                            container: "#item-5",
+                            container: "#oda-regional",
                             adapter: {
                                 type: "standard",
                                 xDimensions: 'unitcode',
@@ -870,20 +995,20 @@ define(function () {
                                             }
                                         }
                                     },
-                                   /** subtitle: {
+                                    /** subtitle: {
                                         text: '<b>Click and drag on chart to zoom</b>'
                                     },
-                                    credits: {
+                                     credits: {
                                         enabled: true,
                                         text: 'Source: OECD',
                                         href: ''
                                     },
-                                    lang: {
+                                     lang: {
                                         doptions: "Chart Download options"
                                     },**/
                                     exporting:{
                                         //sourceWidth: 1000,
-                                       /** buttons: {
+                                        /** buttons: {
                                             contextButton: {
                                                 _titleKey:"doptions",
                                                 text: 'Download'
@@ -891,12 +1016,12 @@ define(function () {
                                             //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
                                         },**/
                                         chartOptions:{
-                                           /** subtitle: {
+                                            /** subtitle: {
                                                 text: ''
                                             },**/
                                             legend:{
                                                 enabled:true//,
-                                              /**  title: {
+                                                /**  title: {
                                                     text: ''
                                                 }**/
                                             }
@@ -904,25 +1029,25 @@ define(function () {
                                     },
                                     legend: {
                                         reversed: true//,
-                                       /** title: {
+                                        /** title: {
                                            text: 'Click to hide/show'
                                         }**/
                                     },
                                     yAxis: {
-                                      title: {
-                                          text: '%',
-                                          align: 'high'
-                                      }
+                                        title: {
+                                            text: '%',
+                                            align: 'high'
+                                        }
                                     },
                                     xAxis: {
-                                       labels: {
-                                           enabled: false
-                                       }
+                                        labels: {
+                                            enabled: false
+                                        }
                                     },
                                     tooltip: {
                                         formatter: function(){
                                             return '<b>' +this.series.name + ':' + '</b><br/>'  +' <b>'+   Highcharts.numberFormat(this.point.percentage, 4) + '% </b>'+
-                                                  ' ('+ Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil)'
+                                                ' ('+ Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil)'
                                         }
                                     }
                                 }
@@ -983,28 +1108,29 @@ define(function () {
                             }
                         ]
                     },
-                  {
-                        id: 'item-6',
+                    {
+                        id: 'country-map',
                         type: 'map',
                         class: "fx-map-chart",
                         //needed if layout = injected
-                        container: "#item-6",
+                        title: '',
+                        container: "#country-map",
                         config: {
-                            container: "#item-6",
+                            container: "#country-map",
                             leaflet: {
                                 zoomControl: false,
                                 attributionControl: true,
                                 scrollWheelZoom: false,
                                 minZoom: 2
                             },
-                           join: {
-                               style: {
-                                   colorramp: "PuBuGn"
+                            join: {
+                                style: {
+                                    colorramp: "PuBuGn"
                                 }
                             },
                             layer: {
                                 layertitle: "Commitment Current Prices"
-                           }
+                            }
                         },
                         // for now it takes the id, TODO: add uid as well
                         allowedFilter: ['purposecode', 'year', 'channelsubcategory_code', 'channelcode'],
@@ -1060,7 +1186,7 @@ define(function () {
             }
         },
 
-        "country_sector": {
+        "country": {
 
             filter: [
                 {
@@ -1330,17 +1456,17 @@ define(function () {
 
                 items: [
                     {
-                        id: 'item-1',  // TOTAL ODA
+                        id: 'tot-oda',  // TOTAL ODA
                         type: 'chart',
                         class: "fx-timeseries-ecample",
                         //needed if layout = injected
-                        container: "#item-1",
+                        container: "#tot-oda",
                         config: {
-                            container: "#item-1",
+                            container: "#tot-oda",
                             adapter: {
                                 type: "standard",
                                 xDimensions: 'year',
-                                yDimensions: 'unitname',
+                                yDimensions: 'unitcode',
                                 valueDimensions: 'value',
                                 seriesDimensions: ['parentsector_code']
                             },
@@ -1460,8 +1586,7 @@ define(function () {
                                         {
                                             "columns": ["unitcode"],
                                             "rule": "pgfirst"
-                                        }/** FAO Sectors, don't need unitname **/
-                                    ]
+                                        }                                    ]
                                 }
                             },
                             {
@@ -1474,219 +1599,50 @@ define(function () {
                         ]
                     },
                     {
-                        id: 'item-2', // Total ODA for most financed sectors
+                        id: 'top-partners', // TOP Donors
                         type: 'chart',
                         class: "fx-timeseries-ecample",
                         //needed if layout = injected
-                        container: "#item-2",
+                        container: "#top-partners",
                         config: {
-                            container: "#item-2",
-                            adapter: {
-                                type: "standard",
-                                xDimensions: 'parentsector_code',
-                                yDimensions: 'unitname',
-                                valueDimensions: 'value',
-                                seriesDimensions: ['unitname'],
-                                sort: false
-                            },
-                            template: {
-                                //"title": "Top 25..."
-                            },
-                            creator: {
-                                chartObj: {
-                                    chart: {
-                                        type: "column"
-                                    },
-                                    /**subtitle: {
-                                        text: '<b>Click and drag on chart to zoom</b>'
-                                    },**/
-                                   /** credits: {
-                                        enabled: true,
-                                        text: 'Source: OECD',
-                                        href: ''
-                                    },
-                                    lang: {
-                                        doptions: "Chart Download options"
-                                    },**/
-                                    exporting:{
-                                       /** buttons: {
-                                            contextButton: {
-                                                _titleKey:"doptions",
-                                                text: 'Download'
-                                            }
-                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },**/
-                                        chartOptions:{
-                                         /**   subtitle: {
-                                                text: ''
-                                            },**/
-                                            legend:{
-                                                enabled:false,
-                                                title: {
-                                                    text: ''
-                                                }
-                                            }
-                                        }
-                                    },
-                                    legend: {
-                                        enabled: false
-                                      /** title: {
-                                            text: 'Click to hide/show'
-                                        }**/
-                                    },
-                                    plotOptions: {
-                                        column: {
-                                            colorByPoint: true
-                                        }
-                                    },
-                                    tooltip: {
-                                        formatter: function(){
-                                            return '<b>' +this.x + ': ' + '</b><br/>' +
-                                                Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
-                                        }
-                                    }
-
-                                }
-                            }
-                        },
-                        // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['recipientcode', 'year', 'channelsubcategory_code', 'channelcode'],
-                        filter: [
-                            {
-                                "name": "filter",
-                                "parameters": {
-                                    "rows": {
-                                        "recipientcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_recipients",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "625"  //Afghanistan
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                        "year": {
-                                            "time": [
-                                                {
-                                                    "from": 2000,
-                                                    "to": 2014
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            },
-                            {
-                                "name": "pggroup",
-                                "parameters": {
-                                    "by": [
-                                        "parentsector_code"
-                                    ],
-                                    "aggregations": [
-                                        {
-                                            "columns": ["value"],
-                                            "rule": "SUM"
-                                        },
-                                        {
-                                            "columns": ["unitcode"],
-                                            "rule": "pgfirst"
-                                        },
-                                        {
-                                            "columns": ["unitname"],
-                                            "rule": "pgfirst"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                "name": "order",
-                                "parameters": {
-                                    "value": "DESC"
-                                }
-                            },
-                            {
-                                "name": "page",
-                                "parameters": {
-                                    "perPage": 10,  //top 10
-                                    "page": 1
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        id: 'item-3', // TOP Donors
-                        type: 'chart',
-                        class: "fx-timeseries-ecample",
-                        //needed if layout = injected
-                        container: "#item-3",
-                        config: {
-                            container: "#item-3",
+                            container: "#top-partners",
                             adapter: {
                                 type: "standard",
                                 xDimensions: 'donorcode',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['unitname'],
+                                seriesDimensions: ['flowcategory'],
                                 sort: false
                             },
                             template: {
-                                //"title": "Top 25..."
                             },
                             creator: {
                                 chartObj: {
                                     chart: {
                                         type: "column"
                                     },
-                                   /** subtitle: {
-                                        text: '<b>Click and drag on chart to zoom</b>'
-                                    },**/
-                                   /** credits: {
-                                        enabled: true,
-                                        text: 'Source: OECD',
-                                        href: ''
-                                    },
-                                    lang: {
-                                        doptions: "Chart Download options"
-                                    },**/
                                     exporting:{
-                                      /**  buttons: {
-                                            contextButton: {
-                                                _titleKey:"doptions",
-                                                text: 'Download'
-                                            }
-                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },**/
                                         chartOptions:{
-                                          /**  subtitle: {
-                                                text: ''
-                                            },**/
                                             legend:{
-                                                enabled:false//,
-                                               /** title: {
-                                                    text: ''
-                                                }**/
+                                                enabled:true,
                                             }
                                         }
                                     },
-                                   legend: {
-                                       enabled: false
-                                      /**  title: {
-                                            text: 'Click to hide/show'
-                                        }**/
+                                    legend: {
+                                        enabled: true
                                     },
-                                   plotOptions: {
-                                       column: {
-                                           colorByPoint: true
-                                       }
-                                   },
+                                   // plotOptions: {
+                                       // column: {
+                                         //   colorByPoint: true
+                                       // }
+                                  //  },
                                     tooltip: {
                                         formatter: function(){
                                             return '<b>' +this.x + ': ' + '</b><br/>' +
                                                 Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
                                         }
-                                    }
+                                    },
+                                    colors: ['#56adc3']
 
                                 }
                             }
@@ -1738,6 +1694,10 @@ define(function () {
                                         {
                                             "columns": ["unitname"],
                                             "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["flowcategory"],
+                                            "rule": "pgfirst"
                                         }
                                     ]
                                 }
@@ -1758,13 +1718,133 @@ define(function () {
                         ]
                     },
                     {
-                        id: 'item-4',    // Top sub-sectors pie
+                        id: 'top-sectors', // TOP SECTORS
                         type: 'chart',
                         class: "fx-timeseries-ecample",
                         //needed if layout = injected
-                        container: "#item-4",
+                        container: "#top-sectors",
                         config: {
-                            container: "#item-4",
+                            container: "#top-sectors",
+                            adapter: {
+                                type: "standard",
+                                xDimensions: 'parentsector_code',
+                                yDimensions: 'unitname',
+                                valueDimensions: 'value',
+                                seriesDimensions: ['flowcategory'],
+                                sort: false
+                            },
+                            template: {
+                                //"title": "Top 25..."
+                            },
+                            creator: {
+                                chartObj: {
+                                    chart: {
+                                        type: "column"
+                                    },
+                                    exporting:{
+                                        chartOptions:{
+                                            legend:{
+                                                enabled:true
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        enabled: true
+                                    },
+                                   // plotOptions: {
+                                     //   column: {
+                                      //      colorByPoint: true
+                                      //  }
+                                   // },
+                                    tooltip: {
+                                        formatter: function(){
+                                            return '<b>' +this.x + ': ' + '</b><br/>' +
+                                                Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
+                                        }
+                                    },
+                                    colors: ['#39B7CD']
+
+                                }
+                            }
+                        },
+                        // for now it takes the id, TODO: add uid as well
+                        allowedFilter: ['recipientcode', 'year', 'channelsubcategory_code', 'channelcode'],
+                        filter: [
+                            {
+                                "name": "filter",
+                                "parameters": {
+                                    "rows": {
+                                        "recipientcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_recipients",
+                                                    "version": "2016",
+                                                    "codes": [
+                                                        "625"  //Afghanistan
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "year": {
+                                            "time": [
+                                                {
+                                                    "from": 2000,
+                                                    "to": 2014
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "name": "pggroup",
+                                "parameters": {
+                                    "by": [
+                                        "parentsector_code"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": ["value"],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["unitname"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["flowcategory"],
+                                            "rule": "pgfirst"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "order",
+                                "parameters": {
+                                    "value": "DESC"
+                                }
+                            },
+                            {
+                                "name": "page",
+                                "parameters": {
+                                    "perPage": 10,  //top 10
+                                    "page": 1
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        id: 'top-subsectors',    // Top sub-sectors pie
+                        type: 'chart',
+                        class: "fx-timeseries-ecample",
+                        //needed if layout = injected
+                        container: "#top-subsectors",
+                        config: {
+                            container: "#top-subsectors",
                             adapter: {
                                 type: "pie",
                                 valueDimensions: 'value',
@@ -1782,67 +1862,50 @@ define(function () {
                                     subtitle: {
                                         text: '<b>Hover for values</b>'
                                     },
-                                   /** credits: {
-                                        enabled: true,
-                                        text: 'Source: OECD',
-                                        href: ''
-                                    },
-                                    lang: {
-                                        doptions: "Chart Download options"
-                                    },**/
                                     exporting:{
-                                      /**  buttons: {
-                                            contextButton: {
-                                                _titleKey:"doptions",
-                                                text: 'Download'
-                                            }
-                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },**/
                                         chartOptions:{
-                                          /**  subtitle: {
+                                            title: {
                                                 text: ''
-                                            },**/
-                                            legend: {
-                                                enabled: false
                                             },
-                                            series: {
-                                                dataLabels: {
-                                                    style: {
-                                                        width: '100px'
-                                                    },
-                                                    enabled: true
+                                            legend: {
+                                                align: 'center',
+                                                verticalAlign: 'bottom',
+                                                layout: 'vertical',
+                                                x:0,
+                                                y:0,
+                                                useHTML: true,
+                                                labelFormatter: function() {
+                                                    return '<div style="width:200px"><span style="float:left">' + this.name.trim() +': '+ Highcharts.numberFormat(this.percentage, 2) + '% (' + Highcharts.numberFormat(this.y, 2)+ ' USD Mil)</b></span></div>';
                                                 }
                                             }
                                         }
                                     },
                                     legend: {
-                                      /**  title: {
-                                            text: 'Click to hide/show'
-                                        },**/
-                                        itemStyle: {
+                                        align: 'center',
+                                        verticalAlign: 'bottom',
+                                        layout: 'horizontal',
+                                        x:0,
+                                        y:0//,
+                                        /**itemStyle: {
                                             width: 250
-                                        }
+                                        },**/
                                     },
                                     tooltip: {
                                         style: {width: '200px', whiteSpace: 'normal'},
                                         pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>'
                                     },
-
-                                   // legend: {
-                                   //    labelFormatter: function(){return this.name.slice(0, 25)+ '...'}
-                                   // },
                                     plotOptions: {
                                         pie: {
                                             allowPointSelect: true,
                                             cursor: 'pointer',
-                                             dataLabels: {
+                                            dataLabels: {
                                                 style: {
-                                                   width: '100px'
-                                                 },
+                                                    width: '200px'
+                                                },
                                                 formatter: function(){
-                                                   return '<div>' + this.point.name + ' '+
-                                                       Math.round(this.point.percentage) //Highcharts.numberFormat(this.point.percentage, 2)
-                                                      +'% </div>';
+                                                    return '<div>' + this.point.name + ' '+
+                                                        Math.round(this.point.percentage)
+                                                        +'% </div>';
                                                 },
                                                 enabled: false
                                             },
@@ -1853,7 +1916,8 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['recipientcode', 'year', 'channelsubcategory_code', 'channelcode'],
+                        // FAO sub Sectors needs purpose code
+                        allowedFilter: ['recipientcode', 'purposecode', 'year', 'channelsubcategory_code', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -1912,26 +1976,26 @@ define(function () {
                             {
                                 "name": "page",
                                 "parameters": {
-                                    "perPage": 10,  //top 10 FAO sub-sectors
+                                    "perPage": 10,  //top 10
                                     "page": 1
                                 }
                             }
                         ]
                     },
                     {
-                        id: 'item-5', // TOP Channels
+                        id: 'top-channels', // TOP Channels
                         type: 'chart',
                         class: "fx-timeseries-ecample",
                         //needed if layout = injected
-                        container: "#item-5",
+                        container: "#top-channels",
                         config: {
-                            container: "#item-5",
+                            container: "#top-channels",
                             adapter: {
                                 type: "standard",
                                 xDimensions: 'channelsubcategory_code',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['unitname'],
+                                seriesDimensions: ['flowcategory'],
                                 sort: false
                             },
                             template: {
@@ -1942,62 +2006,38 @@ define(function () {
                                     chart: {
                                         type: "column"
                                     },
-                                   /** subtitle: {
-                                        text: '<b>Click and drag on chart to zoom</b>'
-                                    },**/
-                                  /**  credits: {
-                                        enabled: true,
-                                        text: 'Source: OECD',
-                                        href: ''
-                                    },
-                                    lang: {
-                                        doptions: "Chart Download options"
-                                    },**/
                                     exporting:{
-                                      /**  buttons: {
-                                            contextButton: {
-                                                _titleKey:"doptions",
-                                                text: 'Download'
-                                            }
-                                         },**/
                                         chartOptions:{
-                                          /**  subtitle: {
-                                                text: ''
-                                            },**/
                                             legend:{
-                                                enabled:false//,
-                                               /** title: {
-                                                    text: ''
-                                                }**/
+                                                enabled:true
                                             }
                                         }
                                     },
                                     legend: {
-                                        enabled: false,
-                                       /** title: {
-                                            text: 'Click to hide/show'
-                                        },**/
-                                        itemStyle: {
+                                        enabled: true,
+                                        align: 'center',
+                                        verticalAlign: 'bottom',
+                                        layout: 'horizontal',
+                                        x:0,
+                                        y:0//,
+                                        /**itemStyle: {
                                             width: 250
-                                        }
+                                        },**/
                                     },
-                                    plotOptions: {
-                                        column: {
-                                            colorByPoint: true
-                                        },
-                                        series: {
-                                            dataLabels: {
-                                                enabled: true
-                                            }
-                                        }
-                                    },
+
+                                    // plotOptions: {
+                                    // column: {
+                                    //     colorByPoint: true
+                                    // }
+                                    // },
                                     tooltip: {
                                         useHTML:true,
                                         formatter: function(){
                                             return '<div style="width: 200px; white-space:normal"><b>' +this.x + ': ' + '</b><br/>' +
                                                 Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil' + '</div>';
                                         }
-                                    }
+                                    },
+                                    colors: ['#5663c3']
 
                                 }
                             }
@@ -2049,6 +2089,10 @@ define(function () {
                                         {
                                             "columns": ["unitname"],
                                             "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["flowcategory"],
+                                            "rule": "pgfirst"
                                         }
                                     ]
                                 }
@@ -2069,14 +2113,14 @@ define(function () {
                         ]
                     },
                   {
-                        id: 'item-6',
+                        id: 'country-map',
                         type: 'map',
                         class: "fx-map-chart",
                         name: 'region-map',
                         //needed if layout = injected
-                        container: "#item-6",
+                        container: "#country-map",
                         config: {
-                            container: "#item-6",
+                            container: "#country-map",
                             leaflet: {
                                 zoomControl: false,
                                 attributionControl: true,
@@ -2161,7 +2205,7 @@ define(function () {
             }
         },
 
-        "donor_sector": {
+        "donor": {
 
 
             filter: [
@@ -2433,17 +2477,17 @@ define(function () {
 
                 items: [
                     {
-                        id: 'item-1',  // TOTAL ODA
+                        id: 'tot-oda',  // TOTAL ODA
                         type: 'chart',
                         class: "fx-timeseries-ecample",
                         //needed if layout = injected
-                        container: "#item-1",
+                        container: "#tot-oda",
                         config: {
-                            container: "#item-1",
+                            container: "#tot-oda",
                             adapter: {
                                 type: "standard",
                                 xDimensions: 'year',
-                                yDimensions: 'unitname',
+                                yDimensions: 'unitcode',
                                 valueDimensions: 'value',
                                 seriesDimensions: ['parentsector_code']
                             },
@@ -2554,7 +2598,7 @@ define(function () {
                                         {
                                             "columns": ["unitcode"],
                                             "rule": "pgfirst"
-                                        } /** Don't need unitname for FAO sectors **/
+                                        }
                                     ]
                                 }
                             },
@@ -2568,13 +2612,142 @@ define(function () {
                         ]
                     },
                     {
-                        id: 'item-2', // Total ODA for most financed sectors
+                        id: 'top-recipients', // TOP Recipients
                         type: 'chart',
                         class: "fx-timeseries-ecample",
                         //needed if layout = injected
-                        container: "#item-2",
+                        container: "#top-recipients",
                         config: {
-                            container: "#item-2",
+                            container: "#top-recipients",
+                            adapter: {
+                                type: "standard",
+                                xDimensions: 'recipientcode',
+                                yDimensions: 'unitname',
+                                valueDimensions: 'value',
+                                seriesDimensions: ['flowcategory'],
+                                sort: false
+                            },
+                            template: {
+                                //"title": "Top 25..."
+                            },
+                            creator: {
+                                chartObj: {
+                                    chart: {
+                                        type: "column"
+                                    },
+                                    exporting:{
+                                        chartOptions:{
+                                            legend:{
+                                                enabled:true
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        enabled: true//,
+                                      //  itemStyle: {
+                                       //     width: 250
+                                       // }
+                                    },
+
+                                   /** plotOptions: {
+                                        column: {
+                                            colorByPoint: true
+                                        },
+                                        series: {
+                                            dataLabels: {
+                                                enabled: true
+                                            }
+                                        }
+                                    },**/
+                                    tooltip: {
+                                        useHTML:true,
+                                        formatter: function(){
+                                            return '<div style="width: 200px; white-space:normal"><b>' +this.x + ': ' + '</b><br/>' +
+                                                Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil' + '</div>';
+                                        }
+                                    },
+                                    colors: ['#5691c3']
+                                }
+                            }
+                        },
+                        // for now it takes the id, TODO: add uid as well
+                        allowedFilter: ['donorcode', 'purposecode', 'year'],
+                        filter: [
+                            {
+                                "name": "filter",
+                                "parameters": {
+                                    "rows": {
+                                        "donorcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_donors",
+                                                    "version": "2016",
+                                                    "codes": [
+                                                        "1"  //Austria
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "year": {
+                                            "time": [
+                                                {
+                                                    "from": 2000,
+                                                    "to": 2014
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "name": "pggroup",
+                                "parameters": {
+                                    "by": [
+                                        "recipientcode"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": ["value"],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["unitname"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["flowcategory"],
+                                            "rule": "pgfirst"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "order",
+                                "parameters": {
+                                    "value": "DESC"
+                                }
+                            },
+                            {
+                                "name": "page",
+                                "parameters": {
+                                    "perPage": 10,  //top 10
+                                    "page": 1
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        id: 'top-sectors', // TOP SECTORS
+                        type: 'chart',
+                        class: "fx-timeseries-ecample",
+                        //needed if layout = injected
+                        container: "#top-sectors",
+                        config: {
+                            container: "#top-sectors",
                             adapter: {
                                 type: "standard",
                                 xDimensions: 'parentsector_code',
@@ -2591,54 +2764,28 @@ define(function () {
                                     chart: {
                                         type: "column"
                                     },
-                                    /**subtitle: {
-                                        text: '<b>Click and drag on chart to zoom</b>'
-                                    },
-                                    credits: {
-                                        enabled: true,
-                                        text: 'Source: OECD',
-                                        href: ''
-                                    },
-                                    lang: {
-                                        doptions: "Chart Download options"
-                                    },**/
                                     exporting:{
-                                       /** buttons: {
-                                            contextButton: {
-                                                _titleKey:"doptions",
-                                                text: 'Download'
-                                            }
-                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },**/
                                         chartOptions:{
-                                           /** subtitle: {
-                                                text: ''
-                                            },**/
                                             legend:{
-                                                enabled:false//,
-                                               /** title: {
-                                                    text: ''
-                                                }**/
+                                                enabled:true
                                             }
                                         }
                                     },
-                                   legend: {
-                                       enabled: false
-                                       /** title: {
-                                            text: 'Click to hide/show'
-                                        }**/
+                                    legend: {
+                                        enabled: true
                                     },
-                                    plotOptions: {
-                                       column: {
-                                           colorByPoint: true
-                                       }
-                                    },
+                                    // plotOptions: {
+                                    //   column: DF3328{
+                                    //      colorByPoint: true
+                                    //  }
+                                    // },
                                     tooltip: {
                                         formatter: function(){
                                             return '<b>' +this.x + ': ' + '</b><br/>' +
                                                 Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
                                         }
-                                    }
+                                    },
+                                    colors: ['#39B7CD']
 
                                 }
                             }
@@ -2710,165 +2857,13 @@ define(function () {
                         ]
                     },
                     {
-                        id: 'item-3', // TOP Channels
+                        id: 'top-subsectors',    // Top sub-sectors pie
                         type: 'chart',
                         class: "fx-timeseries-ecample",
                         //needed if layout = injected
-                        container: "#item-3",
+                        container: "#top-subsectors",
                         config: {
-                            container: "#item-3",
-                            adapter: {
-                                type: "standard",
-                                xDimensions: 'channelsubcategory_code',
-                                yDimensions: 'unitname',
-                                valueDimensions: 'value',
-                                seriesDimensions: ['unitname'],
-                                sort: false
-                            },
-                            template: {
-                                //"title": "Top 25..."
-                            },
-                            creator: {
-                                chartObj: {
-                                    chart: {
-                                        type: "column"
-                                    },
-                                   /** subtitle: {
-                                        text: '<b>Click and drag on chart to zoom</b>'
-                                    },
-                                    credits: {
-                                        enabled: true,
-                                        text: 'Source: OECD',
-                                        href: ''
-                                    },
-                                    lang: {
-                                        doptions: "Chart Download options"
-                                    },**/
-                                    exporting:{
-                                      /**  buttons: {
-                                            contextButton: {
-                                                _titleKey:"doptions",
-                                                text: 'Download'
-                                            }
-                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },**/
-                                        chartOptions:{
-                                           /** subtitle: {
-                                                text: ''
-                                            },**/
-                                            legend:{
-                                                enabled:false//,
-                                               /** title: {
-                                                    text: ''
-                                                }**/
-                                            }
-                                        }
-                                    },
-                                    legend: {
-                                        enabled: false,
-                                       /** title: {
-                                            text: 'Click to hide/show'
-                                        },**/
-                                        itemStyle: {
-                                            width: 250
-                                        }
-                                    },
-
-                                    plotOptions: {
-                                        column: {
-                                           colorByPoint: true
-                                        },
-                                        series: {
-                                            dataLabels: {
-                                                enabled: true
-                                            }
-                                        }
-                                    },
-                                    tooltip: {
-                                        useHTML:true,
-                                        formatter: function(){
-                                            return '<div style="width: 200px; white-space:normal"><b>' +this.x + ': ' + '</b><br/>' +
-                                                Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil' + '</div>';
-                                        }
-                                    }
-
-                                }
-                            }
-                        },
-                        // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['donorcode', 'purposecode', 'year'],
-                        filter: [
-                            {
-                                "name": "filter",
-                                "parameters": {
-                                    "rows": {
-                                        "donorcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_donors",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "1"  //Austria
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                        "year": {
-                                            "time": [
-                                                {
-                                                    "from": 2000,
-                                                    "to": 2014
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            },
-                            {
-                                "name": "pggroup",
-                                "parameters": {
-                                    "by": [
-                                        "channelsubcategory_code"
-                                    ],
-                                    "aggregations": [
-                                        {
-                                            "columns": ["value"],
-                                            "rule": "SUM"
-                                        },
-                                        {
-                                            "columns": ["unitcode"],
-                                            "rule": "pgfirst"
-                                        },
-                                        {
-                                            "columns": ["unitname"],
-                                            "rule": "pgfirst"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                "name": "order",
-                                "parameters": {
-                                    "value": "DESC"
-                                }
-                            },
-                            {
-                                "name": "page",
-                                "parameters": {
-                                    "perPage": 10,  //top 10
-                                    "page": 1
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        id: 'item-4',    // Top sub-sectors pie
-                        type: 'chart',
-                        class: "fx-timeseries-ecample",
-                        //needed if layout = injected
-                        container: "#item-4",
-                        config: {
-                            container: "#item-4",
+                            container: "#top-subsectors",
                             adapter: {
                                 type: "pie",
                                 valueDimensions: 'value',
@@ -2886,65 +2881,49 @@ define(function () {
                                     subtitle: {
                                         text: '<b>Hover for values</b>'
                                     },
-                                   /** credits: {
-                                        enabled: true,
-                                        text: 'Source: OECD',
-                                        href: ''
-                                    },
-                                    lang: {
-                                        doptions: "Chart Download options"
-                                    },**/
                                     exporting:{
-                                       /** buttons: {
-                                            contextButton: {
-                                                _titleKey:"doptions",
-                                                text: 'Download'
-                                            }
-                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },**/
                                         chartOptions:{
-                                          /**  subtitle: {
+                                            title: {
                                                 text: ''
-                                            },**/
-                                            legend: {
-                                                enabled: false
                                             },
-                                            series: {
-                                                dataLabels: {
-                                                    style: {
-                                                        width: '100px'
-                                                    },
-                                                    enabled: true
+                                            legend: {
+                                                align: 'center',
+                                                verticalAlign: 'bottom',
+                                                layout: 'vertical',
+                                                x:0,
+                                                y:0,
+                                                useHTML: true,
+                                                labelFormatter: function() {
+                                                    return '<div style="width:200px"><span style="float:left">' + this.name.trim() +': '+ Highcharts.numberFormat(this.percentage, 2) + '% (' + Highcharts.numberFormat(this.y, 2)+ ' USD Mil)</b></span></div>';
                                                 }
                                             }
                                         }
                                     },
                                     legend: {
-                                       /** title: {
-                                            text: 'Click to hide/show'
-                                        },**/
-                                        itemStyle: {
+                                        align: 'center',
+                                        verticalAlign: 'bottom',
+                                        layout: 'horizontal',
+                                        x:0,
+                                        y:0//,
+                                        /**itemStyle: {
                                             width: 250
-                                        }
+                                        },**/
                                     },
                                     tooltip: {
                                         style: {width: '200px', whiteSpace: 'normal'},
                                         pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>'
                                     },
-                                    // legend: {
-                                    //    labelFormatter: function(){return this.name.slice(0, 25)+ '...'}
-                                    // },
                                     plotOptions: {
                                         pie: {
                                             allowPointSelect: true,
                                             cursor: 'pointer',
                                             dataLabels: {
                                                 style: {
-                                                    width: '100px'
+                                                    width: '200px'
                                                 },
                                                 formatter: function(){
                                                     return '<div>' + this.point.name + ' '+
-                                                        Math.round(this.point.percentage) //Highcharts.numberFormat(this.point.percentage, 2)
+                                                        Math.round(this.point.percentage)
                                                         +'% </div>';
                                                 },
                                                 enabled: false
@@ -2956,7 +2935,8 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['donorcode', 'year', 'channelsubcategory_code', 'channelcode'],
+                        //FAO Sub sectors needs purposecode
+                        allowedFilter: ['donorcode', 'year', 'purposecode', 'channelsubcategory_code', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -3015,19 +2995,149 @@ define(function () {
                             {
                                 "name": "page",
                                 "parameters": {
-                                    "perPage": 10,  //top 10 FAO sub-sectors
+                                    "perPage": 10,  //top 10
                                     "page": 1
                                 }
                             }
                         ]
                     },
                     {
-                        id: 'item-5', // Regional Distribution
+                        id: 'top-channels', // TOP Channels
                         type: 'chart',
                         class: "fx-timeseries-ecample",
-                        container: "#item-5",
+                        //needed if layout = injected
+                        container: "#top-channels",
                         config: {
-                            container: "#item-5",
+                            container: "#top-channels",
+                            adapter: {
+                                type: "standard",
+                                xDimensions: 'channelsubcategory_code',
+                                yDimensions: 'unitname',
+                                valueDimensions: 'value',
+                                seriesDimensions: ['flowcategory'],
+                                sort: false
+                            },
+                            template: {
+                                //"title": "Top 25..."
+                            },
+                            creator: {
+                                chartObj: {
+                                    chart: {
+                                        type: "column"
+                                    },
+                                    exporting:{
+                                        chartOptions:{
+                                            legend:{
+                                                enabled:true
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        enabled: true,
+                                        align: 'center',
+                                        verticalAlign: 'bottom',
+                                        layout: 'horizontal',
+                                        x:0,
+                                        y:0//,
+                                        /**itemStyle: {
+                                            width: 250
+                                        },**/
+                                    },
+
+                                    // plotOptions: {
+                                    // column: {
+                                    //     colorByPoint: true
+                                    // }
+                                    // },
+                                    tooltip: {
+                                        useHTML:true,
+                                        formatter: function(){
+                                            return '<div style="width: 200px; white-space:normal"><b>' +this.x + ': ' + '</b><br/>' +
+                                                Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil' + '</div>';
+                                        }
+                                    },
+                                    colors: ['#5663c3']
+
+                                }
+                            }
+                        },
+                        // for now it takes the id, TODO: add uid as well
+                        allowedFilter: ['donorcode', 'purposecode', 'year'],
+                        filter: [
+                            {
+                                "name": "filter",
+                                "parameters": {
+                                    "rows": {
+                                        "donorcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_donors",
+                                                    "version": "2016",
+                                                    "codes": [
+                                                        "1"  //Austria
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "year": {
+                                            "time": [
+                                                {
+                                                    "from": 2000,
+                                                    "to": 2014
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "name": "pggroup",
+                                "parameters": {
+                                    "by": [
+                                        "channelsubcategory_code"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": ["value"],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["unitname"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["flowcategory"],
+                                            "rule": "pgfirst"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "order",
+                                "parameters": {
+                                    "value": "DESC"
+                                }
+                            },
+                            {
+                                "name": "page",
+                                "parameters": {
+                                    "perPage": 10,  //top 10
+                                    "page": 1
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        id: 'oda-regional', // Regional Distribution
+                        type: 'chart',
+                        class: "fx-timeseries-ecample",
+                        container: "#oda-regional",
+                        config: {
+                            container: "#oda-regional",
                             adapter: {
                                 type: "standard",
                                 xDimensions: 'unitcode',
@@ -3183,13 +3293,13 @@ define(function () {
                         ]
                     },
                     {
-                        id: 'item-6',
+                        id: 'country-map',
                         type: 'map',
                         class: "fx-map-chart",
                         //needed if layout = injected
-                        container: "#item-6",
+                        container: "#country-map",
                         config: {
-                            container: "#item-6",
+                            container: "#country-map",
                             leaflet: {
                                 zoomControl: false,
                                 attributionControl: true,
@@ -3270,7 +3380,7 @@ define(function () {
             }
         },
 
-        "country_donor_sector": {
+        "country_donor": {
 
             filter: [
                 {
@@ -3567,17 +3677,17 @@ define(function () {
 
                 items: [
                     {
-                        id: 'item-1',  // TOTAL ODA
+                        id: 'tot-oda',  // TOTAL ODA
                         type: 'chart',
                         class: "fx-timeseries-ecample",
                         //needed if layout = injected
-                        container: "#item-1",
+                        container: "#tot-oda",
                         config: {
-                            container: "#item-1",
+                            container: "#tot-oda",
                             adapter: {
                                 type: "standard",
                                 xDimensions: 'year',
-                                yDimensions: 'unitname',
+                                yDimensions: 'unitcode',
                                 valueDimensions: 'value',
                                 seriesDimensions: ['parentsector_code']
                             },
@@ -3699,8 +3809,7 @@ define(function () {
                                         {
                                             "columns": ["unitcode"],
                                             "rule": "pgfirst"
-                                        }/** Don't need unitname for FAO Sectors **/
-
+                                        }
                                     ]
                                 }
                             },
@@ -3714,13 +3823,13 @@ define(function () {
                         ]
                     },
                     {
-                        id: 'item-2', // Total ODA for most financed sectors
+                        id: 'top-sectors', // TOP SECTORS
                         type: 'chart',
                         class: "fx-timeseries-ecample",
                         //needed if layout = injected
-                        container: "#item-2",
+                        container: "#top-sectors",
                         config: {
-                            container: "#item-2",
+                            container: "#top-sectors",
                             adapter: {
                                 type: "standard",
                                 xDimensions: 'parentsector_code',
@@ -3737,54 +3846,28 @@ define(function () {
                                     chart: {
                                         type: "column"
                                     },
-                                  /**  subtitle: {
-                                        text: '<b>Click and drag on chart to zoom</b>'
-                                    },
-                                    credits: {
-                                        enabled: true,
-                                        text: 'Source: OECD',
-                                        href: ''
-                                    },
-                                    lang: {
-                                        doptions: "Chart Download options"
-                                    },**/
                                     exporting:{
-                                       /** buttons: {
-                                            contextButton: {
-                                                _titleKey:"doptions",
-                                                text: 'Download'
-                                            }
-                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },**/
                                         chartOptions:{
-                                           /** subtitle: {
-                                                text: ''
-                                            },**/
                                             legend:{
-                                                enabled:false,
-                                                title: {
-                                                    text: ''
-                                                }
+                                                enabled:true
                                             }
                                         }
                                     },
                                     legend: {
-                                        enabled: false
-                                       /** title: {
-                                            text: 'Click to hide/show'
-                                        }**/
+                                        enabled: true
                                     },
-                                    plotOptions: {
-                                        column: {
-                                            colorByPoint: true
-                                        }
-                                    },
+                                    // plotOptions: {
+                                    //   column: {
+                                    //      colorByPoint: true
+                                    //  }
+                                    // },
                                     tooltip: {
                                         formatter: function(){
                                             return '<b>' +this.x + ': ' + '</b><br/>' +
                                                 Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
                                         }
-                                    }
+                                    },
+                                    colors: ['#39B7CD']
 
                                 }
                             }
@@ -3867,166 +3950,13 @@ define(function () {
                         ]
                     },
                     {
-                        id: 'item-3', // TOP Channels
+                        id: 'top-subsectors',    // Top sub-sectors pie
                         type: 'chart',
                         class: "fx-timeseries-ecample",
                         //needed if layout = injected
-                        container: "#item-3",
+                        container: "#top-subsectors",
                         config: {
-                            container: "#item-3",
-                            adapter: {
-                                type: "standard",
-                                xDimensions: 'channelsubcategory_code',
-                                yDimensions: 'unitname',
-                                valueDimensions: 'value',
-                                seriesDimensions: ['unitname'],
-                                sort:false
-                            },
-                            template: {
-                                //"title": "Top 25..."
-                            },
-                            creator: {
-                                chartObj: {
-                                    chart: {
-                                        type: "column"
-                                    },
-                                   /** subtitle: {
-                                        text: '<b>Click and drag on chart to zoom</b>'
-                                    },
-                                    credits: {
-                                        enabled: true,
-                                        text: 'Source: OECD',
-                                        href: ''
-                                    },
-                                    lang: {
-                                        doptions: "Chart Download options"
-                                    },**/
-                                    exporting:{
-                                       /** buttons: {
-                                            contextButton: {
-                                                _titleKey:"doptions",
-                                                text: 'Download'
-                                            }
-                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },**/
-                                        chartOptions:{
-                                          /**  subtitle: {
-                                                text: ''
-                                            },**/
-                                            legend:{
-                                                enabled:false,
-                                                title: {
-                                                    text: ''
-                                                }
-                                            }
-                                        }
-                                    },
-                                    legend: {
-                                        enabled: false
-                                       /** title: {
-                                            text: 'Click to hide/show'
-                                        }**/
-                                    },
-                                    plotOptions: {
-                                        column: {
-                                            colorByPoint: true
-                                        }
-                                    },
-                                    tooltip: {
-                                        formatter: function(){
-                                            return '<b>' +this.x + ': ' + '</b><br/>' +
-                                                Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
-                                        }
-                                    }
-
-                                }
-                            }
-                        },
-                        // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['recipientcode', 'donorcode', 'purposecode', 'year'],
-                        filter: [
-                            {
-                                "name": "filter",
-                                "parameters": {
-                                    "rows": {
-                                        "recipientcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_recipients",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "238"  //Ethiopia
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                        "donorcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_donors",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "1"  //Austria
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                        "year": {
-                                            "time": [
-                                                {
-                                                    "from": 2000,
-                                                    "to": 2014
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            },
-                            {
-                                "name": "pggroup",
-                                "parameters": {
-                                    "by": [
-                                        "channelsubcategory_code"
-                                    ],
-                                    "aggregations": [
-                                        {
-                                            "columns": ["value"],
-                                            "rule": "SUM"
-                                        },
-                                        {
-                                            "columns": ["unitcode"],
-                                            "rule": "pgfirst"
-                                        },
-                                        {
-                                            "columns": ["unitname"],
-                                            "rule": "pgfirst"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                "name": "order",
-                                "parameters": {
-                                    "value": "DESC"
-                                }
-                            },
-                            {
-                                "name": "page",
-                                "parameters": {
-                                    "perPage": 10,  //top 10
-                                    "page": 1
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        id: 'item-4',    // Top sub-sectors pie
-                        type: 'chart',
-                        class: "fx-timeseries-ecample",
-                        //needed if layout = injected
-                        container: "#item-4",
-                        config: {
-                            container: "#item-4",
+                            container: "#top-subsectors",
                             adapter: {
                                 type: "pie",
                                 valueDimensions: 'value',
@@ -4044,65 +3974,49 @@ define(function () {
                                     subtitle: {
                                         text: '<b>Hover for values</b>'
                                     },
-                                  /**  credits: {
-                                        enabled: true,
-                                        text: 'Source: OECD',
-                                        href: ''
-                                    },
-                                    lang: {
-                                        doptions: "Chart Download options"
-                                    },**/
                                     exporting:{
-                                      /**  buttons: {
-                                            contextButton: {
-                                                _titleKey:"doptions",
-                                                text: 'Download'
-                                            }
-                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },**/
                                         chartOptions:{
-                                           /** subtitle: {
+                                            title: {
                                                 text: ''
-                                            },**/
-                                            legend: {
-                                                enabled: false
                                             },
-                                            series: {
-                                                dataLabels: {
-                                                    style: {
-                                                        width: '100px'
-                                                    },
-                                                    enabled: true
+                                            legend: {
+                                                align: 'center',
+                                                verticalAlign: 'bottom',
+                                                layout: 'vertical',
+                                                x:0,
+                                                y:0,
+                                                useHTML: true,
+                                                labelFormatter: function() {
+                                                    return '<div style="width:200px"><span style="float:left">' + this.name.trim() +': '+ Highcharts.numberFormat(this.percentage, 2) + '% (' + Highcharts.numberFormat(this.y, 2)+ ' USD Mil)</b></span></div>';
                                                 }
                                             }
                                         }
                                     },
                                     legend: {
-                                       /** title: {
-                                            text: 'Click to hide/show'
-                                        },**/
-                                        itemStyle: {
+                                        align: 'center',
+                                        verticalAlign: 'bottom',
+                                        layout: 'horizontal',
+                                        x:0,
+                                        y:0//,
+                                        /**itemStyle: {
                                             width: 250
-                                        }
+                                        },**/
                                     },
                                     tooltip: {
                                         style: {width: '200px', whiteSpace: 'normal'},
                                         pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>'
                                     },
-                                    // legend: {
-                                    //    labelFormatter: function(){return this.name.slice(0, 25)+ '...'}
-                                    // },
                                     plotOptions: {
                                         pie: {
                                             allowPointSelect: true,
                                             cursor: 'pointer',
                                             dataLabels: {
                                                 style: {
-                                                    width: '100px'
+                                                    width: '200px'
                                                 },
                                                 formatter: function(){
                                                     return '<div>' + this.point.name + ' '+
-                                                        Math.round(this.point.percentage) //Highcharts.numberFormat(this.point.percentage, 2)
+                                                        Math.round(this.point.percentage)
                                                         +'% </div>';
                                                 },
                                                 enabled: false
@@ -4114,7 +4028,8 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: ['recipientcode', 'donorcode', 'year', 'channelsubcategory_code', 'channelcode'],
+                        //FAO Sub sectors needs purposecode
+                        allowedFilter: ['recipientcode', 'donorcode', 'year', 'purposecode', 'channelsubcategory_code', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -4184,7 +4099,148 @@ define(function () {
                             {
                                 "name": "page",
                                 "parameters": {
-                                    "perPage": 10,  //top 10 FAO sub-sectors
+                                    "perPage": 10,  //top 10
+                                    "page": 1
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        id: 'top-channels', // TOP Channels
+                        type: 'chart',
+                        class: "fx-timeseries-ecample",
+                        //needed if layout = injected
+                        container: "#top-channels",
+                        config: {
+                            container: "#top-channels",
+                            adapter: {
+                                type: "standard",
+                                xDimensions: 'channelsubcategory_code',
+                                yDimensions: 'unitname',
+                                valueDimensions: 'value',
+                                seriesDimensions: ['flowcategory'],
+                                sort:false
+                            },
+                            template: {
+                                //"title": "Top 25..."
+                            },
+                            creator: {
+                                chartObj: {
+                                    chart: {
+                                        type: "column"
+                                    },
+                                    exporting:{
+                                        chartOptions:{
+                                            legend:{
+                                                enabled:true
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        enabled: true,
+                                        align: 'center',
+                                        verticalAlign: 'bottom',
+                                        layout: 'horizontal',
+                                        x:0,
+                                        y:0//,
+                                        /**itemStyle: {
+                                            width: 250
+                                        },**/
+                                    },
+
+                                    // plotOptions: {
+                                    // column: {
+                                    //     colorByPoint: true
+                                    // }
+                                    // },
+                                    tooltip: {
+                                        useHTML:true,
+                                        formatter: function(){
+                                            return '<div style="width: 200px; white-space:normal"><b>' +this.x + ': ' + '</b><br/>' +
+                                                Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil' + '</div>';
+                                        }
+                                    },
+                                    colors: ['#5663c3']
+
+                                }
+                            }
+                        },
+                        // for now it takes the id, TODO: add uid as well
+                        allowedFilter: ['recipientcode', 'donorcode', 'purposecode', 'year'],
+                        filter: [
+                            {
+                                "name": "filter",
+                                "parameters": {
+                                    "rows": {
+                                        "recipientcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_recipients",
+                                                    "version": "2016",
+                                                    "codes": [
+                                                        "238"  //Ethiopia
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "donorcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_donors",
+                                                    "version": "2016",
+                                                    "codes": [
+                                                        "1"  //Austria
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "year": {
+                                            "time": [
+                                                {
+                                                    "from": 2000,
+                                                    "to": 2014
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "name": "pggroup",
+                                "parameters": {
+                                    "by": [
+                                        "channelsubcategory_code"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": ["value"],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["unitname"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["flowcategory"],
+                                            "rule": "pgfirst"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "order",
+                                "parameters": {
+                                    "value": "DESC"
+                                }
+                            },
+                            {
+                                "name": "page",
+                                "parameters": {
+                                    "perPage": 10,  //top 10
                                     "page": 1
                                 }
                             }

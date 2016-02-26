@@ -7,10 +7,11 @@ define([
     'fx-ds/start',
     'lib/utils',
     'i18n!nls/browse',
+    'i18n!nls/browse-dashboard',
     'handlebars',
     'lib/config-utils',
     'amplify'
-], function ($, _, View, template, Dashboard, Utils, i18nLabels, Handlebars, ConfigUtils) {
+], function ($, _, View, template, Dashboard, Utils, i18nLabels, i18nDashboardLabels, Handlebars, ConfigUtils) {
 
     'use strict';
 
@@ -51,6 +52,9 @@ define([
             this.model.on("change", this.render, this);
             //this.model.on("change", this.render);
 
+            this.source = $(this.template).find("[data-topic='" + this.topic + "']").prop('outerHTML');
+
+
             View.prototype.initialize.call(this, arguments);
 
             //this.render();
@@ -63,6 +67,12 @@ define([
         render: function () {
             this.setElement(this.container);
             this._unbindEventListeners();
+
+           // console.log("REnder");
+            for(var it in this.config.items){
+                var item = this.config.items[it];
+                this._updateChartExportTitles(this.config.items[it], i18nDashboardLabels[item.id], this.model.get('label'));
+            }
 
             $(this.el).html(this.getTemplateFunction());
         },
@@ -77,18 +87,22 @@ define([
         },
 
         getTemplateFunction: function() {
-            var source = $(this.template).find("[data-topic='" + this.topic + "']").prop('outerHTML');
-            var template = Handlebars.compile(source);
+           // var source = $(this.template).find("[data-topic='" + this.topic + "']").prop('outerHTML');
+
+           // console.log(this.source);
+
+            this.compiledTemplate = Handlebars.compile(this.source);
 
             var model = this.model.toJSON();
-            var data = $.extend(true, model, i18nLabels);
+            var data = $.extend(true, model, i18nLabels, i18nDashboardLabels);
 
-            return template(data);
+            return this.compiledTemplate(data);
         },
 
         setDashboardConfig: function(config, type){
             this.config = config;
             this.config_type = type || s.config_types.BASE;
+
         },
 
         renderDashboard: function () {
@@ -104,19 +118,38 @@ define([
                 layout: "injected"
             });
 
+          //  console.log("renderDashboard");
 
 
             this.browseDashboard.render(this.config);
         },
 
 
+        _removeItemFromDashboard: function (itemId) {
+            this.config.items = _.filter(this.config.items, function(el) {
+                return el.id !== itemId;
+            });
 
-        updateDashboardConfig: function(uid, sectorSelected, subSectorSelected, recipientSelected, regioncode){
-            var item1 = _.filter(this.config.items, {id:'item-1'})[0];
+            var currentItem =  $(this.source).find('#'+itemId);
+            var parent =  currentItem.closest('.col-sm-6');
+            //parent.setProperty()
+        //    console.log(parent);
 
+            currentItem.closest('.col-sm-6').hide();
+
+           // console.log(parent);
+        },
+
+
+
+        updateDashboardConfig: function(uid, sectorSelected, subSectorSelected, recipientSelected, regioncode, removeItems){
+           // console.log("updateDashboardConfig ", this.config_type);
+
+            var item1 = _.filter(this.config.items, {id:'tot-oda'})[0];
 
             switch(this.config_type == s.config_types.FAO){
                 case true:
+                    //console.log("updateFAOConfig ");
                     this._updateFAOItem1ChartConfiguration(item1, sectorSelected, subSectorSelected);
                     break;
                 case false:
@@ -130,6 +163,12 @@ define([
             }
 
             this.config.uid = uid;
+
+            if(removeItems){
+                for(var itemId in removeItems){
+                    this._removeItemFromDashboard(removeItems[itemId]);
+                }
+            }
 
         },
 
@@ -152,6 +191,7 @@ define([
 
         },
 
+
         _updateFAOItem1ChartConfiguration: function (item1, sectorSelected, subSectorSelected) {
 
            // console.log("_updateFAOItem1ChartConfiguration");
@@ -160,8 +200,14 @@ define([
             // Check the current selection via seriesname in config
             var seriesname = item1.config.adapter.seriesDimensions[0];
 
+           // console.log(sectorSelected, subSectorSelected);
+            //console.log(seriesname);
+
             var configFind = subSectorSelected && seriesname !== 'purposecode' ? 'parentsector_code': 'purposecode';
             var configReplace = subSectorSelected && seriesname !== 'purposecode' ? 'purposecode': 'parentsector_code';
+
+
+            //console.log(configFind, configReplace);
 
             // modify chartconfig seriesdimension
             this.configUtils.findAndReplace(item1.config.adapter, configFind, configReplace);
@@ -189,6 +235,15 @@ define([
             // modify group by in filter
             var grpByConfig = this.configUtils.findByPropValue(item1.filter,  "name", "pggroup");
             this.configUtils.findAndReplace(grpByConfig, configFind, configReplace);
+        },
+
+        _updateChartExportTitles: function (chartItem, title, subtitle) {
+            if( chartItem.config.creator) {
+                var chartItemTitle = chartItem.config.creator.chartObj.exporting.chartOptions.title = {},
+                 chartItemSubTitle = chartItem.config.creator.chartObj.exporting.chartOptions.subtitle = {};
+                chartItemTitle.text = title;
+                chartItemSubTitle.text = subtitle;
+            }
         },
 
         rebuildDashboard: function (filter) {
