@@ -155,27 +155,31 @@ define([
 
         getIndicatorsValues: function () {
             var values = this.filter.getValues();
-
+            var cloneObj;
 
             var donorSelected = this._hasSelections(s.ids.DONOR, values);
-            var cloneObj = this._getObject(s.ids.RECIPIENT_COUNTRY, values);
+            var recipientSelected = this._hasSelections(s.ids.RECIPIENT_COUNTRY, values);
 
-            if (donorSelected)
+            if(donorSelected)
                 cloneObj = this._getObject(s.ids.DONOR, values);
 
+            if(recipientSelected)
+                cloneObj = this._getObject(s.ids.RECIPIENT_COUNTRY, values);
 
-            //======= UPDATE VALUES CONFIG
-            values[s.ids.COUNTRY] = {};
-            values[s.ids.COUNTRY].codes = [];
-            values[s.ids.COUNTRY].codes[0] = $.extend(true, {}, cloneObj["codes"][0]); // clone the codes configuration
-            values[s.ids.COUNTRY].codes[0].uid = s.codeLists.RECIPIENT_DONORS.uid;
-            values[s.ids.COUNTRY].codes[0].version = s.codeLists.RECIPIENT_DONORS.version;
+            if(cloneObj) {
+                //======= UPDATE VALUES CONFIG
+                values[s.ids.COUNTRY] = {};
+                values[s.ids.COUNTRY].codes = [];
+                values[s.ids.COUNTRY].codes[0] = $.extend(true, {}, cloneObj["codes"][0]); // clone the codes configuration
+                values[s.ids.COUNTRY].codes[0].uid = s.codeLists.RECIPIENT_DONORS.uid;
+                values[s.ids.COUNTRY].codes[0].version = s.codeLists.RECIPIENT_DONORS.version;
 
-            //======= Set everything in the values to be removed except the country
-            for (var filter in values) {
-                if (filter !== s.ids.COUNTRY) {
-                    values[filter] = {};
-                    values[filter].removeFilter = true;
+                //======= Set everything in the values to be removed except the country
+                for (var filter in values) {
+                    if (filter !== s.ids.COUNTRY) {
+                        values[filter] = {};
+                        values[filter].removeFilter = true;
+                    }
                 }
             }
 
