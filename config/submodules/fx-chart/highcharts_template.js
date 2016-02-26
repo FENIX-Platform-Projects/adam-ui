@@ -17,7 +17,7 @@ define(function () {
             //borderWidth: 1, //Spessore bordo intorno
             //borderRadius: 0, //Smusso bordo intorno
             //margin: [5,5,5,5], //Margine intorno (vince sullo spacing)
-            spacing: [20, 1, 1, 1],//Spacing intorno (molto simile al margin - Di default il bottom è 15, qui l'ho messo a 10 per essere uguale agli altri)
+           // spacing: [20, 1, 1, 1],//Spacing intorno (molto simile al margin - Di default il bottom è 15, qui l'ho messo a 10 per essere uguale agli altri)
             //plotBackgroundColor: 'red', //Colore di background solo area chart
             plotBorderColor: '#ffffff', //Colore bordo intorno solo area chart
             plotBorderWidth: 0, //Spessore bordo intorno solo area chart
@@ -129,8 +129,17 @@ define(function () {
                 }
               },
             chartOptions:{
+                title: {
+                    text: '',
+                    style: {
+                        fontSize: '12px'
+                    }
+                },
                 subtitle: {
-                    text: ''
+                    text: '',
+                    style: {
+                        fontSize: '10px'
+                    }
                 },
                 legend:{
                     title: {
@@ -167,14 +176,14 @@ define(function () {
             gridLineColor: '#eeeeee',
             tickLength: 7,
             //tickmarkPlacement: 'on', Per partire dall'origine
-            labels: {
+          /**  labels: {
                 y: 25,
                 style: {
                     color: '#666666',
                     fontWeight: '300',
                     fontSize: 12
                 }
-            },
+            },**/
             //type: 'datetime',
 /*            dateTimeLabelFormats: { // don't display the dummy year
                 //month: '%e. %b',

@@ -134,7 +134,7 @@ define([
              //   values['channelcode'].codes[0].uid = s.codeLists.CHANNELS.uid;
             //}
 
-            console.log(values);
+            //console.log(values);
 
 
             return this._updateValues(values, subSectorSelected);
@@ -357,8 +357,8 @@ define([
              **/
         },
 
-        _onResetEvent: function () {
-            amplify.publish(s.events.FILTER_ON_RESET);
+        _onResetEvent: function (item) {
+            amplify.publish(s.events.FILTER_ON_RESET, item.name);
         },
 
         _populateSubSectorFilter: function (result1) {
@@ -689,6 +689,33 @@ define([
                 type: "GET",
                 dataType: "json"
             }));
+        },
+
+        _getFilterConfig: function (id) {
+            var filter = _.find(this.config, function (obj) {
+                return obj.components[0].name === id;
+            });
+
+            return filter;
+        },
+
+        _hasProp: function (filter, prop) {
+            var hasProp = _.find(filter, function (obj) {
+                    if(filter[prop]) {
+                        return true;
+                    }
+            });
+            return hasProp;
+        },
+
+        getConfigPropValue: function (id, prop) {
+            var filterValue;
+            var filterItem = this._getFilterConfig(id);
+
+            if(this._hasProp(filterItem, prop))
+                filterValue = filterItem[prop] ;
+
+            return filterValue;
         },
 
         _unbindEventListeners: function () {

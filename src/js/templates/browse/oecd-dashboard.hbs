@@ -2,51 +2,83 @@
     <section data-topic="sector">
 
         <div class="row">
-            <div class="col-sm-12">
-                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>Total ODA</b>: {{label}}</p></div>
+            <div class="col-sm-12"> <!-- TOTAL ODA -->
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{tot-oda}}</b>: {{label}}</p></div>
                 <div class="obj-box">
-                    <div id="item-1"></div>
+                    <div id="tot-oda"></div>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12">
-                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>Top Donors</b>: {{label}}</p></div>
+            <div class="col-sm-12"> <!-- TOP RESOURCE PARTNERS -->
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{top-partners}}</b>: {{label}}</p></div>
                 <div class="obj-box">
-                    <div id="item-2"></div>
+                    <div id="top-partners"></div>
+                </div>
+            </div>
+        </div>
+       <!-- <div class="row">
+            <div class="col-sm-12"> <
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{item-2}}</b>: {{label}}</p></div>
+                <div class="obj-box">
+                    <div id="item-2a"></div>
+                </div>
+            </div>
+        </div>-->
+        <div class="row">
+            <div class="col-sm-12"><!-- TOP RECIPIENTS -->
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{top-recipients}}</b>: {{label}}</p></div>
+                <div class="obj-box">
+                    <div id="top-recipients"></div>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-6">
-                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>Top Channels of Delivery</b>: {{label}}</p></div>
+            <div class="col-sm-12"><!-- TOP CHANNELS -->
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{top-channels}}</b>:{{label}}</p></div>
                 <div class="obj-box">
-                    <div id="item-3"></div>
+                    <div id="top-channels"></div>
                 </div>
             </div>
-            <div class="col-sm-6">
+        </div>
+        <div class="row">
+            <div class="col-sm-6"><!-- TOP SUB SECTORS -->
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{top-subsectors}}</b>: {{label}}</p></div>
+                <div class="obj-box">
+                    <div id="top-subsectors"></div>
+                </div>
+            </div>
+            <!-- <div class="col-sm-6" id="test">
                 <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>Top Sub Sectors</b>: {{label}}</p></div>
                 <div class="obj-box">
                     <div id="item-4"></div>
                 </div>
+            </div>-->
+        </div>
+       <!-- <div class="row">
+            <div class="col-sm-6">
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{item-4}}</b>: {{label}}</p></div>
+                <div class="obj-box">
+                    <div id="item-4"></div>
+                </div>
+            </div>
+        </div>-->
+        <div class="row">
+            <div class="col-sm-12"> <!-- ODA REGIONAL DISTRIBUTION  -->
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{oda-regional}}</b>: {{label}}</p></div>
+                <div class="obj-box">
+                    <div id="oda-regional"></div>
+                </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12">
-                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>Total ODA Regional Distribution</b>: {{label}}</p></div>
+            <div class="col-sm-12"> <!-- COUNTRY DISTRIBUTION - MAP  -->
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{country-map}}</b>: {{label}}</p></div>
                 <div class="obj-box">
-                    <div id="item-5"></div>
+                    <div id="country-map"></div>
                 </div>
             </div>
         </div>
-       <div class="row">
-                    <div class="col-sm-12">
-                        <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>Total ODA Distribution by Country</b>: {{label}}</p></div>
-                        <div class="obj-box">
-                            <div id="item-6"></div>
-                        </div>
-                    </div>
-                </div>
         <!--  <div class="row">
             <div class="col-sm-12">
                 <div class="obj-box-header"><p>Regional Income TEST</p></div>
@@ -56,137 +88,148 @@
             </div>
         </div>-->
     </section>
-    <section data-topic="country_sector">
+    <section data-topic="country">
         <div class="row">
-            <div class="col-sm-6">
-                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>Total ODA</b>: {{label}}</p> </div>
+            <div class="col-sm-12"> <!-- TOTAL ODA -->
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{tot-oda}}</b>: {{label}}</p></div>
                 <div class="obj-box">
-                    <div id="item-1"></div>
-                </div>
-            </div>
-                <div class="col-sm-6">
-                    <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>Top Donors</b>: {{label}}</p></div>
-                    <div class="obj-box">
-                        <div id="item-3"></div>
-                    </div>
-                </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>Total ODA for most financed sectors</b>: {{label}}</p></div>
-                <div class="obj-box">
-                    <div id="item-2"></div>
+                    <div id="tot-oda"></div>
                 </div>
             </div>
         </div>
         <div class="row">
-
-            <div class="col-sm-6">
-                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>Top Channels of Delivery</b>:{{label}}</p></div>
+            <div class="col-sm-12"> <!-- TOP RESOURCE PARTNERS -->
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{top-partners}}</b>: {{label}}</p></div>
                 <div class="obj-box">
-                    <div id="item-5"></div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>Top Sub Sectors</b>: {{label}}</p></div>
-                <div class="obj-box">
-                    <div id="item-4"></div>
+                    <div id="top-partners"></div>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12">
-                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>Regional Map</b>: {{label}}</p></div>
+            <div class="col-sm-12"><!-- TOP CHANNELS -->
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{top-channels}}</b>:{{label}}</p></div>
                 <div class="obj-box">
-                    <div id="item-6"></div>
+                    <div id="top-channels"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12"> <!-- TOP SECTORS -->
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{top-sectors}}</b>: {{label}}</p></div>
+                <div class="obj-box">
+                    <div id="top-sectors"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6"><!-- TOP SUB SECTORS -->
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{top-subsectors}}</b>: {{label}}</p></div>
+                <div class="obj-box">
+                    <div id="top-subsectors"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12"> <!-- COUNTRY DISTRIBUTION - MAP  -->
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{country-map}}</b>: {{label}}</p></div>
+                <div class="obj-box">
+                    <div id="country-map"></div>
                 </div>
             </div>
         </div>
 
     </section>
-    <section data-topic="donor_sector">
+    <section data-topic="donor">
         <div class="row">
-            <div class="col-sm-12">
-                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>Total ODA</b>: {{label}}</p></div>
+            <div class="col-sm-12"> <!-- TOTAL ODA -->
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{tot-oda}}</b>: {{label}}</p></div>
                 <div class="obj-box">
-                    <div id="item-1"></div>
+                    <div id="tot-oda"></div>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12">
-                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>Total ODA for most financed sectors</b>: {{label}}</p></div>
+            <div class="col-sm-12"><!-- TOP RECIPIENTS -->
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{top-recipients}}</b>: {{label}}</p></div>
                 <div class="obj-box">
-                    <div id="item-2"></div>
-                </div>
-            </div>
-
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>Top Channels of Delivery</b>: {{label}}</p></div>
-                <div class="obj-box">
-                    <div id="item-3"></div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>Top Sub Sectors</b>: {{label}}</p></div>
-                <div class="obj-box">
-                    <div id="item-4"></div>
+                    <div id="top-recipients"></div>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12">
-                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>Total ODA Regional Distribution</b>: {{label}}</p></div>
+            <div class="col-sm-12"><!-- TOP CHANNELS -->
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{top-channels}}</b>:{{label}}</p></div>
                 <div class="obj-box">
-                    <div id="item-5"></div>
+                    <div id="top-channels"></div>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12">
-                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>Total ODA Distribution by Country</b>: {{label}}</p></div>
+            <div class="col-sm-12"> <!-- TOP SECTORS -->
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{top-sectors}}</b>: {{label}}</p></div>
                 <div class="obj-box">
-                    <div id="item-6"></div>
+                    <div id="top-sectors"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6"><!-- TOP SUB SECTORS -->
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{top-subsectors}}</b>: {{label}}</p></div>
+                <div class="obj-box">
+                    <div id="top-subsectors"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12"> <!-- ODA REGIONAL DISTRIBUTION  -->
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{oda-regional}}</b>: {{label}}</p></div>
+                <div class="obj-box">
+                    <div id="oda-regional"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12"> <!-- COUNTRY DISTRIBUTION - MAP  -->
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{donor_country-map}}</b>: {{label}}</p></div>
+                <div class="obj-box">
+                    <div id="country-map"></div>
                 </div>
             </div>
         </div>
     </section>
-    <section data-topic="country_donor_sector">
-
+    <section data-topic="country_donor">
         <div class="row">
-            <div class="col-sm-12">
-                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>Total ODA</b>: {{label}}</p></div>
+            <div class="col-sm-12"> <!-- TOTAL ODA -->
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{tot-oda}}</b>: {{label}}</p></div>
                 <div class="obj-box">
-                    <div id="item-1"></div>
+                    <div id="tot-oda"></div>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12">
-                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>Total ODA for most financed sectors</b>: {{label}}</p></div>
+            <div class="col-sm-12"><!-- TOP CHANNELS -->
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{top-channels}}</b>:{{label}}</p></div>
                 <div class="obj-box">
-                    <div id="item-2"></div>
+                    <div id="top-channels"></div>
                 </div>
             </div>
-
         </div>
         <div class="row">
-            <div class="col-sm-6">
-                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>Top Channels of Delivery</b>: {{label}}</p></div>
+            <div class="col-sm-12"> <!-- TOP SECTORS -->
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{top-sectors}}</b>: {{label}}</p></div>
                 <div class="obj-box">
-                    <div id="item-3"></div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>Top Sub Sectors</b>: {{label}}</p></div>
-                <div class="obj-box">
-                    <div id="item-4"></div>
+                    <div id="top-sectors"></div>
                 </div>
             </div>
         </div>
-
+        <div class="row">
+            <div class="col-sm-6"><!-- TOP SUB SECTORS -->
+                <div class="obj-box-header"><p class="truncate" title="{{label}}"><b>{{top-subsectors}}</b>: {{label}}</p></div>
+                <div class="obj-box">
+                    <div id="top-subsectors"></div>
+                </div>
+            </div>
+        </div>
     </section>
 
 

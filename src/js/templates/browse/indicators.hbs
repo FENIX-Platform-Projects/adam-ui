@@ -6,7 +6,7 @@
                 <div class="row">
 
                     <div class="col-xs-8 indicator-name"><span class="indicators-icons icojam_{{this.css}}"></span><p class="name">{{this.name}} ({{this.period}})<a href="#" name="{{this.footnote}}" class="anchor"><sup>{{this.footnote}}</sup></a></p></div>
-                    <div class="col-xs-4 indicator-value"><p>{{commaSeparator this.value}}</p></div>
+                    <div class="col-xs-4 indicator-value"><p>{{commaSeparator this.value}} <span>{{this.unit}}</span></p></div>
                 </div>
             </div>
         {{/each}}
