@@ -21,12 +21,12 @@ define({
                 "EN": "Browse by"
             },
             "title": {
-                "EN": "Country and Sector"
+                "EN": "Country"
             },
             "body": {
                 "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
             },
-            "link": "#browse/country_sector",
+            "link": "#browse/country",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/crowdprices/crowdprices.png"
         },
         {
@@ -34,12 +34,12 @@ define({
                 "EN": "Browse by"
             },
             "title": {
-                "EN": "Donor and Sector"
+                "EN": "Donor"
             },
             "body": {
                 "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
             },
-            "link": "#browse/donor_sector",
+            "link": "#browse/donor",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/trade_AFG/trade_AFG.png"
         },
         {
@@ -47,12 +47,12 @@ define({
                 "EN": "Browse by"
             },
             "title": {
-                "EN": "Country, Donor and Sector"
+                "EN": "Country and Donor"
             },
             "body": {
                 "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
             },
-            "link": "#browse/country_donor_sector",
+            "link": "#browse/country_donor",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/env_AFG/environmental_AFG.png"
         }
     ]
