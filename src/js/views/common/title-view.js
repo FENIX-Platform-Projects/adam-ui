@@ -137,14 +137,14 @@ define([
         },
 
         _onRemove: function (e) {
-            this._removeItem(e.name);
+            this.removeItem(e.name);
         },
 
         _addItem: function (item) {
            this._updateList(item);
         },
 
-        _removeItem: function (name) {
+        removeItem: function (name) {
             this._findListItem(name).remove();
         },
 
