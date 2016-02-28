@@ -52,6 +52,7 @@ define(function () {
                     "title": "Sub Sector",
                     "module_class": "fx-filter-grid-module",
                     "class": "col-md-3 col-lg-2",
+                    "remove": ['top-subsectors'],
                     "components": [
                         {
                             "uid": "crs_dac",
@@ -1222,6 +1223,7 @@ define(function () {
                     "title": "Sector",
                     "module_class": "fx-filter-grid-module",
                     "class": "col-md-3 col-lg-2",
+                    "remove": ['top-sectors'],
                     "components": [
                         {
                             "uid": "crs_dac",
@@ -1255,6 +1257,7 @@ define(function () {
                     "title": "Sub Sector",
                     "module_class": "fx-filter-grid-module",
                     "class": "col-md-3 col-lg-2",
+                    "remove": ['top-subsectors'],
                     "components": [
                         {
                             "uid": "crs_dac",
@@ -2242,6 +2245,7 @@ define(function () {
                     "title": "Sector",
                     "module_class": "fx-filter-grid-module",
                     "class": "col-md-3 col-lg-2",
+                    "remove": ['top-sectors'],
                     "components": [
                         {
                             "uid": "crs_dac",
@@ -2275,6 +2279,7 @@ define(function () {
                     "title": "Sub Sector",
                     "module_class": "fx-filter-grid-module",
                     "class": "col-md-3 col-lg-2",
+                    "remove": ['top-subsectors'],
                     "components": [
                         {
                             "uid": "crs_dac",
@@ -3443,6 +3448,7 @@ define(function () {
                     "title": "Sector",
                     "module_class": "fx-filter-grid-module",
                     "class": "col-md-3 col-lg-2",
+                    "remove": ['top-sectors'],
                     "components": [
                         {
                             "uid": "crs_dac",
@@ -3476,6 +3482,7 @@ define(function () {
                     "title": "Sub Sector",
                     "module_class": "fx-filter-grid-module",
                     "class": "col-md-3 col-lg-2",
+                    "remove": ['top-subsectors'],
                     "components": [
                         {
                             "uid": "crs_dac",

@@ -25,7 +25,9 @@ define([
         config_types: {
             FAO: 'FAO',
             BASE: 'BASE'
-        }
+        },
+        item_container_id: '-container',
+        total_oda_id: 'tot-oda'
     };
 
     var DashboardView = View.extend({
@@ -40,20 +42,13 @@ define([
         // In the end you might want to used precompiled templates.
         template: template,
 
-       /** initialize: function (params) {
-            this.topic = params.topic
-
-            View.prototype.initialize.call(this, arguments);
-        },**/
-
         initialize: function (params) {
             this.topic = params.topic;
 
             this.model.on("change", this.render, this);
             //this.model.on("change", this.render);
 
-            this.source = $(this.template).find("[data-topic='" + this.topic + "']").prop('outerHTML');
-
+           this.source = $(this.template).find("[data-topic='" + this.topic + "']");//.prop('outerHTML');
 
             View.prototype.initialize.call(this, arguments);
 
@@ -87,11 +82,7 @@ define([
         },
 
         getTemplateFunction: function() {
-           // var source = $(this.template).find("[data-topic='" + this.topic + "']").prop('outerHTML');
-
-           // console.log(this.source);
-
-            this.compiledTemplate = Handlebars.compile(this.source);
+            this.compiledTemplate = Handlebars.compile(this.source.prop('outerHTML'));
 
             var model = this.model.toJSON();
             var data = $.extend(true, model, i18nLabels, i18nDashboardLabels);
@@ -101,6 +92,7 @@ define([
 
         setDashboardConfig: function(config, type){
             this.config = config;
+            this.config.baseItems = config.items;
             this.config_type = type || s.config_types.BASE;
 
         },
@@ -125,27 +117,27 @@ define([
         },
 
 
-        _removeItemFromDashboard: function (itemId) {
-            this.config.items = _.filter(this.config.items, function(el) {
-                return el.id !== itemId;
-            });
+        _hideDashboardItem: function (itemId) {
+            // Remove Item from config Items
+            this.config.items = _.reject( this.config.items, function(el) { return el.id === itemId; });
 
-            var currentItem =  $(this.source).find('#'+itemId);
-            var parent =  currentItem.closest('.col-sm-6');
-            //parent.setProperty()
-        //    console.log(parent);
+            // Hide Item container
+            var itemContainerId = '#'+itemId + s.item_container_id;
+            $(this.source).find(itemContainerId).hide();
 
-            currentItem.closest('.col-sm-6').hide();
-
-           // console.log(parent);
         },
 
-
+        _showDashboardItem: function (itemId) {
+            // Show Item container
+            var itemContainerId = '#'+itemId + s.item_container_id;
+            $(this.source).find(itemContainerId).show();
+        },
 
         updateDashboardConfig: function(uid, sectorSelected, subSectorSelected, recipientSelected, regioncode, removeItems){
-           // console.log("updateDashboardConfig ", this.config_type);
 
-            var item1 = _.filter(this.config.items, {id:'tot-oda'})[0];
+            this.config.items = this.config.baseItems; // Reset Config Items
+
+            var item1 = _.filter(this.config.items, {id: s.total_oda_id})[0];
 
             switch(this.config_type == s.config_types.FAO){
                 case true:
@@ -166,7 +158,16 @@ define([
 
             if(removeItems){
                 for(var itemId in removeItems){
-                    this._removeItemFromDashboard(removeItems[itemId]);
+                    this._hideDashboardItem(removeItems[itemId]);
+                }
+            }
+
+        },
+
+        showHiddenDashboardItems: function(showItems){
+            if(showItems){
+                for(var itemId in showItems){
+                    this._showDashboardItem(showItems[itemId]);
                 }
             }
 
@@ -190,7 +191,6 @@ define([
              }
 
         },
-
 
         _updateFAOItem1ChartConfiguration: function (item1, sectorSelected, subSectorSelected) {
 
@@ -247,7 +247,7 @@ define([
         },
 
         rebuildDashboard: function (filter) {
-
+           // console.log("rebuild",  this.source);
             if (this.browseDashboard && this.browseDashboard.destroy) {
                 this.browseDashboard.destroy();
             }
@@ -263,14 +263,8 @@ define([
         },
 
 
-      //  getTemplateFunction: function() {
-       //     var source = $(this.template).find("[data-topic='" + this.topic + "']");
-       //     return Handlebars.compile(source.prop('outerHTML'));
-      //  },
-
 
         _bindEventListeners: function () {
-
           //  amplify.subscribe("BEFORE_RENDER", this, this._setChartOptions);
             // Add List Change listeners
             amplify.subscribe(s.events.FAO_SECTOR_CHART_LOADED, this, this._sectorChartLoaded);
@@ -282,14 +276,6 @@ define([
             if((chart.series[0].name).trim() == "Million USD")    {
                 chart.series[0].update({name: "FAO-Related Sectors"}, false);
                 chart.redraw();
-            }
-
-            var series = chart.series,
-                i=0;
-
-            for(; i<series.length; i++) {
-                //series[i].legendItem.translate(-15, 0);
-                //series[i].checkbox.style.marginRight = '-12px';
             }
         },
 

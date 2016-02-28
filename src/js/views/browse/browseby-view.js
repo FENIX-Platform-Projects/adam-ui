@@ -194,7 +194,6 @@ define([
 
         _bindEventListeners: function () {
 
-            amplify.subscribe(s.events.FAO_SECTOR_CHART_LOADED, this, this._sectorChartLoaded);
 
           //  amplify.subscribe(s.events.BAR_CHART_LOADED, this, this._barChartLoaded);
 
@@ -210,11 +209,7 @@ define([
         _updateDashboard: function (item){
            // console.log("=============== _updateDashboard ");
             amplify.publish(s.events.TITLE_ADD_ITEM, item);
-           // this.subview('title').show();
-           // this._updateFixedTitle();
 
-
-           // if(!this.firstLoad) {
                 switch (this.subview('filters').isFAOSectorsSelected()) {
                     case true:
                         this.subview('oecdDashboard').setDashboardConfig(this.faoDashboardConfig, s.config_types.FAO);
@@ -239,13 +234,10 @@ define([
                  // console.log('recipientcode has been activated');
                // }
 
-               //this.removeItems = this.subview('filters').getConfigPropValue(item.name, 'remove');
-
-            // console.log(item.name, this.removeItems);
+               this.removeItems = this.subview('filters').getConfigPropValue(item.name, 'remove');
 
                 // REBUILD DASHBOARD 1
                if(!this.firstLoad  && item.name != 'parentsector_code') {
-                  // var regionValue = this.subview('filters').getRecipentRegionValue();
                    this.subview('oecdDashboard').updateDashboardConfig(this.datasetType.oecd_uid, this.subview('filters').isFilterSelected('parentsector_code'), this.subview('filters').isFilterSelected('purposecode'), this.subview('filters').isFilterSelected('recipientcode'), this.regioncode, this.removeItems);
                    this._setDashboardModelValues();
                    var ovalues = this.subview('filters').getOECDValues();
@@ -254,18 +246,14 @@ define([
 
                 // REBUILD DASHBOARD 2
                 if(this.browse_type === s.topics.COUNTRY || this.browse_type === s.topics.DONOR){
-                  //  if(item.name === 'recipientcode' || item.name === 'donorcode') {
                         this._setIndicatorDashboardModelCountry();
                         var ivalues = this.subview('filters').getIndicatorsValues();
                         this.subview('indicatorsDashboard').rebuildDashboard([ivalues]);
-                  //  }
                 }
-          //  }
         },
 
         _unbindEventListeners: function () {
           // Remove listeners
-            amplify.unsubscribe(s.events.FAO_SECTOR_CHART_LOADED, this._sectorChartLoaded);
           //  amplify.unsubscribe(s.events.BAR_CHART_LOADED, this._barChartLoaded);
             amplify.unsubscribe(s.events.SUB_SECTORS_FILTERS_READY, this._subSectorFilterLoaded);
             amplify.unsubscribe(s.events.FILTER_ON_CHANGE, this._updateDashboard);
@@ -277,22 +265,6 @@ define([
             this.subview('title').cloneTitle().appendTo(s.css_classes.TITLE_BAR_ITEMS_FIXED);
         },
 
-        _sectorChartLoaded: function (chart) {
-            //console.log(chart.series[0].name);
-            //var isPurposes = this.subview('filters').isFilterSelected('purposecode');
-            //console.log(isPurposes);
-
-            //if((chart.series[0].name).trim() == "Million USD")    {
-             //   chart.series[0].update({name: "FAO-Related Sectors"}, false);
-              //  chart.redraw();
-           // }
-
-
-            // centre the chart bar
-            // chart.series[1].points[3].graphic.translate(-10,0);
-
-
-        },
 
       _subSectorFilterLoaded: function (chart) {
          //  console.log("SUB SECTOR FILTER LOADED ");
@@ -319,9 +291,14 @@ define([
             }
         },
 
-        _resetDashboard: function (resetItem) {
-          //  console.log("============ RESET DASHBOARD =====");
+        _resetDashboard: function (resetItemName) {
 
+            this.removeItems = this.subview('filters').getConfigPropValue(resetItemName, 'remove');
+
+            if(this.removeItems){
+              this.subview('oecdDashboard').showHiddenDashboardItems(this.removeItems);
+              this.removeItems = null;
+            }
 
             //console.log(this.subview('oecdDashboard'));
             this.subview('oecdDashboard').updateDashboardConfig(this.datasetType.oecd_uid, this.subview('filters').isFilterSelected('parentsector_code'), this.subview('filters').isFilterSelected('purposecode'),  this.subview('filters').isFilterSelected('recipientcode'), this.regioncode, this.removeItems);
@@ -329,7 +306,7 @@ define([
 
             //console.log(this.subview('title'));
 
-            this.subview('title').removeItem(resetItem);
+            this.subview('title').removeItem(resetItemName);
             this._setDashboardModelValues();
 
             this.subview('oecdDashboard').rebuildDashboard([ovalues]);
