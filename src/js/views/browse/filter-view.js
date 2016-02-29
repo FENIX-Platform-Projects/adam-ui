@@ -20,7 +20,9 @@ define([
             FILTER_BROWSE: "filter-browse"
         },
         events: {
-            SUB_SECTORS_FILTERS_READY: 'fx.filters.list.subsectors.ready',
+            SUB_SECTORS_FILTER_READY: 'fx.filters.list.subsectors.ready',
+            TIMERANGE_FILTER_READY: 'fx.filters.list.timerange.ready',
+            COUNTRY_FILTER_READY: 'fx.filters.list.recipients.ready',
             LIST_CHANGE: 'fx.filter.list.change.',
             LIST_RESET: 'fx.filter.list.reset.',
             FILTER_ON_CHANGE: 'fx.filter.list.onchange',
@@ -40,7 +42,8 @@ define([
             CHANNELS: 'channelcode',
             COUNTRY: 'countrycode',
             DONOR: 'donorcode',
-            RECIPIENT_COUNTRY: 'recipientcode'
+            RECIPIENT_COUNTRY: 'recipientcode',
+            YEAR: 'year'
         },
         values: {
             FAO_SECTORS: '9999'
@@ -102,7 +105,6 @@ define([
                     self.filter.add(c, adapterMap);
 
                 }).then(function () {
-
                 // initialize Bootstarp tooltip
                 $('[data-toggle="tooltip"]').tooltip();
 
@@ -277,7 +279,7 @@ define([
                         self._regioncodeerror(error, item)
                 }).done(function () {
                         amplify.publish(s.events.FILTER_ON_CHANGE, item);
-
+                        amplify.publish(s.events.COUNTRY_FILTER_READY, item);
                     });
             }
             else if (item.name === s.ids.CHANNELS_SUBCATEGORY) {
@@ -310,9 +312,14 @@ define([
                     .catch(this._error)
                     .done(function () {
                         amplify.publish(s.events.FILTER_ON_CHANGE, item);
-                        amplify.publish(s.events.SUB_SECTORS_FILTERS_READY);
+                        amplify.publish(s.events.SUB_SECTORS_FILTER_READY);
                     });
 
+            } else if (item.name === s.ids.YEAR) {
+                if(item.type === "to") {
+                  amplify.publish(s.events.FILTER_ON_CHANGE, item);
+                  amplify.publish(s.events.TIMERANGE_FILTER_READY, item);
+                }
             } else {
                 amplify.publish(s.events.FILTER_ON_CHANGE, item);
             }

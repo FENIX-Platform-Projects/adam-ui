@@ -36,7 +36,9 @@ define([
             TITLE_ADD_ITEM: 'fx.title.item.add',
             FAO_SECTOR_CHART_LOADED: 'fx.browse.chart.faosector.loaded',
             BAR_CHART_LOADED: 'fx.browse.chart.bar.loaded',
-            SUB_SECTORS_FILTERS_READY: 'fx.filters.list.subsectors.ready',
+            SUB_SECTORS_FILTER_READY: 'fx.filters.list.subsectors.ready',
+            TIMERANGE_FILTER_READY: 'fx.filters.list.timerange.ready',
+            COUNTRY_FILTER_READY: 'fx.filters.list.recipients.ready',
             FILTER_ON_CHANGE: 'fx.filter.list.onchange',
             FILTER_ON_RESET: 'fx.filter.list.onreset'
         },
@@ -197,17 +199,21 @@ define([
 
           //  amplify.subscribe(s.events.BAR_CHART_LOADED, this, this._barChartLoaded);
 
-            amplify.subscribe(s.events.SUB_SECTORS_FILTERS_READY, this, this._subSectorFilterLoaded);
+            amplify.subscribe(s.events.SUB_SECTORS_FILTER_READY, this, this._subSectorFilterLoaded);
+            amplify.subscribe(s.events.TIMERANGE_FILTER_READY, this, this._timerangeFilterLoaded);
+            amplify.subscribe(s.events.COUNTRY_FILTER_READY, this, this._countryFilterLoaded);
+
 
             amplify.subscribe(s.events.FILTER_ON_CHANGE, this, this._updateDashboard);
 
             amplify.subscribe(s.events.FILTER_ON_RESET, this, this._resetDashboard);
 
 
+
         },
 
         _updateDashboard: function (item){
-           // console.log("=============== _updateDashboard ");
+           // console.log("=============== _updateDashboard "+item.name);
             amplify.publish(s.events.TITLE_ADD_ITEM, item);
 
                 switch (this.subview('filters').isFAOSectorsSelected()) {
@@ -237,25 +243,78 @@ define([
                this.removeItems = this.subview('filters').getConfigPropValue(item.name, 'remove');
 
                 // REBUILD DASHBOARD 1
-               if(!this.firstLoad  && item.name != 'parentsector_code') {
-                   this.subview('oecdDashboard').updateDashboardConfig(this.datasetType.oecd_uid, this.subview('filters').isFilterSelected('parentsector_code'), this.subview('filters').isFilterSelected('purposecode'), this.subview('filters').isFilterSelected('recipientcode'), this.regioncode, this.removeItems);
-                   this._setDashboardModelValues();
-                   var ovalues = this.subview('filters').getOECDValues();
-                   this.subview('oecdDashboard').rebuildDashboard([ovalues]);
-               }
+                
+            //console.log("_updateDashboard");
 
-                // REBUILD DASHBOARD 2
-                if(this.browse_type === s.topics.COUNTRY || this.browse_type === s.topics.DONOR){
+            //console.log("isFirstLoad ", this.firstLoad);
+
+                if(!this.firstLoad) {
+                   // if(this.browse_type === s.topics.COUNTRY && item.name != 'parentsector_code') {
+                    //    this.subview('oecdDashboard').updateDashboardConfig(this.datasetType.oecd_uid, this.subview('filters').isFilterSelected('parentsector_code'), this.subview('filters').isFilterSelected('purposecode'), this.subview('filters').isFilterSelected('recipientcode'), this.regioncode, this.removeItems);
+                     //   this._setDashboardModelValues();
+                     //   var ovalues = this.subview('filters').getOECDValues();
+                     //   this.subview('oecdDashboard').rebuildDashboard([ovalues]);
+
+                       // if(this.browse_type === s.topics.COUNTRY || this.browse_type === s.topics.DONOR){
+                          //  this._setIndicatorDashboardModelCountry();
+                          //  var ivalues = this.subview('filters').getIndicatorsValues();
+                          //  this.subview('indicatorsDashboard').rebuildDashboard([ivalues]);
+                        //}
+                  //  }//&& item.name != 'parentsector_code') {
+                  // else {
+                        this.subview('oecdDashboard').updateDashboardConfig(this.datasetType.oecd_uid, this.subview('filters').isFilterSelected('parentsector_code'), this.subview('filters').isFilterSelected('purposecode'), this.subview('filters').isFilterSelected('recipientcode'), this.regioncode, this.removeItems);
+                        this._setDashboardModelValues();
+                        var ovalues = this.subview('filters').getOECDValues();
+                        this.subview('oecdDashboard').rebuildDashboard([ovalues]);
+
+
+                   // }
+
+                    if(this.browse_type === s.topics.COUNTRY || this.browse_type === s.topics.DONOR){
                         this._setIndicatorDashboardModelCountry();
                         var ivalues = this.subview('filters').getIndicatorsValues();
                         this.subview('indicatorsDashboard').rebuildDashboard([ivalues]);
+                    }
                 }
+
+                // REBUILD DASHBOARD 1
+               //if(this.firstLoad ) {
+                 //  console.log(this.firstLoad );
+                 //  if(this.browse_type !== s.topics.SECTOR) {
+                      //this.firstLoad = false;
+                    //  this._setDashboardModelValues();
+                     //  console.log(" // RENDER DASHBOARD 1 render")
+                     // this.subview('oecdDashboard').renderDashboard();
+                 //  }
+              // } else {
+                 //  console.log(this.firstLoad );
+                  // if(item.name != 'parentsector_code') {
+                    //   this.subview('oecdDashboard').updateDashboardConfig(this.datasetType.oecd_uid, this.subview('filters').isFilterSelected('parentsector_code'), this.subview('filters').isFilterSelected('purposecode'), this.subview('filters').isFilterSelected('recipientcode'), this.regioncode, this.removeItems);
+                    //   this._setDashboardModelValues();
+                      // var ovalues = this.subview('filters').getOECDValues();
+
+                      // console.log(" // REBUILD DASHBOARD 1 render")
+                      // this.subview('oecdDashboard').rebuildDashboard([ovalues]);
+                  // }
+
+               //}
+
+
+
+                // REBUILD DASHBOARD 2
+                //if(this.browse_type === s.topics.COUNTRY || this.browse_type === s.topics.DONOR){
+                  //      this._setIndicatorDashboardModelCountry();
+                   //     var ivalues = this.subview('filters').getIndicatorsValues();
+                   ///     this.subview('indicatorsDashboard').rebuildDashboard([ivalues]);
+              //  }
         },
 
         _unbindEventListeners: function () {
           // Remove listeners
           //  amplify.unsubscribe(s.events.BAR_CHART_LOADED, this._barChartLoaded);
-            amplify.unsubscribe(s.events.SUB_SECTORS_FILTERS_READY, this._subSectorFilterLoaded);
+            amplify.unsubscribe(s.events.SUB_SECTORS_FILTER_READY, this._subSectorFilterLoaded);
+            amplify.unsubscribe(s.events.TIMERANGE_FILTER_READY, this._timerangeFilterLoaded);
+            amplify.unsubscribe(s.events.COUNTRY_FILTER_READY, this._countryFilterLoaded);
             amplify.unsubscribe(s.events.FILTER_ON_CHANGE, this._updateDashboard);
             amplify.unsubscribe(s.events.FILTER_ON_RESET, this._resetDashboard);
         },
@@ -265,17 +324,18 @@ define([
             this.subview('title').cloneTitle().appendTo(s.css_classes.TITLE_BAR_ITEMS_FIXED);
         },
 
-
       _subSectorFilterLoaded: function (chart) {
          //  console.log("SUB SECTOR FILTER LOADED ");
-            if(this.firstLoad) {
+            if(this.firstLoad && this.browse_type === s.topics.SECTOR) {
                  this.firstLoad = false;
                 // show title
                // this.subview('title').show();
 
-
+               // console.log("_subSectorFilterLoaded  "+ this.browse_type);
                 this._setDashboardModelValues();
                 this.subview('oecdDashboard').renderDashboard();
+
+
 
                // if(this.browse_type === 'country_sector' || this.browse_type === 'donor_sector'){
                  //   this._setIndicatorDashboardModelCountry();
@@ -283,13 +343,60 @@ define([
                // }
 
             }
-            else {
-                    this.subview('oecdDashboard').updateDashboardConfig(this.datasetType.oecd_uid, this.subview('filters').isFilterSelected('parentsector_code'), this.subview('filters').isFilterSelected('purposecode'),  this.subview('filters').isFilterSelected('recipientcode'), this.regioncode, this.removeItems);
-                    this._setDashboardModelValues();
-                    var ovalues = this.subview('filters').getOECDValues();
-                    this.subview('oecdDashboard').rebuildDashboard([ovalues]);
+           // else {
+                 //   this.subview('oecdDashboard').updateDashboardConfig(this.datasetType.oecd_uid, this.subview('filters').isFilterSelected('parentsector_code'), this.subview('filters').isFilterSelected('purposecode'),  this.subview('filters').isFilterSelected('recipientcode'), this.regioncode, this.removeItems);
+                 //   this._setDashboardModelValues();
+                 //   var ovalues = this.subview('filters').getOECDValues();
+                 //   this.subview('oecdDashboard').rebuildDashboard([ovalues]);
+           // }
+        },
+
+        _timerangeFilterLoaded: function (chart) {
+
+
+            if(this.firstLoad && this.browse_type === s.topics.DONOR) {
+                this.firstLoad = false;
+                // show title
+                // this.subview('title').show();
+
+               // console.log("_timerangeFilterLoaded  "+ this.browse_type);
+                this._setDashboardModelValues();
+                this.subview('oecdDashboard').renderDashboard();
+
+
+
+                    this._setIndicatorDashboardModelCountry();
+                    var ivalues = this.subview('filters').getIndicatorsValues();
+                    this.subview('indicatorsDashboard').rebuildDashboard([ivalues]);
+
+                // if(this.browse_type === 'country_sector' || this.browse_type === 'donor_sector'){
+                //   this._setIndicatorDashboardModelCountry();
+                //  this.subview('indicatorsDashboard').renderDashboard();
+                // }
+
             }
         },
+
+        _countryFilterLoaded: function () {
+            if(this.firstLoad && this.browse_type === s.topics.COUNTRY ||  this.browse_type === s.topics.COUNTRY_DONOR) {
+                this.firstLoad = false;
+                // show title
+                // this.subview('title').show();
+
+               // console.log("_countryFilterLoaded "+ this.browse_type);
+                this._setDashboardModelValues();
+                this.subview('oecdDashboard').renderDashboard();
+
+
+                if(this.browse_type === s.topics.COUNTRY){
+                    this._setIndicatorDashboardModelCountry();
+                    var ivalues = this.subview('filters').getIndicatorsValues();
+                    this.subview('indicatorsDashboard').rebuildDashboard([ivalues]);
+                }
+            }
+        },
+
+
 
         _resetDashboard: function (resetItemName) {
 

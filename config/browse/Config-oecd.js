@@ -384,11 +384,31 @@ define(function () {
                                 chartObj: {
                                     chart: {
                                         type: "column",
-
                                         events: {
-                                            load: function(event) {
-                                              //  amplify.publish('fx.browse.chart.bar.loaded', this);
-                                            }
+                                                load: function (event) {
+                                                    if (this.options.chart.forExport) {
+                                                        this.xAxis[0].update ({
+                                                            categories: this.xAxis[0].categories,
+                                                            labels: {
+                                                                style: {
+                                                                    fontSize: '6px'
+                                                                }
+                                                            }
+                                                        }, false);
+
+                                                        Highcharts.each(this.series, function (series) {
+                                                            series.update({
+                                                                dataLabels: {
+                                                                    enabled: true,
+                                                                    style: {
+                                                                        fontSize: '6px'
+                                                                    }
+                                                                }
+                                                            }, false);
+                                                        });
+                                                        this.redraw();
+                                                    }
+                                                }
                                         }
                                     },
                                     xAxis: {
@@ -699,7 +719,28 @@ define(function () {
                                         type: "column",
                                         events: {
                                             load: function(event) {
-                                                //  amplify.publish('fx.browse.chart.bar.loaded', this);
+                                                if (this.options.chart.forExport) {
+                                                    this.xAxis[0].update ({
+                                                        categories: this.xAxis[0].categories,
+                                                        labels: {
+                                                            style: {
+                                                                fontSize: '6px'
+                                                            }
+                                                        }
+                                                    }, false);
+
+                                                    Highcharts.each(this.series, function (series) {
+                                                        series.update({
+                                                            dataLabels: {
+                                                                enabled: true,
+                                                                style: {
+                                                                    fontSize: '6px'
+                                                                }
+                                                            }
+                                                        }, false);
+                                                    });
+                                                    this.redraw();
+                                                }
                                             }
                                         }
                                     },
@@ -1014,7 +1055,33 @@ define(function () {
                             creator: {
                                 chartObj: {
                                     chart: {
-                                        type: "column"
+                                        type: "column",
+                                        events: {
+                                            load: function(event) {
+                                                if (this.options.chart.forExport) {
+                                                    this.xAxis[0].update ({
+                                                        categories: this.xAxis[0].categories,
+                                                        labels: {
+                                                            style: {
+                                                                fontSize: '6px'
+                                                            }
+                                                        }
+                                                    }, false);
+
+                                                    Highcharts.each(this.series, function (series) {
+                                                        series.update({
+                                                            dataLabels: {
+                                                                enabled: true,
+                                                                style: {
+                                                                    fontSize: '6px'
+                                                                }
+                                                            }
+                                                        }, false);
+                                                    });
+                                                    this.redraw();
+                                                }
+                                            }
+                                        }
                                     },
                                     exporting:{
                                         chartOptions:{
@@ -1029,10 +1096,7 @@ define(function () {
                                         verticalAlign: 'bottom',
                                         layout: 'horizontal',
                                         x:0,
-                                        y:0//,
-                                        /**itemStyle: {
-                                            width: 250
-                                        },**/
+                                        y:0
                                     },
 
                                    // plotOptions: {
@@ -1170,43 +1234,15 @@ define(function () {
                                             }
                                         }
                                     },
-                                    /** subtitle: {
-                                        text: '<b>Click and drag on chart to zoom</b>'
-                                    },
-                                     credits: {
-                                        enabled: true,
-                                        text: 'Source: OECD',
-                                        href: ''
-                                    },
-                                     lang: {
-                                        doptions: "Chart Download options"
-                                    },**/
                                     exporting:{
-                                        //sourceWidth: 1000,
-                                        /** buttons: {
-                                            contextButton: {
-                                                _titleKey:"doptions",
-                                                text: 'Download'
-                                            }
-                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },**/
                                         chartOptions:{
-                                            /** subtitle: {
-                                                text: ''
-                                            },**/
                                             legend:{
-                                                enabled:true//,
-                                                /**  title: {
-                                                    text: ''
-                                                }**/
+                                                enabled:true
                                             }
                                         }
                                     },
                                     legend: {
-                                        reversed: true//,
-                                        /** title: {
-                                           text: 'Click to hide/show'
-                                        }**/
+                                        reversed: true
                                     },
                                     yAxis: {
                                         title: {
@@ -1372,8 +1408,8 @@ define(function () {
                             {
                                 "name": "select",
                                 "parameters": {
-                                    "query": "WHERE gaul0<>? AND  gaul0<>?",
-                                    "queryParameters": [{"value": "NA"}, {"value": "147295+147296"}]
+                                    "query": "WHERE gaul0<>?",
+                                    "queryParameters": [{"value": "NA"}]
                                 }
                             }
                         ]
@@ -1515,7 +1551,7 @@ define(function () {
                                 "defaultsource": [
                                     //{"value": null, "label": "All", "selected": true},
                                 ],
-                                "defaultcodes": ['600'],
+                                "defaultcodes": [],
                                 "onlyValueText": true,
                                 "enableMultiselection": false,
                                 "filter": {
@@ -1524,6 +1560,10 @@ define(function () {
                                     "level" : 1,
                                     "levels":3
                                 }
+                            },
+                            creator: {
+                                allowClear: true,
+                                placeholder: "All"
                             }
 
                         }
@@ -1759,34 +1799,10 @@ define(function () {
                                     chart: {
                                         type: "line"
                                     },
-                                   /** subtitle: {
-                                        text: '<b>Hover for values and click and drag to zoom</b>'
-                                    },**/
-                                   /** credits: {
-                                        enabled: true,
-                                        text: 'Source: OECD',
-                                        href: ''
-                                    },
-                                    lang: {
-                                        doptions: "Chart Download options"
-                                    },**/
                                     exporting:{
-                                      /**  buttons: {
-                                            contextButton: {
-                                                _titleKey:"doptions",
-                                                text: 'Download'
-                                            }
-                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },**/
                                         chartOptions:{
-                                          /**  subtitle: {
-                                                text: ''
-                                            },**/
                                             legend:{
-                                                enabled:true//,
-                                              /**  title: {
-                                                    text: ''
-                                                }**/
+                                                enabled:true
                                             }
                                         }
                                     },
@@ -1797,15 +1813,6 @@ define(function () {
                                         x:0,
                                         y:0
                                     },
-                                   /** legend: {
-                                       title: {
-                                            text: 'Click to hide/show'
-                                        },
-                                        itemStyle: {
-                                            fontSize: '11px'
-                                        }
-
-                                    },**/
                                     xAxis : {
                                         type: 'datetime'
                                     },
@@ -1826,17 +1833,6 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "parentsector_code": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_dac",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
-                                                }
-                                            ]
-                                        },
                                         "recipientcode": {
                                             "codes": [
                                                 {
@@ -1906,12 +1902,38 @@ define(function () {
                             creator: {
                                 chartObj: {
                                     chart: {
-                                        type: "column"
+                                        type: "column",
+                                        events: {
+                                            load: function(event) {
+                                                if (this.options.chart.forExport) {
+                                                    this.xAxis[0].update ({
+                                                        categories: this.xAxis[0].categories,
+                                                        labels: {
+                                                            style: {
+                                                                fontSize: '6px'
+                                                            }
+                                                        }
+                                                    }, false);
+
+                                                    Highcharts.each(this.series, function (series) {
+                                                        series.update({
+                                                            dataLabels: {
+                                                                enabled: true,
+                                                                style: {
+                                                                    fontSize: '6px'
+                                                                }
+                                                            }
+                                                        }, false);
+                                                    });
+                                                    this.redraw();
+                                                }
+                                            }
+                                        }
                                     },
                                     exporting:{
                                         chartOptions:{
                                             legend:{
-                                                enabled:true,
+                                                enabled:true
                                             }
                                         }
                                     },
@@ -1941,17 +1963,6 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "parentsector_code": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_dac",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
-                                                }
-                                            ]
-                                        },
                                         "recipientcode": {
                                             "codes": [
                                                 {
@@ -2037,7 +2048,33 @@ define(function () {
                             creator: {
                                 chartObj: {
                                     chart: {
-                                        type: "column"
+                                        type: "column",
+                                        events: {
+                                            load: function(event) {
+                                                if (this.options.chart.forExport) {
+                                                    this.xAxis[0].update ({
+                                                        categories: this.xAxis[0].categories,
+                                                        labels: {
+                                                            style: {
+                                                                fontSize: '6px'
+                                                            }
+                                                        }
+                                                    }, false);
+
+                                                    Highcharts.each(this.series, function (series) {
+                                                        series.update({
+                                                            dataLabels: {
+                                                                enabled: true,
+                                                                style: {
+                                                                    fontSize: '6px'
+                                                                }
+                                                            }
+                                                        }, false);
+                                                    });
+                                                    this.redraw();
+                                                }
+                                            }
+                                        }
                                     },
                                     exporting:{
                                         chartOptions:{
@@ -2220,17 +2257,6 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "parentsector_code": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_dac",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
-                                                }
-                                            ]
-                                        },
                                         "recipientcode": {
                                             "codes": [
                                                 {
@@ -2312,7 +2338,33 @@ define(function () {
                             creator: {
                                 chartObj: {
                                     chart: {
-                                        type: "column"
+                                        type: "column",
+                                        events: {
+                                            load: function(event) {
+                                                if (this.options.chart.forExport) {
+                                                    this.xAxis[0].update ({
+                                                        categories: this.xAxis[0].categories,
+                                                        labels: {
+                                                            style: {
+                                                                fontSize: '6px'
+                                                            }
+                                                        }
+                                                    }, false);
+
+                                                    Highcharts.each(this.series, function (series) {
+                                                        series.update({
+                                                            dataLabels: {
+                                                                enabled: true,
+                                                                style: {
+                                                                    fontSize: '6px'
+                                                                }
+                                                            }
+                                                        }, false);
+                                                    });
+                                                    this.redraw();
+                                                }
+                                            }
+                                        }
                                     },
                                     exporting:{
                                         chartOptions:{
@@ -2357,17 +2409,6 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "parentsector_code": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_dac",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
-                                                }
-                                            ]
-                                        },
                                         "recipientcode": {
                                             "codes": [
                                                 {
@@ -2474,17 +2515,6 @@ define(function () {
                                                 }
                                             ]
                                         },
-                                        "parentsector_code": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_dac",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
-                                                }
-                                            ]
-                                        },
                                         "year": {
                                             "time": [
                                                 {
@@ -2522,8 +2552,8 @@ define(function () {
                             {
                                 "name": "select",
                                 "parameters": {
-                                    "query": "WHERE gaul0<>? AND  gaul0<>?",
-                                    "queryParameters": [{"value": "NA"}, {"value": "147295+147296"}]
+                                    "query": "WHERE gaul0<>?",
+                                    "queryParameters": [{"value": "NA"}]
                                     /**"query": "WHERE gaul0<>? AND regioncode=?",
                                     "queryParameters": [{"value": "NA"}, {"value": "10009"}]**/
                                 }
@@ -2586,7 +2616,7 @@ define(function () {
                                 "defaultsource": [
                                     //{"value": null, "label": "All", "selected": true},
                                 ],
-                                "defaultcodes": ['600'],
+                                "defaultcodes": [],
                                 "onlyValueText": true,
                                 "enableMultiselection": false,
                                 "filter": {
@@ -2595,6 +2625,10 @@ define(function () {
                                     "level" : 1,
                                     "levels":3
                                 }
+                            },
+                            creator: {
+                                allowClear: true,
+                                placeholder: "All"
                             }
 
                         }
@@ -2831,34 +2865,10 @@ define(function () {
                                     chart: {
                                         type: "line"
                                     },
-                                  /**  subtitle: {
-                                        text: '<b>Click and drag on chart to zoom</b>'
-                                    },
-                                    credits: {
-                                        enabled: true,
-                                        text: 'Source: OECD',
-                                        href: ''
-                                    },
-                                    lang: {
-                                        doptions: "Chart Download options"
-                                    },**/
                                     exporting:{
-                                       /** buttons: {
-                                            contextButton: {
-                                                _titleKey:"doptions",
-                                                text: 'Download'
-                                            }
-                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },**/
                                         chartOptions:{
-                                          /**  subtitle: {
-                                                text: ''
-                                            },**/
                                             legend:{
-                                                enabled:true//,
-                                               /** title: {
-                                                    text: ''
-                                                } **/
+                                                enabled:true
                                             }
                                         }
                                     },
@@ -2889,17 +2899,6 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "parentsector_code": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_dac",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
-                                                }
-                                            ]
-                                        },
                                         "donorcode": {
                                             "codes": [
                                                 {
@@ -2971,7 +2970,33 @@ define(function () {
                             creator: {
                                 chartObj: {
                                     chart: {
-                                        type: "column"
+                                        type: "column",
+                                        events: {
+                                            load: function(event) {
+                                                if (this.options.chart.forExport) {
+                                                    this.xAxis[0].update ({
+                                                        categories: this.xAxis[0].categories,
+                                                        labels: {
+                                                            style: {
+                                                                fontSize: '6px'
+                                                            }
+                                                        }
+                                                    }, false);
+
+                                                    Highcharts.each(this.series, function (series) {
+                                                        series.update({
+                                                            dataLabels: {
+                                                                enabled: true,
+                                                                style: {
+                                                                    fontSize: '6px'
+                                                                }
+                                                            }
+                                                        }, false);
+                                                    });
+                                                    this.redraw();
+                                                }
+                                            }
+                                        }
                                     },
                                     exporting:{
                                         chartOptions:{
@@ -2981,22 +3006,8 @@ define(function () {
                                         }
                                     },
                                     legend: {
-                                        enabled: true//,
-                                      //  itemStyle: {
-                                       //     width: 250
-                                       // }
+                                        enabled: true
                                     },
-
-                                   /** plotOptions: {
-                                        column: {
-                                            colorByPoint: true
-                                        },
-                                        series: {
-                                            dataLabels: {
-                                                enabled: true
-                                            }
-                                        }
-                                    },**/
                                     tooltip: {
                                         useHTML:true,
                                         formatter: function(){
@@ -3015,17 +3026,6 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "parentsector_code": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_dac",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
-                                                }
-                                            ]
-                                        },
                                         "donorcode": {
                                             "codes": [
                                                 {
@@ -3111,7 +3111,33 @@ define(function () {
                             creator: {
                                 chartObj: {
                                     chart: {
-                                        type: "column"
+                                        type: "column",
+                                        events: {
+                                            load: function(event) {
+                                                if (this.options.chart.forExport) {
+                                                    this.xAxis[0].update ({
+                                                        categories: this.xAxis[0].categories,
+                                                        labels: {
+                                                            style: {
+                                                                fontSize: '6px'
+                                                            }
+                                                        }
+                                                    }, false);
+
+                                                    Highcharts.each(this.series, function (series) {
+                                                        series.update({
+                                                            dataLabels: {
+                                                                enabled: true,
+                                                                style: {
+                                                                    fontSize: '6px'
+                                                                }
+                                                            }
+                                                        }, false);
+                                                    });
+                                                    this.redraw();
+                                                }
+                                            }
+                                        }
                                     },
                                     exporting:{
                                         chartOptions:{
@@ -3290,17 +3316,6 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "parentsector_code": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_dac",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
-                                                }
-                                            ]
-                                        },
                                         "donorcode": {
                                             "codes": [
                                                 {
@@ -3382,7 +3397,33 @@ define(function () {
                             creator: {
                                 chartObj: {
                                     chart: {
-                                        type: "column"
+                                        type: "column",
+                                        events: {
+                                            load: function(event) {
+                                                if (this.options.chart.forExport) {
+                                                    this.xAxis[0].update ({
+                                                        categories: this.xAxis[0].categories,
+                                                        labels: {
+                                                            style: {
+                                                                fontSize: '6px'
+                                                            }
+                                                        }
+                                                    }, false);
+
+                                                    Highcharts.each(this.series, function (series) {
+                                                        series.update({
+                                                            dataLabels: {
+                                                                enabled: true,
+                                                                style: {
+                                                                    fontSize: '6px'
+                                                                }
+                                                            }
+                                                        }, false);
+                                                    });
+                                                    this.redraw();
+                                                }
+                                            }
+                                        }
                                     },
                                     exporting:{
                                         chartOptions:{
@@ -3397,17 +3438,11 @@ define(function () {
                                         verticalAlign: 'bottom',
                                         layout: 'horizontal',
                                         x:0,
-                                        y:0//,
-                                        /**itemStyle: {
-                                            width: 250
-                                        },**/
+                                        y:0
+
                                     },
 
-                                    // plotOptions: {
-                                    // column: {
-                                    //     colorByPoint: true
-                                    // }
-                                    // },
+
                                     tooltip: {
                                         useHTML:true,
                                         formatter: function(){
@@ -3427,17 +3462,6 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "parentsector_code": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_dac",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
-                                                }
-                                            ]
-                                        },
                                         "donorcode": {
                                             "codes": [
                                                 {
@@ -3528,7 +3552,7 @@ define(function () {
                                         series: {
                                             stacking: 'percent',
                                             dataLabels: {
-                                                enabled: true,
+                                                enabled: false,
                                                 color: 'white',
                                                 formatter: function(){   // display label in stack if value > 0%
                                                     var percent =  Math.round(this.point.percentage);
@@ -3538,43 +3562,15 @@ define(function () {
                                             }
                                         }
                                     },
-                                   /** subtitle: {
-                                        text: '<b>Click and drag on chart to zoom</b>'
-                                    },
-                                    credits: {
-                                        enabled: true,
-                                        text: 'Source: OECD',
-                                        href: ''
-                                    },
-                                    lang: {
-                                        doptions: "Chart Download options"
-                                    },**/
                                     exporting:{
-                                        //sourceWidth: 1000,
-                                      /**  buttons: {
-                                            contextButton: {
-                                                _titleKey:"doptions",
-                                                text: 'Download'
-                                            }
-                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },**/
                                         chartOptions:{
-                                           /** subtitle: {
-                                                text: ''
-                                            },**/
                                             legend:{
-                                                enabled:true//,
-                                               /** title: {
-                                                    text: ''
-                                                }**/
+                                                enabled:true
                                             }
                                         }
                                     },
                                     legend: {
-                                        reversed: true,
-                                       /** title: {
-                                            text: 'Click to hide/show'
-                                        }**/
+                                        reversed: true
                                     },
                                     yAxis: {
                                         title: {
@@ -3584,12 +3580,13 @@ define(function () {
                                     },
                                     xAxis: {
                                         labels: {
-                                            enabled: false
+                                            enabled: true,
+                                            step: 1
                                         }
                                     },
                                     tooltip: {
                                         formatter: function(){
-                                            return '<b>' +this.series.name + ':' + '</b><br/>'  +' <b>'+   Highcharts.numberFormat(this.point.percentage, 4) + '% </b>'+
+                                            return '<b>' +this.series.name +' - ' +this.x +':' + '</b><br/>'  +' <b>'+   Highcharts.numberFormat(this.point.percentage, 2) + '% </b>'+
                                                 ' ('+ Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil)'
                                         }
                                     }
@@ -3603,17 +3600,6 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "parentsector_code": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_dac",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
-                                                }
-                                            ]
-                                        },
                                         "donorcode": {
                                             "codes": [
                                                 {
@@ -3703,17 +3689,6 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "parentsector_code": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_dac",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
-                                                }
-                                            ]
-                                        },
                                         "donorcode": {
                                             "codes": [
                                                 {
@@ -3849,7 +3824,7 @@ define(function () {
                                 "defaultsource": [
                                     //{"value": null, "label": "All", "selected": true},
                                 ],
-                                "defaultcodes": ['600'],
+                                "defaultcodes": [],
                                 "onlyValueText": true,
                                 "enableMultiselection": false,
                                 "filter": {
@@ -3858,6 +3833,10 @@ define(function () {
                                     "level" : 1,
                                     "levels":3
                                 }
+                            },
+                            creator: {
+                                allowClear: true,
+                                placeholder: "All"
                             }
 
                         }
@@ -4093,34 +4072,10 @@ define(function () {
                                     chart: {
                                         type: "line"
                                     },
-                                   /** subtitle: {
-                                        text: '<b>Click and drag on chart to zoom</b>'
-                                    },
-                                    credits: {
-                                        enabled: true,
-                                        text: 'Source: OECD',
-                                        href: ''
-                                    },
-                                    lang: {
-                                        doptions: "Chart Download options"
-                                    },**/
                                     exporting:{
-                                       /** buttons: {
-                                            contextButton: {
-                                                _titleKey:"doptions",
-                                                text: 'Download'
-                                            }
-                                            //contextButton: {symbol: 'url(http://www.emanuelchurch.com/images/download_icon_small.png)'}
-                                        },**/
                                         chartOptions:{
-                                           /** subtitle: {
-                                                text: ''
-                                            },**/
                                             legend:{
-                                                enabled:true//,
-                                               /** title: {
-                                                    text: ''
-                                                }**/
+                                                enabled:true
                                             }
                                         }
                                     },
@@ -4151,17 +4106,6 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "parentsector_code": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_dac",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
-                                                }
-                                            ]
-                                        },
                                         "recipientcode": {
                                             "codes": [
                                                 {
@@ -4244,7 +4188,33 @@ define(function () {
                             creator: {
                                 chartObj: {
                                     chart: {
-                                        type: "column"
+                                        type: "column",
+                                        events: {
+                                            load: function(event) {
+                                                if (this.options.chart.forExport) {
+                                                    this.xAxis[0].update ({
+                                                        categories: this.xAxis[0].categories,
+                                                        labels: {
+                                                            style: {
+                                                                fontSize: '6px'
+                                                            }
+                                                        }
+                                                    }, false);
+
+                                                    Highcharts.each(this.series, function (series) {
+                                                        series.update({
+                                                            dataLabels: {
+                                                                enabled: true,
+                                                                style: {
+                                                                    fontSize: '6px'
+                                                                }
+                                                            }
+                                                        }, false);
+                                                    });
+                                                    this.redraw();
+                                                }
+                                            }
+                                        }
                                     },
                                     exporting:{
                                         chartOptions:{
@@ -4434,17 +4404,6 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "parentsector_code": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_dac",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
-                                                }
-                                            ]
-                                        },
                                         "recipientcode": {
                                             "codes": [
                                                 {
@@ -4537,7 +4496,33 @@ define(function () {
                             creator: {
                                 chartObj: {
                                     chart: {
-                                        type: "column"
+                                        type: "column",
+                                        events: {
+                                            load: function(event) {
+                                                if (this.options.chart.forExport) {
+                                                    this.xAxis[0].update ({
+                                                        categories: this.xAxis[0].categories,
+                                                        labels: {
+                                                            style: {
+                                                                fontSize: '6px'
+                                                            }
+                                                        }
+                                                    }, false);
+
+                                                    Highcharts.each(this.series, function (series) {
+                                                        series.update({
+                                                            dataLabels: {
+                                                                enabled: true,
+                                                                style: {
+                                                                    fontSize: '6px'
+                                                                }
+                                                            }
+                                                        }, false);
+                                                    });
+                                                    this.redraw();
+                                                }
+                                            }
+                                        }
                                     },
                                     exporting:{
                                         chartOptions:{
@@ -4552,17 +4537,8 @@ define(function () {
                                         verticalAlign: 'bottom',
                                         layout: 'horizontal',
                                         x:0,
-                                        y:0//,
-                                        /**itemStyle: {
-                                            width: 250
-                                        },**/
+                                        y:0
                                     },
-
-                                    // plotOptions: {
-                                    // column: {
-                                    //     colorByPoint: true
-                                    // }
-                                    // },
                                     tooltip: {
                                         useHTML:true,
                                         formatter: function(){
@@ -4582,17 +4558,6 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                        "parentsector_code": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_dac",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
-                                                }
-                                            ]
-                                        },
                                         "recipientcode": {
                                             "codes": [
                                                 {
