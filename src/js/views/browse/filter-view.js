@@ -669,31 +669,36 @@ define([
         },
 
         _getPropByString: function(obj, propString) {
-            if (!propString)
-                return obj;
+            if(!this._hasProp(obj, propString)){
+                return null;
+            } else {
+                if (!propString)
+                    return obj;
 
-            var prop, candidate;
+                var prop, candidate;
 
-            prop = propString;
-            candidate = obj[prop];
+                prop = propString;
+                candidate = obj[prop];
 
-            if (candidate) {
-                obj = candidate;
-                if(obj.hasOwnProperty(prop)) {
-                    this._getPropByString(obj, prop);
+                if (candidate) {
+                    obj = candidate;
+                    if(obj.hasOwnProperty(prop)) {
+                        this._getPropByString(obj, prop);
+                    }
                 }
+
+                return obj;
             }
 
-            return obj;
         },
 
 
         _getRegionPromise: function (codelist, version, depth, direction, findcode) {
-            console.log(codelist, version, depth, direction, findcode);
+            //console.log(codelist, version, depth, direction, findcode);
 
             var baseUrl = BaseConfig.SERVER + BaseConfig.CODELIST_SERVICE + BaseConfig.HIERARCHY_CODES_POSTFIX;
             baseUrl+= "/"+ codelist + "/" +version+ "/" + findcode + "?depth="+depth+"&direction="+direction;
-             console.log(baseUrl);
+           //  console.log(baseUrl);
 
             return Q($.ajax({
                 url: baseUrl,

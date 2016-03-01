@@ -437,7 +437,7 @@ define(function () {
                                             plotOptions: {
                                                 series: {
                                                     dataLabels: {
-                                                        enabled: true
+                                                        enabled: false
                                                     }
                                                 }
                                             }
@@ -767,13 +767,22 @@ define(function () {
                                             },
                                             legend: {
                                                 align: 'center',
-                                                verticalAlign: 'bottom',
                                                 layout: 'vertical',
-                                                x:0,
-                                                y:0,
+                                                //symbolHeight:2,
+                                                //symbolPadding: 0,
+                                                //symbolWidth: 2,
                                                 useHTML: true,
                                                 labelFormatter: function() {
-                                                    return '<div style="width:200px"><span style="float:left">' + this.name.trim() +': '+ Highcharts.numberFormat(this.percentage, 2) + '% (' + Highcharts.numberFormat(this.y, 2)+ ' USD Mil)</b></span></div>';
+                                                        var val = this.y;
+                                                        if (val.toFixed(0) < 1) {
+                                                            val = (val * 1000).toFixed(2) + ' K'
+                                                        } else {
+                                                            val = val.toFixed(2) + ' USD Mil'
+                                                        }
+
+                                                        return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() +': '+ this.percentage.toFixed(2) + '% ('+ val+ ')</span></div>';
+
+                                                   // return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() +': '+ Highcharts.numberFormat(this.percentage, 2) + '% (' + Highcharts.numberFormat(this.y, 2)+ ' USD Mil)</b></span></div>';
                                                 }
                                             }
                                         }
@@ -790,7 +799,17 @@ define(function () {
                                     },
                                     tooltip: {
                                         style: {width: '200px', whiteSpace: 'normal'},
-                                        pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>'
+                                       // pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>',
+                                        formatter: function () {
+                                            var val = this.y;
+                                            if (val.toFixed(0) < 1) {
+                                                val = (val * 1000).toFixed(2) + ' K'
+                                            } else {
+                                                val = val.toFixed(2) + ' USD Mil'
+                                            }
+
+                                            return '<b>'+this.percentage.toFixed(2) + '% ('+ val+ ')</b>';
+                                        }
                                     },
                                     plotOptions: {
                                         pie: {
@@ -927,14 +946,14 @@ define(function () {
                                             }
                                         }
                                     },
-                                    legend: {
+                                   /** legend: {
                                         enabled: true,
                                         align: 'center',
                                         verticalAlign: 'bottom',
                                         layout: 'horizontal',
                                         x:0,
                                         y:0
-                                    },
+                                    },**/
 
                                    // plotOptions: {
                                        // column: {
@@ -1782,7 +1801,8 @@ define(function () {
                                                     this.xAxis[0].update ({
                                                         categories: this.xAxis[0].categories,
                                                         labels: {
-                                                            style: {
+                                                            style:{
+                                                                width:'80px',
                                                                 fontSize: '6px'
                                                             }
                                                         }
@@ -1812,6 +1832,14 @@ define(function () {
                                     },
                                     legend: {
                                         enabled: true
+                                    },
+                                    xAxis: {
+                                        labels: {
+                                            style:{
+                                                width:'80px'
+                                            },
+                                            rotation: -45
+                                        }
                                     },
                                    // plotOptions: {
                                      //   column: {
@@ -1931,6 +1959,26 @@ define(function () {
                                             },
                                             legend: {
                                                 align: 'center',
+                                                layout: 'vertical',
+                                                //symbolHeight:2,
+                                                //symbolPadding: 0,
+                                                //symbolWidth: 2,
+                                                useHTML: true,
+                                                labelFormatter: function() {
+                                                    var val = this.y;
+                                                    if (val.toFixed(0) < 1) {
+                                                        val = (val * 1000).toFixed(2) + ' K'
+                                                    } else {
+                                                        val = val.toFixed(2) + ' USD Mil'
+                                                    }
+
+                                                    return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() +': '+ this.percentage.toFixed(2) + '% ('+ val+ ')</span></div>';
+
+                                                    // return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() +': '+ Highcharts.numberFormat(this.percentage, 2) + '% (' + Highcharts.numberFormat(this.y, 2)+ ' USD Mil)</b></span></div>';
+                                                }
+                                            }
+                                            /** legend: {
+                                                align: 'center',
                                                 verticalAlign: 'bottom',
                                                 layout: 'vertical',
                                                 x:0,
@@ -1939,7 +1987,7 @@ define(function () {
                                                 labelFormatter: function() {
                                                     return '<div style="width:200px"><span style="float:left">' + this.name.trim() +': '+ Highcharts.numberFormat(this.percentage, 2) + '% (' + Highcharts.numberFormat(this.y, 2)+ ' USD Mil)</b></span></div>';
                                                 }
-                                            }
+                                            }**/
                                         }
                                     },
                                     legend: {
@@ -1954,7 +2002,17 @@ define(function () {
                                     },
                                     tooltip: {
                                         style: {width: '200px', whiteSpace: 'normal'},
-                                        pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>'
+                                        // pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>',
+                                        formatter: function () {
+                                            var val = this.y;
+                                            if (val.toFixed(0) < 1) {
+                                                val = (val * 1000).toFixed(2) + ' K'
+                                            } else {
+                                                val = val.toFixed(2) + ' USD Mil'
+                                            }
+
+                                            return '<b>'+this.percentage.toFixed(2) + '% ('+ val+ ')</b>';
+                                        }
                                     },
                                     plotOptions: {
                                         pie: {
@@ -2101,17 +2159,15 @@ define(function () {
                                             }
                                         }
                                     },
-                                    legend: {
+                                   /** legend: {
                                         enabled: true,
                                         align: 'center',
                                         verticalAlign: 'bottom',
                                         layout: 'horizontal',
                                         x:0,
                                         y:0//,
-                                        /**itemStyle: {
-                                            width: 250
-                                        },**/
-                                    },
+
+                                    },**/
 
                                     // plotOptions: {
                                     // column: {
@@ -2835,7 +2891,7 @@ define(function () {
                                 xDimensions: 'parentsector_code',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['unitname'],
+                                seriesDimensions: ['flowcategory'],
                                 sort: false
                             },
                             template: {
@@ -2851,7 +2907,8 @@ define(function () {
                                                     this.xAxis[0].update ({
                                                         categories: this.xAxis[0].categories,
                                                         labels: {
-                                                            style: {
+                                                            style:{
+                                                                width:'80px',
                                                                 fontSize: '6px'
                                                             }
                                                         }
@@ -2881,6 +2938,14 @@ define(function () {
                                     },
                                     legend: {
                                         enabled: true
+                                    },
+                                    xAxis: {
+                                        labels: {
+                                            style:{
+                                                width:'80px'
+                                            },
+                                            rotation: -45
+                                        }
                                     },
                                     // plotOptions: {
                                     //   column: DF3328{
@@ -2945,6 +3010,10 @@ define(function () {
                                         {
                                             "columns": ["unitname"],
                                             "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["flowcategory"],
+                                            "rule": "pgfirst"
                                         }
                                     ]
                                 }
@@ -2996,6 +3065,26 @@ define(function () {
                                             },
                                             legend: {
                                                 align: 'center',
+                                                layout: 'vertical',
+                                                //symbolHeight:2,
+                                                //symbolPadding: 0,
+                                                //symbolWidth: 2,
+                                                useHTML: true,
+                                                labelFormatter: function() {
+                                                    var val = this.y;
+                                                    if (val.toFixed(0) < 1) {
+                                                        val = (val * 1000).toFixed(2) + ' K'
+                                                    } else {
+                                                        val = val.toFixed(2) + ' USD Mil'
+                                                    }
+
+                                                    return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() +': '+ this.percentage.toFixed(2) + '% ('+ val+ ')</span></div>';
+
+                                                    // return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() +': '+ Highcharts.numberFormat(this.percentage, 2) + '% (' + Highcharts.numberFormat(this.y, 2)+ ' USD Mil)</b></span></div>';
+                                                }
+                                            }
+                                            /** legend: {
+                                                align: 'center',
                                                 verticalAlign: 'bottom',
                                                 layout: 'vertical',
                                                 x:0,
@@ -3004,7 +3093,7 @@ define(function () {
                                                 labelFormatter: function() {
                                                     return '<div style="width:200px"><span style="float:left">' + this.name.trim() +': '+ Highcharts.numberFormat(this.percentage, 2) + '% (' + Highcharts.numberFormat(this.y, 2)+ ' USD Mil)</b></span></div>';
                                                 }
-                                            }
+                                            }**/
                                         }
                                     },
                                     legend: {
@@ -3019,7 +3108,17 @@ define(function () {
                                     },
                                     tooltip: {
                                         style: {width: '200px', whiteSpace: 'normal'},
-                                        pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>'
+                                        // pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>',
+                                        formatter: function () {
+                                            var val = this.y;
+                                            if (val.toFixed(0) < 1) {
+                                                val = (val * 1000).toFixed(2) + ' K'
+                                            } else {
+                                                val = val.toFixed(2) + ' USD Mil'
+                                            }
+
+                                            return '<b>'+this.percentage.toFixed(2) + '% ('+ val+ ')</b>';
+                                        }
                                     },
                                     plotOptions: {
                                         pie: {
@@ -3166,7 +3265,7 @@ define(function () {
                                             }
                                         }
                                     },
-                                    legend: {
+                                   /** legend: {
                                         enabled: true,
                                         align: 'center',
                                         verticalAlign: 'bottom',
@@ -3174,8 +3273,7 @@ define(function () {
                                         x:0,
                                         y:0
 
-                                    },
-
+                                    },**/
 
                                     tooltip: {
                                         useHTML:true,
@@ -3314,12 +3412,13 @@ define(function () {
                                     },
                                     xAxis: {
                                         labels: {
-                                            enabled: false
+                                            enabled: true,
+                                            step: 1
                                         }
                                     },
                                     tooltip: {
                                         formatter: function(){
-                                            return '<b>' +this.series.name + ':' + '</b><br/>'  +' <b>'+   Highcharts.numberFormat(this.point.percentage, 4) + '% </b>'+
+                                            return '<b>' +this.series.name +' - ' +this.x +':' + '</b><br/>'  +' <b>'+   Highcharts.numberFormat(this.point.percentage, 2) + '% </b>'+
                                                 ' ('+ Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil)'
                                         }
                                     }
@@ -3469,8 +3568,8 @@ define(function () {
                             {
                                 "name": "select",
                                 "parameters": {
-                                    "query": "WHERE gaul0<>? AND  gaul0<>?",
-                                    "queryParameters": [{"value": "NA"}, {"value": "147295+147296"}]
+                                    "query": "WHERE gaul0<>?",
+                                    "queryParameters": [{"value": "NA"}]
                                 }
                             }
                         ]
@@ -3917,7 +4016,7 @@ define(function () {
                                 xDimensions: 'parentsector_code',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['unitname'],
+                                seriesDimensions: ['flowcategory'],
                                 sort: false
                             },
                             template: {
@@ -3933,7 +4032,8 @@ define(function () {
                                                     this.xAxis[0].update ({
                                                         categories: this.xAxis[0].categories,
                                                         labels: {
-                                                            style: {
+                                                            style:{
+                                                                width:'80px',
                                                                 fontSize: '6px'
                                                             }
                                                         }
@@ -3958,11 +4058,26 @@ define(function () {
                                         chartOptions:{
                                             legend:{
                                                 enabled:true
+                                            },
+                                            xAxis: {
+                                                labels: {
+                                                    style:{
+                                                        width:'80px'
+                                                    }
+                                                }
                                             }
                                         }
                                     },
                                     legend: {
                                         enabled: true
+                                    },
+                                    xAxis: {
+                                        labels: {
+                                            style:{
+                                                width:'80px'
+                                            },
+                                           rotation: -45
+                                        }
                                     },
                                     // plotOptions: {
                                     //   column: {
@@ -4038,6 +4153,10 @@ define(function () {
                                         {
                                             "columns": ["unitname"],
                                             "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["flowcategory"],
+                                            "rule": "pgfirst"
                                         }
                                     ]
                                 }
@@ -4089,6 +4208,26 @@ define(function () {
                                             },
                                             legend: {
                                                 align: 'center',
+                                                layout: 'vertical',
+                                                //symbolHeight:2,
+                                                //symbolPadding: 0,
+                                                //symbolWidth: 2,
+                                                useHTML: true,
+                                                labelFormatter: function() {
+                                                    var val = this.y;
+                                                    if (val.toFixed(0) < 1) {
+                                                        val = (val * 1000).toFixed(2) + ' K'
+                                                    } else {
+                                                        val = val.toFixed(2) + ' USD Mil'
+                                                    }
+
+                                                    return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() +': '+ this.percentage.toFixed(2) + '% ('+ val+ ')</span></div>';
+
+                                                    // return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() +': '+ Highcharts.numberFormat(this.percentage, 2) + '% (' + Highcharts.numberFormat(this.y, 2)+ ' USD Mil)</b></span></div>';
+                                                }
+                                            }
+                                            /** legend: {
+                                                align: 'center',
                                                 verticalAlign: 'bottom',
                                                 layout: 'vertical',
                                                 x:0,
@@ -4097,7 +4236,7 @@ define(function () {
                                                 labelFormatter: function() {
                                                     return '<div style="width:200px"><span style="float:left">' + this.name.trim() +': '+ Highcharts.numberFormat(this.percentage, 2) + '% (' + Highcharts.numberFormat(this.y, 2)+ ' USD Mil)</b></span></div>';
                                                 }
-                                            }
+                                            }**/
                                         }
                                     },
                                     legend: {
@@ -4112,8 +4251,22 @@ define(function () {
                                     },
                                     tooltip: {
                                         style: {width: '200px', whiteSpace: 'normal'},
-                                        pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>'
+                                        // pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>',
+                                        formatter: function () {
+                                            var val = this.y;
+                                            if (val.toFixed(0) < 1) {
+                                                val = (val * 1000).toFixed(2) + ' K'
+                                            } else {
+                                                val = val.toFixed(2) + ' USD Mil'
+                                            }
+
+                                            return '<b>'+this.percentage.toFixed(2) + '% ('+ val+ ')</b>';
+                                        }
                                     },
+                                   // tooltip: {
+                                      //  style: {width: '200px', whiteSpace: 'normal'},
+                                      //  pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>'
+                                  //  },
                                     plotOptions: {
                                         pie: {
                                             allowPointSelect: true,
@@ -4270,14 +4423,14 @@ define(function () {
                                             }
                                         }
                                     },
-                                    legend: {
+                                  /**  legend: {
                                         enabled: true,
                                         align: 'center',
                                         verticalAlign: 'bottom',
                                         layout: 'horizontal',
                                         x:0,
                                         y:0
-                                    },
+                                    },**/
                                     tooltip: {
                                         useHTML:true,
                                         formatter: function(){
