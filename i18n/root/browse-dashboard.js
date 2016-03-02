@@ -2,7 +2,7 @@
 define({
     title: "Dashboard Items",
     text: "Change me in 118n/root/modules.js",
-    "tot-oda": "Total ODA",
+    "tot-oda": "Total ODA for Sectors",
     "top-partners": "Top Resource Partners",
     "top-recipients": "Top Recipients",
     "top-sectors": "Top Sectors",

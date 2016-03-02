@@ -266,7 +266,7 @@ define(function () {
                                 xDimensions: 'year',
                                 yDimensions: 'unitcode',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['parentsector_code']
+                                seriesDimensions: ['flowcategory']
                             },
                             template: {
                                 //"title": "Top 25..."
@@ -338,7 +338,7 @@ define(function () {
                                 "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                        "parentsector_code", "year"
+                                        "year"
                                     ],
                                     "aggregations": [
                                         {
@@ -347,6 +347,10 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitcode"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["flowcategory"],
                                             "rule": "pgfirst"
                                         }
                                     ]
@@ -1808,7 +1812,7 @@ define(function () {
                                 xDimensions: 'year',
                                 yDimensions: 'unitcode',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['parentsector_code']
+                                seriesDimensions: ['flowcategory']
                             },
                             template: {
                                 //"title": "Top 25..."
@@ -1878,7 +1882,7 @@ define(function () {
                                 "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                        "parentsector_code", "year"
+                                        "year"
                                     ],
                                     "aggregations": [
                                         {
@@ -1888,7 +1892,12 @@ define(function () {
                                         {
                                             "columns": ["unitcode"],
                                             "rule": "pgfirst"
-                                        }                                    ]
+                                        } ,
+                                        {
+                                            "columns": ["flowcategory"],
+                                            "rule": "pgfirst"
+                                        }
+                                    ]
                                 }
                             },
                             {
@@ -2911,7 +2920,7 @@ define(function () {
                                 xDimensions: 'year',
                                 yDimensions: 'unitcode',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['parentsector_code']
+                                seriesDimensions: ['flowcategory']
                             },
                             template: {
                                 //"title": "Top 25..."
@@ -2981,7 +2990,7 @@ define(function () {
                                 "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                        "parentsector_code", "year"
+                                        "year"
                                     ],
                                     "aggregations": [
                                         {
@@ -2990,6 +2999,10 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitcode"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["flowcategory"],
                                             "rule": "pgfirst"
                                         }
                                     ]
@@ -4160,7 +4173,7 @@ define(function () {
                                 xDimensions: 'year',
                                 yDimensions: 'unitcode',
                                 valueDimensions: 'value',
-                                seriesDimensions: ['parentsector_code']
+                                seriesDimensions: ['flowcategory']
                             },
                             template: {
                                 //"title": "Top 25..."
@@ -4241,7 +4254,7 @@ define(function () {
                                 "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                        "parentsector_code", "year"
+                                       "year"
                                     ],
                                     "aggregations": [
                                         {
@@ -4250,6 +4263,10 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitcode"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["flowcategory"],
                                             "rule": "pgfirst"
                                         }
                                     ]

@@ -137,8 +137,12 @@ define(function () {
                 },
                 subtitle: {
                     text: '',
+                   // style: {
+                      //  fontSize: '10px'
+                    //}
                     style: {
-                        fontSize: '10px'
+                        fontSize: '9px',
+                        lineHeight: '15em'
                     }
                 },
                 legend:{
@@ -148,7 +152,20 @@ define(function () {
                 }
             }
           },
-        legend: {
+      /**  legend: {
+            align: 'center',
+            verticalAlign: 'bottom',
+            layout: 'horizontal',
+            x:0,
+            y:0,
+            itemStyle: {
+                fontWeight: 'normal'
+            },
+            title: {
+                text: 'Click to hide/show'
+            }
+        },**/
+      legend: {
             align: 'right',
             verticalAlign: 'top',
             layout: 'vertical',
