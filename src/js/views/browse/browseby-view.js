@@ -417,6 +417,13 @@ define([
             this._setDashboardModelValues();
 
             this.subview('oecdDashboard').rebuildDashboard([ovalues]);
+
+             if(this.browse_type === 'country' || this.browse_type === 'donor'){
+               this._setIndicatorDashboardModelCountry();
+              this.subview('indicatorsDashboard').renderDashboard();
+             }
+
+
         },
 
         /** _updateIndicatorDashboardModel: function(key, value){
