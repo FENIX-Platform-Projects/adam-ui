@@ -3645,7 +3645,7 @@ define(function () {
                             container: "#oda-regional",
                             adapter: {
                                 type: "standard",
-                                xDimensions: 'parentsector_code',
+                                xDimensions: 'flowcategory',
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
                                 seriesDimensions: ['un_continent_code'],
@@ -3691,7 +3691,7 @@ define(function () {
                                     },
                                     xAxis: {
                                         labels: {
-                                            enabled: true,
+                                            enabled: false,
                                             step: 1
                                         }
                                     },
@@ -3737,7 +3737,7 @@ define(function () {
                                 "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                        "parentsector_code", "un_continent_code"
+                                        "un_continent_code"
                                     ],
                                     "aggregations": [
                                         {
@@ -3750,6 +3750,10 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitname"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["flowcategory"],
                                             "rule": "pgfirst"
                                         }
                                     ]
