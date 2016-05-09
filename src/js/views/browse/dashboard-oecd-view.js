@@ -44,11 +44,10 @@ define([
 
         initialize: function (params) {
             this.topic = params.topic;
-
             this.model.on("change", this.render, this);
             //this.model.on("change", this.render);
 
-           this.source = $(this.template).find("[data-topic='" + this.topic + "']");//.prop('outerHTML');
+            this.source = $(this.template).find("[data-topic='" + this.topic + "']");//.prop('outerHTML');
 
             View.prototype.initialize.call(this, arguments);
 
@@ -62,6 +61,8 @@ define([
         render: function () {
             this.setElement(this.container);
             this._unbindEventListeners();
+
+
 
            // console.log("REnder");
             for(var it in this.config.items){
@@ -81,13 +82,15 @@ define([
 
         },
 
-        getTemplateFunction: function() {
-            this.compiledTemplate = Handlebars.compile(this.source.prop('outerHTML'));
+
+    getTemplateFunction: function() {
+           this.compiledTemplate = Handlebars.compile(this.source.prop('outerHTML'));
 
             var model = this.model.toJSON();
             var data = $.extend(true, model, i18nLabels, i18nDashboardLabels);
 
             return this.compiledTemplate(data);
+
         },
 
         setDashboardConfig: function(config, type){

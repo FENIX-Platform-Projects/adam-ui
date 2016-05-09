@@ -4,14 +4,17 @@ define([
     'underscore',
     'views/base/view',
     'text!templates/browse/indicators-dashboard.hbs',
-    'text!templates/browse/indicators.hbs',
+    'text!templates/browse/indicators-country.hbs',
+    'text!templates/browse/indicators-donor.hbs',
+    'text!templates/browse/indicators-indicator-partial.hbs',
+    'text!templates/browse/indicators-footer-partial.hbs',
     'fx-ds/start',
     'lib/utils',
     'i18n!nls/browse',
     'handlebars',
     'lib/config-utils',
     'amplify'
-], function ($, _, View, template, indicatorsTemplate, Dashboard, Utils, i18nLabels, Handlebars, ConfigUtils) {
+], function ($, _, View, template, indicatorsCountryTemplate, indicatorsDonorTemplate, indicatorPartialTemplate, footerPartialTemplate, Dashboard, Utils, i18nLabels, Handlebars, ConfigUtils) {
 
     'use strict';
 
@@ -22,8 +25,14 @@ define([
         events: {
             CUSTOM_ITEM_COUNTRY_RESPONSE: 'fx.dashboard.custom.item.response.country-indicator-1'
         },
-        indicatorIds : {
-          INCOME_LEVEL: 'INCOME.LEVEL'
+        indicatorsOrder : [ 'INCOME.LEVEL', 'POP.TOT',  'NET.ODA.REC',  'SI.POV.GINI', 'NY.GNP.ATLS.CD', 'RUR.POP.PERC', 'NET.ODA.REC.PC', 'ODA.GNI', 'NY.GNP.PCAP.CD', 'NODA', 'AGRI.LAND.PERC', 'DT.ODA.ODAT.GN.ZS'],
+        indicatorProperties : {
+            CODE: 'code',
+            GINI_CODE: 'SI.POV.GINI'
+        },
+        views : {
+            DONOR: 'donor',
+            COUNTRY: 'country'
         }
     };
 
@@ -74,6 +83,7 @@ define([
             this.setElement(this.container);
             this._unbindEventListeners();
 
+
             $(this.el).hide();
             $(this.el).html(this.getTemplateFunction());
         },
@@ -93,6 +103,12 @@ define([
 
             var model = this.model.toJSON();
             var data = $.extend(true, model, i18nLabels);
+
+            var indicatorsPartial = Handlebars.compile(indicatorPartialTemplate);
+            Handlebars.registerPartial('indicatorPartial', indicatorsPartial);
+
+            var indicatorsFooterPartial = Handlebars.compile(footerPartialTemplate);
+            Handlebars.registerPartial('indicatorsFooterPartial', indicatorsFooterPartial);
 
             return template(data);
         },
@@ -156,7 +172,12 @@ define([
 
             data = $.extend(true, data, i18nLabels);
 
-            this.indicatortemplate = Handlebars.compile(indicatorsTemplate);
+            this.indicatortemplate = Handlebars.compile(indicatorsCountryTemplate);
+
+            if(this.topic == s.views.DONOR){
+                this.indicatortemplate = Handlebars.compile(indicatorsDonorTemplate);
+            }
+
             var html = this.indicatortemplate({data: data});
 
             if(payload.model.size > 0) {
@@ -185,6 +206,9 @@ define([
                 sourceArray = [];
 
             var results = [], results2 = [], count = 1;
+            var hasGINI = false;
+
+            // Create Array of Indicator Objects
             for (var i = 0, len = data.length; i < len; ++i) {
                 var indicatorObj =  {};
 
@@ -199,6 +223,11 @@ define([
                 indicatorObj.note = data[i][noteIndex];
                 indicatorObj.link = data[i][linkIndex];
                 indicatorObj.unit = data[i][unitnameIndex];
+
+                // Track the presence of the
+                if(indicatorObj.code ===  s.indicatorProperties.GINI_CODE){
+                    hasGINI = true;
+                }
 
                 if(indicatorObj.unit === null){
                     indicatorObj.unit = "";
@@ -215,19 +244,33 @@ define([
                 if(indicatorObj.css)
                   indicatorObj.css = indicatorObj.css.replace(/\./g, "_");
 
-                if ($.inArray(indicatorObj.source+indicatorObj.note, results) < 0) {
+                indicators.push(indicatorObj);
 
-                    var sourceObj =  {};
+            }
+
+           // Reorder the Indicators Array, based on the 'code' order in the indicators order Array
+           indicators = this._reorderArrayByProperty(s.indicatorsOrder, indicators, s.indicatorProperties.CODE);
+
+           // console.log(indicators);
+
+            // Add the Footnote details to the reordered indicators
+
+            for (var j = 0, len = indicators.length; j < len; ++j) {
+                var indicatorObj  =  indicators[j];
+
+                if ($.inArray(indicatorObj.source + indicatorObj.note, results) < 0) {
+
+                    var sourceObj = {};
                     indicatorObj.footnote = count;
-                    sourceObj.sourceid = indicatorObj.source+indicatorObj.note;
+                    sourceObj.sourceid = indicatorObj.source + indicatorObj.note;
 
-                    if(indicatorObj.source.split(";").length > 0){
+                    if (indicatorObj.source.split(";").length > 0) {
                         sourceObj.sourceArray = indicatorObj.source.split(";")
                     } else if (indicatorObj.source) {
                         sourceObj.sourceArray = sourceArray.push(indicatorObj.source);
                     }
 
-                    if(indicatorObj.link.split(";").length > 0){
+                    if (indicatorObj.link.split(";").length > 0) {
                         sourceObj.linkArray = indicatorObj.link.split(";")
                     } else if (indicatorObj.link) {
                         sourceObj.linkArray = linkArray.push(indicatorObj.link);
@@ -236,53 +279,61 @@ define([
                     sourceObj.link = indicatorObj.link;
                     sourceObj.note = indicatorObj.note;
 
-                    if(indicatorObj.source.length === 0)
+                    if (indicatorObj.source.length === 0)
                         sourceObj.source = indicatorObj.note;
                     else
-                        sourceObj.source = indicatorObj.source + ": " +indicatorObj.note;
+                        sourceObj.source = indicatorObj.source + ": " + indicatorObj.note;
 
                     sourceObj.footnote = count;
 
-                    results.push(indicatorObj.source+indicatorObj.note);
+                    results.push(indicatorObj.source + indicatorObj.note);
                     footnote.push(sourceObj);
-                    count ++;
+                    count++;
                 } else {
-                    var result = _.findWhere(footnote, {sourceid: indicatorObj.source+indicatorObj.note});
+                    var result = _.findWhere(footnote, {sourceid: indicatorObj.source + indicatorObj.note});
 
                     indicatorObj.footnote = result.footnote;
                 }
-
-                indicators.push(indicatorObj);
-
-                 //console.log(indicators);
-
             }
 
-            //console.log(indicators);
-            indicators.sort(this._sortByName);
-
             // Move Income Level to the first position
-            var toIndex = 0;
-            var fromIndex = _.chain(indicators).pluck("code").indexOf(s.indicatorIds.INCOME_LEVEL).value();
-            indicators.splice(toIndex,0,indicators.splice(fromIndex,1)[0]);
+          //  var toIndex = 0;
+          //  var fromIndex = _.chain(indicators).pluck("code").indexOf(s.indicatorIds.INCOME_LEVEL).value();
+          //  indicators.splice(toIndex,0,indicators.splice(fromIndex,1)[0]);
 
             // console.log("AFTER==========");
             //console.log(indicators);
             newdata.indicators = indicators;
+            if(hasGINI)
+                newdata.colIdx = 3;
+             else
+                newdata.colIdx = 4;
+
             newdata.footnotes = footnote;
 
+           // console.log(newdata);
            // console.log(newdata.indicators);
            // console.log(newdata.footnotes);
             return newdata;
         },
 
+        _reorderArrayByProperty: function (array_with_order, array_to_order, orderByProperty) {
+            var reordered_array = [],
+                len = array_to_order.length,
+                index, current;
 
-        _sortByName: function (a, b) {
-           var aName = a.name.toLowerCase();
-           var bName = b.name.toLowerCase();
-            return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
+            for (; len--;) {
+                current = array_to_order[len];
+                index = array_with_order.indexOf(current[orderByProperty]);
+                reordered_array[index] = current;
+            }
+
+            // filters out any undefined items in the reordered array
+            reordered_array = reordered_array.filter(function(e){return e});
+
+            return reordered_array;
+
         },
-
 
         _findIndexForPropValue: function (columns, prop, value) {
 
