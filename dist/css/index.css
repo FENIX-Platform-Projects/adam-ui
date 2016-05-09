@@ -13573,6 +13573,10 @@ footer.fao-footer {
   font-size: 20px;
   position: absolute; }
 
+/* DASHBOARD */
+.display-box-header {
+  font-size: 14px; }
+
 /* Jstree Mood */
 /* Preload CSS */
 .loading {
