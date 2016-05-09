@@ -316,7 +316,7 @@ define([
                     });
 
             } else if (item.name === s.ids.YEAR) {
-                if(item.type === "to") {
+                if(item.type === "to" || item.type === "from") {
                   amplify.publish(s.events.FILTER_ON_CHANGE, item);
                   amplify.publish(s.events.TIMERANGE_FILTER_READY, item);
                 }
@@ -441,7 +441,8 @@ define([
               this._onRecipientChange(item);
             }
 
-           // console.log(item);
+            //console.log("========================================");
+            //console.log(item);
             amplify.publish(s.events.FILTER_ON_CHANGE, item);
 
         },
