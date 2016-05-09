@@ -48,6 +48,21 @@ define([
         return out;
     });
 
+    Handlebars.registerHelper('ifIn', function(value, property, list, options) {
+
+        var subcontext = [], result = list.filter(function( obj ) {
+            //console.log(obj[property] + ' - ' + value);
+            return obj[property] == value;
+        });
+
+        if(result.length > 0)
+         subcontext.push(result[0]);
+
+        return options.fn(subcontext);
+
+    });
+
+
     Handlebars.registerHelper('divideBy12', function(size) {
         var modulus = 12 % size;
 
@@ -66,6 +81,8 @@ define([
         return keyword[lang.toUpperCase()];
     });
 
+
+
     Handlebars.registerHelper('decimal', function(number) {
         return number.toFixed(2);
     });
@@ -73,7 +90,6 @@ define([
     Handlebars.registerHelper('commaSeparator', function(number) {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     });
-
 
     utils.getLabel = function (obj) {
         return obj[requirejs.s.contexts._.config.i18n.locale.toUpperCase()];
