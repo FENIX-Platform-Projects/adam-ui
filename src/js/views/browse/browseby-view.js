@@ -17,7 +17,6 @@ define([
     'lib/utils',
     'amplify',
     'bootstrap'
-
 ], function ($, $UI, View, TitleSubView, FilterSubView, DashboardOecdSubView, DashboardIndicatorsSubView, DashboardModel, template, i18nLabels, E, BrowseOecdConfig, BrowseOecdFaoSectorsConfig, BrowseIndicatorsConfig, Utils) {
 
     'use strict';
@@ -102,7 +101,7 @@ define([
         },
 
         getTemplateData: function () {
-          return i18nLabels;
+            return i18nLabels;
          },
 
         attach: function () {
@@ -214,6 +213,10 @@ define([
 
         _updateDashboard: function (item){
            // console.log("=============== _updateDashboard "+item.name);
+
+           // console.log("=============== _updateDashboard BROWSE BY VIEW ");
+           // console.log(item);
+
             amplify.publish(s.events.TITLE_ADD_ITEM, item);
 
                 switch (this.subview('filters').isFAOSectorsSelected()) {

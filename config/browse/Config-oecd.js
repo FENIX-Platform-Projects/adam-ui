@@ -274,7 +274,24 @@ define(function () {
                             creator: {
                                 chartObj: {
                                     chart: {
-                                        type: "line"
+                                        type: "line",
+                                        events: {
+                                            load: function (event) {
+                                                if (this.options.chart.forExport) {
+                                                    Highcharts.each(this.series, function (series) {
+                                                        series.update({
+                                                            dataLabels: {
+                                                                enabled: true,
+                                                                style: {
+                                                                    fontSize: '6px'
+                                                                }
+                                                            }
+                                                        }, false);
+                                                    });
+                                                    this.redraw();
+                                                }
+                                            }
+                                        }
                                     },
                                     exporting:{
                                         chartOptions:{
@@ -874,6 +891,18 @@ define(function () {
                                             "columns": ["flowcategory"],
                                             "rule": "pgfirst"
                                         }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "select",
+                                "parameters": {
+                                    "query": "WHERE recipientcode NOT IN (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", // skipping regional recipient countries (e.g. "Africa, regional"; "North of Sahara, regional")
+                                    "queryParameters": [
+                                        {"value": '298'}, {"value": '498'}, {"value": '798'}, {"value": '89'},
+                                        {"value": '589'}, {"value": '889'}, {"value": '189'}, {"value": '289'},
+                                        {"value": '389'}, {"value": '380'}, {"value": '489'}, {"value": '789'},
+                                        {"value": '689'}, {"value": '619'}, {"value": '679'}
                                     ]
                                 }
                             },
@@ -1820,7 +1849,24 @@ define(function () {
                             creator: {
                                 chartObj: {
                                     chart: {
-                                        type: "line"
+                                        type: "line",
+                                        events: {
+                                            load: function (event) {
+                                                if (this.options.chart.forExport) {
+                                                    Highcharts.each(this.series, function (series) {
+                                                        series.update({
+                                                            dataLabels: {
+                                                                enabled: true,
+                                                                style: {
+                                                                    fontSize: '6px'
+                                                                }
+                                                            }
+                                                        }, false);
+                                                    });
+                                                    this.redraw();
+                                                }
+                                            }
+                                        }
                                     },
                                     exporting:{
                                         chartOptions:{
@@ -2928,7 +2974,24 @@ define(function () {
                             creator: {
                                 chartObj: {
                                     chart: {
-                                        type: "line"
+                                        type: "line",
+                                        events: {
+                                            load: function (event) {
+                                                if (this.options.chart.forExport) {
+                                                    Highcharts.each(this.series, function (series) {
+                                                        series.update({
+                                                            dataLabels: {
+                                                                enabled: true,
+                                                                style: {
+                                                                    fontSize: '6px'
+                                                                }
+                                                            }
+                                                        }, false);
+                                                    });
+                                                    this.redraw();
+                                                }
+                                            }
+                                        }
                                     },
                                     exporting:{
                                         chartOptions:{
@@ -3144,6 +3207,18 @@ define(function () {
                                 }
                             },
                             {
+                                "name": "select",
+                                "parameters": {
+                                    "query": "WHERE recipientcode NOT IN (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", // skipping regional recipient countries (e.g. "Africa, regional"; "North of Sahara, regional")
+                                    "queryParameters": [
+                                        {"value": '298'}, {"value": '498'}, {"value": '798'}, {"value": '89'},
+                                        {"value": '589'}, {"value": '889'}, {"value": '189'}, {"value": '289'},
+                                        {"value": '389'}, {"value": '380'}, {"value": '489'}, {"value": '789'},
+                                        {"value": '689'}, {"value": '619'}, {"value": '679'}
+                                    ]
+                                }
+                            },
+                            {
                                 "name": "order",
                                 "parameters": {
                                     "value": "DESC"
@@ -3187,12 +3262,21 @@ define(function () {
                                                     this.xAxis[0].update ({
                                                         categories: this.xAxis[0].categories,
                                                         labels: {
+                                                            //useHTML: true,
+                                                           // formatter: function() {
+                                                              //  return '<span style="font-size:5px;">'+this.value +'</span>';
+                                                           // }
                                                             style:{
-                                                                width:'80px',
-                                                                fontSize: '6px'
-                                                            }
+                                                               fontSize: '6px'//,
+                                                              //  width:'80px'
+                                                           }
+                                                           // rotation: 0//,
+                                                            // style:{
+                                                            //   width:'100px',
+                                                            //  fontSize: '6px'
+                                                            // }
                                                         }
-                                                    }, false);
+                                                   }, false);
 
                                                     Highcharts.each(this.series, function (series) {
                                                         series.update({
@@ -4185,7 +4269,24 @@ define(function () {
                             creator: {
                                 chartObj: {
                                     chart: {
-                                        type: "line"
+                                        type: "line",
+                                        events: {
+                                            load: function (event) {
+                                                if (this.options.chart.forExport) {
+                                                    Highcharts.each(this.series, function (series) {
+                                                        series.update({
+                                                            dataLabels: {
+                                                                enabled: true,
+                                                                style: {
+                                                                    fontSize: '6px'
+                                                                }
+                                                            }
+                                                        }, false);
+                                                    });
+                                                    this.redraw();
+                                                }
+                                            }
+                                        }
                                     },
                                     exporting:{
                                         chartOptions:{
