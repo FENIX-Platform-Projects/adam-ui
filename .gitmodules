@@ -49,3 +49,6 @@
 [submodule "submodules/fenix-ui-table-creator"]
 	path = submodules/fenix-ui-table-creator
 	url = https://github.com/FENIX-Platform/fenix-ui-table-creator
+[submodule "submodules/fenix-ui-DataEditor-test"]
+	path = submodules/fenix-ui-DataEditor-test
+	url = ../../FENIX-Platform/fenix-ui-DataEditor
