@@ -22,13 +22,13 @@ require.config({
         compilerPaths: pathProjectRoot + '/submodules/fenix-ui-common/js/Compiler',
         //compilerPaths : './submodules/fenix-ui-common/js/Compiler',
         commonPaths: pathProjectRoot + '/submodules/fenix-ui-common/js/paths',
-        menuPaths: pathProjectRoot + '/submodules/fenix-ui-menu/js/paths',
+        menuPaths: pathProjectRoot + '/submodules/fenix-ui-menu/src/js/paths',
         dashboardPaths: pathProjectRoot + '/submodules/fenix-ui-dashboard/src/js/paths',
         chartPaths: pathProjectRoot + '/submodules/fenix-ui-chart-creator/src/js/paths',
         mapPaths: pathProjectRoot + '/submodules/fenix-ui-map-creator/src/js/paths',
         tablePaths: pathProjectRoot + '/submodules/fenix-ui-table-creator/src/js/paths',
         filterPaths: pathProjectRoot + '/submodules/fenix-ui-filter/src/js/paths',
-        olapPaths: pathProjectRoot + '/submodules/fenix-ui-olap/js/paths',
+        olapPaths: pathProjectRoot + '/submodules/fenix-ui-olap/src/js/paths',
         reportPaths: pathProjectRoot + '/submodules/fenix-ui-reports/src/js/paths'
     }
 });
@@ -53,7 +53,7 @@ require([
     commonConfig.baseUrl = submodules_path + '/fenix-ui-common/js';
 
     var menuConfig = Menu;
-    menuConfig.baseUrl = submodules_path + '/fenix-ui-menu/js';
+    menuConfig.baseUrl = submodules_path + '/fenix-ui-menu/src/js';
 
     var dashboardConfig = Dashboard;
     dashboardConfig.baseUrl = submodules_path + '/fenix-ui-dashboard/src/js';
@@ -68,10 +68,10 @@ require([
     tableConfig.baseUrl = submodules_path + '/fenix-ui-table-creator/src/js';
 
     var filterConfig = Filter;
-    filterConfig.baseUrl = submodules_path + '/fenix-ui-filter/';
+    filterConfig.baseUrl = submodules_path + '/fenix-ui-filter/src/js';
 
     var olapConfig = Olap;
-    olapConfig.baseUrl = submodules_path + '/fenix-ui-olap/js';
+    olapConfig.baseUrl = submodules_path + '/fenix-ui-olap/src/js';
 
     var reoprtsConfig = Reports;
     reoprtsConfig.baseUrl = submodules_path + '/fenix-ui-reports/src/js';
@@ -131,23 +131,8 @@ require([
                     'fx-common/config/auth_users': projectRoot + '/config/auth_users.json',
 
 
-                    //OLAP DEPS
-                    pivot: "../../submodules/fenix-ui-olap/js/pivot",
-                    gt_msg: "../../submodules/fenix-ui-olap/lib/grid/gt_msg_en",
-                    jqueryui: "../../submodules/fenix-ui-olap/lib/jquery-ui-1.9.2.custom.min",
-                    gt_msg_grid: "../../submodules/fenix-ui-olap/lib/grid/gt_grid_all",
-                    HPivot: "//fenixapps.fao.org/repository/js/jbpivot/0.1.0-olap/jbpivot.min",
-                    highcharts: "//fenixapps.fao.org/repository/js/highcharts/4.0.4/js/highcharts",
-
                     "nls/pivot": "../../i18n/pivot",
 
-                    pivotRenderersFuncs: "../../submodules/fenix-ui-olap/js/rend/function_rendererers",
-                    pivotRenderers: "../../submodules/fenix-ui-olap/js/rend/rendererers",
-                    pivotAggregatorsFuncs: "../../submodules/fenix-ui-olap/js/rend/function_aggregators",
-                    pivotAggregators: "../../submodules/fenix-ui-olap/js/rend/aggregators",
-                    pivotDataConfig: '../../config/submodules/fx-olap/dataConfig',
-                    pivotDataTest: '../../submodules/fenix-ui-olap/tests/data/test.json',
-                    'fx-olap/config/gridoption': '../../config/submodules/fx-olap/gridoption',
 
                 },
 
