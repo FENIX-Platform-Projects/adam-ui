@@ -131,5 +131,10 @@ define([
         return item;
     };
 
+    utils.getI18nLabel = function (id, labels, prefix) {
+
+        return labels[prefix + id];
+    };
+
     return utils;
 });
