@@ -38,7 +38,7 @@ define([
             //update State
             amplify.publish(E.STATE_CHANGE, {menu: 'browse'});
 
-
+            console.log("BROWSE OPTIONS =========");
             this._displayBrowseOptions() ;
 
         },

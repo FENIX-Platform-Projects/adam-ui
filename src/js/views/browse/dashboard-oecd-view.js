@@ -4,14 +4,16 @@ define([
     'underscore',
     'views/base/view',
     'text!templates/browse/oecd-dashboard.hbs',
-    'fx-ds/start',
+    //'fx-ds/start',
+    'fx-dashboard/start',
     'lib/utils',
     'i18n!nls/browse',
     'i18n!nls/browse-dashboard',
     'handlebars',
     'lib/config-utils',
+    'config/submodules/fx-chart/highcharts_template',
     'amplify'
-], function ($, _, View, template, Dashboard, Utils, i18nLabels, i18nDashboardLabels, Handlebars, ConfigUtils) {
+], function ($, _, View, template, Dashboard, Utils, i18nLabels, i18nDashboardLabels, Handlebars, ConfigUtils, HighchartsTemplate) {
 
     'use strict';
 
@@ -46,6 +48,7 @@ define([
             this.topic = params.topic;
             this.model.on("change", this.render, this);
             //this.model.on("change", this.render);
+            this.dashboards = [];
 
             this.source = $(this.template).find("[data-topic='" + this.topic + "']");//.prop('outerHTML');
 
@@ -64,8 +67,10 @@ define([
 
 
 
-           // console.log("REnder");
+            console.log("RENDER ========== ");
+
             for(var it in this.config.items){
+
                 var item = this.config.items[it];
                 this._updateChartExportTitles(this.config.items[it], i18nDashboardLabels[item.id], this.model.get('label'));
             }
@@ -87,6 +92,8 @@ define([
            this.compiledTemplate = Handlebars.compile(this.source.prop('outerHTML'));
 
             var model = this.model.toJSON();
+
+       //console.log(model);
             var data = $.extend(true, model, i18nLabels, i18nDashboardLabels);
 
             return this.compiledTemplate(data);
@@ -95,30 +102,85 @@ define([
 
         setDashboardConfig: function(config, type){
             this.config = config;
+           // console.log(config.items);
+
             this.config.baseItems = config.items;
             this.config_type = type || s.config_types.BASE;
+            this.config.environment = 'develop'
+
+
+            _.each(this.config.items, _.bind(function ( item ) {
+               // console.log(item);
+                if (!_.isEmpty(item)) {
+                        if(item.type == "chart"){
+                            if(item.config.config){
+                               item.config.config = $.extend(true, HighchartsTemplate, item.config.config);
+                            } else {
+                               item.config.config =  $.extend(true, {}, HighchartsTemplate);
+                            }
+                        }
+                }
+
+            }, this));
+
+
+            //  console.log("setDashboardConfig DONE");
 
         },
+
+
 
         renderDashboard: function () {
 
-            if (this.browseDashboard && this.browseDashboard.destroy) {
-                this.browseDashboard.destroy();
-            }
+         //console.log("renderDashboard");
 
-            this.browseDashboard = new Dashboard({
+
+
+           // if (this.browseDashboard && this.browseDashboard.destroy) {
+              //  this.browseDashboard.destroy();
+            //}
+
+
+            this.config.el = this.$el;
+
+            var data_id =   this.$el.find("[data-item='tot-oda']");
+
+
+
+
+           // console.log( $(this.el).length);
+
+           // this.browseDashboard = new Dashboard({
 
                 //Ignored if layout = injected
-                container: s.css_classes.DASHBOARD_BROWSE_CONTAINER,
-                layout: "injected"
-            });
+               // container: s.css_classes.DASHBOARD_BROWSE_CONTAINER,
+               // layout: "injected"
+           // });
 
           //  console.log("renderDashboard");
 
+            this.dashboards.push(new Dashboard(this.config));
 
-            this.browseDashboard.render(this.config);
+           // console.log("renderDashboard:this.dashboards ");
+           // console.log(this.dashboards);
+          //  this.browseDashboard.render(this.config);
         },
 
+
+
+        _disposeDashboards : function () {
+
+           // console.log("_disposeDashboards:this.dashboards ");
+            //console.log(this.dashboards);
+
+            _.each( this.dashboards, _.bind(function (dashboard) {
+                if (dashboard && $.isFunction(dashboard.dispose)) {
+                    dashboard.dispose();
+                }
+            }, this));
+
+            this.dashboards = [];
+        },
 
         _hideDashboardItem: function (itemId) {
             // Remove Item from config Items
@@ -138,9 +200,14 @@ define([
 
         updateDashboardConfig: function(uid, sectorSelected, subSectorSelected, recipientSelected, regioncode, removeItems){
 
+           // console.log("================ updateDashboardConfig");
+          //  console.log(uid + ' | '+ sectorSelected+ ' | '+subSectorSelected+ ' | '+ recipientSelected+ ' | '+ regioncode+ ' | '+ removeItems);
             this.config.items = this.config.baseItems; // Reset Config Items
 
             var item1 = _.filter(this.config.items, {id: s.total_oda_id})[0];
+
+
+          //  console.log(item1);
 
             switch(this.config_type == s.config_types.FAO){
                 case true:
@@ -227,42 +294,67 @@ define([
         _updateItem1ChartConfiguration: function (item1, sectorSelected, subSectorSelected) {
             // Set either parentsector_code or purposecode as the series in the first chart config
             // Check the current selection via seriesname in config
-            var seriesname = item1.config.adapter.seriesDimensions[0];
+          //  var seriesname = item1.config.adapter.seriesDimensions[0];
+            var seriesname = item1.config.series[0];
 
             var configFind = subSectorSelected && seriesname !== 'purposecode' ? 'parentsector_code': 'purposecode';
             var configReplace = subSectorSelected && seriesname !== 'purposecode' ? 'purposecode': 'parentsector_code';
 
+          //  console.log(seriesname);
+          //  console.log(subSectorSelected);
+          //  console.log(configFind);
+          //  console.log(configReplace);
+
             // modify chartconfig seriesdimension
-            this.configUtils.findAndReplace(item1.config.adapter, configFind, configReplace);
+            this.configUtils.findAndReplace(item1.config, configFind, configReplace);
 
             // modify group by in filter
-            var grpByConfig = this.configUtils.findByPropValue(item1.filter,  "name", "pggroup");
+            var grpByConfig = this.configUtils.findByPropValue(item1.postProcess,  "name", "pggroup");
+         //   console.log(grpByConfig);
+
             this.configUtils.findAndReplace(grpByConfig, configFind, configReplace);
         },
 
         _updateChartExportTitles: function (chartItem, title, subtitle) {
-            if( chartItem.config.creator) {
-                var chartItemTitle = chartItem.config.creator.chartObj.exporting.chartOptions.title = {},
-                 chartItemSubTitle = chartItem.config.creator.chartObj.exporting.chartOptions.subtitle = {};
+
+            if( chartItem.config.config) {
+                var chartItemTitle = chartItem.config.config.exporting.chartOptions.title = {},
+                 chartItemSubTitle = chartItem.config.config.exporting.chartOptions.subtitle = {};
                 chartItemTitle.text = title;
                 chartItemSubTitle.text = subtitle;
             }
         },
 
         rebuildDashboard: function (filter) {
-           // console.log("rebuild",  this.source);
-            if (this.browseDashboard && this.browseDashboard.destroy) {
-                this.browseDashboard.destroy();
-            }
+            //console.log("rebuild", filter);
+            //console.log("rebuild",  this.dashboards);
+          //  if (this.browseDashboard && this.browseDashboard.destroy) {
+            //    this.browseDashboard.destroy();
+           // }
 
-            this.browseDashboard = new Dashboard({
+            //this.browseDashboard = new Dashboard({
 
                 //Ignored if layout = injected
-                container: s.css_classes.DASHBOARD_BROWSE_CONTAINER,
-                layout: "injected"
-            });
+              //  container: s.css_classes.DASHBOARD_BROWSE_CONTAINER,
+               // layout: "injected"
+           // });
 
-            this.browseDashboard.rebuild(this.config, filter);
+            _.each( this.dashboards, _.bind(function (dashboard) {
+               // console.log(dashboard);
+               // console.log($.isFunction(dashboard.refresh)
+                if (dashboard && $.isFunction(dashboard.refresh)) {
+                   // console.log("REFRESH");
+                    dashboard.refresh(filter);
+                }
+            }, this));
+
+
+
+            //if (this.browseDashboard && $.isFunction(this.browseDashboard.refresh)) {
+             //   this.browseDashboard.refresh(values);
+            //}
+
+            //this.browseDashboard.rebuild(this.config, filter);
         },
 
 

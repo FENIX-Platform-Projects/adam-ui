@@ -6,18 +6,19 @@ define([
     'views/common/title-view',
     'views/browse/filter-view',
     'views/browse/dashboard-oecd-view',
-    'views/browse/dashboard-indicators-view',
+    //'views/browse/dashboard-indicators-view',
     'models/browse/dashboard',
     'text!templates/browse/browse.hbs',
     'i18n!nls/browse',
     'config/Events',
+    'config/browse/Events',
     'config/browse/Config-oecd',
     'config/browse/Config-oecd-fao',
     'config/browse/Config-indicators',
     'lib/utils',
     'amplify',
     'bootstrap'
-], function ($, $UI, View, TitleSubView, FilterSubView, DashboardOecdSubView, DashboardIndicatorsSubView, DashboardModel, template, i18nLabels, E, BrowseOecdConfig, BrowseOecdFaoSectorsConfig, BrowseIndicatorsConfig, Utils) {
+], function ($, $UI, View, TitleSubView, FilterSubView, DashboardOecdSubView /**,DashboardIndicatorsSubView**/, DashboardModel, template, i18nLabels, E, BaseEvents, BrowseOecdConfig, BrowseOecdFaoSectorsConfig, BrowseIndicatorsConfig, Utils) {
 
     'use strict';
 
@@ -69,6 +70,12 @@ define([
 
     var uidChanged =  false;
 
+    /**
+     *
+     * Creates a new Browse By View.
+     * @class BrowseByView
+     * @extends View
+     */
     var BrowseByView = View.extend({
 
         // Automatically render after initialize
@@ -136,6 +143,7 @@ define([
 
             var titleSubView = new TitleSubView({autoRender: true, container: this.$el.find(s.css_classes.TITLE_BAR_ITEMS), title: i18nLabels.selections});
             this.subview('title', titleSubView);
+
             var filtersSubView = new FilterSubView({autoRender: true, container: this.$el.find(s.css_classes.FILTER_HOLDER), config: config.filter});
             this.subview('filters', filtersSubView);
 
@@ -150,6 +158,15 @@ define([
 
             this.subview('oecdDashboard', dashboardOecdSubView);
 
+            //TEST
+
+           // this._setDashboardModelValues();
+            //this.subview('oecdDashboard').renderDashboard();
+
+
+            //amplify.publish(s.events.TITLE_ADD_ITEM, item);
+
+            /**
             //DASHBOARD 2, render indicators dashboard if browse_type =
             if(this.browse_type === s.topics.COUNTRY || this.browse_type === s.topics.DONOR){
                 var configIndicators = BrowseIndicatorsConfig[this.browse_type];
@@ -165,7 +182,7 @@ define([
                 dashboardIndicatorsSubView.setDashboardConfig(this.indicatorsDashboardConfig);
                 this.subview('indicatorsDashboard', dashboardIndicatorsSubView);
             }
-
+**/
         },
 
         _initMenuBreadcrumbItem: function() {
@@ -196,6 +213,15 @@ define([
         _bindEventListeners: function () {
 
 
+
+           amplify.subscribe(BaseEvents.FILTER_ON_READY, this, this._filtersLoaded);
+
+
+
+
+
+
+            //======================================================================================
           //  amplify.subscribe(s.events.BAR_CHART_LOADED, this, this._barChartLoaded);
 
             amplify.subscribe(s.events.SUB_SECTORS_FILTER_READY, this, this._subSectorFilterLoaded);
@@ -211,47 +237,91 @@ define([
 
         },
 
+        /**
+         * When filters have all loaded, then the TitleView is initialized
+         * @param selectedFilterItems
+         * @private
+         */
+        _filtersLoaded: function (selectedFilterItems){
+
+            //console.log("_filtersLoaded ", selectedFilterItems);
+
+           /// var titleSubView = new TitleSubView({autoRender: true,
+            //    container: this.$el.find(s.css_classes.TITLE_BAR_ITEMS),
+             //   header: i18nLabels.selections,
+              //  labels: selectedFilterItems});
+
+           // this.subview('title', titleSubView);
+            this.subview('title').setLabels(selectedFilterItems);
+            this.subview('title').build();
+
+            this._setDashboardModelValues();
+
+            this.subview('oecdDashboard').renderDashboard();
+
+        },
+
+
         _updateDashboard: function (item){
-           // console.log("=============== _updateDashboard "+item.name);
+           // console.log("=============== _updateDashboard 1 ");
+
+
+
+            if(item) {
+               var values = item.values.values;
 
            // console.log("=============== _updateDashboard BROWSE BY VIEW ");
            // console.log(item);
 
-            amplify.publish(s.events.TITLE_ADD_ITEM, item);
+            amplify.publish(s.events.TITLE_ADD_ITEM, this._getTitleItem(item));
 
-                switch (this.subview('filters').isFAOSectorsSelected()) {
+           // console.log("=============== _updateDashboard 2 ");
+
+           // console.log(item);
+
+            switch (this.subview('filters').isFAOSectorsSelected()) {
                     case true:
                         this.subview('oecdDashboard').setDashboardConfig(this.faoDashboardConfig, s.config_types.FAO);
                         break;
                     case false:
+                        //console.log("=============== _updateDashboard 3 ");
+
                         this.subview('oecdDashboard').setDashboardConfig(this.baseDashboardConfig, s.config_types.BASE);
                         break;
                 }
 
-                if(item.name === 'uid') {
+                if(item.id === 'uid') {
                     this.datasetType.oecd_uid = item.value;
                 }
 
-                if(item.name === 'recipientcode') {
+            //console.log("=============== _updateDashboard 3i ");
+
+
+            if(item.id === 'recipientcode') {
                     if(item.regioncode)
                         this.regioncode = item.regioncode;
                     else
                         this.regioncode = null;
                 }
 
+           // console.log("=============== _updateDashboard 3ii ");
                 //if(item.name === 'recipientcode') {
                  // console.log('recipientcode has been activated');
                // }
 
-               this.removeItems = this.subview('filters').getConfigPropValue(item.name, 'remove');
+               this.removeItems = this.subview('filters').getConfigPropValue(item.id, 'remove');
 
+              // console.log(this.removeItems);
                 // REBUILD DASHBOARD 1
                 
             //console.log("_updateDashboard");
 
-            //console.log("isFirstLoad ", this.firstLoad);
+            //  console.log("isFirstLoad ", this.firstLoad);
 
-                if(!this.firstLoad) {
+               //TEST IF COMMENTED OUT if(!this.firstLoad) {
+
+
+
                    // if(this.browse_type === s.topics.COUNTRY && item.name != 'parentsector_code') {
                     //    this.subview('oecdDashboard').updateDashboardConfig(this.datasetType.oecd_uid, this.subview('filters').isFilterSelected('parentsector_code'), this.subview('filters').isFilterSelected('purposecode'), this.subview('filters').isFilterSelected('recipientcode'), this.regioncode, this.removeItems);
                      //   this._setDashboardModelValues();
@@ -265,10 +335,19 @@ define([
                         //}
                   //  }//&& item.name != 'parentsector_code') {
                   // else {
+
+
+                   // console.log("=============== _updateDashboard 4 "+item.id);
                         this.subview('oecdDashboard').updateDashboardConfig(this.datasetType.oecd_uid, this.subview('filters').isFilterSelected('parentsector_code'), this.subview('filters').isFilterSelected('purposecode'), this.subview('filters').isFilterSelected('recipientcode'), this.regioncode, this.removeItems);
+                   // console.log("=============== _updateDashboard 4i "+item.id);
+
                         this._setDashboardModelValues();
-                        var ovalues = this.subview('filters').getOECDValues();
-                        this.subview('oecdDashboard').rebuildDashboard([ovalues]);
+                   // console.log("=============== _updateDashboard 4ii "+item.id);
+                       // var ovalues = this.subview('filters').getOECDValues();
+                      // this.subview('oecdDashboard').rebuildDashboard([ovalues]);
+
+                        var ovalues = this.subview('filters').getFilterValues();
+                        this.subview('oecdDashboard').rebuildDashboard(ovalues);
 
 
                    // }
@@ -278,7 +357,7 @@ define([
                         var ivalues = this.subview('filters').getIndicatorsValues();
                         this.subview('indicatorsDashboard').rebuildDashboard([ivalues]);
                     }
-                }
+            //TEST: JUST IF }
 
                 // REBUILD DASHBOARD 1
                //if(this.firstLoad ) {
@@ -310,9 +389,27 @@ define([
                    //     var ivalues = this.subview('filters').getIndicatorsValues();
                    ///     this.subview('indicatorsDashboard').rebuildDashboard([ivalues]);
               //  }
+
+            }
+        },
+
+        _getTitleItem: function(item){
+
+            var titleItem = {}, labels = item.values.labels;
+
+            titleItem.id = item.id;
+
+            var key = Object.keys(labels)[0];
+            titleItem.label = labels[key];
+
+            return titleItem;
         },
 
         _unbindEventListeners: function () {
+
+            amplify.unsubscribe(BaseEvents.FILTER_ON_READY, this._filtersLoaded);
+
+            //==================================
           // Remove listeners
           //  amplify.unsubscribe(s.events.BAR_CHART_LOADED, this._barChartLoaded);
             amplify.unsubscribe(s.events.SUB_SECTORS_FILTER_READY, this._subSectorFilterLoaded);
@@ -449,7 +546,8 @@ define([
         },
 
         _setDashboardModelValues: function(){
-            // console.log("_setDashboardModelValues ", this.subview('title').getTitleAsArray());
+            // console.log("_setDashboardModelValues ", s.dashboardModel.LABEL);
+             console.log(this.subview('title').getTitleAsArray() );
              this._updateDashboardModel(s.dashboardModel.LABEL, this.subview('title').getTitleAsArray());
         },
 
