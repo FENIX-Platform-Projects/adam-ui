@@ -36,6 +36,26 @@
 @import '../../src/css/pages/analyze-data';
 @import '../../src/css/pages/browse-data';
 
+
+/* Fenix Common CSS */
+@import '../../submodules/fenix-ui-common/css/themes/fx-variables';
+
+/* Boostrap Queries */
+@import '../../submodules/fenix-ui-common/css/themes/fx-bootstrap-queries';
+$fx-ui-common: '../../submodules/fenix-ui-common/';
+
+
+@import '../../submodules/fenix-ui-common/css/base/fx-typography';
+
+@import '../../submodules/fenix-ui-common/css/utils/fx-mixins';
+@import '../../submodules/fenix-ui-common/css/components/fx-tabs';
+@import '../../submodules/fenix-ui-common/css/components/fx-buttons';
+@import '../../submodules/fenix-ui-common/css/components/fx-icons';
+@import '../../submodules/fenix-ui-common/css/vendor/fx-jstree';
+@import '../../submodules/fenix-ui-common/css/components/fx-radio-checkbox';
+
+@import '../../submodules/fenix-ui-filter/src/css/filter';
+
 body {
   background-color: $fenix-light-bg;
   font-family: "FrutigerLTW02-45Light", Arial, Helvetica, Verdana, sans-serif;
