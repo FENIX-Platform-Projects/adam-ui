@@ -8,9 +8,7 @@ define(function () {
         //Line chart
         chart: {
             events: {},
-
             type: 'line', //Tipo di grafico:  area, areaspline, boxplot, bubble, column, line, pie, scatter, spline
-
             alignTicks: false,
             backgroundColor: '#FFFFFF', //Colore di background
             //borderColor: '#3fa8da', //Colore bordo intorno
@@ -109,26 +107,40 @@ define(function () {
             doptions: "Chart Download options"
         },
         exporting: {
+           // credits: {
+             //   enabled: true,
+              //  position: {
+               //     align: 'left',
+                //    x: 10,
+                //    y:30,
+                //    verticalAlign: 'top'
+                //},
+               // text: 'Source: OECD',
+               // href: ''
+           // },
             buttons: {
                 contextButton: {
                     _titleKey:"doptions",
-                    text: 'Download',
-                    menuItems: [{
-                        textKey: 'downloadPNG',
-                        onclick: function () {
-                            this.exportChart();
-                        }
-                    }, {
-                        textKey: 'downloadJPEG',
-                        onclick: function () {
-                            this.exportChart({
-                                type: 'image/jpeg'
-                            });
-                        }
-                    }]
+                    text: 'Download'//,
+                   // menuItems: [{
+                   //    textKey: 'downloadPNG',
+                    //    onclick: function () {
+                    //        this.exportChart();
+                    //    }
+                   // }, {
+                     //   textKey: 'downloadJPEG',
+                      //  onclick: function () {
+                      //      this.exportChart({
+                       //         type: 'image/jpeg'
+                        //    });
+                      // }
+                  // }]
                 }
               },
             chartOptions:{
+               // chart:{
+                  //spacingBottom: '100',
+               // },
                 title: {
                     text: '',
                     style: {
@@ -225,8 +237,11 @@ define(function () {
                 }
             },
             title: {
-                enabled: false,
-                text: 'null'
+                enabled: true,
+                text: 'Million USD',
+                style: {
+                    fontWeight: 'normal'
+                }
             },
             plotLines: [
                 {
