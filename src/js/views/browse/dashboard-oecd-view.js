@@ -110,11 +110,10 @@ define([
 
 
             _.each(this.config.items, _.bind(function ( item ) {
-               // console.log(item);
                 if (!_.isEmpty(item)) {
                         if(item.type == "chart"){
                             if(item.config.config){
-                               item.config.config = $.extend(true, HighchartsTemplate, item.config.config);
+                               item.config.config = $.extend(true, {}, HighchartsTemplate, item.config.config);
                             } else {
                                item.config.config =  $.extend(true, {}, HighchartsTemplate);
                             }
@@ -318,8 +317,14 @@ define([
         _updateChartExportTitles: function (chartItem, title, subtitle) {
 
             if( chartItem.config.config) {
-                var chartItemTitle = chartItem.config.config.exporting.chartOptions.title = {},
-                 chartItemSubTitle = chartItem.config.config.exporting.chartOptions.subtitle = {};
+                var chartItemTitle = chartItem.config.config.exporting.chartOptions.title,
+                    chartItemSubTitle = chartItem.config.config.exporting.chartOptions.subtitle;
+
+                if(!chartItemTitle || !chartItemSubTitle){
+                    chartItemTitle = chartItem.config.config.exporting.chartOptions.title = {};
+                    chartItemSubTitle = chartItem.config.config.exporting.chartOptions.subtitle = {};
+                }
+
                 chartItemTitle.text = title;
                 chartItemSubTitle.text = subtitle;
             }
