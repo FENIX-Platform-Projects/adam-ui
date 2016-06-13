@@ -165,79 +165,8 @@ define(function () {
 
                            // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
                             config: {
-                                chart: {
-                                    type: "line",
-                                    events: {
-                                        load: function (event) {
-                                            if (this.options.chart.forExport) {
-                                                Highcharts.each(this.series, function (series) {
-                                                    series.update({
-                                                        dataLabels: {
-                                                            enabled: true,
-                                                            style: {
-                                                                fontSize: '6px'
-                                                            }
-                                                        }
-                                                    }, false);
-                                                });
-                                                this.redraw();
-                                            }
-                                        }
-                                    }
-                                },
-                                exporting:{
-                                    chartOptions:{
-                                        xAxis: {
-                                            labels: {
-                                                y: 15,
-                                                style: {
-                                                   fontSize: '6px'
-                                                }
-                                            }
-                                        },
-                                        yAxis: {
-                                            title: {
-                                                style: {
-                                                    fontSize: '6px'
-                                                }
-                                            },
-                                            labels: {
-                                                style: {
-                                                    fontSize: '6px'
-                                                }
-                                            }
-                                        },
-                                        credits:{
-                                            style: {
-                                                fontSize: '6px'
-                                            }//,
-                                           // position: {
-                                             //   align: 'left',
-                                                //x: 10
-                                           // }
-                                        },
-                                        legend:{
-                                            enabled:false//, only one series and all info in title and subtitle
-                                        }
-                                    }
-                                },
-                                legend: {
-                                    align: 'center',
-                                    verticalAlign: 'bottom',
-                                    layout: 'horizontal',
-                                    x:0,
-                                    y:0
-                                },
                                 xAxis : {
                                     type: 'datetime'
-                                },
-
-                                tooltip: {
-                                    formatter: function(){
-                                        return '<b>' +this.x + ': ' +
-                                            this.series.name +  '</b><br/>' +
-                                            Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
-                                    }
                                 }
                             }
                         }, //
@@ -284,6 +213,145 @@ define(function () {
                             "year": "ASC"
                         }
                     }]},
+                    {
+                        id: 'top-partners', // TOP DONORS
+                        type: 'chart',
+                        config: {
+                            type: "column",
+                            x : ["donorcode"], //x axis
+                            series: ["flowcategory"], // series
+                            y: ["value"],//Y dimension
+                            aggregationFn: {"value": "sum"},
+                            useDimensionLabelsIfExist:true,// || default raw else fenixtool
+
+                            // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
+
+                        },
+                        filter: { //FX-filter format
+                            parentsector_code: ["600"],
+                            "year": {
+                                "time": [
+                                    {
+                                        "from": 2000,
+                                        "to": 2014
+                                    }
+                                ]
+                            }
+
+                        },
+                        postProcess:  [
+                            {
+                                "name": "pggroup",
+                                "parameters": {
+                                    "by": [
+                                        "donorcode"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": ["value"],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["flowcategory"],
+                                            "rule": "pgfirst"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "order",
+                                "parameters": {
+                                    "value": "DESC"
+                                }
+                            },
+                            {
+                                "name": "page",
+                                "parameters": {
+                                    "perPage": 10,  //top 10
+                                    "page": 1
+                                }
+                            }]
+                    },
+                    {
+                        id: 'top-recipients', // TOP RECIPIENTS
+                        type: 'chart',
+                        config: {
+                            type: "column",
+                            x : ["recipientcode"], //x axis
+                            series: ["flowcategory"], // series
+                            y: ["value"],//Y dimension
+                            aggregationFn: {"value": "sum"},
+                            useDimensionLabelsIfExist:true// || default raw else fenixtool
+
+                            // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
+
+
+                        },
+                        filter: { //FX-filter format
+                            parentsector_code: ["600"],
+                            "year": {
+                                "time": [
+                                    {
+                                        "from": 2000,
+                                        "to": 2014
+                                    }
+                                ]
+                            }
+
+                        },
+                        postProcess:  [
+                            {
+                                "name": "pggroup",
+                                "parameters": {
+                                    "by": [
+                                        "recipientcode"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": ["value"],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["flowcategory"],
+                                            "rule": "pgfirst"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "select",
+                                "parameters": {
+                                    "query": "WHERE recipientcode NOT IN (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", // skipping regional recipient countries (e.g. "Africa, regional"; "North of Sahara, regional")
+                                    "queryParameters": [
+                                        {"value": '298'}, {"value": '498'}, {"value": '798'}, {"value": '89'},
+                                        {"value": '589'}, {"value": '889'}, {"value": '189'}, {"value": '289'},
+                                        {"value": '389'}, {"value": '380'}, {"value": '489'}, {"value": '789'},
+                                        {"value": '689'}, {"value": '619'}, {"value": '679'}
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "order",
+                                "parameters": {
+                                    "value": "DESC"
+                                }
+                            },
+                            {
+                                "name": "page",
+                                "parameters": {
+                                    "perPage": 10,  //top 10
+                                    "page": 1
+                                }
+                            }]
+                    },
                     {
                         id: 'country-map',
                         type: 'map',
