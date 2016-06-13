@@ -225,7 +225,9 @@ define(function () {
                             useDimensionLabelsIfExist:true,// || default raw else fenixtool
 
                             // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
-
+                           config:{
+                               colors: ['#008080']
+                           }
                         },
                         filter: { //FX-filter format
                             parentsector_code: ["600"],
@@ -285,10 +287,12 @@ define(function () {
                             series: ["flowcategory"], // series
                             y: ["value"],//Y dimension
                             aggregationFn: {"value": "sum"},
-                            useDimensionLabelsIfExist:true// || default raw else fenixtool
+                            useDimensionLabelsIfExist:true,// || default raw else fenixtool
 
                             // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
-
+                            config:{
+                                colors: ['#5DA58D']
+                            }
 
                         },
                         filter: { //FX-filter format
