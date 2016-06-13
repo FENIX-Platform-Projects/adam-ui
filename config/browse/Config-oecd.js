@@ -357,6 +357,131 @@ define(function () {
                             }]
                     },
                     {
+                        id: 'top-channels', // TOP CHANNELS OF DELIVERY
+                        type: 'chart',
+                        config: {
+                            type: "column",
+                            x : ["channelsubcategory_code"], //x axis
+                            series: ["flowcategory"], // series
+                            y: ["value"],//Y dimension
+                            aggregationFn: {"value": "sum"},
+                            useDimensionLabelsIfExist:true,// || default raw else fenixtool
+
+                            // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
+                            config:{
+                                colors: ['#56adc3']
+                            }
+
+                        },
+                        filter: { //FX-filter format
+                            parentsector_code: ["600"],
+                            "year": {
+                                "time": [
+                                    {
+                                        "from": 2000,
+                                        "to": 2014
+                                    }
+                                ]
+                            }
+
+                        },
+                        postProcess:  [
+                            {
+                                "name": "pggroup",
+                                "parameters": {
+                                    "by": [
+                                        "channelsubcategory_code"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": ["value"],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["flowcategory"],
+                                            "rule": "pgfirst"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "order",
+                                "parameters": {
+                                    "value": "DESC"
+                                }
+                            },
+                            {
+                                "name": "page",
+                                "parameters": {
+                                    "perPage": 10,  //top 10
+                                    "page": 1
+                                }
+                            }]
+                    },
+                    {
+                        id: 'top-subsectors', // TOP SUB SECTORS
+                        type: 'chart',
+                        config: {
+                            type: "pie",
+                            series: ["purposecode"], // series
+                            y: ["value"],//Y dimension
+                            aggregationFn: {"value": "sum"},
+                            useDimensionLabelsIfExist:true,// || default raw else fenixtool
+
+                            // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
+
+
+                        },
+                        filter: { //FX-filter format
+                            parentsector_code: ["600"],
+                            "year": {
+                                "time": [
+                                    {
+                                        "from": 2000,
+                                        "to": 2014
+                                    }
+                                ]
+                            }
+
+                        },
+                        postProcess:  [
+                            {
+                                "name": "pggroup",
+                                "parameters": {
+                                    "by": [
+                                        "purposecode"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": ["value"],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "pgfirst"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "order",
+                                "parameters": {
+                                    "value": "DESC"
+                                }
+                            },
+                            {
+                                "name": "page",
+                                "parameters": {
+                                    "perPage": 10,  //top 10
+                                    "page": 1
+                                }
+                            }]
+                    },
+                    {
                         id: 'country-map',
                         type: 'map',
                         config: {
