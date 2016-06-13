@@ -284,6 +284,96 @@ define(function () {
                             "year": "ASC"
                         }
                     }]},
+                    {
+                        id: 'country-map',
+                        type: 'map',
+                        config: {
+                            geoSubject: 'gaul0',
+                            fenix_ui_map: {
+
+                                guiController: {
+                                    overlay: false,
+                                    baselayer: false,
+                                    wmsLoader: false
+                                },
+                                baselayers: {
+                                    "cartodb": {
+
+                                            title_en: "CartoDB light",
+                                            url: 'http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
+                                            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+                                            subdomains: 'abcd',
+                                            maxZoom: 19
+                                       // title_en: "Baselayer",
+                                       // url: 'http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
+                                       // subdomains: 'abcd',
+                                       // maxZoom: 19
+                                    }
+                                }
+                            }
+                        },
+                      /**  config: {
+                            container: "#country-map",
+                            leaflet: {
+                                zoomControl: false,
+                                attributionControl: true,
+                                scrollWheelZoom: false,
+                                minZoom: 2
+                            },
+                            join: {
+                                style: {
+                                    colorramp: "PuBuGn"
+                                }
+                            },
+                            layer: {
+                                layertitle: "Commitment Current Prices"
+                            }
+                        },**/
+                         filter: { //FX-filter format
+                            parentsector_code: ["600"],
+                            "year": {
+                                "time": [
+                                    {
+                                        "from": 2000,
+                                        "to": 2014
+                                    }
+                                ]
+                            }
+
+                        },
+                        postProcess:  [
+                            {
+                                "name": "pggroup",
+                                "parameters": {
+                                    "by": [
+                                        "gaul0"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": ["value"],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["unitname"],
+                                            "rule": "pgfirst"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "select",
+                                "parameters": {
+                                    "query": "WHERE gaul0<>?",
+                                    "queryParameters": [{"value": "NA"}]
+                                }
+                            }
+                            ]},
+
+
 
 
 
