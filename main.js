@@ -122,7 +122,7 @@ require([
 
                     'fx-m-c/config/config': projectRoot + '/config/submodules/fx-chart-creator/Config',
 
-                    'fx-filter/config/config': projectRoot + '/config/submodules/fx-filter/Config',
+                   // 'fx-filter/config/config': projectRoot + '/config/submodules/fx-filter/Config',
 
                     nls: projectRoot + "/i18n",
                     config: projectRoot + "/config",
