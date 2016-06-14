@@ -11,10 +11,10 @@ define(function () {
         },
 
         "sector": {
-            filter:{
-                parentsector_code :{
+            filter: {
+                parentsector_code: {
                     selector: {
-                        id : "dropdown",
+                        id: "dropdown",
                         default: ["600"],
                         config: { //Selectize configuration
                             maxItems: 1,
@@ -27,17 +27,17 @@ define(function () {
                     cl: {
                         uid: "crs_dac",
                         version: "2016",
-                        level : 1,
-                        levels:1
+                        level: 1,
+                        levels: 1
                     },
                     template: {
                         hideSwitch: true,
                         hideRemoveButton: true
                     }
                 },
-              purposecode :{
+                purposecode: {
                     selector: {
-                        id : "dropdown",
+                        id: "dropdown",
                         config: {
                             maxItems: 1,
                             placeholder: "All",
@@ -57,9 +57,9 @@ define(function () {
                         hideSwitch: true,
                         hideRemoveButton: true
                     },
-                   dependencies :{
-                      "parentsector_code": {id: "parent", event: "select"}, //obj or array of obj
-                  }
+                    dependencies: {
+                        "parentsector_code": {id: "parent", event: "select"}, //obj or array of obj
+                    }
                 },
                 "year-from": {
                     selector: {
@@ -74,7 +74,7 @@ define(function () {
                     className: "col-sm-2",
                     format: {
                         type: "static",
-                        output : "time"
+                        output: "time"
                     },
                     template: {
                         hideSwitch: true,
@@ -96,7 +96,7 @@ define(function () {
                     className: "col-sm-2",
                     format: {
                         type: "static",
-                        output : "time"
+                        output: "time"
                     },
 
                     dependencies: {
@@ -108,9 +108,9 @@ define(function () {
                         hideRemoveButton: true
                     }
                 },
-                uid :{
+                uid: {
                     selector: {
-                        id : "dropdown",
+                        id: "dropdown",
                         default: ['adam_usd_commitment'],
                         config: { //Selectize configuration
                             maxItems: 1
@@ -122,34 +122,19 @@ define(function () {
                         version: "2016"
                     },
                     template: {
-                        hideHeaderIcon : false,
-                        headerIconClassName : 'glyphicon glyphicon-asterisk',
+                        hideHeaderIcon: false,
+                        headerIconClassName: 'glyphicon glyphicon-asterisk',
                         hideSwitch: true,
                         hideRemoveButton: true
                     }
                 }
 
-        },
-
+            },
 
 
             dashboard: {
-                //data cube's uid
+                //default dataset id
                 uid: "adam_usd_commitment",
-
-                //data base filter
-                //filter: [],
-
-                //bridge configuration
-               // bridge: {
-                 //   type: "d3p"
-              //  },
-
-                /*
-                 * in case bridge is WDS this is the cube metadata.
-                 * if bridge is D3P this is ignored
-                 * */
-               // metadata: {},
 
                 items: [
                     {
@@ -157,15 +142,15 @@ define(function () {
                         type: "chart", //chart || map || olap,
                         config: {
                             type: "line",
-                            x : ["year"], //x axis
+                            x: ["year"], //x axis
                             series: ["flowcategory"], // series
                             y: ["value"],//Y dimension
                             aggregationFn: {"value": "sum"},
-                            useDimensionLabelsIfExist:true,// || default raw else fenixtool
+                            useDimensionLabelsIfExist: true,// || default raw else fenixtool
 
-                           // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
+                            // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
                             config: {
-                                xAxis : {
+                                xAxis: {
                                     type: 'datetime'
                                 }
                             }
@@ -184,50 +169,51 @@ define(function () {
 
                         },
 
-                        postProcess:  [
-                        {
-                        "name": "pggroup",
-                        "parameters": {
-                            "by": [
-                                "year"
-                            ],
-                            "aggregations": [
-                                {
-                                    "columns": ["value"],
-                                    "rule": "SUM"
-                                },
-                                {
-                                    "columns": ["unitcode"],
-                                    "rule": "pgfirst"
-                                },
-                                {
-                                    "columns": ["flowcategory"],
-                                    "rule": "pgfirst"
+                        postProcess: [
+                            {
+                                "name": "pggroup",
+                                "parameters": {
+                                    "by": [
+                                        "year"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": ["value"],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["flowcategory"],
+                                            "rule": "pgfirst"
+                                        }
+                                    ]
                                 }
-                            ]
-                        }
+                            },
+                            {
+                                "name": "order",
+                                "parameters": {
+                                    "year": "ASC"
+                                }
+                            }]
                     },
-                    {
-                        "name": "order",
-                        "parameters": {
-                            "year": "ASC"
-                        }
-                    }]},
                     {
                         id: 'top-partners', // TOP DONORS
                         type: 'chart',
                         config: {
                             type: "column",
-                            x : ["donorcode"], //x axis
+                            x: ["donorcode"], //x axis
                             series: ["flowcategory"], // series
                             y: ["value"],//Y dimension
                             aggregationFn: {"value": "sum"},
-                            useDimensionLabelsIfExist:true,// || default raw else fenixtool
+                            useDimensionLabelsIfExist: true,// || default raw else fenixtool
 
                             // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
-                           config:{
-                               colors: ['#008080']
-                           }
+                            config: {
+                                colors: ['#008080']
+                            }
                         },
                         filter: { //FX-filter format
                             parentsector_code: ["600"],
@@ -241,7 +227,7 @@ define(function () {
                             }
 
                         },
-                        postProcess:  [
+                        postProcess: [
                             {
                                 "name": "pggroup",
                                 "parameters": {
@@ -283,14 +269,14 @@ define(function () {
                         type: 'chart',
                         config: {
                             type: "column",
-                            x : ["recipientcode"], //x axis
+                            x: ["recipientcode"], //x axis
                             series: ["flowcategory"], // series
                             y: ["value"],//Y dimension
                             aggregationFn: {"value": "sum"},
-                            useDimensionLabelsIfExist:true,// || default raw else fenixtool
+                            useDimensionLabelsIfExist: true,// || default raw else fenixtool
 
                             // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
-                            config:{
+                            config: {
                                 colors: ['#5DA58D']
                             }
 
@@ -307,7 +293,7 @@ define(function () {
                             }
 
                         },
-                        postProcess:  [
+                        postProcess: [
                             {
                                 "name": "pggroup",
                                 "parameters": {
@@ -361,14 +347,14 @@ define(function () {
                         type: 'chart',
                         config: {
                             type: "column",
-                            x : ["channelsubcategory_code"], //x axis
+                            x: ["channelsubcategory_code"], //x axis
                             series: ["flowcategory"], // series
                             y: ["value"],//Y dimension
                             aggregationFn: {"value": "sum"},
-                            useDimensionLabelsIfExist:true,// || default raw else fenixtool
+                            useDimensionLabelsIfExist: true,// || default raw else fenixtool
 
                             // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
-                            config:{
+                            config: {
                                 colors: ['#56adc3']
                             }
 
@@ -385,7 +371,7 @@ define(function () {
                             }
 
                         },
-                        postProcess:  [
+                        postProcess: [
                             {
                                 "name": "pggroup",
                                 "parameters": {
@@ -422,18 +408,72 @@ define(function () {
                                 }
                             }]
                     },
+
                     {
                         id: 'top-subsectors', // TOP SUB SECTORS
                         type: 'chart',
                         config: {
                             type: "pie",
-                            series: ["purposecode"], // series
+                            x: ["purposecode"], //x axis and series
+                            series: ["flowcategory"], // series
                             y: ["value"],//Y dimension
                             aggregationFn: {"value": "sum"},
-                            useDimensionLabelsIfExist:true,// || default raw else fenixtool
+                            useDimensionLabelsIfExist: true,// || default raw else fenixtool
 
                             // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
+                            config: {
+                                chart: {
+                                    events: {
+                                        load: function (event) {
+                                            if (this.options.chart.forExport) {
+                                                Highcharts.each(this.series, function (series) {
+                                                    series.update({
+                                                        dataLabels: {
+                                                            enabled: false
+                                                        }
+                                                    }, false);
+                                                });
+                                                this.redraw();
+                                            }
+                                        }
+                                    }
 
+                                },
+                                tooltip: {
+                                    style: {width: '200px', whiteSpace: 'normal'},
+                                    formatter: function () {
+                                        var val = this.y;
+                                        if (val.toFixed(0) < 1) {
+                                            val = (val * 1000).toFixed(2) + ' K'
+                                        } else {
+                                            val = val.toFixed(2) + ' USD Mil'
+                                        }
+
+                                        return '<b>' + this.percentage.toFixed(2) + '% (' + val + ')</b>';
+                                    }
+                                },
+                                exporting: {
+                                    chartOptions: {
+                                        legend: {
+                                            title: '',
+                                            enabled: true,
+                                            align: 'center',
+                                            layout: 'vertical',
+                                            useHTML: true,
+                                            labelFormatter: function () {
+                                                var val = this.y;
+                                                if (val.toFixed(0) < 1) {
+                                                    val = (val * 1000).toFixed(2) + ' K'
+                                                } else {
+                                                    val = val.toFixed(2) + ' USD Mil'
+                                                }
+
+                                                return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() + ': ' + this.percentage.toFixed(2) + '% (' + val + ')</span></div>';
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 
                         },
                         filter: { //FX-filter format
@@ -448,7 +488,7 @@ define(function () {
                             }
 
                         },
-                        postProcess:  [
+                        postProcess: [
                             {
                                 "name": "pggroup",
                                 "parameters": {
@@ -462,6 +502,10 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitcode"],
+                                            "rule": "pgfirst"
+                                        },
+                                        {
+                                            "columns": ["flowcategory"],
                                             "rule": "pgfirst"
                                         }
                                     ]
@@ -496,37 +540,21 @@ define(function () {
                                 baselayers: {
                                     "cartodb": {
 
-                                            title_en: "CartoDB light",
-                                            url: 'http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
-                                            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
-                                            subdomains: 'abcd',
-                                            maxZoom: 19
-                                       // title_en: "Baselayer",
-                                       // url: 'http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
-                                       // subdomains: 'abcd',
-                                       // maxZoom: 19
+                                        title_en: "CartoDB light",
+                                        url: 'http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
+                                        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+                                        subdomains: 'abcd',
+                                        maxZoom: 19
+                                        // title_en: "Baselayer",
+                                        // url: 'http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
+                                        // subdomains: 'abcd',
+                                        // maxZoom: 19
                                     }
                                 }
                             }
                         },
-                      /**  config: {
-                            container: "#country-map",
-                            leaflet: {
-                                zoomControl: false,
-                                attributionControl: true,
-                                scrollWheelZoom: false,
-                                minZoom: 2
-                            },
-                            join: {
-                                style: {
-                                    colorramp: "PuBuGn"
-                                }
-                            },
-                            layer: {
-                                layertitle: "Commitment Current Prices"
-                            }
-                        },**/
-                         filter: { //FX-filter format
+
+                        filter: { //FX-filter format
                             parentsector_code: ["600"],
                             "year": {
                                 "time": [
@@ -538,7 +566,7 @@ define(function () {
                             }
 
                         },
-                        postProcess:  [
+                        postProcess: [
                             {
                                 "name": "pggroup",
                                 "parameters": {
@@ -568,10 +596,8 @@ define(function () {
                                     "queryParameters": [{"value": "NA"}]
                                 }
                             }
-                            ]},
-
-
-
+                        ]
+                    },
 
 
                 /** {
@@ -764,8 +790,8 @@ define(function () {
                                 "filter": {
                                     "uid": "crs_dac",
                                     "version": "2016",
-                                    "level" : 1,
-                                    "levels":3
+                                    "level": 1,
+                                    "levels": 3
                                 }
                             },
                             creator: {
@@ -800,8 +826,8 @@ define(function () {
                                 "filter": {
                                     "uid": "crs_dac",
                                     "version": "2016",
-                                    "level" : 3,
-                                    "levels":3
+                                    "level": 3,
+                                    "levels": 3
                                 }
                             },
                             creator: {
@@ -824,8 +850,8 @@ define(function () {
                             "lang": "EN",
                             "title": {"EN": "Year"},
                             "config": {
-                                "from" : {
-                                    "title":  {"EN": "From"},
+                                "from": {
+                                    "title": {"EN": "From"},
                                     "defaultsource": [
                                         {"value": "2000", "label": "2000", "selected": true},
                                         {"value": "2001", "label": "2001", "selected": false},
@@ -844,8 +870,8 @@ define(function () {
                                         {"value": "2014", "label": "2014", "selected": false}
                                     ]
                                 },
-                                "to" : {
-                                    "title":  {"EN": "To"},
+                                "to": {
+                                    "title": {"EN": "To"},
                                     "defaultsource": [
                                         {"value": "2014", "label": "2014", "selected": true},
                                         {"value": "2013", "label": "2013", "selected": false},
@@ -890,8 +916,8 @@ define(function () {
                                 "filter": {
                                     "uid": "crs_channels",
                                     "version": "2016",
-                                    "level" : 2,
-                                    "levels":3
+                                    "level": 2,
+                                    "levels": 3
                                 }
                             },
                             creator: {
@@ -923,8 +949,8 @@ define(function () {
                                 "filter": {
                                     "uid": "crs_channels",
                                     "version": "2016",
-                                    "level" : 3,
-                                    "levels":3
+                                    "level": 3,
+                                    "levels": 3
                                 }
                             },
                             creator: {
@@ -938,9 +964,9 @@ define(function () {
                     "type": "codelist",
                     "containerType": "baseContainer",
                     "title": "ODA",
-                    "icon" : {
-                        "class" : "fa fa-info-circle",
-                        "tooltip" : "Official Development Assistance - Grants, Grant-Like, Loans and Equity Investment"
+                    "icon": {
+                        "class": "fa fa-info-circle",
+                        "tooltip": "Official Development Assistance - Grants, Grant-Like, Loans and Equity Investment"
                     },
                     "module_class": "fx-filter-grid-module",
                     "class": "col-md-3 col-lg-2",
@@ -1023,10 +1049,10 @@ define(function () {
                                             }
                                         }
                                     },
-                                    exporting:{
-                                        chartOptions:{
-                                            legend:{
-                                                enabled:true
+                                    exporting: {
+                                        chartOptions: {
+                                            legend: {
+                                                enabled: true
                                             }
                                         }
                                     },
@@ -1034,16 +1060,16 @@ define(function () {
                                         align: 'center',
                                         verticalAlign: 'bottom',
                                         layout: 'horizontal',
-                                        x:0,
-                                        y:0
+                                        x: 0,
+                                        y: 0
                                     },
-                                    xAxis : {
+                                    xAxis: {
                                         type: 'datetime'
                                     },
                                     tooltip: {
-                                        formatter: function(){
-                                            return '<b>' +this.x + ': ' +
-                                                this.series.name +  '</b><br/>' +
+                                        formatter: function () {
+                                            return '<b>' + this.x + ': ' +
+                                                this.series.name + '</b><br/>' +
                                                 Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
                                         }
                                     }
@@ -1093,7 +1119,7 @@ define(function () {
                                         {
                                             "columns": ["unitcode"],
                                             "rule": "pgfirst"
-                                        } ,
+                                        },
                                         {
                                             "columns": ["flowcategory"],
                                             "rule": "pgfirst"
@@ -1126,16 +1152,15 @@ define(function () {
                                 seriesDimensions: ['flowcategory'],
                                 sort: false
                             },
-                            template: {
-                            },
+                            template: {},
                             creator: {
                                 chartObj: {
                                     chart: {
                                         type: "column",
                                         events: {
-                                            load: function(event) {
+                                            load: function (event) {
                                                 if (this.options.chart.forExport) {
-                                                    this.xAxis[0].update ({
+                                                    this.xAxis[0].update({
                                                         categories: this.xAxis[0].categories,
                                                         labels: {
                                                             style: {
@@ -1159,24 +1184,24 @@ define(function () {
                                             }
                                         }
                                     },
-                                    exporting:{
-                                        chartOptions:{
-                                            legend:{
-                                                enabled:true
+                                    exporting: {
+                                        chartOptions: {
+                                            legend: {
+                                                enabled: true
                                             }
                                         }
                                     },
                                     legend: {
                                         enabled: true
                                     },
-                                   // plotOptions: {
-                                       // column: {
-                                         //   colorByPoint: true
-                                       // }
-                                  //  },
+                                    // plotOptions: {
+                                    // column: {
+                                    //   colorByPoint: true
+                                    // }
+                                    //  },
                                     tooltip: {
-                                        formatter: function(){
-                                            return '<b>' +this.x + ': ' + '</b><br/>' +
+                                        formatter: function () {
+                                            return '<b>' + this.x + ': ' + '</b><br/>' +
                                                 Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
                                         }
                                     },
@@ -1279,13 +1304,13 @@ define(function () {
                                     chart: {
                                         type: "column",
                                         events: {
-                                            load: function(event) {
+                                            load: function (event) {
                                                 if (this.options.chart.forExport) {
-                                                    this.xAxis[0].update ({
+                                                    this.xAxis[0].update({
                                                         categories: this.xAxis[0].categories,
                                                         labels: {
-                                                            style:{
-                                                                width:'80px',
+                                                            style: {
+                                                                width: '80px',
                                                                 fontSize: '6px'
                                                             }
                                                         }
@@ -1306,10 +1331,10 @@ define(function () {
                                             }
                                         }
                                     },
-                                    exporting:{
-                                        chartOptions:{
-                                            legend:{
-                                                enabled:true
+                                    exporting: {
+                                        chartOptions: {
+                                            legend: {
+                                                enabled: true
                                             }
                                         }
                                     },
@@ -1318,20 +1343,20 @@ define(function () {
                                     },
                                     xAxis: {
                                         labels: {
-                                            style:{
-                                                width:'80px'
+                                            style: {
+                                                width: '80px'
                                             },
                                             rotation: -45
                                         }
                                     },
-                                   // plotOptions: {
-                                     //   column: {
-                                      //      colorByPoint: true
-                                      //  }
-                                   // },
+                                    // plotOptions: {
+                                    //   column: {
+                                    //      colorByPoint: true
+                                    //  }
+                                    // },
                                     tooltip: {
-                                        formatter: function(){
-                                            return '<b>' +this.x + ': ' + '</b><br/>' +
+                                        formatter: function () {
+                                            return '<b>' + this.x + ': ' + '</b><br/>' +
                                                 Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
                                         }
                                     },
@@ -1435,8 +1460,8 @@ define(function () {
                                     subtitle: {
                                         text: '<b>Hover for values</b>'
                                     },
-                                    exporting:{
-                                        chartOptions:{
+                                    exporting: {
+                                        chartOptions: {
                                             title: {
                                                 text: ''
                                             },
@@ -1447,7 +1472,7 @@ define(function () {
                                                 //symbolPadding: 0,
                                                 //symbolWidth: 2,
                                                 useHTML: true,
-                                                labelFormatter: function() {
+                                                labelFormatter: function () {
                                                     var val = this.y;
                                                     if (val.toFixed(0) < 1) {
                                                         val = (val * 1000).toFixed(2) + ' K'
@@ -1455,7 +1480,7 @@ define(function () {
                                                         val = val.toFixed(2) + ' USD Mil'
                                                     }
 
-                                                    return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() +': '+ this.percentage.toFixed(2) + '% ('+ val+ ')</span></div>';
+                                                    return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() + ': ' + this.percentage.toFixed(2) + '% (' + val + ')</span></div>';
 
                                                     // return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() +': '+ Highcharts.numberFormat(this.percentage, 2) + '% (' + Highcharts.numberFormat(this.y, 2)+ ' USD Mil)</b></span></div>';
                                                 }
@@ -1477,8 +1502,8 @@ define(function () {
                                         align: 'center',
                                         verticalAlign: 'bottom',
                                         layout: 'horizontal',
-                                        x:0,
-                                        y:0//,
+                                        x: 0,
+                                        y: 0//,
                                         /**itemStyle: {
                                             width: 250
                                         },**/
@@ -1494,7 +1519,7 @@ define(function () {
                                                 val = val.toFixed(2) + ' USD Mil'
                                             }
 
-                                            return '<b>'+this.percentage.toFixed(2) + '% ('+ val+ ')</b>';
+                                            return '<b>' + this.percentage.toFixed(2) + '% (' + val + ')</b>';
                                         }
                                     },
                                     plotOptions: {
@@ -1505,10 +1530,10 @@ define(function () {
                                                 style: {
                                                     width: '200px'
                                                 },
-                                                formatter: function(){
-                                                    return '<div>' + this.point.name + ' '+
+                                                formatter: function () {
+                                                    return '<div>' + this.point.name + ' ' +
                                                         Math.round(this.point.percentage)
-                                                        +'% </div>';
+                                                        + '% </div>';
                                                 },
                                                 enabled: false
                                             },
@@ -1608,9 +1633,9 @@ define(function () {
                                     chart: {
                                         type: "column",
                                         events: {
-                                            load: function(event) {
+                                            load: function (event) {
                                                 if (this.options.chart.forExport) {
-                                                    this.xAxis[0].update ({
+                                                    this.xAxis[0].update({
                                                         categories: this.xAxis[0].categories,
                                                         labels: {
                                                             style: {
@@ -1634,14 +1659,14 @@ define(function () {
                                             }
                                         }
                                     },
-                                    exporting:{
-                                        chartOptions:{
-                                            legend:{
-                                                enabled:true
+                                    exporting: {
+                                        chartOptions: {
+                                            legend: {
+                                                enabled: true
                                             }
                                         }
                                     },
-                                   /** legend: {
+                                    /** legend: {
                                         enabled: true,
                                         align: 'center',
                                         verticalAlign: 'bottom',
@@ -1657,9 +1682,9 @@ define(function () {
                                     // }
                                     // },
                                     tooltip: {
-                                        useHTML:true,
-                                        formatter: function(){
-                                            return '<div style="width: 200px; white-space:normal"><b>' +this.x + ': ' + '</b><br/>' +
+                                        useHTML: true,
+                                        formatter: function () {
+                                            return '<div style="width: 200px; white-space:normal"><b>' + this.x + ': ' + '</b><br/>' +
                                                 Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil' + '</div>';
                                         }
                                     },
@@ -1738,7 +1763,7 @@ define(function () {
                             }
                         ]
                     },
-                  {
+                    {
                         id: 'country-map',
                         type: 'map',
                         class: "fx-map-chart",
@@ -1769,7 +1794,7 @@ define(function () {
                                 "name": "filter",
                                 "parameters": {
                                     "rows": {
-                                          "regioncode": {
+                                        "regioncode": {
                                             "codes": [
                                                 {
                                                     "uid": "crs_regions_countries",
@@ -1821,7 +1846,7 @@ define(function () {
                                     "query": "WHERE gaul0<>?",
                                     "queryParameters": [{"value": "NA"}]
                                     /**"query": "WHERE gaul0<>? AND regioncode=?",
-                                    "queryParameters": [{"value": "NA"}, {"value": "10009"}]**/
+                                     "queryParameters": [{"value": "NA"}, {"value": "10009"}]**/
                                 }
                             }
                         ]
@@ -1888,8 +1913,8 @@ define(function () {
                                 "filter": {
                                     "uid": "crs_dac",
                                     "version": "2016",
-                                    "level" : 1,
-                                    "levels":3
+                                    "level": 1,
+                                    "levels": 3
                                 }
                             },
                             creator: {
@@ -1924,8 +1949,8 @@ define(function () {
                                 "filter": {
                                     "uid": "crs_dac",
                                     "version": "2016",
-                                    "level" : 3,
-                                    "levels":3
+                                    "level": 3,
+                                    "levels": 3
                                 }
                             },
                             creator: {
@@ -1949,8 +1974,8 @@ define(function () {
                             "lang": "EN",
                             "title": {"EN": "Year"},
                             "config": {
-                                "from" : {
-                                    "title":  {"EN": "From"},
+                                "from": {
+                                    "title": {"EN": "From"},
                                     "defaultsource": [
                                         {"value": "2000", "label": "2000", "selected": true},
                                         {"value": "2001", "label": "2001", "selected": false},
@@ -1969,8 +1994,8 @@ define(function () {
                                         {"value": "2014", "label": "2014", "selected": false}
                                     ]
                                 },
-                                "to" : {
-                                    "title":  {"EN": "To"},
+                                "to": {
+                                    "title": {"EN": "To"},
                                     "defaultsource": [
                                         {"value": "2014", "label": "2014", "selected": true},
                                         {"value": "2013", "label": "2013", "selected": false},
@@ -2015,8 +2040,8 @@ define(function () {
                                 "filter": {
                                     "uid": "crs_channels",
                                     "version": "2016",
-                                    "level" : 2,
-                                    "levels":3
+                                    "level": 2,
+                                    "levels": 3
                                 }
                             },
                             creator: {
@@ -2048,8 +2073,8 @@ define(function () {
                                 "filter": {
                                     "uid": "crs_channels",
                                     "version": "2016",
-                                    "level" : 3,
-                                    "levels":3
+                                    "level": 3,
+                                    "levels": 3
                                 }
                             },
                             creator: {
@@ -2063,9 +2088,9 @@ define(function () {
                     "type": "codelist",
                     "containerType": "baseContainer",
                     "title": "ODA",
-                    "icon" : {
-                        "class" : "fa fa-info-circle",
-                        "tooltip" : "Official Development Assistance - Grants, Grant-Like, Loans and Equity Investment"
+                    "icon": {
+                        "class": "fa fa-info-circle",
+                        "tooltip": "Official Development Assistance - Grants, Grant-Like, Loans and Equity Investment"
                     },
                     "module_class": "fx-filter-grid-module",
                     "class": "col-md-3 col-lg-2",
@@ -2148,10 +2173,10 @@ define(function () {
                                             }
                                         }
                                     },
-                                    exporting:{
-                                        chartOptions:{
-                                            legend:{
-                                                enabled:true
+                                    exporting: {
+                                        chartOptions: {
+                                            legend: {
+                                                enabled: true
                                             }
                                         }
                                     },
@@ -2159,16 +2184,16 @@ define(function () {
                                         align: 'center',
                                         verticalAlign: 'bottom',
                                         layout: 'horizontal',
-                                        x:0,
-                                        y:0
+                                        x: 0,
+                                        y: 0
                                     },
-                                    xAxis : {
+                                    xAxis: {
                                         type: 'datetime'
                                     },
                                     tooltip: {
-                                        formatter: function(){
-                                            return '<b>' +this.x + ': ' +
-                                                this.series.name +  '</b><br/>' +
+                                        formatter: function () {
+                                            return '<b>' + this.x + ': ' +
+                                                this.series.name + '</b><br/>' +
                                                 Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
                                         }
                                     }
@@ -2176,7 +2201,7 @@ define(function () {
                             }
                         },
                         // for now it takes the id, TODO: add uid as well
-                        allowedFilter: [ 'donorcode', 'parentsector_code', 'purposecode', 'year', 'channelsubcategory_code', 'channelcode'],
+                        allowedFilter: ['donorcode', 'parentsector_code', 'purposecode', 'year', 'channelsubcategory_code', 'channelcode'],
                         filter: [
                             {
                                 "name": "filter",
@@ -2259,9 +2284,9 @@ define(function () {
                                     chart: {
                                         type: "column",
                                         events: {
-                                            load: function(event) {
+                                            load: function (event) {
                                                 if (this.options.chart.forExport) {
-                                                    this.xAxis[0].update ({
+                                                    this.xAxis[0].update({
                                                         categories: this.xAxis[0].categories,
                                                         labels: {
                                                             style: {
@@ -2285,10 +2310,10 @@ define(function () {
                                             }
                                         }
                                     },
-                                    exporting:{
-                                        chartOptions:{
-                                            legend:{
-                                                enabled:true
+                                    exporting: {
+                                        chartOptions: {
+                                            legend: {
+                                                enabled: true
                                             }
                                         }
                                     },
@@ -2296,9 +2321,9 @@ define(function () {
                                         enabled: true
                                     },
                                     tooltip: {
-                                        useHTML:true,
-                                        formatter: function(){
-                                            return '<div style="width: 200px; white-space:normal"><b>' +this.x + ': ' + '</b><br/>' +
+                                        useHTML: true,
+                                        formatter: function () {
+                                            return '<div style="width: 200px; white-space:normal"><b>' + this.x + ': ' + '</b><br/>' +
                                                 Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil' + '</div>';
                                         }
                                     },
@@ -2412,26 +2437,26 @@ define(function () {
                                     chart: {
                                         type: "column",
                                         events: {
-                                            load: function(event) {
+                                            load: function (event) {
                                                 if (this.options.chart.forExport) {
-                                                    this.xAxis[0].update ({
+                                                    this.xAxis[0].update({
                                                         categories: this.xAxis[0].categories,
                                                         labels: {
                                                             //useHTML: true,
-                                                           // formatter: function() {
-                                                              //  return '<span style="font-size:5px;">'+this.value +'</span>';
-                                                           // }
-                                                            style:{
-                                                               fontSize: '6px'//,
-                                                              //  width:'80px'
-                                                           }
-                                                           // rotation: 0//,
+                                                            // formatter: function() {
+                                                            //  return '<span style="font-size:5px;">'+this.value +'</span>';
+                                                            // }
+                                                            style: {
+                                                                fontSize: '6px'//,
+                                                                //  width:'80px'
+                                                            }
+                                                            // rotation: 0//,
                                                             // style:{
                                                             //   width:'100px',
                                                             //  fontSize: '6px'
                                                             // }
                                                         }
-                                                   }, false);
+                                                    }, false);
 
                                                     Highcharts.each(this.series, function (series) {
                                                         series.update({
@@ -2448,10 +2473,10 @@ define(function () {
                                             }
                                         }
                                     },
-                                    exporting:{
-                                        chartOptions:{
-                                            legend:{
-                                                enabled:true
+                                    exporting: {
+                                        chartOptions: {
+                                            legend: {
+                                                enabled: true
                                             }
                                         }
                                     },
@@ -2460,8 +2485,8 @@ define(function () {
                                     },
                                     xAxis: {
                                         labels: {
-                                            style:{
-                                                width:'80px'
+                                            style: {
+                                                width: '80px'
                                             },
                                             rotation: -45
                                         }
@@ -2472,8 +2497,8 @@ define(function () {
                                     //  }
                                     // },
                                     tooltip: {
-                                        formatter: function(){
-                                            return '<b>' +this.x + ': ' + '</b><br/>' +
+                                        formatter: function () {
+                                            return '<b>' + this.x + ': ' + '</b><br/>' +
                                                 Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
                                         }
                                     },
@@ -2577,8 +2602,8 @@ define(function () {
                                     subtitle: {
                                         text: '<b>Hover for values</b>'
                                     },
-                                    exporting:{
-                                        chartOptions:{
+                                    exporting: {
+                                        chartOptions: {
                                             title: {
                                                 text: ''
                                             },
@@ -2589,7 +2614,7 @@ define(function () {
                                                 //symbolPadding: 0,
                                                 //symbolWidth: 2,
                                                 useHTML: true,
-                                                labelFormatter: function() {
+                                                labelFormatter: function () {
                                                     var val = this.y;
                                                     if (val.toFixed(0) < 1) {
                                                         val = (val * 1000).toFixed(2) + ' K'
@@ -2597,7 +2622,7 @@ define(function () {
                                                         val = val.toFixed(2) + ' USD Mil'
                                                     }
 
-                                                    return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() +': '+ this.percentage.toFixed(2) + '% ('+ val+ ')</span></div>';
+                                                    return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() + ': ' + this.percentage.toFixed(2) + '% (' + val + ')</span></div>';
 
                                                     // return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() +': '+ Highcharts.numberFormat(this.percentage, 2) + '% (' + Highcharts.numberFormat(this.y, 2)+ ' USD Mil)</b></span></div>';
                                                 }
@@ -2619,8 +2644,8 @@ define(function () {
                                         align: 'center',
                                         verticalAlign: 'bottom',
                                         layout: 'horizontal',
-                                        x:0,
-                                        y:0//,
+                                        x: 0,
+                                        y: 0//,
                                         /**itemStyle: {
                                             width: 250
                                         },**/
@@ -2636,7 +2661,7 @@ define(function () {
                                                 val = val.toFixed(2) + ' USD Mil'
                                             }
 
-                                            return '<b>'+this.percentage.toFixed(2) + '% ('+ val+ ')</b>';
+                                            return '<b>' + this.percentage.toFixed(2) + '% (' + val + ')</b>';
                                         }
                                     },
                                     plotOptions: {
@@ -2647,10 +2672,10 @@ define(function () {
                                                 style: {
                                                     width: '200px'
                                                 },
-                                                formatter: function(){
-                                                    return '<div>' + this.point.name + ' '+
+                                                formatter: function () {
+                                                    return '<div>' + this.point.name + ' ' +
                                                         Math.round(this.point.percentage)
-                                                        +'% </div>';
+                                                        + '% </div>';
                                                 },
                                                 enabled: false
                                             },
@@ -2750,9 +2775,9 @@ define(function () {
                                     chart: {
                                         type: "column",
                                         events: {
-                                            load: function(event) {
+                                            load: function (event) {
                                                 if (this.options.chart.forExport) {
-                                                    this.xAxis[0].update ({
+                                                    this.xAxis[0].update({
                                                         categories: this.xAxis[0].categories,
                                                         labels: {
                                                             style: {
@@ -2776,14 +2801,14 @@ define(function () {
                                             }
                                         }
                                     },
-                                    exporting:{
-                                        chartOptions:{
-                                            legend:{
-                                                enabled:true
+                                    exporting: {
+                                        chartOptions: {
+                                            legend: {
+                                                enabled: true
                                             }
                                         }
                                     },
-                                   /** legend: {
+                                    /** legend: {
                                         enabled: true,
                                         align: 'center',
                                         verticalAlign: 'bottom',
@@ -2794,9 +2819,9 @@ define(function () {
                                     },**/
 
                                     tooltip: {
-                                        useHTML:true,
-                                        formatter: function(){
-                                            return '<div style="width: 200px; white-space:normal"><b>' +this.x + ': ' + '</b><br/>' +
+                                        useHTML: true,
+                                        formatter: function () {
+                                            return '<div style="width: 200px; white-space:normal"><b>' + this.x + ': ' + '</b><br/>' +
                                                 Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil' + '</div>';
                                         }
                                     },
@@ -2904,18 +2929,18 @@ define(function () {
                                             dataLabels: {
                                                 enabled: true,
                                                 color: 'white',
-                                                formatter: function(){   // display label in stack if value > 0%
-                                                    var percent =  Math.round(this.point.percentage);
-                                                    if(percent > 0)
+                                                formatter: function () {   // display label in stack if value > 0%
+                                                    var percent = Math.round(this.point.percentage);
+                                                    if (percent > 0)
                                                         return Math.round(this.point.percentage) + '%';
                                                 }
                                             }
                                         }
                                     },
-                                    exporting:{
-                                        chartOptions:{
-                                            legend:{
-                                                enabled:true
+                                    exporting: {
+                                        chartOptions: {
+                                            legend: {
+                                                enabled: true
                                             }
                                         }
                                     },
@@ -2935,9 +2960,9 @@ define(function () {
                                         }
                                     },
                                     tooltip: {
-                                        formatter: function(){
-                                            return '<b>' +this.series.name +' - ' +this.x +':' + '</b><br/>'  +' <b>'+   Highcharts.numberFormat(this.point.percentage, 2) + '% </b>'+
-                                                ' ('+ Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil)'
+                                        formatter: function () {
+                                            return '<b>' + this.series.name + ' - ' + this.x + ':' + '</b><br/>' + ' <b>' + Highcharts.numberFormat(this.point.percentage, 2) + '% </b>' +
+                                                ' (' + Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil)'
                                         }
                                     }
                                 }
@@ -3184,8 +3209,8 @@ define(function () {
                                 "filter": {
                                     "uid": "crs_dac",
                                     "version": "2016",
-                                    "level" : 1,
-                                    "levels":3
+                                    "level": 1,
+                                    "levels": 3
                                 }
                             },
                             creator: {
@@ -3220,8 +3245,8 @@ define(function () {
                                 "filter": {
                                     "uid": "crs_dac",
                                     "version": "2016",
-                                    "level" : 3,
-                                    "levels":3
+                                    "level": 3,
+                                    "levels": 3
                                 }
                             },
                             creator: {
@@ -3244,8 +3269,8 @@ define(function () {
                             "lang": "EN",
                             "title": {"EN": "Year"},
                             "config": {
-                                "from" : {
-                                    "title":  {"EN": "From"},
+                                "from": {
+                                    "title": {"EN": "From"},
                                     "defaultsource": [
                                         {"value": "2000", "label": "2000", "selected": true},
                                         {"value": "2001", "label": "2001", "selected": false},
@@ -3264,8 +3289,8 @@ define(function () {
                                         {"value": "2014", "label": "2014", "selected": false}
                                     ]
                                 },
-                                "to" : {
-                                    "title":  {"EN": "To"},
+                                "to": {
+                                    "title": {"EN": "To"},
                                     "defaultsource": [
                                         {"value": "2014", "label": "2014", "selected": true},
                                         {"value": "2013", "label": "2013", "selected": false},
@@ -3310,8 +3335,8 @@ define(function () {
                                 "filter": {
                                     "uid": "crs_channels",
                                     "version": "2016",
-                                    "level" : 2,
-                                    "levels":3
+                                    "level": 2,
+                                    "levels": 3
                                 }
                             },
                             creator: {
@@ -3343,8 +3368,8 @@ define(function () {
                                 "filter": {
                                     "uid": "crs_channels",
                                     "version": "2016",
-                                    "level" : 3,
-                                    "levels":3
+                                    "level": 3,
+                                    "levels": 3
                                 }
                             },
                             creator: {
@@ -3358,9 +3383,9 @@ define(function () {
                     "type": "codelist",
                     "containerType": "baseContainer",
                     "title": "ODA",
-                    "icon" : {
-                        "class" : "fa fa-info-circle",
-                        "tooltip" : "Official Development Assistance - Grants, Grant-Like, Loans and Equity Investment"
+                    "icon": {
+                        "class": "fa fa-info-circle",
+                        "tooltip": "Official Development Assistance - Grants, Grant-Like, Loans and Equity Investment"
                     },
                     "module_class": "fx-filter-grid-module",
                     "class": "col-md-3 col-lg-2",
@@ -3443,10 +3468,10 @@ define(function () {
                                             }
                                         }
                                     },
-                                    exporting:{
-                                        chartOptions:{
-                                            legend:{
-                                                enabled:true
+                                    exporting: {
+                                        chartOptions: {
+                                            legend: {
+                                                enabled: true
                                             }
                                         }
                                     },
@@ -3454,16 +3479,16 @@ define(function () {
                                         align: 'center',
                                         verticalAlign: 'bottom',
                                         layout: 'horizontal',
-                                        x:0,
-                                        y:0
+                                        x: 0,
+                                        y: 0
                                     },
-                                    xAxis : {
+                                    xAxis: {
                                         type: 'datetime'
                                     },
                                     tooltip: {
-                                        formatter: function(){
-                                            return '<b>' +this.x + ': ' +
-                                                this.series.name +  '</b><br/>' +
+                                        formatter: function () {
+                                            return '<b>' + this.x + ': ' +
+                                                this.series.name + '</b><br/>' +
                                                 Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
                                         }
                                     }
@@ -3514,7 +3539,7 @@ define(function () {
                                 "name": "pggroup",
                                 "parameters": {
                                     "by": [
-                                       "year"
+                                        "year"
                                     ],
                                     "aggregations": [
                                         {
@@ -3565,13 +3590,13 @@ define(function () {
                                     chart: {
                                         type: "column",
                                         events: {
-                                            load: function(event) {
+                                            load: function (event) {
                                                 if (this.options.chart.forExport) {
-                                                    this.xAxis[0].update ({
+                                                    this.xAxis[0].update({
                                                         categories: this.xAxis[0].categories,
                                                         labels: {
-                                                            style:{
-                                                                width:'80px',
+                                                            style: {
+                                                                width: '80px',
                                                                 fontSize: '6px'
                                                             }
                                                         }
@@ -3592,15 +3617,15 @@ define(function () {
                                             }
                                         }
                                     },
-                                    exporting:{
-                                        chartOptions:{
-                                            legend:{
-                                                enabled:true
+                                    exporting: {
+                                        chartOptions: {
+                                            legend: {
+                                                enabled: true
                                             },
                                             xAxis: {
                                                 labels: {
-                                                    style:{
-                                                        width:'80px'
+                                                    style: {
+                                                        width: '80px'
                                                     }
                                                 }
                                             }
@@ -3611,10 +3636,10 @@ define(function () {
                                     },
                                     xAxis: {
                                         labels: {
-                                            style:{
-                                                width:'80px'
+                                            style: {
+                                                width: '80px'
                                             },
-                                           rotation: -45
+                                            rotation: -45
                                         }
                                     },
                                     // plotOptions: {
@@ -3623,8 +3648,8 @@ define(function () {
                                     //  }
                                     // },
                                     tooltip: {
-                                        formatter: function(){
-                                            return '<b>' +this.x + ': ' + '</b><br/>' +
+                                        formatter: function () {
+                                            return '<b>' + this.x + ': ' + '</b><br/>' +
                                                 Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
                                         }
                                     },
@@ -3739,8 +3764,8 @@ define(function () {
                                     subtitle: {
                                         text: '<b>Hover for values</b>'
                                     },
-                                    exporting:{
-                                        chartOptions:{
+                                    exporting: {
+                                        chartOptions: {
                                             title: {
                                                 text: ''
                                             },
@@ -3751,7 +3776,7 @@ define(function () {
                                                 //symbolPadding: 0,
                                                 //symbolWidth: 2,
                                                 useHTML: true,
-                                                labelFormatter: function() {
+                                                labelFormatter: function () {
                                                     var val = this.y;
                                                     if (val.toFixed(0) < 1) {
                                                         val = (val * 1000).toFixed(2) + ' K'
@@ -3759,7 +3784,7 @@ define(function () {
                                                         val = val.toFixed(2) + ' USD Mil'
                                                     }
 
-                                                    return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() +': '+ this.percentage.toFixed(2) + '% ('+ val+ ')</span></div>';
+                                                    return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() + ': ' + this.percentage.toFixed(2) + '% (' + val + ')</span></div>';
 
                                                     // return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() +': '+ Highcharts.numberFormat(this.percentage, 2) + '% (' + Highcharts.numberFormat(this.y, 2)+ ' USD Mil)</b></span></div>';
                                                 }
@@ -3781,8 +3806,8 @@ define(function () {
                                         align: 'center',
                                         verticalAlign: 'bottom',
                                         layout: 'horizontal',
-                                        x:0,
-                                        y:0//,
+                                        x: 0,
+                                        y: 0//,
                                         /**itemStyle: {
                                             width: 250
                                         },**/
@@ -3798,13 +3823,13 @@ define(function () {
                                                 val = val.toFixed(2) + ' USD Mil'
                                             }
 
-                                            return '<b>'+this.percentage.toFixed(2) + '% ('+ val+ ')</b>';
+                                            return '<b>' + this.percentage.toFixed(2) + '% (' + val + ')</b>';
                                         }
                                     },
-                                   // tooltip: {
-                                      //  style: {width: '200px', whiteSpace: 'normal'},
-                                      //  pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>'
-                                  //  },
+                                    // tooltip: {
+                                    //  style: {width: '200px', whiteSpace: 'normal'},
+                                    //  pointFormat: '<b>{point.percentage:.2f}% ({point.y:.2f} USD Mil)</b>'
+                                    //  },
                                     plotOptions: {
                                         pie: {
                                             allowPointSelect: true,
@@ -3813,10 +3838,10 @@ define(function () {
                                                 style: {
                                                     width: '200px'
                                                 },
-                                                formatter: function(){
-                                                    return '<div>' + this.point.name + ' '+
+                                                formatter: function () {
+                                                    return '<div>' + this.point.name + ' ' +
                                                         Math.round(this.point.percentage)
-                                                        +'% </div>';
+                                                        + '% </div>';
                                                 },
                                                 enabled: false
                                             },
@@ -3917,7 +3942,7 @@ define(function () {
                                 yDimensions: 'unitname',
                                 valueDimensions: 'value',
                                 seriesDimensions: ['flowcategory'],
-                                sort:false
+                                sort: false
                             },
                             template: {
                                 //"title": "Top 25..."
@@ -3927,9 +3952,9 @@ define(function () {
                                     chart: {
                                         type: "column",
                                         events: {
-                                            load: function(event) {
+                                            load: function (event) {
                                                 if (this.options.chart.forExport) {
-                                                    this.xAxis[0].update ({
+                                                    this.xAxis[0].update({
                                                         categories: this.xAxis[0].categories,
                                                         labels: {
                                                             style: {
@@ -3953,14 +3978,14 @@ define(function () {
                                             }
                                         }
                                     },
-                                    exporting:{
-                                        chartOptions:{
-                                            legend:{
-                                                enabled:true
+                                    exporting: {
+                                        chartOptions: {
+                                            legend: {
+                                                enabled: true
                                             }
                                         }
                                     },
-                                  /**  legend: {
+                                    /**  legend: {
                                         enabled: true,
                                         align: 'center',
                                         verticalAlign: 'bottom',
@@ -3969,9 +3994,9 @@ define(function () {
                                         y:0
                                     },**/
                                     tooltip: {
-                                        useHTML:true,
-                                        formatter: function(){
-                                            return '<div style="width: 200px; white-space:normal"><b>' +this.x + ': ' + '</b><br/>' +
+                                        useHTML: true,
+                                        formatter: function () {
+                                            return '<div style="width: 200px; white-space:normal"><b>' + this.x + ': ' + '</b><br/>' +
                                                 Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil' + '</div>';
                                         }
                                     },
@@ -4067,7 +4092,6 @@ define(function () {
         }
 
     }
-
 
 
 });
