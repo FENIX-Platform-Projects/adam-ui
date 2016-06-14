@@ -8,34 +8,34 @@ define(function () {
         chart: {
             spacing: [10, 10, 15, 10], // better spacing when chart exports
 
-                events: {
-                    load: function (event) {
-                        if (this.options.chart.forExport) {
-                            this.xAxis[0].update ({
-                                categories: this.xAxis[0].categories,
-                                labels: {
+            events: {
+                load: function (event) {
+                    if (this.options.chart.forExport) {
+                        this.xAxis[0].update({
+                            categories: this.xAxis[0].categories,
+                            labels: {
+                                style: {
+                                    width: '50px',
+                                    fontSize: '6px'
+                                },
+                                step: 1
+                            }
+                        }, false);
+
+                        Highcharts.each(this.series, function (series) {
+                            series.update({
+                                dataLabels: {
+                                    enabled: true,
                                     style: {
-                                        width: '50px',
                                         fontSize: '6px'
-                                    },
-                                    step: 1
+                                    }
                                 }
                             }, false);
-
-                            Highcharts.each(this.series, function (series) {
-                                series.update({
-                                    dataLabels: {
-                                        enabled: true,
-                                        style: {
-                                            fontSize: '6px'
-                                        }
-                                    }
-                                }, false);
-                            });
-                            this.redraw();
-                        }
+                        });
+                        this.redraw();
                     }
                 }
+            }
 
         },
 
@@ -49,43 +49,30 @@ define(function () {
             href: ''
         },
 
-        lang: {
-            doptions: "Chart Download options"
-        },
 
         exporting: {
-           // credits: {
-             //   enabled: true,
-              //  position: {
-               //     align: 'left',
-                //    x: 10,
-                //    y:30,
-                //    verticalAlign: 'top'
-                //},
-               // text: 'Source: OECD',
-               // href: ''
-           // },
             buttons: {
                 contextButton: {
-                    _titleKey:"doptions",
-                    text: 'Download'//,
-                   // menuItems: [{
-                   //    textKey: 'downloadPNG',
+                    _titleKey: "doptions",
+                    text: "Download"//,
+                    // menuItems: [{
+                    //    textKey: 'downloadPNG',
                     //    onclick: function () {
                     //        this.exportChart();
                     //    }
-                   // }, {
-                     //   textKey: 'downloadJPEG',
-                      //  onclick: function () {
-                      //      this.exportChart({
-                       //         type: 'image/jpeg'
-                        //    });
-                      // }
-                  // }]
+                    // }, {
+                    //   textKey: 'downloadJPEG',
+                    //  onclick: function () {
+                    //      this.exportChart({
+                    //         type: 'image/jpeg'
+                    //    });
+                    // }
+                    // }]
                 }
-              },
+            },
 
-            chartOptions:{
+
+            chartOptions: {
 
                 xAxis: {
                     labels: {
@@ -107,46 +94,46 @@ define(function () {
                         }
                     }
                 },
-                title:{
+                title: {
                     style: {
                         fontSize: '8px',
                         fontWeight: 'bold'
                     }
                 },
-                subtitle:{
+                subtitle: {
                     style: {
                         fontSize: '8px'
                     }
                 },
-                credits:{
+                credits: {
                     style: {
                         fontSize: '6px'
                     }
                 },
-                legend:{
-                    enabled:false//, only one series and all info in title and subtitle
-                },
-                plotOptions: {
-                    plotOptions: {
-                        series: {
-                            dataLabels: {
-                                enabled: true
-                            }
-                        }
-                    }//,
-                   // column :{
-                       // dataLabels: {
-                         //   enabled: true
-                       // }
-                   // }
+                legend: {
+                    enabled: false//, only one series and all info in title and subtitle
                 }
+
             }
 
-          },
+        },
 
-         legend: {
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false
+                },
+                showInLegend: true // shows legend for pie
+            }
+        },
+        legend: {
             title: {
                 text: 'Click to hide/show'
+            },
+            itemStyle: {
+                fontSize: '12px'
             }
         },
 
@@ -162,9 +149,9 @@ define(function () {
             }
         },
         tooltip: {
-            formatter: function(){
-                return '<b>' +this.x + ': ' +
-                    this.series.name +  '</b><br/>' +
+            formatter: function () {
+                return '<b>' + this.x + ': ' +
+                    this.series.name + '</b><br/>' +
                     Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
             }
         }
