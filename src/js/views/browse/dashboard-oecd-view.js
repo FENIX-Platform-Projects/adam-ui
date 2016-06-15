@@ -331,8 +331,8 @@ define([
         },
 
         rebuildDashboard: function (filter) {
-            //console.log("rebuild", filter);
-            //console.log("rebuild",  this.dashboards);
+            console.log("rebuild", filter);
+            console.log("rebuild",  this.dashboards);
           //  if (this.browseDashboard && this.browseDashboard.destroy) {
             //    this.browseDashboard.destroy();
            // }
@@ -348,7 +348,7 @@ define([
                // console.log(dashboard);
                // console.log($.isFunction(dashboard.refresh)
                 if (dashboard && $.isFunction(dashboard.refresh)) {
-                   // console.log("REFRESH");
+                    console.log("REFRESH");
                     dashboard.refresh(filter);
                 }
             }, this));
