@@ -13785,7 +13785,7 @@ footer h4 {
   text-indent: -.7em;
   line-height: 20px; }
 .custom-list-content li:before {
-  content: "ÔÇó";
+  content: "•";
   color: #2686ba;
   /* or whatever color you prefer */
   position: relative;
