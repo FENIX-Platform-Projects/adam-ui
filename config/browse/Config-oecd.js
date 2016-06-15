@@ -158,7 +158,7 @@ define(function () {
 
                         filter: { //FX-filter format
                             parentsector_code: ["600"],
-                           // year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
+                            year: [{value: "2000", parent: "from"}, {value: "2014", parent:  "to"}]
                         },
 
                         postProcess: [
@@ -197,11 +197,11 @@ define(function () {
                         config: {
                             type: "venn",
                             renderer: "jvenn",
-                            x: ["donorcode"], //x axis and series
-                            series: ["recipientcode"], // series
-                            y: ["value"],//Y dimension
+                            x: ["donorname"], //x axis and series
+                            series: ["recipientname"], // series
+                            y: ["donorname"],//Y dimension
                             aggregationFn: {"value": "sum"},
-                            useDimensionLabelsIfExist: true,// || default raw else fenixtool
+                            useDimensionLabelsIfExist: false,// || default raw else fenixtool
                             // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
 
                         },
@@ -214,7 +214,7 @@ define(function () {
                                 "name": "group",
                                 "parameters": {
                                     "by": [
-                                        "recipientcode", "donorcode"
+                                        "recipientname", "donorname"
                                     ],
                                     "aggregations": [
                                         {
@@ -235,14 +235,14 @@ define(function () {
                             {
                                 "name": "select",
                                 "parameters": {
-                                    "query": "WHERE recipientcode<>?",
+                                    "query": "WHERE recipientname<>?",
                                     "queryParameters": [{"value": "NA"}]
                                 }
                             },
                             {
                                 "name": "order",
                                 "parameters": {
-                                    "recipientcode": "DESC"
+                                    "recipientname": "DESC"
                                 }
                             }
                            ]
