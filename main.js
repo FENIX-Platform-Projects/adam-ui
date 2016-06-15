@@ -124,6 +124,7 @@ require([
                     text: '{FENIX_CDN}/js/requirejs/plugins/text/2.0.12/text',
                     rsvp: '{FENIX_CDN}/js/rsvp/3.0.17/rsvp',
                     "bootstrap-list-filter": '{FENIX_CDN}/js/bootstrap-list-filter/0.2.1/bootstrap-list-filter.min',
+                    select2: '{FENIX_CDN}/js/select2/3.5.4/select2.min',
 
                     //Threejs
                     copyShader: "{FENIX_CDN}/js/threejs/4.4/CopyShader",
