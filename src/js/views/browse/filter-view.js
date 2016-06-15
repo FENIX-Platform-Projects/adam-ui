@@ -219,7 +219,7 @@ define(
                     }
                 }
 
-                amplify.publish(s.events.FILTER_ON_CHANGE, payload);
+                amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
 
                //self._onChangeEvent2(payload);
             });
@@ -1230,6 +1230,9 @@ define(
         },
 
         _unbindEventListeners: function () {
+
+
+
             // Remove listeners
             for(var idx in this.config) {
                 //amplify.unsubscribe(s.events.LIST_CHANGE + this.config[idx].components[0].name, this._onChangeEvent);
