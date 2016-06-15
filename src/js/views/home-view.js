@@ -35,11 +35,23 @@ define([
 
         },
 
+        dispose: function () {
+
+            this.unbindEventListeners();
+
+            View.prototype.dispose.call(this, arguments);
+        },
+
+        unbindEventListeners: function () {
+
+            this.$el.find(s.DROPDOWN_CONTAINER).select2().off('change');
+        },
+
         _renderComponents: function () {
 
             this._renderDropdown();
 
-            this._renderMap();
+          //  this._renderMap();
         },
 
         _renderDropdown : function () {
