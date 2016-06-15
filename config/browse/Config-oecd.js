@@ -137,7 +137,7 @@ define(function () {
                 uid: "adam_usd_commitment",
 
                 items: [
-                  {
+                 {
                         id: "tot-oda", //ref [data-item=':id']
                         type: "chart", //chart || map || olap,
                         config: {
@@ -158,12 +158,12 @@ define(function () {
 
                         filter: { //FX-filter format
                             parentsector_code: ["600"],
-                            year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
+                           // year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
                         },
 
                         postProcess: [
                             {
-                                "name": "pggroup",
+                                "name": "group",
                                 "parameters": {
                                     "by": [
                                         "year"
@@ -175,11 +175,11 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitcode"],
-                                            "rule": "pgfirst"
+                                            "rule": "first"
                                         },
                                         {
                                             "columns": ["flowcategory"],
-                                            "rule": "pgfirst"
+                                            "rule": "first"
                                         }
                                     ]
                                 }
@@ -192,32 +192,29 @@ define(function () {
                             }]
                     },
                     {
-                        id: 'top-partners', // TOP DONORS
+                        id: 'test-venn', // VENN TEST
                         type: 'chart',
                         config: {
-                            type: "column",
-                            x: ["donorcode"], //x axis
-                            series: ["flowcategory"], // series
+                            type: "venn",
+                            renderer: "jvenn",
+                            x: ["donorcode"], //x axis and series
+                            series: ["recipientcode"], // series
                             y: ["value"],//Y dimension
                             aggregationFn: {"value": "sum"},
                             useDimensionLabelsIfExist: true,// || default raw else fenixtool
-
                             // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
-                            config: {
-                                colors: ['#008080']
-                            }
+
                         },
                         filter: { //FX-filter format
-                            parentsector_code: ["600"],
-                            year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
-
+                           recipientname: ['Afghanistan', 'Bangladesh', 'Belize'],
+                            year : [2014]
                         },
                         postProcess: [
                             {
-                                "name": "pggroup",
+                                "name": "group",
                                 "parameters": {
                                     "by": [
-                                        "donorcode"
+                                        "recipientcode", "donorcode"
                                     ],
                                     "aggregations": [
                                         {
@@ -226,70 +223,11 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitcode"],
-                                            "rule": "pgfirst"
+                                            "rule": "first"
                                         },
                                         {
                                             "columns": ["flowcategory"],
-                                            "rule": "pgfirst"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                "name": "order",
-                                "parameters": {
-                                    "value": "DESC"
-                                }
-                            },
-                            {
-                                "name": "page",
-                                "parameters": {
-                                    "perPage": 10,  //top 10
-                                    "page": 1
-                                }
-                            }]
-                    },
-                    {
-                        id: 'top-recipients', // TOP RECIPIENTS
-                        type: 'chart',
-                        config: {
-                            type: "column",
-                            x: ["recipientcode"], //x axis
-                            series: ["flowcategory"], // series
-                            y: ["value"],//Y dimension
-                            aggregationFn: {"value": "sum"},
-                            useDimensionLabelsIfExist: true,// || default raw else fenixtool
-
-                            // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
-                            config: {
-                                colors: ['#5DA58D']
-                            }
-
-                        },
-                        filter: { //FX-filter format
-                            parentsector_code: ["600"],
-                            year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
-
-                        },
-                        postProcess: [
-                            {
-                                "name": "pggroup",
-                                "parameters": {
-                                    "by": [
-                                        "recipientcode"
-                                    ],
-                                    "aggregations": [
-                                        {
-                                            "columns": ["value"],
-                                            "rule": "SUM"
-                                        },
-                                        {
-                                            "columns": ["unitcode"],
-                                            "rule": "pgfirst"
-                                        },
-                                        {
-                                            "columns": ["flowcategory"],
-                                            "rule": "pgfirst"
+                                            "rule": "first"
                                         }
                                     ]
                                 }
@@ -297,318 +235,14 @@ define(function () {
                             {
                                 "name": "select",
                                 "parameters": {
-                                    "query": "WHERE recipientcode NOT IN (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", // skipping regional recipient countries (e.g. "Africa, regional"; "North of Sahara, regional")
-                                    "queryParameters": [
-                                        {"value": '298'}, {"value": '498'}, {"value": '798'}, {"value": '89'},
-                                        {"value": '589'}, {"value": '889'}, {"value": '189'}, {"value": '289'},
-                                        {"value": '389'}, {"value": '380'}, {"value": '489'}, {"value": '789'},
-                                        {"value": '689'}, {"value": '619'}, {"value": '679'}
-                                    ]
+                                    "query": "WHERE recipientcode<>?",
+                                    "queryParameters": [{"value": "NA"}]
                                 }
                             },
                             {
                                 "name": "order",
                                 "parameters": {
-                                    "value": "DESC"
-                                }
-                            },
-                            {
-                                "name": "page",
-                                "parameters": {
-                                    "perPage": 10,  //top 10
-                                    "page": 1
-                                }
-                            }]
-                    },
-                    {
-                        id: 'top-channels', // TOP CHANNELS OF DELIVERY
-                        type: 'chart',
-                        config: {
-                            type: "column",
-                            x: ["channelsubcategory_code"], //x axis
-                            series: ["flowcategory"], // series
-                            y: ["value"],//Y dimension
-                            aggregationFn: {"value": "sum"},
-                            useDimensionLabelsIfExist: true,// || default raw else fenixtool
-
-                            // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
-                            config: {
-                                colors: ['#56adc3']
-                            }
-
-                        },
-                        filter: { //FX-filter format
-                            parentsector_code: ["600"],
-                            year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
-                        },
-                        postProcess: [
-                            {
-                                "name": "pggroup",
-                                "parameters": {
-                                    "by": [
-                                        "channelsubcategory_code"
-                                    ],
-                                    "aggregations": [
-                                        {
-                                            "columns": ["value"],
-                                            "rule": "SUM"
-                                        },
-                                        {
-                                            "columns": ["unitcode"],
-                                            "rule": "pgfirst"
-                                        },
-                                        {
-                                            "columns": ["flowcategory"],
-                                            "rule": "pgfirst"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                "name": "order",
-                                "parameters": {
-                                    "value": "DESC"
-                                }
-                            },
-                            {
-                                "name": "page",
-                                "parameters": {
-                                    "perPage": 10,  //top 10
-                                    "page": 1
-                                }
-                            }]
-                    },
-
-                    {
-                        id: 'top-subsectors', // TOP SUB SECTORS
-                        type: 'chart',
-                        config: {
-                            type: "pie",
-                            x: ["purposecode"], //x axis and series
-                            series: ["flowcategory"], // series
-                            y: ["value"],//Y dimension
-                            aggregationFn: {"value": "sum"},
-                            useDimensionLabelsIfExist: true,// || default raw else fenixtool
-
-                            // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
-                            config: {
-                                chart: {
-                                    events: {
-                                        load: function (event) {
-                                            if (this.options.chart.forExport) {
-                                                Highcharts.each(this.series, function (series) {
-                                                    series.update({
-                                                        dataLabels: {
-                                                            enabled: false
-                                                        }
-                                                    }, false);
-                                                });
-                                                this.redraw();
-                                            }
-                                        }
-                                    }
-
-                                },
-                                tooltip: {
-                                    style: {width: '200px', whiteSpace: 'normal'},
-                                    formatter: function () {
-                                        var val = this.y;
-                                        if (val.toFixed(0) < 1) {
-                                            val = (val * 1000).toFixed(2) + ' K'
-                                        } else {
-                                            val = val.toFixed(2) + ' USD Mil'
-                                        }
-
-                                        return '<b>' + this.percentage.toFixed(2) + '% (' + val + ')</b>';
-                                    }
-                                },
-                                exporting: {
-                                    chartOptions: {
-                                        legend: {
-                                            title: '',
-                                            enabled: true,
-                                            align: 'center',
-                                            layout: 'vertical',
-                                            useHTML: true,
-                                            labelFormatter: function () {
-                                                var val = this.y;
-                                                if (val.toFixed(0) < 1) {
-                                                    val = (val * 1000).toFixed(2) + ' K'
-                                                } else {
-                                                    val = val.toFixed(2) + ' USD Mil'
-                                                }
-
-                                                return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() + ': ' + this.percentage.toFixed(2) + '% (' + val + ')</span></div>';
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                        },
-                        filter: { //FX-filter format
-                            parentsector_code: ["600"],
-                            year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
-
-                        },
-                        postProcess: [
-                            {
-                                "name": "pggroup",
-                                "parameters": {
-                                    "by": [
-                                        "purposecode"
-                                    ],
-                                    "aggregations": [
-                                        {
-                                            "columns": ["value"],
-                                            "rule": "SUM"
-                                        },
-                                        {
-                                            "columns": ["unitcode"],
-                                            "rule": "pgfirst"
-                                        },
-                                        {
-                                            "columns": ["flowcategory"],
-                                            "rule": "pgfirst"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                "name": "order",
-                                "parameters": {
-                                    "value": "DESC"
-                                }
-                            },
-                            {
-                                "name": "page",
-                                "parameters": {
-                                    "perPage": 10,  //top 10
-                                    "page": 1
-                                }
-                            }]
-                    },
-                    {
-                        id: 'oda-regional', // REGIONAL DISTRIBUTION
-                        type: 'chart',
-                        config: {
-                            type: "column",
-                            x: ["parentsector_code"], //x axis
-                            series: ["un_continent_code"], // series
-                            y: ["value"],//Y dimension
-                            aggregationFn: {"value": "sum"},
-                            useDimensionLabelsIfExist: true,// || default raw else fenixtool
-
-                            config: {
-                                chart: {
-                                  inverted: true
-                                },
-                                plotOptions: {
-                                    series: {
-                                        stacking: 'percent',
-                                        dataLabels: {
-                                            enabled: true,
-                                            color: 'white',
-                                            style :{
-                                                fontWeight: 'normal',
-                                                textShadow: '0'
-                                            },
-                                            formatter: function(){
-                                                var percent =  Math.round(this.point.percentage);
-                                                if(percent > 0)
-                                                    return Math.round(this.point.percentage) + '%';
-                                                else
-                                                    return this.point.percentage.toFixed(2) + '%';
-                                            }
-                                        }
-                                    },
-                                    column: {
-                                        minPointLength: 5
-                                    }
-                                },
-                                exporting:{
-                                    chartOptions:{
-                                        legend:{
-                                            title: '',
-                                            enabled:true,
-                                            itemStyle: {
-                                                fontSize:'9px',
-                                            },
-                                            useHTML: true,
-                                            labelFormatter: function () {
-                                                console.log(this.options);
-                                                console.log(this.options.dataLabels);
-
-                                               // var opts = JSON.parse(JSON.stringify(Object.keys(this.options)));
-                                              //  console.log(opts);
-
-                                              //  console.log(opts.dataLabels);
-
-                                              return '<div style="width:200px"><span style="float:left;  font-size:9px">'+ this.name +' (' + this.yData + ' USD Mil)</span></div>';
-                                            }
-                                        }
-                                    }
-                                },
-                                yAxis: {
-                                    min: 0,
-                                    title: {
-                                        text: '%',
-                                        align: 'high'
-                                    }
-                                },
-                                xAxis: {
-                                    labels: {
-                                        enabled: false
-                                    }
-                                },
-                                tooltip: {
-                                    formatter: function(){
-                                        return '<b>' +this.series.name + ':' + '</b><br/>'  +' <b>'+   Highcharts.numberFormat(this.point.percentage, 4) + '% </b>'+
-                                            ' ('+ Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil)'
-                                    }
-                                }
-                            }
-                            // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
-                        },
-                        filter: { //FX-filter format
-                            parentsector_code: ["600"],
-                            year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
-                        },
-
-                        postProcess: [
-                            {
-                                "name": "pggroup",
-                                "parameters": {
-                                    "by": [
-                                        "parentsector_code", "un_continent_code"
-                                    ],
-                                    "aggregations": [
-                                        {
-                                            "columns": ["value"],
-                                            "rule": "SUM"
-                                        },
-                                        {
-                                            "columns": ["unitcode"],
-                                            "rule": "pgfirst"
-                                        },
-                                        {
-                                            "columns": ["flowcategory"],
-                                            "rule": "pgfirst"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                "name": "select",
-                                "parameters": {
-                                    "query": "WHERE un_continent_code<>?",
-                                    "queryParameters": [{"value": ''}]
-                                }
-                            },
-                            {
-                                "name": "order",
-                                "parameters": {
-                                    "value": "DESC"
+                                    "recipientcode": "DESC"
                                 }
                             }
                            ]
@@ -644,12 +278,12 @@ define(function () {
 
                         filter: { //FX-filter format
                             parentsector_code: ["600"],
-                            year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
+                           // year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
 
                         },
                         postProcess: [
                             {
-                                "name": "pggroup",
+                                "name": "group",
                                 "parameters": {
                                     "by": [
                                         "gaul0"
@@ -661,11 +295,11 @@ define(function () {
                                         },
                                         {
                                             "columns": ["unitcode"],
-                                            "rule": "pgfirst"
+                                            "rule": "first"
                                         },
                                         {
                                             "columns": ["unitname"],
-                                            "rule": "pgfirst"
+                                            "rule": "first"
                                         }
                                     ]
                                 }
