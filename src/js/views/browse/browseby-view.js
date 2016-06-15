@@ -39,7 +39,6 @@ define([
             SUB_SECTORS_FILTER_READY: 'fx.filters.list.subsectors.ready',
             TIMERANGE_FILTER_READY: 'fx.filters.list.timerange.ready',
             COUNTRY_FILTER_READY: 'fx.filters.list.recipients.ready',
-            FILTER_ON_CHANGE: 'fx.filter.list.onchange',
             FILTER_ON_RESET: 'fx.filter.list.onreset'
         },
         topics: {
@@ -229,7 +228,7 @@ define([
             amplify.subscribe(s.events.COUNTRY_FILTER_READY, this, this._countryFilterLoaded);
 
 
-            amplify.subscribe(s.events.FILTER_ON_CHANGE, this, this._updateDashboard);
+            amplify.subscribe(BaseEvents.FILTER_ON_CHANGE, this, this._updateDashboard);
 
             amplify.subscribe(s.events.FILTER_ON_RESET, this, this._resetDashboard);
 
@@ -408,6 +407,8 @@ define([
         _unbindEventListeners: function () {
 
             amplify.unsubscribe(BaseEvents.FILTER_ON_READY, this._filtersLoaded);
+            amplify.unsubscribe(BaseEvents.FILTER_ON_CHANGE, this._updateDashboard);
+
 
             //==================================
           // Remove listeners
@@ -415,7 +416,7 @@ define([
             amplify.unsubscribe(s.events.SUB_SECTORS_FILTER_READY, this._subSectorFilterLoaded);
             amplify.unsubscribe(s.events.TIMERANGE_FILTER_READY, this._timerangeFilterLoaded);
             amplify.unsubscribe(s.events.COUNTRY_FILTER_READY, this._countryFilterLoaded);
-            amplify.unsubscribe(s.events.FILTER_ON_CHANGE, this._updateDashboard);
+
             amplify.unsubscribe(s.events.FILTER_ON_RESET, this._resetDashboard);
         },
 
