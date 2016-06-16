@@ -46,7 +46,7 @@ define(function () {
                         }
                     },
                     className: "col-sm-3",
-                    cl: {
+                    cl: { 
                         codes: ["60010", "60020", "60030", "60040", "60061", "60062", "60063"],
                         "uid": "crs_dac",
                         "version": "2016",
@@ -252,6 +252,7 @@ define(function () {
                         type: 'map',
                         config: {
                             geoSubject: 'gaul0',
+                            colorRamp: 'Reds',  //Blues, Greens, 
                             fenix_ui_map: {
 
                                 guiController: {
@@ -259,9 +260,9 @@ define(function () {
                                     baselayer: false,
                                     wmsLoader: false
                                 },
+
                                 baselayers: {
                                     "cartodb": {
-
                                         title_en: "CartoDB light",
                                         url: 'http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
                                         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
@@ -272,14 +273,16 @@ define(function () {
                                         // subdomains: 'abcd',
                                         // maxZoom: 19
                                     }
-                                }
+                                },
+                                labels: true,
+                                boundaries: true
+                                //highlightCountry: ['TCD','MLI','NER']
                             }
                         },
 
                         filter: { //FX-filter format
                             parentsector_code: ["600"],
                            // year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
-
                         },
                         postProcess: [
                             {
@@ -311,7 +314,7 @@ define(function () {
                                     "queryParameters": [{"value": "NA"}]
                                 }
                             }
-                        ]
+                        ]//*/
                     }
 
                 ]
