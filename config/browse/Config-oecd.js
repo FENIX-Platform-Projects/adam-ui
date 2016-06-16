@@ -253,6 +253,7 @@ define(function () {
                         config: {
                             geoSubject: 'gaul0',
                             colorRamp: 'Reds',  //Blues, Greens, 
+                            //colorRamp values: http://fenixrepo.fao.org/cdn/fenix/fenix-ui-map-datasets/colorramp.png
                             fenix_ui_map: {
 
                                 guiController: {
