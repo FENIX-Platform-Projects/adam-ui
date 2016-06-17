@@ -252,10 +252,10 @@ define(function () {
                         type: 'map',
                         config: {
                             geoSubject: 'gaul0',
-                            colorRamp: 'Reds',  //Blues, Greens, 
+                            colorRamp: 'GnBu',  //Blues, Greens,
                             //colorRamp values: http://fenixrepo.fao.org/cdn/fenix/fenix-ui-map-datasets/colorramp.png
                             
-                            legendtitle: 'OCD',
+                            legendtitle: 'ODA',
 
                             fenix_ui_map: {
 
@@ -268,7 +268,7 @@ define(function () {
                                 baselayers: {
                                     "cartodb": {
                                         title_en: "CartoDB light",
-                                        url: 'http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
+                                        url: 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
                                         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
                                         subdomains: 'abcd',
                                         maxZoom: 19
