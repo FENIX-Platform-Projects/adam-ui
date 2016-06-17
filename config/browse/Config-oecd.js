@@ -254,6 +254,9 @@ define(function () {
                             geoSubject: 'gaul0',
                             colorRamp: 'Reds',  //Blues, Greens, 
                             //colorRamp values: http://fenixrepo.fao.org/cdn/fenix/fenix-ui-map-datasets/colorramp.png
+                            
+                            legendtitle: 'OCD',
+
                             fenix_ui_map: {
 
                                 guiController: {
@@ -277,7 +280,6 @@ define(function () {
                                 },
                                 labels: true,
                                 boundaries: true
-                                //highlightCountry: ['TCD','MLI','NER']
                             }
                         },
 
