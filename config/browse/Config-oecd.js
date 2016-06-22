@@ -81,7 +81,6 @@ define(function () {
                         hideRemoveButton: true
                     }
                 },
-
                 "year-to": {
 
                     selector: {
@@ -108,7 +107,7 @@ define(function () {
                         hideRemoveButton: true
                     }
                 },
-                uid: {
+                oda: {
                     selector: {
                         id: "dropdown",
                         default: ['adam_usd_commitment'],
@@ -143,25 +142,118 @@ define(function () {
                         config: {
                             type: "line",
                             x: ["year"], //x axis
-                            series: ["flowcategory"], // series
+                            series: ["indicator"], // series
                             y: ["value"],//Y dimension
                             aggregationFn: {"value": "sum"},
-                            useDimensionLabelsIfExist: true,// || default raw else fenixtool
+                            useDimensionLabelsIfExist: false,// || default raw else fenixtool
 
-                            // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
                             config: {
                                 xAxis: {
                                     type: 'datetime'
+                                },
+                                yAxis: [{ //Primary Axis in default template
+                                },{ // Secondary Axis
+                                    gridLineWidth: 0,
+                                    title: {
+                                        text: '%'
+                                    },
+                                    opposite: true
+                                }],
+                                series: [{
+                                    name: '% SECTOR/TOTAL ODA',
+                                    yAxis: 1,
+                                    dashStyle: 'shortdot',
+                                    marker : {
+                                       radius: 3
+                                    }
+                                },
+                                    {
+                                        name: 'ODA SECTOR'//,
+                                       // type: 'column'
+                                    },
+                                    {
+                                        name: 'TOTAL ODA'//,
+                                       // type: 'column'
+                                    }],
+                                exporting: {
+                                    chartOptions: {
+                                        legend: {
+                                            enabled: true
+                                        }
+
+                                    }
                                 }
+
                             }
                         },
 
-                        filter: { //FX-filter format
-                            parentsector_code: ["600"],
-                            year: [{value: "2000", parent: "from"}, {value: "2014", parent:  "to"}]
+                        filterFor: {
+                            "filter_sector_oda": ['sectorcode', 'year-from', 'year-to', 'oda'],
+                            "filter_total_oda": ['year-from', 'year-to']
                         },
 
                         postProcess: [
+                            {
+                                "name": "union",
+                                "sid": [
+                                    {
+                                        "uid": "sector_oda"
+                                    },
+                                    {
+                                        "uid": "total_oda"
+                                    },
+                                    {
+                                        "uid": "percentage_ODA"
+                                    }
+                                ],
+                                "parameters": {
+                                },
+                                "rid": {
+                                    "uid": "union_process"
+                                }
+                            },
+                            {
+                                "name": "filter",
+                                "sid": [
+                                    {
+                                        "uid": "adam_usd_aggregation_table"
+                                    }
+                                ],
+                                "parameters": {
+                                    "columns": [
+                                        "year",
+                                        "value",
+                                        "unitcode"
+                                    ],
+                                    "rows": {
+                                        "oda": {
+                                            "enumeration": [
+                                                "usd_commitment"
+                                            ]
+                                        },
+                                        "sectorcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_sectors",
+                                                    "version": "2016",
+                                                    "codes": [
+                                                        "600"
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "year": {
+                                            "time": [
+                                                {
+                                                    "from": 2000,
+                                                    "to": 2014
+                                                }
+                                            ]
+                                        }
+                                    }
+                                },
+                                 rid: {uid: "filter_sector_oda"}
+                            },
                             {
                                 "name": "group",
                                 "parameters": {
@@ -170,28 +262,314 @@ define(function () {
                                     ],
                                     "aggregations": [
                                         {
-                                            "columns": ["value"],
+                                            "columns": [
+                                                "value"
+                                            ],
                                             "rule": "SUM"
                                         },
                                         {
-                                            "columns": ["unitcode"],
-                                            "rule": "first"
-                                        },
-                                        {
-                                            "columns": ["flowcategory"],
+                                            "columns": [
+                                                "unitcode"
+                                            ],
                                             "rule": "first"
                                         }
                                     ]
                                 }
                             },
                             {
-                                "name": "order",
+                                "name": "addcolumn",
                                 "parameters": {
-                                    "year": "ASC"
+                                    "column": {
+                                        "dataType": "text",
+                                        "id": "indicator",
+                                        "title": {
+                                            "EN": "Indicator"
+                                        },
+                                        "domain": {
+                                            "codes": [
+                                                {
+                                                    "extendedName": {
+                                                        "EN": "Adam Processes"
+                                                    },
+                                                    "idCodeList": "adam_processes"
+                                                }
+                                            ]
+                                        },
+                                        "subject": null
+                                    },
+                                    "value": "ODA SECTOR"
+                                },
+                                "rid": {
+                                    "uid": "sector_oda"
                                 }
-                            }]
-                    },
-                    {
+                            },
+                            {
+                                "name": "filter",
+                                "sid": [
+                                    {
+                                        "uid": "adam_usd_aggregation_table"
+                                    }
+                                ],
+                                "parameters": {
+                                    "columns": [
+                                        "year",
+                                        "value",
+                                        "unitcode"
+                                    ],
+                                    "rows": {
+                                        "oda": {
+                                            "enumeration": [
+                                                "usd_commitment"
+                                            ]
+                                        },
+                                        "sectorcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_sectors",
+                                                    "version": "2016",
+                                                    "codes": [
+                                                        "NA"
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "purposecode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_purposes",
+                                                    "version": "2016",
+                                                    "codes": [
+                                                        "NA"
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "donorcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_donors",
+                                                    "version": "2016",
+                                                    "codes": [
+                                                        "NA"
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "recipientcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_recipients",
+                                                    "version": "2016",
+                                                    "codes": [
+                                                        "NA"
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "year": {
+                                            "time": [
+                                                {
+                                                    "from": 2000,
+                                                    "to": 2014
+                                                }
+                                            ]
+                                        }
+                                    }
+                                },
+                                "rid": {
+                                    "uid": "filter_total_oda"
+                                }
+
+                            },
+                            {
+                                "name": "group",
+                                "parameters": {
+                                    "by": [
+                                        "year"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": [
+                                                "value"
+                                            ],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": [
+                                                "unitcode"
+                                            ],
+                                            "rule": "first"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "addcolumn",
+                                "parameters": {
+                                    "column": {
+                                        "dataType": "text",
+                                        "id": "indicator",
+                                        "title": {
+                                            "EN": "Indicator"
+                                        },
+                                        "domain": {
+                                            "codes": [
+                                                {
+                                                    "extendedName": {
+                                                        "EN": "Adam Processes"
+                                                    },
+                                                    "idCodeList": "adam_processes"
+                                                }
+                                            ]
+                                        },
+                                        "subject": null
+                                    },
+                                    "value": "TOTAL ODA"
+                                },
+                                "rid": {
+                                    "uid": "total_oda"
+                                }
+                            },
+                            {
+                                "name": "join",
+                                "sid": [
+                                    {
+                                        "uid": "sector_oda"
+                                    },
+                                    {
+                                        "uid": "total_oda"
+                                    }
+                                ],
+                                "parameters": {
+                                    "joins": [
+                                        [
+                                            {
+                                                "type": "id",
+                                                "value": "year"
+                                            }
+                                        ],
+                                        [
+                                            {
+                                                "type": "id",
+                                                "value": "year"
+                                            }
+                                        ]
+                                    ],
+                                    "values": [
+                                    ]
+                                },
+                                "rid": {
+                                    "uid": "join_process"
+                                }
+                            },
+                            {
+                                "name": "addcolumn",
+                                "sid": [
+                                    {
+                                        "uid": "join_process"
+                                    }
+                                ],
+                                "parameters": {
+                                    "column": {
+                                        "dataType": "number",
+                                        "id": "value",
+                                        "title": {
+                                            "EN": "Value"
+                                        },
+                                        "subject": null
+                                    },
+                                    "value": {
+                                        "keys":  ["1=1"],
+                                        "values":["(sector_oda_value/total_oda_value)*100"]
+                                    }
+                                },
+                                "rid": {
+                                    "uid": "percentage_Value"
+                                }
+                            },
+                            {
+                                "name": "filter",
+                                "parameters": {
+                                    "columns": [
+                                        "year",
+                                        "value"
+                                    ],
+                                    "rows": {}
+                                },
+                                "rid": {
+                                    "uid": "percentage_with_two_values"
+                                }
+                            },
+                            {
+                                "name": "addcolumn",
+                                "parameters": {
+                                    "column": {
+                                        "id": "unitcode",
+                                        "title": {
+                                            "EN": "Measurement Unit"
+                                        },
+                                        "domain": {
+                                            "codes": [
+                                                {
+                                                    "idCodeList": "crs_units",
+                                                    "version": "2016",
+                                                    "level": 1
+                                                }
+                                            ]
+                                        },
+                                        "dataType": "code",
+                                        "subject": "um"
+                                    },
+                                    "value": "percentage"
+                                }
+                            },
+                            {
+                                "name": "addcolumn",
+                                "parameters": {
+                                    "column": {
+                                        "dataType": "text",
+                                        "id": "unitcode_EN",
+                                        "title": {
+                                            "EN": "Measurement Unit_TEST"
+                                        },
+                                        "subject": null
+                                    },
+                                    "value": "%"
+                                },
+                                "rid": {
+                                    "uid": "percentage_withUM"
+                                }
+                            },
+                            {
+                                "name": "addcolumn",
+                                "parameters": {
+                                    "column": {
+                                        "dataType": "text",
+                                        "id": "indicator",
+                                        "title": {
+                                            "EN": "Indicator"
+                                        },
+                                        "domain": {
+                                            "codes": [
+                                                {
+                                                    "extendedName": {
+                                                        "EN": "Adam Processes"
+                                                    },
+                                                    "idCodeList": "adam_processes"
+                                                }
+                                            ]
+                                        },
+                                        "subject": null
+                                    },
+                                    "value": "% SECTOR/TOTAL ODA"
+                                },
+                                "rid": {
+                                    "uid": "percentage_ODA"
+                                }
+                            }
+                        ]
+                    }
+                   , {
                         id: 'test-venn', // VENN TEST
                         type: 'chart',
                         config: {
@@ -207,7 +585,7 @@ define(function () {
                         },
                         filter: { //FX-filter format
                            recipientname: ['Afghanistan', 'Bangladesh', 'Belize'],
-                            year : [2014]
+                           year : [2014]
                         },
                         postProcess: [
                             {
@@ -317,14 +695,14 @@ define(function () {
                                     "queryParameters": [{"value": "NA"}]
                                 }
                             }
-                        ]//*/
+                        ]//
                     }
 
                 ]
             }
         },
 /*
-        "country": {
+        "recipient": {
             dashboard: {
                 //default dataset id
                 uid: "browse-country",
