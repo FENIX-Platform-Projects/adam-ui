@@ -22,12 +22,32 @@ define(function () {
                             }
                         }, false);
 
+                        Highcharts.each(this.yAxis, function (y) {
+                            y.update({
+                                title: {
+                                    style: {
+                                        fontSize: '6px'
+                                    }
+                                },
+                                labels: {
+                                    style: {
+                                        fontSize: '6px'
+                                    }
+                                }
+                            }, false);
+                        });
+
                         Highcharts.each(this.series, function (series) {
                             series.update({
+                                marker : {
+                                    radius: 2
+                                },
                                 dataLabels: {
                                     enabled: true,
                                     style: {
-                                        fontSize: '6px'
+                                        fontSize: '6px',
+                                        color: series.color,
+                                        textShadow: 0
                                     }
                                 }
                             }, false);
@@ -51,6 +71,7 @@ define(function () {
 
 
         exporting: {
+            sourceWidth: 700,
             buttons: {
                 contextButton: {
                     _titleKey: "doptions",
@@ -111,10 +132,26 @@ define(function () {
                     }
                 },
                 legend: {
+                    title: {
+                        text: null
+                    },
+                    labelFormatter: function(){
+                        return '<span style="color:'+this.color+'">'+this.name+'</span>';
+                    },
+                    itemStyle: {
+                        fontSize: '6px',
+                        fontWeight: 'bold'
+                    },
                     enabled: false//, only one series and all info in title and subtitle
+                },
+                plotOptions: {
+                    series: {
+                        lineWidth: 1
+                    }
                 }
 
             }
+
 
         },
 
@@ -142,17 +179,25 @@ define(function () {
             x: -20
         },
 
-        yAxis: {
+        yAxis: [{ //Primary Axis
             title: {
-                enabled: true,
-                text: 'Million USD'
-            }
-        },
+               enabled: true,
+               text: 'USD Millions'
+             }
+        }],
+
+
         tooltip: {
             formatter: function () {
+                var unit = 'USD Mil';
+
+                if(this.series.name.contains('%'))
+                    unit = '%'
+
                 return '<b>' + this.x + ': ' +
                     this.series.name + '</b><br/>' +
-                    Highcharts.numberFormat(this.y, 2, '.', ',') + ' USD Mil'
+                    Highcharts.numberFormat(this.y, 2, '.', ',') + ' '+unit;
+
             }
         }
 
