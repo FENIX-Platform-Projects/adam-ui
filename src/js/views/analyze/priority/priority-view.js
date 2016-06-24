@@ -4,21 +4,18 @@ define([
     'jquery-ui',
     'views/base/view',
     'views/common/title-view',
-    'views/browse/filter-view',
-    'views/browse/dashboard-oecd-view',
-    //'views/browse/dashboard-indicators-view',
+    'views/analyze/priority/filter-view',
+    'views/analyze/priority/dashboard-view',
     'models/browse/dashboard',
-    'text!templates/browse/browse.hbs',
-    'i18n!nls/browse',
+    'text!templates/analyze/priority/priority.hbs',
+    'i18n!nls/analyze',
     'config/Events',
     'config/browse/Events',
-    'config/browse/Config-oecd',
-    'config/browse/Config-oecd-fao',
-    'config/browse/Config-indicators',
+    'config/analyze/priority/config',
     'lib/utils',
     'amplify',
     'bootstrap'
-], function ($, $UI, View, TitleSubView, FilterSubView, DashboardOecdSubView /**,DashboardIndicatorsSubView**/, DashboardModel, template, i18nLabels, E, BaseEvents, BrowseOecdConfig, BrowseOecdFaoSectorsConfig, BrowseIndicatorsConfig, Utils) {
+], function ($, $UI, View, TitleSubView, FilterSubView, DashboardSubView, DashboardModel, template, i18nLabels, E, BaseEvents, PriorityConfig, Utils) {
 
     'use strict';
 
@@ -71,11 +68,11 @@ define([
 
     /**
      *
-     * Creates a new Browse By View.
-     * @class BrowseByView
+     * Creates a new Priority View.
+     * @class PriorityView
      * @extends View
      */
-    var BrowseByView = View.extend({
+    var PriorityView = View.extend({
 
         // Automatically render after initialize
         autoRender: true,
@@ -115,7 +112,7 @@ define([
             View.prototype.attach.call(this, arguments);
 
             //update State
-            amplify.publish(E.STATE_CHANGE, {menu: 'browse', breadcrumb: this._initMenuBreadcrumbItem()});
+            amplify.publish(E.STATE_CHANGE, {menu: 'analyze', breadcrumb: this._initMenuBreadcrumbItem()});
 
             this._initVariables();
 
@@ -132,8 +129,8 @@ define([
         _initSubViews: function() {
             View.prototype.render.apply(this, arguments);
 
-            var config = BrowseOecdConfig[this.browse_type];
-            var configFao = BrowseOecdFaoSectorsConfig[this.browse_type];
+            var config = PriorityConfig;
+
 
             if (!config || !config.dashboard || !config.filter) {
                 alert(" HERE Impossible to find configuration for topic: " + this.browse_type);
@@ -149,10 +146,10 @@ define([
             this.dashboardModel = new DashboardModel();
 
             //DASHBOARD 1
-            this.baseDashboardConfig = config.dashboard,
-            this.faoDashboardConfig = configFao.dashboard;
+            this.baseDashboardConfig = config.dashboard;
 
-            var dashboardOecdSubView = new DashboardOecdSubView({autoRender: false, container: this.$el.find(s.css_classes.DASHBOARD_OECD_HOLDER), topic: this.browse_type, model:this.dashboardModel});
+
+            var dashboardOecdSubView = new DashboardSubView({autoRender: false, container: this.$el.find(s.css_classes.DASHBOARD_OECD_HOLDER), model:this.dashboardModel});
             dashboardOecdSubView.setDashboardConfig(this.baseDashboardConfig, s.config_types.BASE);
 
             this.subview('oecdDashboard', dashboardOecdSubView);
@@ -570,5 +567,5 @@ define([
 
    });
 
-    return BrowseByView;
+    return PriorityView;
 });
