@@ -140,7 +140,7 @@ require([
                     threejs: "{FENIX_CDN}/js/threejs/4.4/three.min",
                     loglevel: "{FENIX_CDN}/js/loglevel/1.4.0/loglevel",
 
-                    'highcharts': '{FENIX_CDN}/js/highcharts/4.1.6/js/highcharts',
+                 //   'highcharts': '{FENIX_CDN}/js/highcharts/4.1.6/js/highcharts',
 
                     amplify: '{FENIX_CDN}/js/amplify/1.1.2/amplify.min',
 
@@ -185,11 +185,14 @@ require([
                     shaderPass: {
                         deps: ["threejs"]
                     },
-                    highcharts: {
-                        "exports": "Highcharts",
-                        "deps": ["jquery"]
-                    },
+                    //highcharts: {
+                     //   "exports": "Highcharts",
+                      //  "deps": ["jquery"]
+                   // },
                     bootstrap: {
+                        deps: ["jquery"]
+                    },
+                    select2: {
                         deps: ["jquery"]
                     },
                     underscore: {
