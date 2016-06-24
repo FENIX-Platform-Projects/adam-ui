@@ -60,8 +60,7 @@ define(
             RECIPIENT_COUNTRY: 'recipientcode',
             YEAR: 'year',
             YEAR_FROM: 'year-from',
-            YEAR_TO: 'year-to',
-            ODA: 'oda'
+            YEAR_TO: 'year-to'
         },
         range: {
             FROM: 'from',
@@ -273,18 +272,11 @@ define(
                 labels: {year: {range: ''}}
             };
 
-            var updatedValuesWithYear = {}, updatedValuesWithODA = {}, extendedValues = $.extend(true, {}, this.filter.getValues(), timerange);
+            var convertedValues = $.extend(true, {}, this.filter.getValues(), timerange);
 
-                updatedValuesWithYear = this._processTimeRange(extendedValues);
+            convertedValues = this._processTimeRange(convertedValues);
 
-                updatedValuesWithODA = this._processODA(updatedValuesWithYear);
-
-
-              //  console.log("========================= UPDATED VALUES ============");
-
-              //  console.log(updatedValuesWithODA);
-
-           return updatedValuesWithODA;
+           return convertedValues;
 
         },
 
@@ -331,19 +323,6 @@ define(
                 filter.labels.year.range = year_from[0] + '-' + year_to[0];
                 filter.labels[s.ids.YEAR_FROM] = [];
                 filter.labels[s.ids.YEAR_TO] = [];
-
-                return filter;
-            },
-
-
-            _processODA: function(filter){
-
-                var enumeration = [], oda =  filter.values[s.ids.ODA][0];
-                enumeration.push(oda);
-
-                filter.values[s.ids.ODA] = {};
-                filter.values[s.ids.ODA].enumeration = enumeration;
-
 
                 return filter;
             },
