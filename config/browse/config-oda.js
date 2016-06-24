@@ -582,6 +582,7 @@ define(function () {
                             config: {
                                 colors: ['#008080']
                             }
+
                         },
                         filter: { //FX-filter format
                             parentsector_code: ["600"],
@@ -636,8 +637,60 @@ define(function () {
                             useDimensionLabelsIfExist: false,// || default raw else fenixtool
 
                             // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
+
                             config: {
-                                colors: ['#008080']
+                                colors: ['#008080'],
+                                chart: {
+                                    events: {
+                                        load: function (event) {
+                                            if (this.options.chart.forExport) {
+                                                Highcharts.each(this.series, function (series) {
+                                                    series.update({
+                                                        dataLabels: {
+                                                            enabled: false
+                                                        }
+                                                    }, false);
+                                                });
+                                                this.redraw();
+                                            }
+                                        }
+                                    }
+
+                                },
+                                tooltip: {
+                                    style: {width: '200px', whiteSpace: 'normal'},
+                                    formatter: function () {
+                                        var val = this.y;
+                                        if (val.toFixed(0) < 1) {
+                                            val = (val * 1000).toFixed(2) + ' K'
+                                        } else {
+                                            val = val.toFixed(2) + ' USD Mil'
+                                        }
+
+                                        return '<b>' + this.percentage.toFixed(2) + '% (' + val + ')</b>';
+                                    }
+                                },
+                                exporting: {
+                                    chartOptions: {
+                                        legend: {
+                                            title: '',
+                                            enabled: true,
+                                            align: 'center',
+                                            layout: 'vertical',
+                                            useHTML: true,
+                                            labelFormatter: function () {
+                                                var val = this.y;
+                                                if (val.toFixed(0) < 1) {
+                                                    val = (val * 1000).toFixed(2) + ' K'
+                                                } else {
+                                                    val = val.toFixed(2) + ' USD Mil'
+                                                }
+
+                                                return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() + ': ' + this.percentage.toFixed(2) + '% (' + val + ')</span></div>';
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         },
                         // filter: { //FX-filter format
@@ -1062,7 +1115,58 @@ define(function () {
                             useDimensionLabelsIfExist: false,// || default raw else fenixtool
 
                             config: {
-                                colors: ['#008080']
+                                colors: ['#008080'],
+                                chart: {
+                                    events: {
+                                        load: function (event) {
+                                            if (this.options.chart.forExport) {
+                                                Highcharts.each(this.series, function (series) {
+                                                    series.update({
+                                                        dataLabels: {
+                                                            enabled: false
+                                                        }
+                                                    }, false);
+                                                });
+                                                this.redraw();
+                                            }
+                                        }
+                                    }
+
+                                },
+                                tooltip: {
+                                    style: {width: '200px', whiteSpace: 'normal'},
+                                    formatter: function () {
+                                        var val = this.y;
+                                        if (val.toFixed(0) < 1) {
+                                            val = (val * 1000).toFixed(2) + ' K'
+                                        } else {
+                                            val = val.toFixed(2) + ' USD Mil'
+                                        }
+
+                                        return '<b>' + this.percentage.toFixed(2) + '% (' + val + ')</b>';
+                                    }
+                                },
+                                exporting: {
+                                    chartOptions: {
+                                        legend: {
+                                            title: '',
+                                            enabled: true,
+                                            align: 'center',
+                                            layout: 'vertical',
+                                            useHTML: true,
+                                            labelFormatter: function () {
+                                                var val = this.y;
+                                                if (val.toFixed(0) < 1) {
+                                                    val = (val * 1000).toFixed(2) + ' K'
+                                                } else {
+                                                    val = val.toFixed(2) + ' USD Mil'
+                                                }
+
+                                                return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() + ': ' + this.percentage.toFixed(2) + '% (' + val + ')</span></div>';
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         },
                         // filter: { //FX-filter format
