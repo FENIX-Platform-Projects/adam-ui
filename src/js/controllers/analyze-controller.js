@@ -3,9 +3,10 @@ define([
     'chaplin',
     'controllers/base/controller',
     'views/analyze-view',
-    'views/analyze/compare/compare-view',
-    'views/analyze/projects/projects-view'
-], function (Chaplin, Controller, AnalyzeView, CompareView, ProjectsView) {
+    'views/analyze/priority/priority-view'
+    // 'views/analyze/compare/compare-view',
+   // 'views/analyze/projects/projects-view'
+], function (Chaplin, Controller, AnalyzeView, PriorityView /**, CompareView, ProjectsView**/) {
 
     'use strict';
 
@@ -20,22 +21,30 @@ define([
             });
         },
 
-        compare: function (params, route) {
-            this.view = new CompareView({
+        priority: function (params, route) {
+            this.view = new PriorityView({
                 region: 'main',
                 filter: route.action,
                 page: Backbone.history.fragment
             });
         },
 
+        //compare: function (params, route) {
+           // this.view = new CompareView({
+             //   region: 'main',
+             //  filter: route.action,
+              //  page: Backbone.history.fragment
+           // });
+      //  },
 
-        projects: function (params, route) {
-           this.view = new ProjectsView({
-                region: 'main',
-                filter: route.action,
-                page: Backbone.history.fragment
-            });
-        }
+
+       // projects: function (params, route) {
+         //  this.view = new ProjectsView({
+            //    region: 'main',
+             //   filter: route.action,
+             //   page: Backbone.history.fragment
+           // });
+       // }
 
     });
 

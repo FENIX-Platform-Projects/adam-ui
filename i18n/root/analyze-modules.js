@@ -34,7 +34,7 @@ define({
                 "EN": "Analyze data"
             },
             "title": {
-                "EN": "Donor Matrix"
+                "EN": "Resource Partner Matrix"
             },
             "body": {
                 "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
@@ -57,7 +57,7 @@ define({
         },
         {
             "header": {
-                "EN": "Analyse data"
+                "EN": "Analyze data"
             },
             "title": {
                 "EN": "Priority Analysis"
@@ -65,7 +65,20 @@ define({
             "body": {
                 "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.."
             },
-            "link": "#analyze/priorities",
+            "link": "#analyze/priority",
+            "img": "http://fenixrepo.fao.org/cdn/images/modules/monitoring/kenya/timeseries/kenya_monitoring_timeseries.png"
+        },
+        {
+            "header": {
+                "EN": "Analyze data"
+            },
+            "title": {
+                "EN": "FAO Comparative Advantage"
+            },
+            "body": {
+                "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.."
+            },
+            "link": "#analyze/fao",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/monitoring/kenya/timeseries/kenya_monitoring_timeseries.png"
         }
     ]
