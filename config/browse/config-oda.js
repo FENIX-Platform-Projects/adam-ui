@@ -1115,7 +1115,7 @@ define(function () {
                             useDimensionLabelsIfExist: false,// || default raw else fenixtool
 
                             config: {
-                                colors: ['#008080'],
+                                colors: ['#5DA58D'],
                                 chart: {
                                     events: {
                                         load: function (event) {
