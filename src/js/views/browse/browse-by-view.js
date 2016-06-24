@@ -5,7 +5,7 @@ define([
     'views/base/view',
     'views/common/title-view',
     'views/browse/filter-view',
-    'views/browse/dashboard-oecd-view',
+    'views/browse/oda-dashboard-view',
     //'views/browse/dashboard-indicators-view',
     'models/browse/dashboard',
     'text!templates/browse/browse.hbs',
@@ -269,8 +269,8 @@ define([
             if(item) {
                var values = item.values.values;
 
-            console.log("=============== _updateDashboard BROWSE BY VIEW ");
-            console.log(item);
+            //console.log("=============== _updateDashboard BROWSE BY VIEW ");
+           // console.log(item);
 
             amplify.publish(s.events.TITLE_ADD_ITEM, this._getTitleItem(item));
 
@@ -548,7 +548,7 @@ define([
 
         _setDashboardModelValues: function(){
             // console.log("_setDashboardModelValues ", s.dashboardModel.LABEL);
-             console.log(this.subview('title').getTitleAsArray() );
+             //console.log(this.subview('title').getTitleAsArray() );
              this._updateDashboardModel(s.dashboardModel.LABEL, this.subview('title').getTitleAsArray());
         },
 
