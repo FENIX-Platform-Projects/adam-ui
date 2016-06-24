@@ -637,6 +637,9 @@ define(function () {
 
                             fenix_ui_map: {
 
+                                plugins: {
+                                    fullscreen: false
+                                },
                                 guiController: {
                                     overlay: false,
                                     baselayer: false,
