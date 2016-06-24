@@ -3,7 +3,7 @@ define([
     'jquery',
     'underscore',
     'views/base/view',
-    'text!templates/browse/oecd-dashboard.hbs',
+    'text!templates/browse/oda-dashboard.hbs',
     //'fx-ds/start',
     'fx-dashboard/start',
     'lib/utils',
@@ -156,7 +156,8 @@ define([
                // layout: "injected"
            // });
 
-          //  console.log("renderDashboard");
+            console.log("renderDashboard");
+            console.log(this.config);
 
             this.dashboards.push(new Dashboard(this.config));
 
@@ -214,7 +215,7 @@ define([
                     this._updateFAOItem1ChartConfiguration(item1, sectorSelected, subSectorSelected);
                     break;
                 case false:
-                    this._updateItem1ChartConfiguration(item1, sectorSelected, subSectorSelected);
+                   // this._updateItem1ChartConfiguration(item1, sectorSelected, subSectorSelected);
                     break;
             }
 
@@ -331,8 +332,10 @@ define([
         },
 
         rebuildDashboard: function (filter) {
-            console.log("rebuild", filter);
-            console.log("rebuild",  this.dashboards);
+            console.log("======================== rebuild", filter);
+            console.log("========================= rebuild",  this.dashboards);
+
+            console.log(filter);
           //  if (this.browseDashboard && this.browseDashboard.destroy) {
             //    this.browseDashboard.destroy();
            // }
