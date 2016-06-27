@@ -188,7 +188,7 @@ define(function () {
                         },
 
                         filterFor: {
-                            "filter_sector_oda": ['sectorcode', 'year', 'oda'],
+                            "filter_sector_oda": ['parentsector_code', 'year', 'oda'],
                             "filter_total_oda": ['year']
                         },
 
@@ -230,10 +230,10 @@ define(function () {
                                                 "usd_commitment"
                                             ]
                                         },
-                                        "sectorcode": {
+                                        "parentsector_code": {
                                             "codes": [
                                                 {
-                                                    "uid": "crs_sectors",
+                                                    "uid": "crs_dac",
                                                     "version": "2016",
                                                     "codes": [
                                                         "600"
@@ -321,10 +321,10 @@ define(function () {
                                                 "usd_commitment"
                                             ]
                                         },
-                                        "sectorcode": {
+                                        "parentsector_code": {
                                             "codes": [
                                                 {
-                                                    "uid": "crs_sectors",
+                                                    "uid": "crs_dac",
                                                     "version": "2016",
                                                     "codes": [
                                                         "NA"
@@ -567,7 +567,7 @@ define(function () {
                             }
                         ]
                     },
-                    {
+                   {
                         id: 'top-partners', // TOP DONORS
                         type: 'chart',
                         config: {
@@ -733,10 +733,10 @@ define(function () {
                                                 "usd_commitment"
                                             ]
                                         },
-                                        "sectorcode": {
+                                        "parentsector_code": {
                                             "codes": [
                                                 {
-                                                    "uid": "crs_sectors",
+                                                    "uid": "crs_dac",
                                                     "version": "2016",
                                                     "codes": [
                                                         "600"
@@ -865,10 +865,10 @@ define(function () {
                                                 "usd_commitment"
                                             ]
                                         },
-                                        "sectorcode": {
+                                        "parentsector_code": {
                                             "codes": [
                                                 {
-                                                    "uid": "crs_sectors",
+                                                    "uid": "crs_dac",
                                                     "version": "2016",
                                                     "codes": [
                                                         "600"
@@ -1209,10 +1209,10 @@ define(function () {
                                                 "usd_commitment"
                                             ]
                                         },
-                                        "sectorcode": {
+                                        "parentsector_code": {
                                             "codes": [
                                                 {
-                                                    "uid": "crs_sectors",
+                                                    "uid": "crs_dac",
                                                     "version": "2016",
                                                     "codes": [
                                                         "600"
@@ -1341,10 +1341,10 @@ define(function () {
                                                 "usd_commitment"
                                             ]
                                         },
-                                        "sectorcode": {
+                                        "parentsector_code": {
                                             "codes": [
                                                 {
-                                                    "uid": "crs_sectors",
+                                                    "uid": "crs_dac",
                                                     "version": "2016",
                                                     "codes": [
                                                         "600"
@@ -1498,6 +1498,64 @@ define(function () {
                                 }
                             }
                         ]
+                    },
+                    {
+                        id: 'top-channels', // TOP CHANNELS OF DELIVERY
+                        type: 'chart',
+                        config: {
+                            type: "column",
+                            x: ["channelsubcategory_name"], //x axis
+                            series: ["flowcategory_name"], // series
+                            y: ["value"],//Y dimension
+                            aggregationFn: {"value": "sum"},
+                            useDimensionLabelsIfExist: false,// || default raw else fenixtool
+
+                            // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
+                            config: {
+                                colors: ['#56adc3']
+                            }
+
+                        },
+                        filter: { //FX-filter format
+                            parentsector_code: ["600"],
+                            year: [{value: "2000", parent: 'from'}, {value: "2014", parent:  'to'}]
+                        },
+                        postProcess: [
+                            {
+                                "name": "group",
+                                "parameters": {
+                                    "by": [
+                                        "channelsubcategory_code", "channelsubcategory_name"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": ["value"],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "first"
+                                        },
+                                        {
+                                            "columns": ["flowcategory_name"],
+                                            "rule": "first"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "order",
+                                "parameters": {
+                                    "value": "DESC"
+                                }
+                            },
+                            {
+                                "name": "page",
+                                "parameters": {
+                                    "perPage": 10,  //top 10
+                                    "page": 1
+                                }
+                            }]
                     },
                     {
                         id: 'top-subsectors', // TOP SUB SECTORS
