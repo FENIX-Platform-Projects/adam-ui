@@ -274,7 +274,7 @@ define(
 
             var convertedValues = $.extend(true, {}, this.filter.getValues(), timerange);
 
-            convertedValues = this._processTimeRange(convertedValues);
+          // convertedValues = this._processTimeRange(convertedValues);
 
            return convertedValues;
 
