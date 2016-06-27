@@ -1037,15 +1037,15 @@ define(function () {
                             // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
                             config: {
                                 colors: ['#5DA58D'],
-                                xAxis: {
-                                    labels: {
-                                        "style": {
-                                            width: '100px',
+                               // xAxis: {
+                                   // labels: {
+                                       // "style": {
+                                           // width: '100px',
                                             //whiteSpace: 'nowrap'
-                                        },
+                                       // },
                                         //  step: 1
-                                    }
-                                }
+                                    //}
+                               // }
                             }
 
                         },
@@ -1500,7 +1500,7 @@ define(function () {
                         ]
                     },
                     {
-                        id: 'top-channels', // TOP CHANNELS OF DELIVERY
+                        id: 'top-channel-categories', // TOP CHANNEL OF DELIVERY CATEGORIES
                         type: 'chart',
                         config: {
                             type: "column",
@@ -1526,6 +1526,114 @@ define(function () {
                                 "parameters": {
                                     "by": [
                                         "channelsubcategory_code", "channelsubcategory_name"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": ["value"],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": ["unitcode"],
+                                            "rule": "first"
+                                        },
+                                        {
+                                            "columns": ["flowcategory_name"],
+                                            "rule": "first"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": "order",
+                                "parameters": {
+                                    "value": "DESC"
+                                }
+                            },
+                            {
+                                "name": "page",
+                                "parameters": {
+                                    "perPage": 10,  //top 10
+                                    "page": 1
+                                }
+                            }]
+                    },
+                    {
+                        id: 'top-channels', // TOP CHANNELS OF DELIVERY
+                        type: 'chart',
+                        config: {
+                            type: "pie",
+                            x: ["channelname"], //x axis and series
+                            series: ["flowcategory_name"], // series
+                            y: ["value"],//Y dimension
+                            aggregationFn: {"value": "sum"},
+                            useDimensionLabelsIfExist: false,// || default raw else fenixtool
+
+                            // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
+                            config: {
+                                chart: {
+                                    events: {
+                                        load: function (event) {
+                                            if (this.options.chart.forExport) {
+                                                Highcharts.each(this.series, function (series) {
+                                                    series.update({
+                                                        dataLabels: {
+                                                            enabled: false
+                                                        }
+                                                    }, false);
+                                                });
+                                                this.redraw();
+                                            }
+                                        }
+                                    }
+
+                                },
+                                tooltip: {
+                                    style: {width: '200px', whiteSpace: 'normal'},
+                                    formatter: function () {
+                                        var val = this.y;
+                                        if (val.toFixed(0) < 1) {
+                                            val = (val * 1000).toFixed(2) + ' K'
+                                        } else {
+                                            val = val.toFixed(2) + ' USD Mil'
+                                        }
+
+                                        return '<b>' + this.percentage.toFixed(2) + '% (' + val + ')</b>';
+                                    }
+                                },
+                                exporting: {
+                                    chartOptions: {
+                                        legend: {
+                                            title: '',
+                                            enabled: true,
+                                            align: 'center',
+                                            layout: 'vertical',
+                                            useHTML: true,
+                                            labelFormatter: function () {
+                                                var val = this.y;
+                                                if (val.toFixed(0) < 1) {
+                                                    val = (val * 1000).toFixed(2) + ' K'
+                                                } else {
+                                                    val = val.toFixed(2) + ' USD Mil'
+                                                }
+
+                                                return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() + ': ' + this.percentage.toFixed(2) + '% (' + val + ')</span></div>';
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                        },
+                        filter: { //FX-filter format
+                            parentsector_code: ["600"],
+                            year: [{value: "2000", parent: 'from'}, {value: "2014", parent:  'to'}]
+                        },
+                        postProcess: [
+                            {
+                                "name": "group",
+                                "parameters": {
+                                    "by": [
+                                        "channelcode", "channelname"
                                     ],
                                     "aggregations": [
                                         {
