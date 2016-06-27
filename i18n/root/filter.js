@@ -1,6 +1,8 @@
 /*global define*/
 define({
     "filter_parentsector_code": "Sector",
+    "filter_donorcode": "Resource Partner",
+    "filter_recipientcode": "Recipient",
     "filter_purposecode": "Sub Sector",
     "filter_year": "Year",
     "filter_channelsubcategory_code": "Channel Parent Category",
