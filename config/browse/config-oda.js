@@ -3765,12 +3765,15 @@ define(function () {
                             }]
                     },
                     {
-                        id: 'country-map',
+                        id: 'regional-map',
                         type: 'map',
                         config: {
                             geoSubject: 'gaul0',
                             colorRamp: 'GnBu',  //Blues, Greens,
                             //colorRamp values: http://fenixrepo.fao.org/cdn/fenix/fenix-ui-map-datasets/colorramp.png
+
+                            zoomToCountry : '1', // GAUL Afghanistan
+                            highlightCountry : '1', // GAUL Afghanistan
 
                             legendtitle: 'ODA',
 
@@ -3801,7 +3804,7 @@ define(function () {
 
                         filter: { //FX-filter format
                             parentsector_code: ["600"],
-                            recipientcode: ["625"],
+                            un_region_code: ["034"], // Region = 'Southern Asia'
                             year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
                         },
                         postProcess: [
