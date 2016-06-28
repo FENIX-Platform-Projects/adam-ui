@@ -16,19 +16,19 @@ define({
             "link": "#analyze/compare",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/crowdprices/crowdprices.png"
         },
-        {
-            "header": {
-                "EN": "Analyze data"
-            },
-            "title": {
-                "EN": "Implementing Agencies"
-            },
-            "body": {
-                "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
-            },
-            "link": "#analyze/agencies",
-            "img": "http://fenixrepo.fao.org/cdn/images/modules/trade_AFG/trade_AFG.png"
-        },
+       // {
+         //   "header": {
+          //      "EN": "Analyze data"
+          //  },
+          //  "title": {
+           //     "EN": "Implementing Agencies"
+          //  },
+          //  "body": {
+           //     "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
+          //  },
+          //  "link": "#analyze/agencies",
+          //  "img": "http://fenixrepo.fao.org/cdn/images/modules/trade_AFG/trade_AFG.png"
+       // },
         {
             "header": {
                 "EN": "Analyze data"
