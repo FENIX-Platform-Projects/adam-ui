@@ -45,18 +45,6 @@
       "label": {
         "EN": "Download"
       }
-    },
-    {
-      "attrs": {
-        "id": "datamgmt"
-      },
-      "a_attrs": {
-        "rel": "external"
-      },
-      "target": "datamgmt.html",
-      "label": {
-        "EN": "Data Management"
-      }
     }
   ],
   "rightItems": [
