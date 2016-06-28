@@ -244,9 +244,11 @@ define([
         },
 
         _updateRegionalMapConfiguration: function (regioncode) {
-             var map = _.filter(this.config.items, {name:'region-map'})[0];
+             var map = _.filter(this.config.items, {id:'regional-map'})[0];
 
-            //console.log(regioncode);
+
+            console.log(map);
+            console.log(regioncode);
              if(map){
                  // modify regioncode
                  var filterConfig = this.configUtils.findByPropValue(map.filter,  "name", "filter");
