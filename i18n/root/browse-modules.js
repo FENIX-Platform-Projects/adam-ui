@@ -21,7 +21,7 @@ define({
                 "EN": "Browse by"
             },
             "title": {
-                "EN": "Recipient"
+                "EN": "Recipient Country"
             },
             "body": {
                 "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
@@ -47,7 +47,7 @@ define({
                 "EN": "Browse by"
             },
             "title": {
-                "EN": "Recipient and Resource Partner"
+                "EN": "Recipient Country and Resource Partner"
             },
             "body": {
                 "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
