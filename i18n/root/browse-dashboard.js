@@ -10,8 +10,10 @@ define({
     "top-sectors": "Top Sectors",
     "top-subsectors": "Top Sub-Sectors",
     "top-channels": "Top Channels of Delivery",
+    "top-implementing-channels": "Top Implementing Channels",
     "oda-regional": "ODA Regional Distribution",
     "country-map": "Regional Map on ODA received",
-    "donor_country-map": "Top Recipients"
+    "donor_country-map": "Top Recipients",
+    "regional-map": "Regional Map on ODA received"
 
 });
