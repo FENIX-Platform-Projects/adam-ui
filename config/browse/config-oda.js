@@ -3772,9 +3772,6 @@ define(function () {
                             colorRamp: 'GnBu',  //Blues, Greens,
                             //colorRamp values: http://fenixrepo.fao.org/cdn/fenix/fenix-ui-map-datasets/colorramp.png
 
-                            zoomToCountry : '1', // GAUL Afghanistan
-                            highlightCountry : '1', // GAUL Afghanistan
-
                             legendtitle: 'ODA',
 
                             fenix_ui_map: {
@@ -3798,7 +3795,12 @@ define(function () {
                                     }
                                 },
                                 labels: true,
-                                boundaries: true
+                                boundaries: true,
+
+                                zoomToCountry: [1]
+                                
+                                //highlight service NOT WORK FOR NOW
+                                //highlightCountry : [1], // GAUL Afghanistan
                             }
                         },
 
