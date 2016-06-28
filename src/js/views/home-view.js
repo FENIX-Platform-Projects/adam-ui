@@ -51,7 +51,7 @@ define([
 
             this._renderDropdown();
 
-          //  this._renderMap();
+            // this._renderMap();
         },
 
         _renderDropdown : function () {
@@ -75,8 +75,8 @@ define([
 
                 $.get('submodules/fenix-ui-map-creator/tests/fenix/dataset/bangkok.json', function (model) {
 
-                    self.mapCreator.addLayer(model, { colorramp: 'Greens' });
-                    self.mapCreator.addCountryBoundaries();
+                   // self.mapCreator.addLayer(model, { colorramp: 'Greens' });
+                   // self.mapCreator.addCountryBoundaries();
                     //self.mapCreator.addCountryLabels();
                 });
 
