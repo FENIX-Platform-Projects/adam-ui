@@ -17,7 +17,10 @@ define(function () {
                     "selector": {"id": "tree", "hideSummary": false},
                     "template": {"title": "", "hideSwitch": true},
                     "format": {"dimension": "recipientcode"},
-                    className: "col-sm-4"
+                    className: "col-sm-4",
+                    summaryRender : function (item) {
+                        return "<u><mark> " + item.label + "</mark></u>"
+                    }
                 },
                 "donorcode": {
                     default: ["600"],
@@ -25,7 +28,10 @@ define(function () {
                     "selector": {"id": "tree", "hideSummary": false},
                     "template": {"title": "", "hideSwitch": true},
                     "format": {"dimension": "donorcode"},
-                    className: "col-sm-6"
+                    className: "col-sm-6",
+                    summaryRender : function (item) {
+                        return "<u><mark> " + item.label + "</mark></u>"
+                    }
                 },
               /**  recipientcode2: {
                     selector: {
