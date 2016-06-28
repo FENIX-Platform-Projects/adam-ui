@@ -11,7 +11,7 @@ define({
                 "EN": "Compare"
             },
             "body": {
-                "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
+                "EN": "Compare past ODA spending in two or more recipient countries, by two or more selected donors, channels of delivery, sectors or subsectors in a specific time period."
             },
             "link": "#analyze/compare",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/crowdprices/crowdprices.png"
@@ -37,7 +37,7 @@ define({
                 "EN": "Resource Partner Matrix"
             },
             "body": {
-                "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
+                "EN": "Analyze the resource partner's spending in FAO-related sectors versus other sectors of the Official Development Assistance (ODA)."
             },
             "link": "#analyze/donor_matrix",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/env_AFG/environmental_AFG.png"
@@ -50,7 +50,7 @@ define({
                 "EN": "Project Analysis"
             },
             "body": {
-                "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.."
+                "EN": "View information on implemented projects based on your selection."
             },
             "link": "#analyze/projects",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/monitoring/kenya/timeseries/kenya_monitoring_timeseries.png"
@@ -63,7 +63,7 @@ define({
                 "EN": "Priority Analysis"
             },
             "body": {
-                "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.."
+                "EN": "Analyze common priorities between FAO, National Governments and Resource Partners by intersecting FAO's countries programming framework, UNDAF documents and donors' spending priorities."
             },
             "link": "#analyze/priority",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/monitoring/kenya/timeseries/kenya_monitoring_timeseries.png"
@@ -76,10 +76,11 @@ define({
                 "EN": "FAO Comparative Advantage"
             },
             "body": {
-                "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.."
+                "EN": "Analyze FAO's comparative advantage with respect to the other implementing agencies in a specific area of intervention."
             },
             "link": "#analyze/fao",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/monitoring/kenya/timeseries/kenya_monitoring_timeseries.png"
         }
+
     ]
 });
