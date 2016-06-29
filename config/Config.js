@@ -7,6 +7,7 @@ define(function () {
         CODELIST_PREFIX = SERVER+ 'msd/resources/',
         CODELIST_HIERARCHY_PREFIX = SERVER+ 'msd/codes/hierarchy/';
 
+
     return {
 
         SERVER: SERVER,
@@ -48,7 +49,9 @@ define(function () {
 
         CODELIST_POSTFIX: "/resources/",
 
-        CODELIST_SERVICE: "d3s_dev/msd"
+        CODELIST_SERVICE: "d3s_dev/msd",
+
+        ENVIRONMENT: "develop"
 
     };
 });
