@@ -4,16 +4,20 @@ define([
     'views/base/view',
     'text!templates/home/home.hbs',
     'config/Events',
+    'config/Config',
+    'config/home/home-config',
     'fx-m-c/start',
+    'fx-dashboard/start',
     'amplify',
     'select2'
-], function ($, View, template, E, MapCreator) {
+], function ($, View, template, E, C,  DashboardConfig, MapCreator, Dashboard) {
 
     'use strict';
 
     var s = {
         MAP_CONTAINER : "#home-map",
-        DROPDOWN_CONTAINER : "#factsheet-select"
+        DROPDOWN_CONTAINER : "#factsheet-select",
+        DASHBOARD_CONTENT: "#dashboard-content"
     };
 
     var HomeView = View.extend({
@@ -31,9 +35,12 @@ define([
             //update State
             amplify.publish(E.STATE_CHANGE, {menu: 'home'});
 
+            this._initVariables();
+
             this._renderComponents();
 
         },
+
 
         dispose: function () {
 
@@ -47,11 +54,19 @@ define([
             this.$el.find(s.DROPDOWN_CONTAINER).select2().off('change');
         },
 
+        _initVariables: function () {
+
+            this.dashboards = [];
+
+            this.environment = C.ENVIRONMENT;
+
+        },
+
         _renderComponents: function () {
 
-            this._renderDropdown();
+           this._renderDropdown();
 
-            // this._renderMap();
+           this._renderDashboard();
         },
 
         _renderDropdown : function () {
@@ -64,23 +79,32 @@ define([
 
         },
 
-        _renderMap : function () {
+        _renderDashboard: function () {
 
-            var self = this;
+            var conf = DashboardConfig;
 
-            this.mapCreator = new MapCreator();
-            this.mapCreator.render({
-                container: s.MAP_CONTAINER
-            }).then(function () {
+            console.log(conf);
+            if (conf && !_.isEmpty(conf) &&  conf.dashboard) {
 
-                $.get('submodules/fenix-ui-map-creator/tests/fenix/dataset/bangkok.json', function (model) {
+            this._disposeDashboards();
 
-                   // self.mapCreator.addLayer(model, { colorramp: 'Greens' });
-                   // self.mapCreator.addCountryBoundaries();
-                    //self.mapCreator.addCountryLabels();
-                });
+                this.dashboards.push(new Dashboard($.extend(true, {
+                    environment: this.environment,
+                    el: $(s.DASHBOARD_CONTENT)
+                }, conf.dashboard)));
 
-            });
+            }
+        },
+
+        _disposeDashboards : function () {
+
+            _.each( this.dashboards, _.bind(function (dashboard) {
+                if (dashboard && $.isFunction(dashboard.dispose)) {
+                    dashboard.dispose();
+                }
+            }, this));
+
+            this.dashboards = [];
         }
     });
 
