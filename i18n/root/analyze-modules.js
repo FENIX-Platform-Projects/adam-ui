@@ -5,7 +5,7 @@ define({
     modules:[
         {
             "header": {
-                "EN": "Analyze data"
+                "EN": "Analyse data"
             },
             "title": {
                 "EN": "Compare"
@@ -31,20 +31,20 @@ define({
        // },
         {
             "header": {
-                "EN": "Analyze data"
+                "EN": "Analyse data"
             },
             "title": {
                 "EN": "Resource Partner Matrix"
             },
             "body": {
-                "EN": "Analyze the resource partner's spending in FAO-related sectors versus other sectors of the Official Development Assistance (ODA)."
+                "EN": "Analyse the resource partner's spending in FAO-related sectors versus other sectors of the Official Development Assistance (ODA)."
             },
             "link": "#analyze/donor_matrix",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/env_AFG/environmental_AFG.png"
         },
         {
             "header": {
-                "EN": "Analyze data"
+                "EN": "Analyse data"
             },
             "title": {
                 "EN": "Project Analysis"
@@ -57,26 +57,26 @@ define({
         },
         {
             "header": {
-                "EN": "Analyze data"
+                "EN": "Analyse data"
             },
             "title": {
                 "EN": "Priority Analysis"
             },
             "body": {
-                "EN": "Analyze common priorities between FAO, National Governments and Resource Partners by intersecting FAO's countries programming framework, UNDAF documents and donors' spending priorities."
+                "EN": "Analyse common priorities between FAO, National Governments and Resource Partners by intersecting FAO's countries programming framework, UNDAF documents and donors' spending priorities."
             },
             "link": "#analyze/priority",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/monitoring/kenya/timeseries/kenya_monitoring_timeseries.png"
         },
         {
             "header": {
-                "EN": "Analyze data"
+                "EN": "Analyse data"
             },
             "title": {
                 "EN": "FAO Comparative Advantage"
             },
             "body": {
-                "EN": "Analyze FAO's comparative advantage with respect to the other implementing agencies in a specific area of intervention."
+                "EN": "Analyse FAO's comparative advantage with respect to the other implementing agencies in a specific area of intervention."
             },
             "link": "#analyze/fao",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/monitoring/kenya/timeseries/kenya_monitoring_timeseries.png"
