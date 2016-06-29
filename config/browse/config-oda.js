@@ -3235,7 +3235,7 @@ define(function () {
                                 }
                             }]
                     },
-                    {
+                   /* {
                         id: 'top-sectors-others', // TOP SECTORS Vs OTHER SECTORS
                         type: 'chart',
                         config: {
@@ -3654,7 +3654,7 @@ define(function () {
                                 }
                             }
                         ]
-                    },
+                    },*/
                     {
                         id: 'top-subsectors', // TOP SUB SECTORS
                         type: 'chart',
