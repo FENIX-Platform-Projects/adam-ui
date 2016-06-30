@@ -119,7 +119,7 @@ define(function () {
                     },
                     template: {
                         hideHeaderIcon: false,
-                        headerIconClassName: 'glyphicon glyphicon-asterisk',
+                        //headerIconClassName: 'glyphicon glyphicon-asterisk',
                         hideSwitch: true,
                         hideRemoveButton: true
                     }
@@ -2089,7 +2089,7 @@ define(function () {
                     },
                     template: {
                         hideHeaderIcon: false,
-                        headerIconClassName: 'glyphicon glyphicon-asterisk',
+                       // headerIconClassName: 'glyphicon glyphicon-asterisk',
                         hideSwitch: true,
                         hideRemoveButton: true
                     }
@@ -3893,7 +3893,7 @@ define(function () {
                         hideRemoveButton: true
                     },
                     dependencies: {
-                        "parentsector_code": {id: "parent", event: "select"}, //obj or array of obj
+                        "parentsector_code": {id: "parent", event: "select"} //obj or array of obj
                     }
                 },
                 "year-from": {
@@ -3957,7 +3957,7 @@ define(function () {
                     },
                     template: {
                         hideHeaderIcon: false,
-                        headerIconClassName: 'glyphicon glyphicon-asterisk',
+                      //  headerIconClassName: 'glyphicon glyphicon-asterisk',
                         hideSwitch: true,
                         hideRemoveButton: true
                     }
