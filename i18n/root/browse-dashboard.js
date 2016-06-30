@@ -3,6 +3,7 @@ define({
     title: "Dashboard Items",
     text: "Change me in 118n/root/modules.js",
     "tot-oda": "Total ODA",
+    "tot-oda-gni": "Total ODA and GNI",
     "top-partners": "Top Resource Partners",
     "top-partners-others": "ODA Share between Top Resource Partners and Others",
     "top-recipients": "Top Recipients",
@@ -14,4 +15,5 @@ define({
     "oda-regional": "ODA Regional Distribution",
     "country-map": "Map on ODA received",
     "regional-map": "Regional Map on ODA received"
+
 });
