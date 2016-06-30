@@ -1356,7 +1356,7 @@ define(function () {
                                 "name": "group",
                                 "parameters": {
                                     "by": [
-                                        "unitcode", "recipientcode"
+                                        "unitcode"
                                     ],
                                     "aggregations": [
                                         {
@@ -1369,18 +1369,19 @@ define(function () {
                                     ]
                                 }
                             },
-                            {
-                                "name": "select",
-                                "parameters": {
-                                    "query": "WHERE recipientcode NOT IN (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", // skipping regional recipient countries (e.g. "Africa, regional"; "North of Sahara, regional")
-                                    "queryParameters": [
-                                        {"value": '298'}, {"value": '498'}, {"value": '798'}, {"value": '89'},
-                                        {"value": '589'}, {"value": '889'}, {"value": '189'}, {"value": '289'},
-                                        {"value": '389'}, {"value": '380'}, {"value": '489'}, {"value": '789'},
-                                        {"value": '689'}, {"value": '619'}, {"value": '679'}
-                                    ]
-                                }
-                            },
+                            // NEED TO VERIFY HOW TO DO THIS
+                           // {
+                            //    "name": "select",
+                            //    "parameters": {
+                             //       "query": "WHERE recipientcode NOT IN (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", // skipping regional recipient countries (e.g. "Africa, regional"; "North of Sahara, regional")
+                             //       "queryParameters": [
+                             //           {"value": '298'}, {"value": '498'}, {"value": '798'}, {"value": '89'},
+                             //           {"value": '589'}, {"value": '889'}, {"value": '189'}, {"value": '289'},
+                             //           {"value": '389'}, {"value": '380'}, {"value": '489'}, {"value": '789'},
+                             //           {"value": '689'}, {"value": '619'}, {"value": '679'}
+                              //      ]
+                              //  }
+                           // },
                             {
                                 "name": "addcolumn",
                                 "parameters": {
