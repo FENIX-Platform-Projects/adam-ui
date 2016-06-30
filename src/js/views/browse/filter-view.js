@@ -218,9 +218,27 @@ define(
                         //  payload = self..id = getFilterValues().year
 
                     }
+
+                    amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
+                }
+                else if (payload.id === s.ids.RECIPIENT_COUNTRY) {
+                    Q.all([
+                        self._onRecipientChange(payload)
+                    ]).then(function (result) {
+                        if (result) {
+                            self._setRegionCode(payload, result[0][0].parents[0].code);
+                        }
+                    }).catch(function (error) {
+                        self._regioncodeerror(error, payload)
+                    }).done(function () {
+                        console.log("RECIPIENT DONE ============ ", payload);
+                        amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
+                    });
+                } else {
+                    amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
                 }
 
-                amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
+
 
                //self._onChangeEvent2(payload);
             });
@@ -419,7 +437,7 @@ define(
             if(recipientSelected)
                 cloneObj = this._getObject(s.ids.RECIPIENT_COUNTRY, values);
 
-            if(cloneObj) {
+          /**  if(cloneObj) {
                 //======= UPDATE VALUES CONFIG
                 values[s.ids.COUNTRY] = {};
                 values[s.ids.COUNTRY].codes = [];
@@ -434,7 +452,7 @@ define(
                         values[filter].removeFilter = true;
                     }
                 }
-            }
+            }**/
 
             return values;
         },
@@ -567,6 +585,8 @@ define(
                     Q.all([
                         self._onRecipientChange(item)
                     ]).then(function (result) {
+                        console.log("=========== ", result);
+
                         if (result) {
                             self._setRegionCode(item, result[0][0].parents[0].code);
                         }
@@ -689,6 +709,7 @@ define(
                     Q.all([
                         self._onRecipientChange(item)
                     ]).then(function (result) {
+                        console.log("============= RESULT ", result);
                         if (result) {
                             self._setRegionCode(item, result[0][0].parents[0].code);
                         }
@@ -1040,12 +1061,11 @@ define(
 
         _onRecipientChange: function (recipient) {
             var self = this;
-
               //  console.log("IS RECIPIENT")
-                if (recipient.value) {
+                if (recipient.values.values.length > 0) {
                   //  console.log("IS RECIPIENT value")
                    return Q.all([
-                        self._createRegionPromiseData("crs_regions_countries", "2016", "2", "up", recipient.value)
+                        self._createRegionPromiseData("crs_un_regions_recipients", "2016", "2", "up", recipient.values.values[0])
                     ]).then(function (c) {
                        return c;
                    }, function (r) {
