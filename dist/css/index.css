@@ -13179,6 +13179,10 @@ ul[role="group"] {
 .container {
   background-color: white; }
 
+.website-title {
+  font-size: 24px;
+  color: black; }
+
 .fit-height {
   height: 100%; }
 
