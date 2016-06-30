@@ -1489,7 +1489,7 @@ define(function () {
                                         },
                                         "subject": null
                                     },
-                                    "value": "Other Recipient Countries"
+                                    "value": "Other Recipients"
                                 },
                                 "rid": {
                                     "uid": "others"
