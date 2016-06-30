@@ -262,8 +262,8 @@ define([
 
 
         _updateDashboard: function (item){
-           // console.log("=============== _updateDashboard 1 ");
-
+          //  console.log("=============== _updateDashboard 1 ");
+           var purposecodeItemHasChanged = false, recipientcodeItemHasChanged = false, parentsectorcodeItemHasChanged = false;
 
 
             if(item) {
@@ -301,9 +301,23 @@ define([
                         this.regioncode = item.regioncode;
                     else
                         this.regioncode = null;
+
+                 recipientcodeItemHasChanged = true;
                 }
 
-           // console.log("=============== _updateDashboard 3ii ");
+                if(item.id === 'purposecode') {
+                    purposecodeItemHasChanged = true;
+                }
+
+
+                if(item.id === 'parentsector_code') {
+                    parentsectorcodeItemHasChanged = true;
+                }
+
+
+
+
+            //console.log(item.id, item), this.regioncode;
                 //if(item.name === 'recipientcode') {
                  // console.log('recipientcode has been activated');
                // }
@@ -335,12 +349,16 @@ define([
                   //  }//&& item.name != 'parentsector_code') {
                   // else {
 
+                        //original
+                       // this.subview('oecdDashboard').updateDashboardConfig(this.datasetType.oecd_uid, this.subview('filters').isFilterSelected('parentsector_code'), this.subview('filters').isFilterSelected('purposecode'), this.subview('filters').isFilterSelected('recipientcode'), this.regioncode, this.removeItems);
 
-                   // console.log("=============== _updateDashboard 4 "+item.id);
-                        this.subview('oecdDashboard').updateDashboardConfig(this.datasetType.oecd_uid, this.subview('filters').isFilterSelected('parentsector_code'), this.subview('filters').isFilterSelected('purposecode'), this.subview('filters').isFilterSelected('recipientcode'), this.regioncode, this.removeItems);
-                   // console.log("=============== _updateDashboard 4i "+item.id);
+                //ORIGINAL
+                //this.subview('oecdDashboard').updateDashboardConfig(this.datasetType.oecd_uid, parentsectorcodeItemHasChanged, purposecodeItemHasChanged, recipientcodeItemHasChanged, this.regioncode, this.removeItems);
 
-                        this._setDashboardModelValues();
+                this.subview('oecdDashboard').updateDashboardConfigNew(this.datasetType.oecd_uid, item, this.removeItems);
+
+
+                   this._setDashboardModelValues();
                    // console.log("=============== _updateDashboard 4ii "+item.id);
                        // var ovalues = this.subview('filters').getOECDValues();
                       // this.subview('oecdDashboard').rebuildDashboard([ovalues]);
