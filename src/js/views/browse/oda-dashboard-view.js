@@ -67,7 +67,7 @@ define([
 
 
 
-            console.log("RENDER ========== ");
+          //  console.log("RENDER ========== ");
 
             for(var it in this.config.items){
 
@@ -156,8 +156,7 @@ define([
                // layout: "injected"
            // });
 
-            console.log("renderDashboard");
-            console.log(this.config);
+
 
             this.dashboards.push(new Dashboard(this.config));
 
@@ -196,6 +195,42 @@ define([
             // Show Item container
             var itemContainerId = '#'+itemId + s.item_container_id;
             $(this.source).find(itemContainerId).show();
+        },
+
+        updateDashboardConfigNew: function(uid, changeditem, removeItems){
+
+            // console.log("================ updateDashboardConfig");
+            //  console.log(uid + ' | '+ sectorSelected+ ' | '+subSectorSelected+ ' | '+ recipientSelected+ ' | '+ regioncode+ ' | '+ removeItems);
+            this.config.items = this.config.baseItems; // Reset Config Items
+
+            var item1 = _.filter(this.config.items, {id: s.total_oda_id})[0];
+
+
+            //  console.log(item1);
+
+           // switch(this.config_type == s.config_types.FAO){
+           //     case true:
+                    //console.log("updateFAOConfig ");
+             //       this._updateFAOItem1ChartConfiguration(item1, sectorSelected, subSectorSelected);
+            //       break;
+             //   case false:
+                    // this._updateItem1ChartConfiguration(item1, sectorSelected, subSectorSelected);
+              //      break;
+           // }
+
+
+            if(changeditem.id === 'recipientcode') {
+                this._updateRegionalMapConfigurationNew(changeditem);
+            }
+
+            this.config.uid = uid;
+
+            if(removeItems){
+                for(var itemId in removeItems){
+                    this._hideDashboardItem(removeItems[itemId]);
+                }
+            }
+
         },
 
         updateDashboardConfig: function(uid, sectorSelected, subSectorSelected, recipientSelected, regioncode, removeItems){
@@ -243,22 +278,52 @@ define([
 
         },
 
+        _updateRegionalMapConfigurationNew: function (changeditem) {
+            var map = _.filter(this.config.items, {id:'regional-map'})[0];
+            var self = this;
+
+            if(map && changeditem.regioncode){
+
+                if(map.filter && map.filter.un_region_code){
+                    map.filter.un_region_code = [];
+                    map.filter.un_region_code.push(changeditem.regioncode)
+                }
+
+                if(map.config && map.config.fenix_ui_map){
+                    map.config.fenix_ui_map.zoomToCountry = ["3"];
+                   // map.config.fenix_ui_map.zoomToCountry.push(changeditem.values.values[0]); /// NEEDS to BE GAUL
+                }
+
+            }
+
+        },
+
         _updateRegionalMapConfiguration: function (regioncode) {
              var map = _.filter(this.config.items, {id:'regional-map'})[0];
 
 
-            console.log(map);
-            console.log(regioncode);
-             if(map){
-                 // modify regioncode
-                 var filterConfig = this.configUtils.findByPropValue(map.filter,  "name", "filter");
 
-                 if(filterConfig.parameters.rows.regioncode){
-                     filterConfig.parameters.rows.regioncode.codes[0].codes = [];
+             if(map && regioncode){
+                 // modify regioncode  parent, key, value
+                // var filterConfig = this.configUtils.findByPropValue(map,  "filter", "un_region_code");
+
+                // var filterConfig = _.find(map, function (keys) {console.log(keys[0]) });//return keys[0] === 'filter' });
+
+                // console.log(filterConfig);
+
+
+                 if(map.filter && map.filter.un_region_code){
+                     map.filter.un_region_code = [];
 
                      if(regioncode)
-                        filterConfig.parameters.rows.regioncode.codes[0].codes.push(regioncode)
+                         map.filter.un_region_code.push(regioncode)
                  }
+
+                 if(map.config && map.config.fenix_ui_map){
+                     map.config.fenix_ui_map.zoomToCountry = [];
+                     map.config.fenix_ui_map.zoomToCountry.push(regioncode)
+                 }
+
 
              }
 
@@ -334,10 +399,10 @@ define([
         },
 
         rebuildDashboard: function (filter) {
-            console.log("======================== rebuild", filter);
-            console.log("========================= rebuild",  this.dashboards);
+            //console.log("======================== rebuild", filter);
+            //console.log("========================= rebuild",  this.dashboards);
 
-            console.log(filter);
+            //console.log(filter);
           //  if (this.browseDashboard && this.browseDashboard.destroy) {
             //    this.browseDashboard.destroy();
            // }
@@ -353,7 +418,7 @@ define([
                // console.log(dashboard);
                // console.log($.isFunction(dashboard.refresh)
                 if (dashboard && $.isFunction(dashboard.refresh)) {
-                    console.log("REFRESH");
+                    //console.log("REFRESH");
                     dashboard.refresh(filter);
                 }
             }, this));
