@@ -6,8 +6,8 @@ define(function () {
     return {
 
         chart: {
-            spacing: [10, 10, 27, 10], // better spacing when chart exports
-
+            //spacing: [10, 10, 27, 10], // better spacing when chart exports
+            spacing: [10, 10, 15, 10],
             events: {
                 load: function (event) {
 
@@ -19,14 +19,14 @@ define(function () {
                         }
                     });
 
-                    if(this.series.length < 2){
-                        $.each(this.series, function (i, serie) {
-                               serie.update({
-                                    showInLegend: false
-                                })
-                        });
+                   // if(this.series.length < 2){
+                       // $.each(this.series, function (i, serie) {
+                             //  serie.update({
+                               //     showInLegend: false
+                               // })
+                       // });
                         //this.redraw();
-                    }
+                   // }
 
                     if (this.options.chart.forExport) {
                         this.xAxis[0].update({
@@ -78,94 +78,6 @@ define(function () {
                         });
 
                       /**  Highcharts.each(this.series, function (series) {
-                            series.update({
-                                marker : {
-                                    radius: 2
-                                },
-                                dataLabels: {
-                                    enabled: true,
-                                    style: {
-                                        fontSize: '6px',
-                                        color: series.color,
-                                        textShadow: 0
-                                    }
-                                }
-                            }, false);
-                        });**/
-                        this.redraw();
-                    }
-
-
-                },
-                beforePrint: function (event) {
-
-
-                    Highcharts.setOptions({
-                        lang: {
-                            toggleDataLabels: 'Display/hide values on the chart',
-                            download: 'Download chart options'
-                        }
-                    });
-
-                    if(this.series.length < 2){
-                        $.each(this.series, function (i, serie) {
-                            serie.update({
-                                showInLegend: false
-                            })
-                        });
-                        this.redraw();
-                    }
-
-                    if (this.options.chart.forExport) {
-                        this.xAxis[0].update({
-                            categories: this.xAxis[0].categories,
-                            labels: {
-                                style: {
-                                    width: '50px',
-                                    fontSize: '6px'
-                                },
-                                step: 1
-                            }
-                        }, false);
-
-                        Highcharts.each(this.yAxis, function (y) {
-                            y.update({
-                                title: {
-                                    style: {
-                                        fontSize: '6px'
-                                    }
-                                },
-                                labels: {
-                                    style: {
-                                        fontSize: '6px'
-                                    }
-                                }
-                            }, false);
-                        });
-
-                        $.each(this.series, function (i, serie) {
-                            if(!serie.visible){
-                                serie.update({
-                                    showInLegend: false
-                                })
-                            } else {
-                                if(serie.options.dataLabels.enabled){
-                                    serie.update({
-                                        marker : {
-                                            radius: 2
-                                        },
-                                        dataLabels: {
-                                            enabled: true,
-                                            style: {
-                                                fontSize: '6px'
-                                            }
-                                        }
-                                    })
-                                }
-                            }
-                        });
-
-                        /**  Highcharts.each(this.series, function (series) {
                             series.update({
                                 marker : {
                                     radius: 2
@@ -246,28 +158,34 @@ define(function () {
                         }
 
                     }
-                }/**,
+                }/*,
                 printButton: {
                      text: "Print",
                    // _titleKey: "toggleDataLabels",
                     onclick: function (){
-                        var chart = $(this.renderTo).highcharts();
-                        //console.lo
-                        $(this.renderTo).find('.highcharts-button').hide();
-                        $(this.renderTo).find('.highcharts-subtitle').hide();
-                        $(this.renderTo).find('.highcharts-legend-title').hide();
+                        var $chart = $(this.renderTo);
+                        var highchartObj = $chart.highcharts();
 
-                        chart.print();
+                        console.log($chart.find('.highcharts-subtitle'));
 
-                        $(this.renderTo).find('.highcharts-button').show();
-                        $(this.renderTo).find('.highcharts-subtitle').show();
-                        $(this.renderTo).find('.highcharts-legend-title').show();
-                        //alert(this.renderTo)
-                        //this.setTitle("Hello");
+                        //Prepare chart for printing
+                        $chart.find('.highcharts-button').hide();
+                        $chart.find('.highcharts-subtitle').hide();
+                        $chart.find('.highcharts-legend-title').hide();
 
-                       // this.print();
+
+
+                        highchartObj.print();
+
+                        //Reset the chart back
+                        setTimeout(function() {
+                            $chart.find('.highcharts-button').show();
+                            $chart.find('.highcharts-subtitle').show();
+                            $chart.find('.highcharts-legend-title').show();
+                        }, 1000);
+
                     }
-                }**/
+                }*/
             },
 
 
