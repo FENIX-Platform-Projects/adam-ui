@@ -1724,6 +1724,11 @@ define(function () {
                                     }
                                 },
                                 exporting: {
+                                    buttons: {
+                                        toggleDataLabelsButton: {
+                                            enabled: false
+                                        }
+                                    },
                                     chartOptions: {
                                         legend: {
                                             title: '',
@@ -5661,6 +5666,11 @@ define(function () {
                                     }
                                 },
                                 exporting: {
+                                    buttons: {
+                                        toggleDataLabelsButton: {
+                                            enabled: false
+                                        }
+                                    },
                                     chartOptions: {
                                         legend: {
                                             title: '',
