@@ -386,7 +386,7 @@ define(function () {
             formatter: function () {
                 var unit = 'USD Mil';
 
-                if(this.series.name.contains('%'))
+                if(this.series.name.indexOf('%') >=0)
                     unit = '%'
 
                 return '<b>' + this.x + ': ' +
