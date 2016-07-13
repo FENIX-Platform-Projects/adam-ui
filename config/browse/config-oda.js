@@ -157,18 +157,12 @@ define(function () {
                                     opposite: true
                                 }],
                                 series: [{
-                                    name: '% SECTOR/TOTAL ODA',
+                                    name: '% Sector/Total ODA',
                                     yAxis: 1,
                                     dashStyle: 'shortdot',
                                     marker: {
                                         radius: 3
                                     }
-                                }, {
-                                    name: 'ODA SECTOR'
-                                    //, type: 'column'
-                                }, {
-                                    name: 'TOTAL ODA'
-                                    //, type: 'column'
                                 }],
                                 exporting: {
                                     chartOptions: {
@@ -290,7 +284,7 @@ define(function () {
                                         },
                                         "subject": null
                                     },
-                                    "value": "ODA SECTOR" // PART 1 FINAL INDICATOR NAME
+                                    "value": "ODA Sector" // PART 1 FINAL INDICATOR NAME
                                 },
                                 "rid": {
                                     "uid": "total_sector_oda"
@@ -417,7 +411,7 @@ define(function () {
                                         },
                                         "subject": null
                                     },
-                                    "value": "TOTAL ODA" // PART 2 FINAL INDICATOR NAME
+                                    "value": "Total ODA" // PART 2 FINAL INDICATOR NAME
                                 },
                                 "rid": {
                                     "uid": "total_oda"
@@ -553,7 +547,7 @@ define(function () {
                                         },
                                         "subject": null
                                     },
-                                    "value": "% SECTOR/TOTAL ODA"  // PART 3 FINAL INDICATOR NAME
+                                    "value": "% Sector/Total ODA"  // PART 3 FINAL INDICATOR NAME
                                 },
                                 "rid": {
                                     "uid": "percentage_ODA"
@@ -573,7 +567,12 @@ define(function () {
                             useDimensionLabelsIfExist: false,// || default raw else fenixtool
 
                             config: {
-                                colors: ['#008080']
+                                colors: ['#008080'],
+                                legend: {
+                                    title: {
+                                        text: null
+                                    }
+                                }
                             }
 
                         },
@@ -661,6 +660,11 @@ define(function () {
                                     }
                                 },
                                 exporting: {
+                                    buttons: {
+                                        toggleDataLabelsButton: {
+                                            enabled: false
+                                        }
+                                    },
                                     chartOptions: {
                                         legend: {
                                             title: '',
@@ -1024,7 +1028,12 @@ define(function () {
                             aggregationFn: {"value": "sum"},
                             useDimensionLabelsIfExist: false,// || default raw else fenixtool
                             config: {
-                                colors: ['#5DA58D']
+                                colors: ['#5DA58D'],
+                                legend: {
+                                    title: {
+                                        text: null
+                                    }
+                                }
                             }
 
                         },
@@ -1124,6 +1133,11 @@ define(function () {
                                     }
                                 },
                                 exporting: {
+                                    buttons: {
+                                        toggleDataLabelsButton: {
+                                            enabled: false
+                                        }
+                                    },
                                     chartOptions: {
                                         legend: {
                                             title: '',
@@ -1509,7 +1523,12 @@ define(function () {
                             useDimensionLabelsIfExist: false,// || default raw else fenixtool
 
                             config: {
-                                colors: ['#56adc3']
+                                colors: ['#56adc3'],
+                                legend: {
+                                    title: {
+                                        text: null
+                                    }
+                                }
                             }
 
                         },
@@ -1523,111 +1542,6 @@ define(function () {
                                 "parameters": {
                                     "by": [
                                         "channelsubcategory_code", "channelsubcategory_name"
-                                    ],
-                                    "aggregations": [
-                                        {
-                                            "columns": ["value"],
-                                            "rule": "SUM"
-                                        },
-                                        {
-                                            "columns": ["unitcode"],
-                                            "rule": "first"
-                                        },
-                                        {
-                                            "columns": ["flowcategory_name"],
-                                            "rule": "first"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                "name": "order",
-                                "parameters": {
-                                    "value": "DESC"
-                                }
-                            },
-                            {
-                                "name": "page",
-                                "parameters": {
-                                    "perPage": 10,  //top 10
-                                    "page": 1
-                                }
-                            }]
-                    },
-                    {
-                        id: 'top-channels', // TOP CHANNELS OF DELIVERY
-                        type: 'chart',
-                        config: {
-                            type: "pie",
-                            x: ["channelname"], //x axis and series
-                            series: ["flowcategory_name"], // series
-                            y: ["value"],//Y dimension
-                            aggregationFn: {"value": "sum"},
-                            useDimensionLabelsIfExist: false,// || default raw else fenixtool
-                            config: {
-                                chart: {
-                                    events: {
-                                        load: function (event) {
-                                            if (this.options.chart.forExport) {
-                                                Highcharts.each(this.series, function (series) {
-                                                    series.update({
-                                                        dataLabels: {
-                                                            enabled: false
-                                                        }
-                                                    }, false);
-                                                });
-                                                this.redraw();
-                                            }
-                                        }
-                                    }
-
-                                },
-                                tooltip: {
-                                    style: {width: '200px', whiteSpace: 'normal'},
-                                    formatter: function () {
-                                        var val = this.y;
-                                        if (val.toFixed(0) < 1) {
-                                            val = (val * 1000).toFixed(2) + ' K'
-                                        } else {
-                                            val = val.toFixed(2) + ' USD Mil'
-                                        }
-
-                                        return '<b>' + this.percentage.toFixed(2) + '% (' + val + ')</b>';
-                                    }
-                                },
-                                exporting: {
-                                    chartOptions: {
-                                        legend: {
-                                            title: '',
-                                            enabled: true,
-                                            align: 'center',
-                                            layout: 'vertical',
-                                            useHTML: true,
-                                            labelFormatter: function () {
-                                                var val = this.y;
-                                                if (val.toFixed(0) < 1) {
-                                                    val = (val * 1000).toFixed(2) + ' K'
-                                                } else {
-                                                    val = val.toFixed(2) + ' USD Mil'
-                                                }
-
-                                                return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() + ': ' + this.percentage.toFixed(2) + '% (' + val + ')</span></div>';
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        filter: { //FX-filter format
-                            parentsector_code: ["600"],
-                            year: [{value: "2000", parent: 'from'}, {value: "2014", parent:  'to'}]
-                        },
-                        postProcess: [
-                            {
-                                "name": "group",
-                                "parameters": {
-                                    "by": [
-                                        "channelcode", "channelname"
                                     ],
                                     "aggregations": [
                                         {
@@ -1702,6 +1616,11 @@ define(function () {
                                     }
                                 },
                                 exporting: {
+                                    buttons: {
+                                        toggleDataLabelsButton: {
+                                            enabled: false
+                                        }
+                                    },
                                     chartOptions: {
                                         legend: {
                                             title: '',
@@ -2127,21 +2046,13 @@ define(function () {
                                     opposite: true
                                 }],
                                 series: [{
-                                    name: '% SECTOR/TOTAL',
+                                    name: '% Sector/Total',
                                     yAxis: 1,
                                     dashStyle: 'shortdot',
                                     marker: {
                                         radius: 3
                                     }
-                                },
-                                    {
-                                        name: 'ODA IN THE SECTOR FOR THE COUNTRY'//,
-                                        // type: 'column'
-                                    },
-                                    {
-                                        name: 'TOTAL ODA IN THE COUNTRY'//,
-                                        // type: 'column'
-                                    }],
+                                }],
                                 exporting: {
                                     chartOptions: {
                                         legend: {
@@ -2266,7 +2177,7 @@ define(function () {
                                         },
                                         "subject": null
                                     },
-                                    "value": "TOTAL ODA IN THE COUNTRY" // PART 1 FINAL INDICATOR NAME
+                                    "value": "Total ODA in the Country" // PART 1 FINAL INDICATOR NAME
                                 },
                                 "rid": {
                                     "uid": "total_country_oda"
@@ -2371,7 +2282,7 @@ define(function () {
                                         },
                                         "subject": null
                                     },
-                                    "value": "ODA IN THE SECTOR FOR THE COUNTRY" // PART 2 FINAL INDICATOR NAME
+                                    "value": "ODA in the Sector for the Country" // PART 2 FINAL INDICATOR NAME
                                 },
                                 "rid":{"uid":"total_sector_country_oda"}
                             }, // (2iii): TOTAL ODA for SECTOR in COUNTRY: Add Column
@@ -2501,7 +2412,7 @@ define(function () {
                                         },
                                         "subject": null
                                     },
-                                    "value": "% SECTOR/TOTAL" // PART 3 FINAL INDICATOR NAME
+                                    "value": "% Sector/Total" // PART 3 FINAL INDICATOR NAME
                                 },
                                 "rid": {
                                     "uid": "percentage_ODA"
@@ -2520,7 +2431,12 @@ define(function () {
                             aggregationFn: {"value": "sum"},
                             useDimensionLabelsIfExist: false,// || default raw else fenixtool
                             config: {
-                                colors: ['#008080']
+                                colors: ['#008080'],
+                                legend: {
+                                    title: {
+                                        text: null
+                                    }
+                                }
                             }
 
                         },
@@ -2610,6 +2526,11 @@ define(function () {
                                     }
                                 },
                                 exporting: {
+                                    buttons: {
+                                        toggleDataLabelsButton: {
+                                            enabled: false
+                                        }
+                                    },
                                     chartOptions: {
                                         legend: {
                                             title: '',
@@ -3001,7 +2922,12 @@ define(function () {
                             useDimensionLabelsIfExist: false,// || default raw else fenixtool
 
                             config: {
-                                colors: ['#56adc3']
+                                colors: ['#56adc3'],
+                                legend: {
+                                    title: {
+                                        text: null
+                                    }
+                                }
                             }
 
                         },
@@ -3016,115 +2942,6 @@ define(function () {
                                 "parameters": {
                                     "by": [
                                         "channelsubcategory_code", "channelsubcategory_name"
-                                    ],
-                                    "aggregations": [
-                                        {
-                                            "columns": ["value"],
-                                            "rule": "SUM"
-                                        },
-                                        {
-                                            "columns": ["unitcode"],
-                                            "rule": "first"
-                                        },
-                                        {
-                                            "columns": ["flowcategory_name"],
-                                            "rule": "first"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                "name": "order",
-                                "parameters": {
-                                    "value": "DESC"
-                                }
-                            },
-                            {
-                                "name": "page",
-                                "parameters": {
-                                    "perPage": 10,  //top 10
-                                    "page": 1
-                                }
-                            }]
-                    },
-                    {
-                        id: 'top-channels', // TOP CHANNELS OF DELIVERY
-                        type: 'chart',
-                        config: {
-                            type: "pie",
-                            x: ["channelname"], //x axis and series
-                            series: ["flowcategory_name"], // series
-                            y: ["value"],//Y dimension
-                            aggregationFn: {"value": "sum"},
-                            useDimensionLabelsIfExist: false,// || default raw else fenixtool
-
-                            // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
-                            config: {
-                                chart: {
-                                    events: {
-                                        load: function (event) {
-                                            if (this.options.chart.forExport) {
-                                                Highcharts.each(this.series, function (series) {
-                                                    series.update({
-                                                        dataLabels: {
-                                                            enabled: false
-                                                        }
-                                                    }, false);
-                                                });
-                                                this.redraw();
-                                            }
-                                        }
-                                    }
-
-                                },
-                                tooltip: {
-                                    style: {width: '200px', whiteSpace: 'normal'},
-                                    formatter: function () {
-                                        var val = this.y;
-                                        if (val.toFixed(0) < 1) {
-                                            val = (val * 1000).toFixed(2) + ' K'
-                                        } else {
-                                            val = val.toFixed(2) + ' USD Mil'
-                                        }
-
-                                        return '<b>' + this.percentage.toFixed(2) + '% (' + val + ')</b>';
-                                    }
-                                },
-                                exporting: {
-                                    chartOptions: {
-                                        legend: {
-                                            title: '',
-                                            enabled: true,
-                                            align: 'center',
-                                            layout: 'vertical',
-                                            useHTML: true,
-                                            labelFormatter: function () {
-                                                var val = this.y;
-                                                if (val.toFixed(0) < 1) {
-                                                    val = (val * 1000).toFixed(2) + ' K'
-                                                } else {
-                                                    val = val.toFixed(2) + ' USD Mil'
-                                                }
-
-                                                return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() + ': ' + this.percentage.toFixed(2) + '% (' + val + ')</span></div>';
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                        },
-                        filter: { //FX-filter format
-                            parentsector_code: ["600"],
-                            recipientcode: ["625"],
-                            year: [{value: "2000", parent: 'from'}, {value: "2014", parent:  'to'}]
-                        },
-                        postProcess: [
-                            {
-                                "name": "group",
-                                "parameters": {
-                                    "by": [
-                                        "channelcode", "channelname"
                                     ],
                                     "aggregations": [
                                         {
@@ -3677,6 +3494,11 @@ define(function () {
                                     }
                                 },
                                 exporting: {
+                                    buttons: {
+                                        toggleDataLabelsButton: {
+                                            enabled: false
+                                        }
+                                    },
                                     chartOptions: {
                                         legend: {
                                             title: '',
@@ -3994,33 +3816,34 @@ define(function () {
                                     },
                                     opposite: true
                                 }],
+
                                 series: [{
-                                    name: '% SECTOR/TOTAL',
+                                    name: '% Sector/Total',
                                     yAxis: 1,
                                     dashStyle: 'shortdot',
                                     marker: {
                                         radius: 3
                                     }
-                                },
+                                }//,
 
-                                    {
-                                        name: 'ODA FROM DONOR IN SECTOR'//,
+                                 //   {
+                                   //     name: 'ODA from Resource Partner in Sector'//,
                                         // type: 'column'
-                                    },
-                                    {
-                                        name: 'TOTAL ODA FROM DONOR'//,
+                                   // },
+                                   // {
+                                       // name: 'Total ODA from Resource Partner'//,
+                                     //   // type: 'column'
+                                    //},
+                                   // {
+                                        //name: 'OECD Average of ODA in that Sector'//,
                                         // type: 'column'
-                                    },
-                                    {
-                                        name: 'OECD AVERAGE OF ODA IN THAT SECTOR'//,
-                                        // type: 'column'
-                                    }],
+                                    //}
+                                    ],
                                 exporting: {
                                     chartOptions: {
                                         legend: {
                                             enabled: true
                                         }
-
                                     }
                                 }
 
@@ -4167,7 +3990,7 @@ define(function () {
                                         },
                                         "subject": null
                                     },
-                                    "value": "ODA FROM DONOR IN SECTOR" // PART 1 FINAL INDICATOR NAME
+                                    "value": "ODA from Resource Partner in Sector" // PART 1 FINAL INDICATOR NAME
                                 },
                                 "rid": {
                                     "uid": "donor_sector_oda"
@@ -4263,7 +4086,7 @@ define(function () {
                                         },
                                         "subject": null
                                     },
-                                    "value": "TOTAL ODA FROM DONOR" // PART 2 FINAL INDICATOR NAME
+                                    "value": "Total ODA from Resource Partner" // PART 2 FINAL INDICATOR NAME
                                 },
                                 "rid": {
                                     "uid": "total_donor_oda"
@@ -4354,7 +4177,7 @@ define(function () {
                                     },
                                     "value": "percentage"
                                 }
-                            }, // (3iv) PERCENTAGE CALCULATION: Add Column (Measurement Unit)
+                            }, // (3iv) PERCENTAGE CALCULATION: Add Column (Measurement Unit Code)
                             {
                                 "name": "addcolumn",
                                 "parameters": {
@@ -4371,7 +4194,7 @@ define(function () {
                                 "rid": {
                                     "uid": "percentage_withUM"
                                 }
-                            }, // (3v) PERCENTAGE CALCULATION: Add Column (Measurement Unit)
+                            }, // (3v) PERCENTAGE CALCULATION: Add Column (Measurement Unit Label)
                             {
                                 "name": "addcolumn",
                                 "parameters": {
@@ -4393,7 +4216,7 @@ define(function () {
                                         },
                                         "subject": null
                                     },
-                                    "value": "% SECTOR/TOTAL" // PART 3 FINAL INDICATOR NAME
+                                    "value": "% Sector/Total" // PART 3 FINAL INDICATOR NAME
                                 },
                                 "rid": {
                                     "uid": "percentage_ODA"
@@ -4657,7 +4480,7 @@ define(function () {
                                         },
                                         "subject": null
                                     },
-                                    "value": "OECD AVERAGE OF ODA IN THAT SECTOR" // PART 4 FINAL INDICATOR NAME
+                                    "value": "OECD Average of ODA in Sector" // PART 4 FINAL INDICATOR NAME
                                 },
                                 "rid": {
                                     "uid": "OECD_AVG"
@@ -5069,7 +4892,12 @@ define(function () {
                             aggregationFn: {"value": "sum"},
                             useDimensionLabelsIfExist: false,// || default raw else fenixtool
                             config: {
-                                colors: ['#5DA58D']
+                                colors: ['#5DA58D'],
+                                legend: {
+                                  title: {
+                                      text: null
+                                  }
+                                }
                             }
 
                         },
@@ -5170,6 +4998,11 @@ define(function () {
                                     }
                                 },
                                 exporting: {
+                                    buttons: {
+                                        toggleDataLabelsButton: {
+                                            enabled: false
+                                        }
+                                    },
                                     chartOptions: {
                                         legend: {
                                             title: '',
@@ -5607,6 +5440,11 @@ define(function () {
                                     }
                                 },
                                 exporting: {
+                                    buttons: {
+                                        toggleDataLabelsButton: {
+                                            enabled: false
+                                        }
+                                    },
                                     chartOptions: {
                                         legend: {
                                             title: '',
@@ -5714,6 +5552,11 @@ define(function () {
                                     }
                                 },
                                 exporting: {
+                                    buttons: {
+                                        toggleDataLabelsButton: {
+                                            enabled: false
+                                        }
+                                    },
                                     chartOptions: {
                                         legend: {
                                             title: '',
