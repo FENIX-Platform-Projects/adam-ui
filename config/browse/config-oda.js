@@ -119,7 +119,7 @@ define(function () {
                     },
                     template: {
                         hideHeaderIcon: false,
-                        //headerIconClassName: 'glyphicon glyphicon-asterisk',
+                        headerIconClassName: 'glyphicon glyphicon-asterisk',
                         hideSwitch: true,
                         hideRemoveButton: true
                     }
@@ -568,7 +568,7 @@ define(function () {
 
                             config: {
                                 colors: ['#008080'],
-                                legend: {
+                                 legend: {
                                     title: {
                                         text: null
                                     }
@@ -630,6 +630,11 @@ define(function () {
 
                             config: {
                                 colors: ['#008080'],
+                                legend: {
+                                    title: {
+                                        text: null
+                                    }
+                                },
                                 chart: {
                                     events: {
                                         load: function (event) {
@@ -1103,6 +1108,11 @@ define(function () {
 
                             config: {
                                 colors: ['#5DA58D'],
+                                legend: {
+                                    title: {
+                                        text: null
+                                    }
+                                },
                                 chart: {
                                     events: {
                                         load: function (event) {
@@ -2013,7 +2023,7 @@ define(function () {
                     },
                     template: {
                         hideHeaderIcon: false,
-                       // headerIconClassName: 'glyphicon glyphicon-asterisk',
+                        headerIconClassName: 'glyphicon glyphicon-info-sign', //'glyphicon glyphicon-asterisk'
                         hideSwitch: true,
                         hideRemoveButton: true
                     }
@@ -2500,6 +2510,11 @@ define(function () {
 
                             config: {
                                 colors: ['#008080'],
+                                legend: {
+                                    title: {
+                                        text: null
+                                    }
+                                },
                                 chart: {
                                     events: {
                                         load: function (event) {
@@ -3784,7 +3799,7 @@ define(function () {
                     },
                     template: {
                         hideHeaderIcon: false,
-                      //  headerIconClassName: 'glyphicon glyphicon-asterisk',
+                        headerIconClassName: 'glyphicon glyphicon-asterisk',
                         hideSwitch: true,
                         hideRemoveButton: true
                     }
@@ -4973,6 +4988,11 @@ define(function () {
 
                             config: {
                                 colors: ['#5DA58D'],
+                                legend: {
+                                    title: {
+                                        text: null
+                                    }
+                                },
                                 chart: {
                                     events: {
                                         load: function (event) {
@@ -5404,73 +5424,25 @@ define(function () {
                         ]
                     },
                     {
-                        id: 'top-channels', // TOP CHANNELS OF DELIVERY
+                        id: 'top-channel-categories', // TOP CHANNEL OF DELIVERY CATEGORIES
                         type: 'chart',
                         config: {
-                            type: "pie",
-                            x: ["channelname"], //x axis and series
+                            type: "column",
+                            x: ["channelsubcategory_name"], //x axis
                             series: ["flowcategory_name"], // series
                             y: ["value"],//Y dimension
                             aggregationFn: {"value": "sum"},
                             useDimensionLabelsIfExist: false,// || default raw else fenixtool
+
                             config: {
-                                chart: {
-                                    events: {
-                                        load: function (event) {
-                                            if (this.options.chart.forExport) {
-                                                Highcharts.each(this.series, function (series) {
-                                                    series.update({
-                                                        dataLabels: {
-                                                            enabled: false
-                                                        }
-                                                    }, false);
-                                                });
-                                                this.redraw();
-                                            }
-                                        }
-                                    }
-
-                                },
-                                tooltip: {
-                                    style: {width: '200px', whiteSpace: 'normal'},
-                                    formatter: function () {
-                                        var val = this.y;
-                                        if (val.toFixed(0) < 1) {
-                                            val = (val * 1000).toFixed(2) + ' K'
-                                        } else {
-                                            val = val.toFixed(2) + ' USD Mil'
-                                        }
-
-                                        return '<b>' + this.percentage.toFixed(2) + '% (' + val + ')</b>';
-                                    }
-                                },
-                                exporting: {
-                                    buttons: {
-                                        toggleDataLabelsButton: {
-                                            enabled: false
-                                        }
-                                    },
-                                    chartOptions: {
-                                        legend: {
-                                            title: '',
-                                            enabled: true,
-                                            align: 'center',
-                                            layout: 'vertical',
-                                            useHTML: true,
-                                            labelFormatter: function () {
-                                                var val = this.y;
-                                                if (val.toFixed(0) < 1) {
-                                                    val = (val * 1000).toFixed(2) + ' K'
-                                                } else {
-                                                    val = val.toFixed(2) + ' USD Mil'
-                                                }
-
-                                                return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() + ': ' + this.percentage.toFixed(2) + '% (' + val + ')</span></div>';
-                                            }
-                                        }
+                                colors: ['#56adc3'],
+                                legend: {
+                                    title: {
+                                        text: null
                                     }
                                 }
                             }
+
                         },
                         filter: { //FX-filter format
                             donorcode: ["1"],
@@ -5482,7 +5454,7 @@ define(function () {
                                 "name": "group",
                                 "parameters": {
                                     "by": [
-                                        "channelcode", "channelname"
+                                        "channelsubcategory_code", "channelsubcategory_name"
                                     ],
                                     "aggregations": [
                                         {
