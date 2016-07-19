@@ -332,6 +332,9 @@ define(function () {
                     enabled: false
                 },
                 showInLegend: true // shows legend for pie
+            },
+            series: {
+                stickyTracking: false // ensures tooltip displays only when point is hovered on
             }
         },
         legend: {
@@ -340,6 +343,10 @@ define(function () {
             },
             itemStyle: {
                 fontSize: '12px'
+            },
+            itemHiddenStyle: {
+                color: '#CCC',  //Default
+                fontWeight: 500  //Makes it a little darker, more visible
             }
         },
 
@@ -355,6 +362,8 @@ define(function () {
                text: 'USD Millions'
              }
         }],
+
+        xAxis: {crosshair: false}, // removes 'blue' highlight when hovering over points
 
 
         tooltip: {
