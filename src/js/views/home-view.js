@@ -6,11 +6,17 @@ define([
     'config/Events',
     'config/Config',
     'config/home/home-config',
+    'config/home/test-data',
     'fx-m-c/start',
     'fx-dashboard/start',
     'amplify',
     'select2'
-], function ($, View, template, E, C,  DashboardConfig, MapCreator, Dashboard) {
+], function ($, View, template, E, C,
+
+    DashboardConfig,
+    DashboardTestData,
+
+    MapCreator, Dashboard) {
 
     'use strict';
 
@@ -88,11 +94,13 @@ define([
 
             this._disposeDashboards();
 
-                this.dashboards.push(new Dashboard($.extend(true, {
+                /*this.dashboards.push(new Dashboard($.extend(true, {
                     environment: this.environment,
                     el: $(s.DASHBOARD_CONTENT)
                 }, conf.dashboard)));
-
+                */
+                
+                this._createMap(s.MAP_CONTAINER);
             }
         },
 
@@ -105,6 +113,78 @@ define([
             }, this));
 
             this.dashboards = [];
+        },
+
+         _createMap: function() {
+
+            console.log('DashboardTestData', DashboardTestData);
+
+            var countries = [];
+            
+            var data = _.map(DashboardTestData, function(d) {
+                
+                var v = {};
+
+                v[ d[0] ] = parseFloat(d[2]);
+
+                countries.push( parseFloat(d[0]) );
+
+                return v;
+            });
+
+            var m = new FM.Map(s.MAP_CONTAINER, {
+                plugins: {
+                    disclaimerfao: false,
+                    geosearch: false,
+                    mouseposition: false,
+                    controlloading: false,
+                    scalecontrol: false
+                },
+                guiController: {
+                    overlay: false,
+                    baselayer: false,
+                    wmsLoader: false
+                },
+                boundaries: true,
+                zoomToCountry: countries
+            });
+            
+            m.createMap(0, 0, 1);
+
+            var joincolumnlabel = 'adm0_name',
+                joincolumn = 'adm0_code',
+                mu = 'Tonnes';
+
+            m.addLayer( new FM.layer({
+                layers: 'fenix:gaul0_3857',
+                layertitle: 'ODA 2014',
+                joincolumn: joincolumn,
+                joincolumnlabel: joincolumnlabel,
+                joindata: data,
+                mu: mu,
+                measurementunit: mu,
+                jointype: 'shaded',
+                colorramp: 'Blues',
+                layertype: 'JOIN',
+                openlegend: true,
+                defaultgfi: true,
+                opacity: '0.7',
+                lang: 'en',
+                customgfi: {
+                    content: {
+                        en: "<div class='fm-popup'>{{" + joincolumnlabel + "}} <div class='fm-popup-join-content'>{{{" + joincolumn + "}}}</div></div>"
+                    },
+                    showpopup: true
+                }
+            }) );
+
+            m.addLayer( new FM.layer({
+                layers: 'fenix:gaul0_line_3857',
+                layertitle: 'Country Boundaries',
+                //urlWMS: 'http://fenixapps.fao.org/geoserver',
+                opacity: '0.9',
+                lang: 'en'
+            }) );
         }
     });
 
