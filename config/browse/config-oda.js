@@ -119,7 +119,8 @@ define(function () {
                     },
                     template: {
                         hideHeaderIcon: false,
-                        headerIconClassName: 'glyphicon glyphicon-asterisk',
+                        frankie: true,
+                        headerIconClassName: 'glyphicon glyphicon-info-sign',
                         hideSwitch: true,
                         hideRemoveButton: true
                     }
@@ -2023,7 +2024,7 @@ define(function () {
                     },
                     template: {
                         hideHeaderIcon: false,
-                        headerIconClassName: 'glyphicon glyphicon-info-sign', //'glyphicon glyphicon-asterisk'
+                        headerIconClassName: 'glyphicon glyphicon-info-sign',
                         hideSwitch: true,
                         hideRemoveButton: true
                     }
@@ -3799,7 +3800,7 @@ define(function () {
                     },
                     template: {
                         hideHeaderIcon: false,
-                        headerIconClassName: 'glyphicon glyphicon-asterisk',
+                        headerIconClassName: 'glyphicon glyphicon-info-sign',
                         hideSwitch: true,
                         hideRemoveButton: true
                     }
