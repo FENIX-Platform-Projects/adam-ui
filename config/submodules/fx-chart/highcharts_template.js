@@ -368,16 +368,21 @@ define(function () {
 
         tooltip: {
             formatter: function () {
-                var unit = 'USD Mil';
+               if(!this.series.options.dataLabels.enabled) { // hide tooltip if data labels enabled
+                    var unit = 'USD Mil';
 
-                if(this.series.name.indexOf('%') >=0)
-                    unit = '%'
+                    if (this.series.name.indexOf('%') >= 0)
+                        unit = '%'
 
-                return '<b>' + this.x + ': ' +
-                    this.series.name + '</b><br/>' +
-                    Highcharts.numberFormat(this.y, 2, '.', ',') + ' '+unit;
+                    return '<b>' + this.x + ': ' +
+                        this.series.name + '</b><br/>' +
+                        Highcharts.numberFormat(this.y, 2, '.', ',') + ' ' + unit;
+                } else {
+                   return false;
+                }
 
             }
+
         }
 
     };

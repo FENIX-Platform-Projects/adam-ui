@@ -58,10 +58,10 @@ define(function () {
                                 "name": "group",
                                 "parameters": {
                                     "by": [
-                                        "gaul0", "incomegroupcode"
+                                       "gaul0"
                                     ],
-                                    "aggregations": [
-                                        {
+                                   "aggregations": [
+                                     {
                                             "columns": ["value"],
                                             "rule": "SUM"
                                         },

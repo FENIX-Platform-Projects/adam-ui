@@ -94,13 +94,13 @@ define([
 
             this._disposeDashboards();
 
-                /*this.dashboards.push(new Dashboard($.extend(true, {
+               this.dashboards.push(new Dashboard($.extend(true, {
                     environment: this.environment,
                     el: $(s.DASHBOARD_CONTENT)
                 }, conf.dashboard)));
-                */
+
                 
-                this._createMap(s.MAP_CONTAINER);
+               // this._createMap(s.MAP_CONTAINER);
             }
         },
 
