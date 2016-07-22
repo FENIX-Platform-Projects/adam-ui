@@ -11,5 +11,5 @@ define({
     "filter_year-to": "To",
     "filter_uid": "ODA",
     "filter_oda": "ODA",
-    "filter_tooltip_uid": "Official Development Assistance - Grants, Grant-Like, Loans and Equity Investment"
+    "filter_tooltip_oda": "Official Development Assistance (ODA) - Grants, Grant-Like, Loans and Equity Investment"
 });
