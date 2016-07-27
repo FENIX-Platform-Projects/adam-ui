@@ -9,6 +9,7 @@ define({
     "top-recipients": "Top Recipients",
     "top-recipients-others": "ODA Share between Top Recipients and Others",
     "top-sectors": "Top Sectors",
+    "top-sectors-others": "ODA Share between Top Sectors and Others",
     "top-subsectors": "Top Sub-Sectors",
     "top-channels": "Top Channels of Delivery",
     "top-implementing-channels": "Top Implementing Channels",
