@@ -4487,13 +4487,14 @@ define(function () {
                                     }
                                 },
                                     {
-                                        name: 'TOTAL ODA FROM DONOR'//,
-                                        // type: 'column'
-                                    },
-                                    {
-                                        name: 'GNI DONOR'//,
-                                        // type: 'column'
-                                    }],
+                                        name: '% OECD Average of ODA/GNI',
+                                        yAxis: 1,
+                                        dashStyle: 'shortdot',
+                                        marker: {
+                                            radius: 3
+                                        }
+                                    }
+                                ],
                                 exporting: {
                                     chartOptions: {
                                         legend: {
@@ -4626,7 +4627,7 @@ define(function () {
                                         },
                                         "subject": null
                                     },
-                                    "value": "TOTAL ODA FROM DONOR"
+                                    "value": "Total ODA from Resource Partner"
                                 },
                                 "rid": {
                                     "uid": "total_donor_oda"
@@ -4715,7 +4716,7 @@ define(function () {
                                         },
                                         "subject": null
                                     },
-                                    "value": "GNI DONOR"
+                                    "value": "Resource Partner GNI"
                                 },
                                 "rid": {
                                     "uid": "gni_donor_oda"
