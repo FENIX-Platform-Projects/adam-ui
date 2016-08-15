@@ -556,6 +556,16 @@ define(function () {
                                     title: {
                                         text: null
                                     }
+                                },
+                                plotOptions: {
+                                    column: {
+                                        events: {
+                                            legendItemClick: function () {
+                                                return false;
+                                            }
+                                        }
+                                    },
+                                    allowPointSelect: false
                                 }
                             }
 
@@ -617,6 +627,20 @@ define(function () {
                                 legend: {
                                     title: {
                                         text: null
+                                    }
+                                },
+                                plotOptions: {
+                                    pie: {
+                                        showInLegend: true
+                                    },
+                                    series: {
+                                        point: {
+                                            events: {
+                                                legendItemClick: function () {
+                                                    return false; // <== returning false will cancel the default action
+                                                }
+                                            }
+                                        }
                                     }
                                 },
                                 chart: {
@@ -687,17 +711,20 @@ define(function () {
                                 "name": "union",
                                 "sid": [
                                     {
-                                        "uid": "top_10_donors_sum" // RESULT OF PART 1: TOTAL ODA for TOP 10 PARTNERS
+                                        "uid": "top_10_donors_sum"
+                                        // RESULT OF PART 1: TOTAL ODA for TOP 10 PARTNERS
                                     },
                                     {
-                                        "uid":"others" // RESULT OF PART 3: TOTAL ODA OTHERS CALCULATION (TOTAL ODA ALL PARTNERS (PART 2) - TOTAL ODA FOR TOP 10 Partners)
+                                        "uid": "others"
+                                        // RESULT OF PART 3: TOTAL ODA OTHERS CALCULATION (TOTAL ODA ALL PARTNERS (PART 2) - TOTAL ODA FOR TOP 10 Partners)
                                     }
                                 ],
-                                "parameters": {
-                                },
-                                "rid":{"uid":"union_process"}
-
-                            }, // PART 4: UNION is the FINAL PART IN THE PROCESS
+                                "parameters": {},
+                                "rid": {
+                                    "uid": "union_process"
+                                }
+                            },
+                            // PART 4: UNION is the FINAL PART IN THE PROCESS
 
                             {
                                 "name": "filter",
@@ -739,8 +766,11 @@ define(function () {
                                         }
                                     }
                                 },
-                                "rid":{"uid":"filter_top_10_donors_sum"}
-                            }, // PART 1: TOTAL ODA for TOP 10 PARTNERS: (1i) Filter
+                                "rid": {
+                                    "uid": "filter_top_10_donors_sum"
+                                }
+                            },
+                            // PART 1: TOTAL ODA for TOP 10 PARTNERS: (1i) Filter
                             {
                                 "name": "group",
                                 "parameters": {
@@ -759,35 +789,27 @@ define(function () {
                                                 "unitcode"
                                             ],
                                             "rule": "first"
-                                        },
+                                        }
                                     ]
                                 }
-                            }, // (1ii): TOTAL ODA for TOP 10 PARTNERS: Group by
+                            },
+                            // (1ii): TOTAL ODA for TOP 10 PARTNERS: Group by
                             {
                                 "name": "order",
                                 "parameters": {
                                     "value": "DESC"
-                                }
-                            }, // (1iii): TOTAL ODA for TOP 10 PARTNERS: Order by
+                                },
+                                "rid":{"uid":"filtered_dataset"}
+                            },
+                            // (1iii): TOTAL ODA for TOP 10 PARTNERS: Order by
                             {
                                 "name": "page",
                                 "parameters": {
                                     "perPage": 10,
                                     "page": 1
                                 }
-                            }, // (1iv): TOTAL ODA for TOP 10 PARTNERS: Limit
-                            {
-                                "name": "filter",
-                                "parameters": {
-                                    "columns": [
-                                        "unitcode",
-                                        "value"
-
-                                    ],
-                                    "rows": {
-                                    }
-                                }
-                            }, // (1v): TOTAL ODA for TOP 10 PARTNERS: Filter (filter out what is not needed)
+                            },
+                            // (1iv): TOTAL ODA for TOP 10 PARTNERS: Limit
                             {
                                 "name": "group",
                                 "parameters": {
@@ -803,7 +825,8 @@ define(function () {
                                         }
                                     ]
                                 }
-                            }, // (1vi): TOTAL ODA for TOP 10 PARTNERS: Group by
+                            },
+                            // (1vi): TOTAL ODA for TOP 10 PARTNERS: Group by
                             {
                                 "name": "addcolumn",
                                 "parameters": {
@@ -825,57 +848,17 @@ define(function () {
                                         },
                                         "subject": null
                                     },
-                                    "value": "Top Resource Partners" // PART 1 FINAL INDICATOR NAME
+                                    "value": "Top Resource Partners"
+                                    // PART 1 FINAL INDICATOR NAME
                                 },
                                 "rid": {
                                     "uid": "top_10_donors_sum"
                                 }
-                            }, // (1vii): TOTAL ODA for TOP 10 PARTNERS: Add Column
-                            {
-                                "name": "filter",
-                                "sid": [
-                                    {
-                                        "uid": "adam_usd_aggregation_table"
-                                    }
-                                ],
-                                "parameters": {
-                                    "columns": [
-                                        "value",
-                                        "unitcode"
-                                    ],
-                                    "rows": {
-                                        "oda": {
-                                            "enumeration": [
-                                                "usd_commitment"
-                                            ]
-                                        },
-                                        "parentsector_code": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_dac",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                        "year": {
-                                            "time": [
-                                                {
-                                                    "from": 2000,
-                                                    "to": 2014
-                                                }
-                                            ]
-                                        }
-                                    }
-                                },
-                                "rid": {
-                                    "uid": "filter_all_donors_sum"
-                                }
-                            }, // PART 2: TOTAL ODA for ALL PARTNERS : (2i) Filter
+                            },
+                            // (1vii): TOTAL ODA for TOP 10 PARTNERS: Add Column
                             {
                                 "name": "group",
+                                "sid":[{"uid":"filtered_dataset"}],
                                 "parameters": {
                                     "by": [
                                         "unitcode"
@@ -887,10 +870,10 @@ define(function () {
                                             ],
                                             "rule": "SUM"
                                         }
-
                                     ]
                                 }
-                            }, // (2ii): TOTAL ODA for ALL PARTNERS: Group by
+                            },
+                            // (2ii): TOTAL ODA for ALL PARTNERS: Group by
                             {
                                 "name": "addcolumn",
                                 "parameters": {
@@ -912,12 +895,14 @@ define(function () {
                                         },
                                         "subject": null
                                     },
-                                    "value": "sum of all donors" // PART 2 FINAL INDICATOR NAME
+                                    "value": "sum of all donors"
+                                    // PART 2 FINAL INDICATOR NAME
                                 },
                                 "rid": {
                                     "uid": "top_all_donors_sum"
                                 }
-                            }, // (2iii): TOTAL ODA for ALL PARTNERS : Add Column
+                            },
+                            // (2iii): TOTAL ODA for ALL PARTNERS : Add Column
                             {
                                 "name": "join",
                                 "sid": [
@@ -931,7 +916,6 @@ define(function () {
                                 "parameters": {
                                     "joins": [
                                         [
-
                                             {
                                                 "type": "id",
                                                 "value": "unitcode"
@@ -942,17 +926,22 @@ define(function () {
                                                 "type": "id",
                                                 "value": "unitcode"
                                             }
-
                                         ]
                                     ],
-                                    "values": [
-                                    ]
+                                    "values": []
                                 },
-                                "rid":{"uid":"join_process_total_donors"}
-                            }, // PART 3: TOTAL ODA OTHERS CALCULATION: (3i) Join
+                                "rid": {
+                                    "uid": "join_process_total_donors"
+                                }
+                            },
+                            // PART 3: TOTAL ODA OTHERS CALCULATION: (3i) Join
                             {
                                 "name": "addcolumn",
-                                "sid":[{"uid":"join_process_total_donors"}],
+                                "sid": [
+                                    {
+                                        "uid": "join_process_total_donors"
+                                    }
+                                ],
                                 "parameters": {
                                     "column": {
                                         "dataType": "number",
@@ -963,11 +952,16 @@ define(function () {
                                         "subject": null
                                     },
                                     "value": {
-                                        "keys":  ["1 = 1"],
-                                        "values":["top_all_donors_sum_value - top_10_donors_sum_value"]
+                                        "keys": [
+                                            "1 = 1"
+                                        ],
+                                        "values": [
+                                            "top_all_donors_sum_value - top_10_donors_sum_value"
+                                        ]
                                     }
                                 }
-                            }, // (3ii): TOTAL ODA OTHERS CALCULATION: Add Column
+                            },
+                            // (3ii): TOTAL ODA OTHERS CALCULATION: Add Column
                             {
                                 "name": "filter",
                                 "parameters": {
@@ -976,7 +970,8 @@ define(function () {
                                         "unitcode"
                                     ]
                                 }
-                            }, // (3iii): TOTAL ODA OTHERS CALCULATION: Filter (filter out what is not needed)
+                            },
+                            // (3iii): TOTAL ODA OTHERS CALCULATION: Filter (filter out what is not needed)
                             {
                                 "name": "addcolumn",
                                 "parameters": {
@@ -998,12 +993,14 @@ define(function () {
                                         },
                                         "subject": null
                                     },
-                                    "value": "Other Resource Partners" // PART 3 FINAL INDICATOR NAME
+                                    "value": "Other Resource Partners"
+                                    // PART 3 FINAL INDICATOR NAME
                                 },
                                 "rid": {
                                     "uid": "others"
                                 }
-                            } // (3iv): TOTAL ODA OTHERS CALCULATION: Add Column
+                            }
+                            // (3iv): TOTAL ODA OTHERS CALCULATION: Add Column
                         ]
                     },
                     {
@@ -1022,6 +1019,16 @@ define(function () {
                                     title: {
                                         text: null
                                     }
+                                },
+                                plotOptions: {
+                                    column: {
+                                        events: {
+                                            legendItemClick: function () {
+                                                return false;
+                                            }
+                                        }
+                                    },
+                                    allowPointSelect: false
                                 }
                             }
 
@@ -1095,6 +1102,20 @@ define(function () {
                                 legend: {
                                     title: {
                                         text: null
+                                    }
+                                },
+                                plotOptions: {
+                                    pie: {
+                                        showInLegend: true
+                                    },
+                                    series: {
+                                        point: {
+                                            events: {
+                                                legendItemClick: function () {
+                                                    return false; // <== returning false will cancel the default action
+                                                }
+                                            }
+                                        }
                                     }
                                 },
                                 chart: {
@@ -1255,25 +1276,14 @@ define(function () {
                                 "name": "order",
                                 "parameters": {
                                     "value": "DESC"
-                                }
+                                },
+                                "rid":{"uid":"filtered_dataset"}
                             },
                             {
                                 "name": "page",
                                 "parameters": {
                                     "perPage": 10,
                                     "page": 1
-                                }
-                            },
-                            {
-                                "name": "filter",
-                                "parameters": {
-                                    "columns": [
-                                        "unitcode",
-                                        "value"
-
-                                    ],
-                                    "rows": {
-                                    }
                                 }
                             },
                             {
@@ -1320,48 +1330,8 @@ define(function () {
                                 }
                             },
                             {
-                                "name": "filter",
-                                "sid": [
-                                    {
-                                        "uid": "adam_usd_aggregation_table"
-                                    }
-                                ],
-                                "parameters": {
-                                    "columns": [
-                                        "value",
-                                        "unitcode"
-                                    ],
-                                    "rows": {
-                                        "oda": {
-                                            "enumeration": [
-                                                "usd_commitment"
-                                            ]
-                                        },
-                                        "parentsector_code": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_dac",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                        "year": {
-                                            "time": [
-                                                {
-                                                    "from": 2000,
-                                                    "to": 2014
-                                                }
-                                            ]
-                                        }
-                                    }
-                                },
-                                "rid":{"uid":"filter_all_recipients_sum"}
-                            },
-                            {
                                 "name": "group",
+                                "sid":[{"uid":"filtered_dataset"}],
                                 "parameters": {
                                     "by": [
                                         "unitcode"
@@ -1522,6 +1492,16 @@ define(function () {
                                     title: {
                                         text: null
                                     }
+                                },
+                                plotOptions: {
+                                    column: {
+                                        events: {
+                                            legendItemClick: function () {
+                                                return false;
+                                            }
+                                        }
+                                    },
+                                    allowPointSelect: false
                                 }
                             }
 
@@ -2418,6 +2398,16 @@ define(function () {
                                     title: {
                                         text: null
                                     }
+                                },
+                                plotOptions: {
+                                    column: {
+                                        events: {
+                                            legendItemClick: function () {
+                                                return false;
+                                            }
+                                        }
+                                    },
+                                    allowPointSelect: false
                                 }
                             }
 
@@ -2480,6 +2470,20 @@ define(function () {
                                 legend: {
                                     title: {
                                         text: null
+                                    }
+                                },
+                                plotOptions: {
+                                    pie: {
+                                        showInLegend: true
+                                    },
+                                    series: {
+                                        point: {
+                                            events: {
+                                                legendItemClick: function () {
+                                                    return false; // <== returning false will cancel the default action
+                                                }
+                                            }
+                                        }
                                     }
                                 },
                                 chart: {
@@ -2553,15 +2557,14 @@ define(function () {
                                         "uid": "top_10_donors_sum"
                                     },
                                     {
-                                        "uid":"others"
+                                        "uid": "others"
                                     }
                                 ],
-                                "parameters": {
-                                },
-                                "rid":{"uid":"union_process"}
-
+                                "parameters": {},
+                                "rid": {
+                                    "uid": "union_process"
+                                }
                             },
-
                             {
                                 "name": "filter",
                                 "sid": [
@@ -2613,7 +2616,9 @@ define(function () {
                                         }
                                     }
                                 },
-                                "rid":{"uid":"filter_top_10_donors_sum"}
+                                "rid": {
+                                    "uid": "filter_top_10_donors_sum"
+                                }
                             },
                             {
                                 "name": "group",
@@ -2633,7 +2638,7 @@ define(function () {
                                                 "unitcode"
                                             ],
                                             "rule": "first"
-                                        },
+                                        }
                                     ]
                                 }
                             },
@@ -2641,25 +2646,14 @@ define(function () {
                                 "name": "order",
                                 "parameters": {
                                     "value": "DESC"
-                                }
+                                },
+                                "rid":{"uid":"filtered_dataset"}
                             },
                             {
                                 "name": "page",
                                 "parameters": {
                                     "perPage": 10,
                                     "page": 1
-                                }
-                            },
-                            {
-                                "name": "filter",
-                                "parameters": {
-                                    "columns": [
-                                        "unitcode",
-                                        "value"
-
-                                    ],
-                                    "rows": {
-                                    }
                                 }
                             },
                             {
@@ -2705,64 +2699,9 @@ define(function () {
                                     "uid": "top_10_donors_sum"
                                 }
                             },
-
-
-                            {
-                                "name": "filter",
-                                "sid": [
-                                    {
-                                        "uid": "adam_usd_aggregation_table"
-                                    }
-                                ],
-                                "parameters": {
-                                    "columns": [
-                                        "value",
-                                        "unitcode"
-                                    ],
-                                    "rows": {
-                                        "oda": {
-                                            "enumeration": [
-                                                "usd_commitment"
-                                            ]
-                                        },
-                                        "recipientcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_recipients",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "625"
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                        "parentsector_code": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_dac",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                        "year": {
-                                            "time": [
-                                                {
-                                                    "from": 2000,
-                                                    "to": 2014
-                                                }
-                                            ]
-                                        }
-                                    }
-                                },
-                                "rid": {
-                                    "uid": "filter_top_all_donors_sum"
-                                }
-                            },
                             {
                                 "name": "group",
+                                "sid":[{"uid":"filtered_dataset"}],
                                 "parameters": {
                                     "by": [
                                         "unitcode"
@@ -2774,7 +2713,6 @@ define(function () {
                                             ],
                                             "rule": "SUM"
                                         }
-
                                     ]
                                 }
                             },
@@ -2805,10 +2743,6 @@ define(function () {
                                     "uid": "top_all_donors_sum"
                                 }
                             },
-
-
-
-
                             {
                                 "name": "join",
                                 "sid": [
@@ -2822,7 +2756,6 @@ define(function () {
                                 "parameters": {
                                     "joins": [
                                         [
-
                                             {
                                                 "type": "id",
                                                 "value": "unitcode"
@@ -2833,17 +2766,21 @@ define(function () {
                                                 "type": "id",
                                                 "value": "unitcode"
                                             }
-
                                         ]
                                     ],
-                                    "values": [
-                                    ]
+                                    "values": []
                                 },
-                                "rid":{"uid":"join_process_total_donors"}
+                                "rid": {
+                                    "uid": "join_process_total_donors"
+                                }
                             },
                             {
                                 "name": "addcolumn",
-                                "sid":[{"uid":"join_process_total_donors"}],
+                                "sid": [
+                                    {
+                                        "uid": "join_process_total_donors"
+                                    }
+                                ],
                                 "parameters": {
                                     "column": {
                                         "dataType": "number",
@@ -2854,8 +2791,12 @@ define(function () {
                                         "subject": null
                                     },
                                     "value": {
-                                        "keys":  ["1 = 1"],
-                                        "values":["top_all_donors_sum_value - top_10_donors_sum_value"]
+                                        "keys": [
+                                            "1 = 1"
+                                        ],
+                                        "values": [
+                                            "top_all_donors_sum_value - top_10_donors_sum_value"
+                                        ]
                                     }
                                 }
                             },
@@ -2914,6 +2855,16 @@ define(function () {
                                     title: {
                                         text: null
                                     }
+                                },
+                                plotOptions: {
+                                    column: {
+                                        events: {
+                                            legendItemClick: function () {
+                                                return false;
+                                            }
+                                        }
+                                    },
+                                    allowPointSelect: false
                                 }
                             }
 
@@ -5208,6 +5159,16 @@ define(function () {
                                   title: {
                                       text: null
                                   }
+                                },
+                                plotOptions: {
+                                    column: {
+                                        events: {
+                                            legendItemClick: function () {
+                                                return false;
+                                            }
+                                        }
+                                    },
+                                    allowPointSelect: false
                                 }
                             }
 
@@ -5282,6 +5243,20 @@ define(function () {
                                 legend: {
                                     title: {
                                         text: null
+                                    }
+                                },
+                                plotOptions: {
+                                    pie: {
+                                        showInLegend: true
+                                    },
+                                    series: {
+                                        point: {
+                                            events: {
+                                                legendItemClick: function () {
+                                                    return false; // <== returning false will cancel the default action
+                                                }
+                                            }
+                                        }
                                     }
                                 },
                                 chart: {
@@ -5453,25 +5428,14 @@ define(function () {
                                 "name": "order",
                                 "parameters": {
                                     "value": "DESC"
-                                }
+                                },
+                                "rid":{"uid":"filtered_dataset"}
                             },
                             {
                                 "name": "page",
                                 "parameters": {
                                     "perPage": 10,
                                     "page": 1
-                                }
-                            },
-                            {
-                                "name": "filter",
-                                "parameters": {
-                                    "columns": [
-                                        "unitcode",
-                                        "value"
-
-                                    ],
-                                    "rows": {
-                                    }
                                 }
                             },
                             {
@@ -5518,59 +5482,8 @@ define(function () {
                                 }
                             },
                             {
-                                "name": "filter",
-                                "sid": [
-                                    {
-                                        "uid": "adam_usd_aggregation_table"
-                                    }
-                                ],
-                                "parameters": {
-                                    "columns": [
-                                        "value",
-                                        "unitcode"
-                                    ],
-                                    "rows": {
-                                        "oda": {
-                                            "enumeration": [
-                                                "usd_commitment"
-                                            ]
-                                        },
-                                        "donorcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_donors",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "1"
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                        "parentsector_code": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_dac",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "600"
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                        "year": {
-                                            "time": [
-                                                {
-                                                    "from": 2000,
-                                                    "to": 2014
-                                                }
-                                            ]
-                                        }
-                                    }
-                                },
-                                "rid":{"uid":"filter_all_recipients_sum"}
-                            },
-                            {
                                 "name": "group",
+                                "sid":[{"uid":"filtered_dataset"}],
                                 "parameters": {
                                     "by": [
                                         "unitcode"
@@ -5731,6 +5644,16 @@ define(function () {
                                     title: {
                                         text: null
                                     }
+                                },
+                                plotOptions: {
+                                    column: {
+                                        events: {
+                                            legendItemClick: function () {
+                                                return false;
+                                            }
+                                        }
+                                    },
+                                    allowPointSelect: false
                                 }
                             }
 
@@ -7827,6 +7750,16 @@ define(function () {
                                     title: {
                                         text: null
                                     }
+                                },
+                                plotOptions: {
+                                    column: {
+                                        events: {
+                                            legendItemClick: function () {
+                                                return false;
+                                            }
+                                        }
+                                    },
+                                    allowPointSelect: false
                                 }
                             }
 
@@ -7889,6 +7822,16 @@ define(function () {
                                     title: {
                                         text: null
                                     }
+                                },
+                                plotOptions: {
+                                    column: {
+                                        events: {
+                                            legendItemClick: function () {
+                                                return false;
+                                            }
+                                        }
+                                    },
+                                    allowPointSelect: false
                                 }
                             }
 
@@ -7951,6 +7894,20 @@ define(function () {
                                 legend: {
                                     title: {
                                         text: null
+                                    }
+                                },
+                                plotOptions: {
+                                    pie: {
+                                        showInLegend: true
+                                    },
+                                    series: {
+                                        point: {
+                                            events: {
+                                                legendItemClick: function () {
+                                                    return false; // <== returning false will cancel the default action
+                                                }
+                                            }
+                                        }
                                     }
                                 },
                                 chart: {
@@ -8021,17 +7978,20 @@ define(function () {
                                 "name": "union",
                                 "sid": [
                                     {
-                                        "uid": "top_10_sectors_sum" // RESULT OF PART 1: TOTAL ODA for TOP 10 SECTORS
+                                        "uid": "top_10_sectors_sum"
+                                        // RESULT OF PART 1: TOTAL ODA for TOP 10 SECTORS
                                     },
                                     {
-                                        "uid":"others" // RESULT OF PART 3: TOTAL ODA OTHERS CALCULATION (TOTAL ODA ALL SECTORS (PART 2) - TOTAL ODA FOR TOP 10 Sectors)
+                                        "uid": "others"
+                                        // RESULT OF PART 3: TOTAL ODA OTHERS CALCULATION (TOTAL ODA ALL SECTORS (PART 2) - TOTAL ODA FOR TOP 10 Sectors)
                                     }
                                 ],
-                                "parameters": {
-                                },
-                                "rid":{"uid":"union_process"}
-
-                            }, // PART 4: UNION is the FINAL PART IN THE PROCESS
+                                "parameters": {},
+                                "rid": {
+                                    "uid": "union_process"
+                                }
+                            },
+                            // PART 4: UNION is the FINAL PART IN THE PROCESS
 
                             {
                                 "name": "filter",
@@ -8084,8 +8044,11 @@ define(function () {
                                         }
                                     }
                                 },
-                                "rid":{"uid":"filter_top_10_sectors_sum"}
-                            }, // PART 1: TOTAL ODA for TOP 10 SECTORS: (1i) Filter
+                                "rid": {
+                                    "uid": "filter_top_10_sectors_sum"
+                                }
+                            },
+                            // PART 1: TOTAL ODA for TOP 10 SECTORS: (1i) Filter
                             {
                                 "name": "group",
                                 "parameters": {
@@ -8104,35 +8067,27 @@ define(function () {
                                                 "unitcode"
                                             ],
                                             "rule": "first"
-                                        },
+                                        }
                                     ]
                                 }
-                            }, // (1ii): TOTAL ODA for TOP 10 SECTORS: Group by
+                            },
+                            // (1ii): TOTAL ODA for TOP 10 SECTORS: Group by
                             {
                                 "name": "order",
                                 "parameters": {
                                     "value": "DESC"
-                                }
-                            }, // (1iii): TOTAL ODA for TOP 10 SECTORS: Order by
+                                },
+                                "rid":{"uid":"filtered_dataset"}
+                            },
+                            // (1iii): TOTAL ODA for TOP 10 SECTORS: Order by
                             {
                                 "name": "page",
                                 "parameters": {
                                     "perPage": 10,
                                     "page": 1
                                 }
-                            }, // (1iv): TOTAL ODA for TOP 10 SECTORS: Limit
-                            {
-                                "name": "filter",
-                                "parameters": {
-                                    "columns": [
-                                        "unitcode",
-                                        "value"
-
-                                    ],
-                                    "rows": {
-                                    }
-                                }
-                            }, // (1v): TOTAL ODA for TOP 10 SECTORS: Filter (filter out what is not needed)
+                            },
+                            // (1iv): TOTAL ODA for TOP 10 SECTORS: Limit
                             {
                                 "name": "group",
                                 "parameters": {
@@ -8148,7 +8103,8 @@ define(function () {
                                         }
                                     ]
                                 }
-                            }, // (1vi): TOTAL ODA for TOP 10 SECTORS: Group by
+                            },
+                            // (1vi): TOTAL ODA for TOP 10 SECTORS: Group by
                             {
                                 "name": "addcolumn",
                                 "parameters": {
@@ -8170,68 +8126,17 @@ define(function () {
                                         },
                                         "subject": null
                                     },
-                                    "value": "Top Sectors" // PART 1 FINAL INDICATOR NAME
+                                    "value": "Top Sectors"
+                                    // PART 1 FINAL INDICATOR NAME
                                 },
                                 "rid": {
                                     "uid": "top_10_sectors_sum"
                                 }
-                            }, // (1vii): TOTAL ODA for TOP 10 PARTNERS: Add Column
-                            {
-                                "name": "filter",
-                                "sid": [
-                                    {
-                                        "uid": "adam_usd_aggregation_table"
-                                    }
-                                ],
-                                "parameters": {
-                                    "columns": [
-                                        "value",
-                                        "unitcode"
-                                    ],
-                                    "rows": {
-                                        "oda": {
-                                            "enumeration": [
-                                                "usd_commitment"
-                                            ]
-                                        },
-                                        "recipientcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_recipients",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "625"
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                        "donorcode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_donors",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "1"
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                        "year": {
-                                            "time": [
-                                                {
-                                                    "from": 2000,
-                                                    "to": 2014
-                                                }
-                                            ]
-                                        }
-                                    }
-                                },
-                                "rid": {
-                                    "uid": "filter_all_sectors_sum"
-                                }
-                            }, // PART 2: TOTAL ODA for ALL SECTORS : (2i) Filter
+                            },
+                            // (1vii): TOTAL ODA for TOP 10 PARTNERS: Add Column
                             {
                                 "name": "group",
+                                "sid":[{"uid":"filtered_dataset"}],
                                 "parameters": {
                                     "by": [
                                         "unitcode"
@@ -8243,10 +8148,10 @@ define(function () {
                                             ],
                                             "rule": "SUM"
                                         }
-
                                     ]
                                 }
-                            }, // (2ii): TOTAL ODA for ALL SECTORS: Group by
+                            },
+                            // PART 2i: TOTAL ODA for ALL SECTORS: Group by
                             {
                                 "name": "addcolumn",
                                 "parameters": {
@@ -8268,12 +8173,14 @@ define(function () {
                                         },
                                         "subject": null
                                     },
-                                    "value": "sum of all sectors" // PART 2 FINAL INDICATOR NAME
+                                    "value": "sum of all sectors"
+                                    // PART 2 FINAL INDICATOR NAME
                                 },
                                 "rid": {
                                     "uid": "top_all_sectors_sum"
                                 }
-                            }, // (2iii): TOTAL ODA for ALL SECTORS : Add Column
+                            },
+                            // (2ii): TOTAL ODA for ALL SECTORS : Add Column
                             {
                                 "name": "join",
                                 "sid": [
@@ -8287,7 +8194,6 @@ define(function () {
                                 "parameters": {
                                     "joins": [
                                         [
-
                                             {
                                                 "type": "id",
                                                 "value": "unitcode"
@@ -8298,17 +8204,22 @@ define(function () {
                                                 "type": "id",
                                                 "value": "unitcode"
                                             }
-
                                         ]
                                     ],
-                                    "values": [
-                                    ]
+                                    "values": []
                                 },
-                                "rid":{"uid":"join_process_total_sectors"}
-                            }, // PART 3: TOTAL ODA OTHERS CALCULATION: (3i) Join
+                                "rid": {
+                                    "uid": "join_process_total_sectors"
+                                }
+                            },
+                            // PART 3: TOTAL ODA OTHERS CALCULATION: (3i) Join
                             {
                                 "name": "addcolumn",
-                                "sid":[{"uid":"join_process_total_sectors"}],
+                                "sid": [
+                                    {
+                                        "uid": "join_process_total_sectors"
+                                    }
+                                ],
                                 "parameters": {
                                     "column": {
                                         "dataType": "number",
@@ -8319,11 +8230,16 @@ define(function () {
                                         "subject": null
                                     },
                                     "value": {
-                                        "keys":  ["1 = 1"],
-                                        "values":["top_all_sectors_sum_value - top_10_sectors_sum_value"]
+                                        "keys": [
+                                            "1 = 1"
+                                        ],
+                                        "values": [
+                                            "top_all_sectors_sum_value - top_10_sectors_sum_value"
+                                        ]
                                     }
                                 }
-                            }, // (3ii): TOTAL ODA OTHERS CALCULATION: Add Column
+                            },
+                            // (3ii): TOTAL ODA OTHERS CALCULATION: Add Column
                             {
                                 "name": "filter",
                                 "parameters": {
@@ -8332,7 +8248,8 @@ define(function () {
                                         "unitcode"
                                     ]
                                 }
-                            }, // (3iii): TOTAL ODA OTHERS CALCULATION: Filter (filter out what is not needed)
+                            },
+                            // (3iii): TOTAL ODA OTHERS CALCULATION: Filter (filter out what is not needed)
                             {
                                 "name": "addcolumn",
                                 "parameters": {
@@ -8354,12 +8271,14 @@ define(function () {
                                         },
                                         "subject": null
                                     },
-                                    "value": "Other Sectors" // PART 3 FINAL INDICATOR NAME
+                                    "value": "Other Sectors"
+                                    // PART 3 FINAL INDICATOR NAME
                                 },
                                 "rid": {
                                     "uid": "others"
                                 }
-                            } // (3iv): TOTAL ODA OTHERS CALCULATION: Add Column
+                            }
+                            // (3iv): TOTAL ODA OTHERS CALCULATION: Add Column
                         ]
                     },
                     {
