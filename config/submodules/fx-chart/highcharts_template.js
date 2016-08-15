@@ -7,7 +7,7 @@ define(function () {
 
         chart: {
             //spacing: [10, 10, 27, 10], // better spacing when chart exports
-            spacing: [10, 10, 15, 10],
+            spacing: [10, 10, 27, 10], // was [10, 10, 15, 10]
             events: {
                 load: function (event) {
 
@@ -72,6 +72,12 @@ define(function () {
                                          }
                                          }
                                      })
+                                } else {
+                                    serie.update({
+                                        marker: {
+                                            radius: 2
+                                        }
+                                    })
                                 }
                            }
                         });
@@ -291,12 +297,15 @@ define(function () {
                     title: {
                         text: null
                     },
+                    itemDistance: 50,
+                    itemMarginBottom: 5,
+
                     labelFormatter: function(){
                         return '<span style="color:'+this.color+'">'+this.name+'</span>';
                     },
                     itemStyle: {
-                        fontSize: '6px'//,
-                        //fontWeight: 'bold'
+                        fontSize: '6px',
+                        fontWeight: 'normal'
                     },
                     enabled: false//, only one series and all info in title and subtitle
                 },
@@ -307,8 +316,8 @@ define(function () {
                 },
                 series: {
                    // marker : {
-                   //     radius: 2
-                  // },
+                      //  radius: 2
+                   //},
                     dataLabels: {
                         enabled: false
                        // style: {
@@ -341,8 +350,9 @@ define(function () {
             title: {
                 text: 'Click to hide/show'
             },
+            padding: 0,
             itemStyle: {
-                fontSize: '12px'
+               fontSize: '12px'
             },
             itemHiddenStyle: {
                 color: '#CCC',  //Default
