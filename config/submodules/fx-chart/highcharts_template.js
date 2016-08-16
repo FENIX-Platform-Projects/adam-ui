@@ -356,7 +356,7 @@ define(function () {
             },
             itemHiddenStyle: {
                 color: '#CCC',  //Default
-                fontWeight: 500  //Makes it a little darker, more visible
+                fontWeight: 'bold'  //Makes it a little darker, more visible
             }
         },
 
