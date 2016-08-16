@@ -166,11 +166,7 @@ define([
         },
 
 
-
         _disposeDashboards : function () {
-
-           // console.log("_disposeDashboards:this.dashboards ");
-            //console.log(this.dashboards);
 
             _.each( this.dashboards, _.bind(function (dashboard) {
                 if (dashboard && $.isFunction(dashboard.dispose)) {
@@ -180,6 +176,7 @@ define([
 
             this.dashboards = [];
         },
+
 
         _hideDashboardItem: function (itemId) {
             // Remove Item from config Items
@@ -454,10 +451,18 @@ define([
             amplify.unsubscribe(s.events.FAO_SECTOR_CHART_LOADED, this._sectorChartLoaded);
         },
 
+
+
+
         dispose: function () {
+
+            this._disposeDashboards();
+
             this._unbindEventListeners();
+
             View.prototype.dispose.call(this, arguments);
         }
+
 
     });
 
