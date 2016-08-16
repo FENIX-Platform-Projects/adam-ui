@@ -6,7 +6,7 @@ define([
     'views/common/title-view',
     'views/browse/filter-view',
     'views/browse/oda-dashboard-view',
-    //'views/browse/dashboard-indicators-view',
+    'views/browse/development-indicators-dashboard-view',
     'models/browse/dashboard',
     'text!templates/browse/browse.hbs',
     'i18n!nls/browse',
@@ -14,11 +14,11 @@ define([
     'config/browse/Events',
     'config/browse/config-oda',
     'config/browse/Config-oecd-fao',
-    'config/browse/Config-indicators',
+    'config/browse/config-development-indicators',
     'lib/utils',
     'amplify',
     'bootstrap'
-], function ($, $UI, View, TitleSubView, FilterSubView, DashboardOecdSubView /**,DashboardIndicatorsSubView**/, DashboardModel, template, i18nLabels, E, BaseEvents, BrowseOecdConfig, BrowseOecdFaoSectorsConfig, BrowseIndicatorsConfig, Utils) {
+], function ($, $UI, View, TitleSubView, FilterSubView, DashboardOecdSubView ,DashboardIndicatorsSubView, DashboardModel, template, i18nLabels, E, BaseEvents, BrowseOecdConfig, BrowseOecdFaoSectorsConfig, BrowseIndicatorsConfig, Utils) {
 
     'use strict';
 
@@ -146,13 +146,13 @@ define([
             var filtersSubView = new FilterSubView({autoRender: true, container: this.$el.find(s.css_classes.FILTER_HOLDER), config: config.filter});
             this.subview('filters', filtersSubView);
 
-            this.dashboardModel = new DashboardModel();
+            this.odaDashboardModel = new DashboardModel();
 
             //DASHBOARD 1
             this.baseDashboardConfig = config.dashboard,
             this.faoDashboardConfig = configFao.dashboard;
 
-            var dashboardOecdSubView = new DashboardOecdSubView({autoRender: false, container: this.$el.find(s.css_classes.DASHBOARD_OECD_HOLDER), topic: this.browse_type, model:this.dashboardModel});
+            var dashboardOecdSubView = new DashboardOecdSubView({autoRender: false, container: this.$el.find(s.css_classes.DASHBOARD_OECD_HOLDER), topic: this.browse_type, model:this.odaDashboardModel});
             dashboardOecdSubView.setDashboardConfig(this.baseDashboardConfig, s.config_types.BASE);
 
             this.subview('oecdDashboard', dashboardOecdSubView);
@@ -164,6 +164,47 @@ define([
 
 
             //amplify.publish(s.events.TITLE_ADD_ITEM, item);
+
+            console.log("============= this.browse_type ================= "+this.browse_type);
+            if(this.browse_type === s.topics.COUNTRY || this.browse_type === s.topics.DONOR) {
+
+                var configIndicators = BrowseIndicatorsConfig[this.browse_type];
+
+                if (!configIndicators || !configIndicators.items) {
+                    alert("Impossible to find configuration for Development Indicators: ");
+                    return;
+                }
+
+                this.indicatorsDashboardConfig = configIndicators;
+                this.indicatorsDashboardModel = new DashboardModel();
+
+                var dashboardIndicatorsSubView = new DashboardIndicatorsSubView({
+                    autoRender: false,
+                    container: this.$el.find(s.css_classes.DASHBOARD_INDICATORS_HOLDER),
+                    topic: this.browse_type,
+                    model: this.indicatorsDashboardModel
+                });
+                dashboardIndicatorsSubView.setDashboardConfig(this.indicatorsDashboardConfig);
+
+                this.subview('indicatorsDashboard', dashboardIndicatorsSubView);
+
+
+               /* var configIndicators = BrowseIndicatorsConfig[this.browse_type];
+
+                if (!configIndicators || !configIndicators.dashboard) {
+                    alert("Impossible to find configuration for Indicators: ");
+                    return;
+                }
+
+                this.indicatorsDashboardConfig = configIndicators.dashboard;
+
+                var dashboardIndicatorsSubView = new DashboardIndicatorsSubView({autoRender: false, container: this.$el.find(s.css_classes.DASHBOARD_INDICATORS_HOLDER), topic: this.browse_type, model:this.dashboardModel});
+                dashboardIndicatorsSubView.setDashboardConfig(this.indicatorsDashboardConfig);
+                this.subview('indicatorsDashboard', dashboardIndicatorsSubView);*/
+
+
+            }
+
 
             /**
             //DASHBOARD 2, render indicators dashboard if browse_type =
@@ -243,7 +284,7 @@ define([
          */
         _filtersLoaded: function (selectedFilterItems){
 
-            //console.log("_filtersLoaded ", selectedFilterItems);
+            console.log("CALLED _filtersLoaded ========== ", selectedFilterItems);
 
            /// var titleSubView = new TitleSubView({autoRender: true,
             //    container: this.$el.find(s.css_classes.TITLE_BAR_ITEMS),
@@ -254,9 +295,14 @@ define([
             this.subview('title').setLabels(selectedFilterItems);
             this.subview('title').build();
 
-            this._setDashboardModelValues();
-
+            this._setOdaDashboardModelValues();
             this.subview('oecdDashboard').renderDashboard();
+
+
+            if(this.browse_type === s.topics.COUNTRY || this.browse_type === s.topics.DONOR){
+                this._setIndicatorDashboardModelValues();
+                this.subview('indicatorsDashboard').renderDashboard();
+            }
 
         },
 
@@ -358,7 +404,7 @@ define([
                 this.subview('oecdDashboard').updateDashboardConfigNew(this.datasetType.oecd_uid, item, this.removeItems);
 
 
-                   this._setDashboardModelValues();
+                   this._setOdaDashboardModelValues();
                    // console.log("=============== _updateDashboard 4ii "+item.id);
                        // var ovalues = this.subview('filters').getOECDValues();
                       // this.subview('oecdDashboard').rebuildDashboard([ovalues]);
@@ -370,9 +416,10 @@ define([
                    // }
 
                     if(this.browse_type === s.topics.COUNTRY || this.browse_type === s.topics.DONOR){
-                        this._setIndicatorDashboardModelCountry();
+                        this._setIndicatorDashboardModelValues();
                         var ivalues = this.subview('filters').getIndicatorsValues();
-                        this.subview('indicatorsDashboard').rebuildDashboard([ivalues]);
+                        //this.subview('indicatorsDashboard').rebuildDashboard([ivalues]);
+                        this.subview('indicatorsDashboard').rebuildDashboard(ivalues);
                     }
             //TEST: JUST IF }
 
@@ -451,12 +498,12 @@ define([
                // this.subview('title').show();
 
                // console.log("_subSectorFilterLoaded  "+ this.browse_type);
-                this._setDashboardModelValues();
+                this._setOdaDashboardModelValues();
                 this.subview('oecdDashboard').renderDashboard();
 
 
 
-               // if(this.browse_type === 'country_sector' || this.browse_type === 'donor_sector'){
+                //if(this.browse_type === 'country_sector' || this.browse_type === 'donor_sector'){
                  //   this._setIndicatorDashboardModelCountry();
                   //  this.subview('indicatorsDashboard').renderDashboard();
                // }
@@ -479,7 +526,7 @@ define([
                 // this.subview('title').show();
 
                // console.log("_timerangeFilterLoaded  "+ this.browse_type);
-                this._setDashboardModelValues();
+                this._setOdaDashboardModelValues();
                 this.subview('oecdDashboard').renderDashboard();
 
 
@@ -503,7 +550,7 @@ define([
                 // this.subview('title').show();
 
                // console.log("_countryFilterLoaded "+ this.browse_type);
-                this._setDashboardModelValues();
+                this._setOdaDashboardModelValues();
                 this.subview('oecdDashboard').renderDashboard();
 
 
@@ -533,12 +580,15 @@ define([
             //console.log(this.subview('title'));
 
             this.subview('title').removeItem(resetItemName);
-            this._setDashboardModelValues();
+            this._setOdaDashboardModelValues();
 
             this.subview('oecdDashboard').rebuildDashboard([ovalues]);
 
              if(this.browse_type === 'country' || this.browse_type === 'donor'){
-               this._setIndicatorDashboardModelCountry();
+               this._setIndicatorDashboardModelValues();
+
+               console.log("RENDER CALLED: _resetDashboard ================");
+
               this.subview('indicatorsDashboard').renderDashboard();
              }
 
@@ -549,25 +599,19 @@ define([
              this.dashboardModel.set(key, value);
          },**/
 
-        _updateDashboardModel: function(key, value){
-            this.dashboardModel.set(key, value);
-        },
 
-        _setIndicatorDashboardModelCountry: function(){
-            var country = this.subview('title').getItemText(s.ids.RECIPIENT_COUNTRY);
+        _setIndicatorDashboardModelValues: function(){
+            var country  = this.subview('title').getItemText(s.ids.RECIPIENT_COUNTRY);
             var donor = this.subview('title').getItemText(s.ids.DONOR);
 
             if(donor.length > 0)
-                this._updateDashboardModel(s.dashboardModel.COUNTRY, donor);
-            else
-                this._updateDashboardModel(s.dashboardModel.COUNTRY, country);
+                country = donor;
 
+            this.indicatorsDashboardModel.set(s.dashboardModel.COUNTRY, country);
         },
 
-        _setDashboardModelValues: function(){
-            // console.log("_setDashboardModelValues ", s.dashboardModel.LABEL);
-             //console.log(this.subview('title').getTitleAsArray() );
-             this._updateDashboardModel(s.dashboardModel.LABEL, this.subview('title').getTitleAsArray());
+        _setOdaDashboardModelValues: function(){
+            this.odaDashboardModel.set(s.dashboardModel.LABEL, this.subview('title').getTitleAsArray());
         },
 
         backToTop: function(e) {
