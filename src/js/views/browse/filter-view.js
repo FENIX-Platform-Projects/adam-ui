@@ -419,42 +419,61 @@ define(
             //console.log(selectedValues);
             return selectedValues;
         },
+
+
+
             /**
              *
              *
              * @returns {*}
              */
-        getIndicatorsValues: function () {
-            var values = this._getSelectedValues();
-            var cloneObj;
+            getIndicatorsValues: function () {
+
+            var filterValues =  this._getFilterValues();
+            var values = filterValues.values;
+            var labels = filterValues.labels;
+
+            var cloneObj, cloneLabelObj;
+
+               // console.log("============================= VALUES =================== ");
+               // console.log(values);
 
             var donorSelected = this._hasSelections(s.ids.DONOR, values);
             var recipientSelected = this._hasSelections(s.ids.RECIPIENT_COUNTRY, values);
 
-            if(donorSelected)
+
+            if(donorSelected){
                 cloneObj = this._getObject(s.ids.DONOR, values);
-
-            if(recipientSelected)
+                cloneLabelObj = this._getObject(s.ids.DONOR, labels);
+            }
+            if(recipientSelected) {
                 cloneObj = this._getObject(s.ids.RECIPIENT_COUNTRY, values);
+                cloneLabelObj = this._getObject(s.ids.RECIPIENT_COUNTRY, labels);
+            }
 
-          /**  if(cloneObj) {
+
+           if(cloneObj) {
                 //======= UPDATE VALUES CONFIG
-                values[s.ids.COUNTRY] = {};
-                values[s.ids.COUNTRY].codes = [];
-                values[s.ids.COUNTRY].codes[0] = $.extend(true, {}, cloneObj["codes"][0]); // clone the codes configuration
-                values[s.ids.COUNTRY].codes[0].uid = s.codeLists.RECIPIENT_DONORS.uid;
-                values[s.ids.COUNTRY].codes[0].version = s.codeLists.RECIPIENT_DONORS.version;
+                values[s.ids.COUNTRY] = cloneObj;
+                labels[s.ids.COUNTRY] = cloneLabelObj;
 
                 //======= Set everything in the values to be removed except the country
                 for (var filter in values) {
                     if (filter !== s.ids.COUNTRY) {
-                        values[filter] = {};
-                        values[filter].removeFilter = true;
+                        values[filter] = [];
+                        labels[filter] = {};
                     }
                 }
-            }**/
+            } else {
+               // reset all filter values to empty
+               for (var filter in values) {
+                       values[filter] = [];
+                       labels[filter] = {};
+               }
 
-            return values;
+           }
+
+            return filterValues;
         },
             /**
              *
