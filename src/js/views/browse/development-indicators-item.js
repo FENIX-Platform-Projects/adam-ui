@@ -31,7 +31,7 @@ define([
         }
     };
 
-    function DevelopmentIndicators(o) {
+    function DevelopmentIndicatorsItem(o) {
 
         var self = this;
 
@@ -42,7 +42,7 @@ define([
 
         this._initVariables();
 
-        this._renderItem();
+        this._render();
 
         this._bindEventListeners();
 
@@ -60,7 +60,7 @@ define([
      * Disposition method
      * Mandatory method
      */
-    DevelopmentIndicators.prototype.dispose = function () {
+    DevelopmentIndicatorsItem.prototype.dispose = function () {
 
         this._dispose();
 
@@ -72,7 +72,7 @@ define([
      * refresh method
      * Mandatory method
      */
-    DevelopmentIndicators.prototype.refresh = function () {
+    DevelopmentIndicatorsItem.prototype.refresh = function () {
 
         log.info("Item refresh successfully");
 
@@ -82,7 +82,7 @@ define([
      * pub/sub
      * @return {Object} component instance
      */
-    DevelopmentIndicators.prototype.on = function (channel, fn, context) {
+    DevelopmentIndicatorsItem.prototype.on = function (channel, fn, context) {
         var _context = context || this;
         if (!this.channels[channel]) {
             this.channels[channel] = [];
@@ -92,7 +92,7 @@ define([
         return this;
     };
 
-    DevelopmentIndicators.prototype._trigger = function (channel) {
+    DevelopmentIndicatorsItem.prototype._trigger = function (channel) {
 
         if (!this.channels[channel]) {
             return false;
@@ -106,11 +106,11 @@ define([
         return this;
     };
 
-    DevelopmentIndicators.prototype._getStatus = function () {
+    DevelopmentIndicatorsItem.prototype._getStatus = function () {
         return this.status;
     };
 
-    DevelopmentIndicators.prototype._renderTemplate = function () {
+    DevelopmentIndicatorsItem.prototype._renderTemplate = function () {
 
         var indicatorsPartial = Handlebars.compile(indicatorPartialTemplate);
         Handlebars.registerPartial('indicatorPartial', indicatorsPartial);
@@ -126,7 +126,7 @@ define([
 
     };
 
-    DevelopmentIndicators.prototype._initVariables = function () {
+    DevelopmentIndicatorsItem.prototype._initVariables = function () {
 
         //Init status
         this.status = {};
@@ -137,13 +137,13 @@ define([
         //TODO
     };
 
-    DevelopmentIndicators.prototype._renderItem = function () {
+    DevelopmentIndicatorsItem.prototype._render = function () {
 
         this.controller._trigger('indicators_ready',{data: {size: this.model.data.length}});
 
          if(this.model.data.length > 0) {
             var metadata = this.model.metadata.dsd.columns;
-            var data = this._processData(this.model.data, metadata);
+            var data = this._processPayload(this.model.data, metadata);
             data = $.extend(true, data, i18nLabels);
             var html = this.indicatortemplate({data: data});
             $(this.el).html(html);
@@ -151,7 +151,7 @@ define([
     };
 
 
-    DevelopmentIndicators.prototype._processData = function (data, metadata) {
+    DevelopmentIndicatorsItem.prototype._processPayload = function (data, metadata) {
 
         var valueIndex = this._findWithAttr(metadata, "id", "value"),
             sourceIndex = this._findWithAttr(metadata, "id", "source"),
@@ -176,7 +176,6 @@ define([
         for (var i = 0, len = data.length; i < len; ++i) {
             var indicatorObj =  {};
 
-            //indicatorObj.name = data[i][data[i].length-1];
             indicatorObj.name = data[i][indicatornameIndex];
             indicatorObj.css = data[i][indicatorcodeIndex];
             indicatorObj.code = data[i][indicatorcodeIndex];
@@ -276,7 +275,7 @@ define([
     };
 
 
-    DevelopmentIndicators.prototype._findWithAttr = function (array, attr, value) {
+    DevelopmentIndicatorsItem.prototype._findWithAttr = function (array, attr, value) {
         for(var i = 0; i < array.length; i += 1) {
             if(array[i][attr] === value) {
                 return i;
@@ -285,7 +284,7 @@ define([
     };
 
 
-    DevelopmentIndicators.prototype._reorderArrayByProperty = function (array_with_order, array_to_order, orderByProperty) {
+    DevelopmentIndicatorsItem.prototype._reorderArrayByProperty = function (array_with_order, array_to_order, orderByProperty) {
         var reordered_array = [],
             len = array_to_order.length,
             index, current;
@@ -303,22 +302,22 @@ define([
 
     };
 
-    DevelopmentIndicators.prototype._destroyCustomItem = function () {
+    DevelopmentIndicatorsItem.prototype._destroyCustomItem = function () {
 
         //TODO
 
         log.info("Destroyed Custom: " + this.id);
     };
 
-    DevelopmentIndicators.prototype._bindEventListeners = function () {
+    DevelopmentIndicatorsItem.prototype._bindEventListeners = function () {
        // amplify.subscribe(s.events.CUSTOM_ITEM_COUNTRY_RESPONSE, this, this._showCountryIndicators);
     };
 
-    DevelopmentIndicators.prototype._unbindEventListeners = function () {
+    DevelopmentIndicatorsItem.prototype._unbindEventListeners = function () {
         //TODO
     };
 
-    DevelopmentIndicators.prototype._dispose = function () {
+    DevelopmentIndicatorsItem.prototype._dispose = function () {
 
         this._unbindEventListeners();
 
@@ -326,11 +325,11 @@ define([
 
     };
 
-    DevelopmentIndicators.prototype._getEventName = function (evt) {
+    DevelopmentIndicatorsItem.prototype._getEventName = function (evt) {
 
         return this.controller.id + evt;
     };
 
-    return DevelopmentIndicators;
+    return DevelopmentIndicatorsItem;
 
 });
