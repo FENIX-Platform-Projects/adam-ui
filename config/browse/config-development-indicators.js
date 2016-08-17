@@ -11,49 +11,26 @@ define(function () {
             uid: "adam_country_indicators",
 
             items: [
-                    {
-                        id: 'indicators-1',
-                        type: 'custom',
+                {
+                    id: 'indicators-1',
+                    type: 'custom',
 
-                        filterFor: {
-                            "filter_country": ['countrycode']
-                        },
-                        postProcess: [
-                            {
-                                "name": "filter",
-                                "sid": [
-                                    {
-                                        "uid": "adam_country_indicators"
-                                    }
-                                ],
-                                "parameters": {
-                                   "columns": ["period", "value", "indicatorcode", "source", "note", "link", "itemcode", "unitcode"],
-                                    "rows": {
-                                        "countrycode": {
-                                            "codes": [
-                                                {
-                                                    "uid": "crs_recipientdonors",
-                                                    "version": "2016",
-                                                    "codes": [
-                                                        "625" // Afghanistan
-                                                    ]
-                                                }
-                                            ]
-                                        }
-                                    }
-                                },
-                                "rid": {
-                                    "uid": "filter_country"
-                                }
-
-                            },
-                            {
-                                "name": "order",
-                                "parameters": {
-                                    "indicatorcode": "ASC"
-                                }
-                            }]
-                    }
+                    filter: { //FX-filter format
+                        countrycode: ["625"] //Afghanistan
+                    },
+                    postProcess: [
+                        {
+                            "name": "filter",
+                            "parameters": {
+                                "columns": ["period", "value", "indicatorcode", "source", "note", "link", "itemcode", "unitcode"]
+                            }
+                        },{
+                            "name": "order",
+                            "parameters": {
+                                "indicatorcode": "ASC"
+                            }
+                        }]
+                }
                 ]
         },
         "donor": {
@@ -65,39 +42,16 @@ define(function () {
                     id: 'indicators-1',
                     type: 'custom',
 
-                    filterFor: {
-                        "filter_donor": ['countrycode']
+                    filter: { //FX-filter format
+                        countrycode: ["1"] //Austria
                     },
                     postProcess: [
                         {
                             "name": "filter",
-                            "sid": [
-                                {
-                                    "uid": "adam_country_indicators"
-                                }
-                            ],
                             "parameters": {
-                                "columns": ["period", "value", "indicatorcode", "source", "note", "link", "itemcode", "unitcode"],
-                                "rows": {
-                                    "countrycode": {
-                                        "codes": [
-                                            {
-                                                "uid": "crs_recipientdonors",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "1" //Austria
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            },
-                            "rid": {
-                                "uid": "filter_donor"
+                                "columns": ["period", "value", "indicatorcode", "source", "note", "link", "itemcode", "unitcode"]
                             }
-
-                        },
-                        {
+                        },{
                             "name": "order",
                             "parameters": {
                                 "indicatorcode": "ASC"
