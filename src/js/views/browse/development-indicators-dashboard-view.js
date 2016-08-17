@@ -99,7 +99,7 @@ define([
 
             this.config.itemsRegistry =  {
                 custom: {
-                    path: 'custom/development-indicators'
+                    path: 'views/browse/development-indicators-item'
                 }
             };
 
