@@ -17,7 +17,10 @@ define(function ( ) {
         RELOAD_RESULT : "fx.analyze.results.reload",
         CHANGE_MODE: "fx.analyze.mode.change",
 
-        MENU_RESET_BREADCRUMB: 'fx.fenix.menu.resetbreadcrumb'
+        MENU_RESET_BREADCRUMB: 'fx.fenix.menu.resetbreadcrumb',
+
+        TITLE_ADD_ITEM: 'fx.title.item.add',
+        TITLE_REMOVE_ITEM: 'fx.title.item.remove'
 
     };
 });
