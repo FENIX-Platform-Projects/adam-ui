@@ -13,7 +13,7 @@ define(function () {
                     default: ["625"],
                     config: { //Selectize configuration
                         maxItems: 1,
-                        placeholder: "All",
+                        placeholder: "Please select",
                         plugins: ['remove_button'],
                         mode: 'multi'
                     }
@@ -650,7 +650,7 @@ define(function () {
                         } // (3vi) PERCENTAGE CALCULATION: Add Column
                     ]
                 },
-                {
+                 {
                     id: "tot-oda-subsector", //ref [data-item=':id']
                     type: "chart", //chart || map || olap,
                     config: {
@@ -721,6 +721,8 @@ define(function () {
 
                         }
                     },
+
+                    //filterFor: ['un_region_code', 'parentsector_code', 'purposecode', 'year', 'oda'],
 
                     filterFor: {
                         "filter_total_country_sector_oda": ['recipientcode', 'parentsector_code', 'year', 'oda'],
@@ -1078,7 +1080,7 @@ define(function () {
                             }
                         } // (3vi) PERCENTAGE CALCULATION: Add Column
                     ]
-                },
+                } ,
                  {
                     id: 'top-partners', // TOP DONORS
                     type: 'chart',
@@ -2198,15 +2200,17 @@ define(function () {
                             labels: true,
                             boundaries: true,
 
-                            zoomToCountry: [1]
+                            zoomToCountry: [1],
 
                             //highlight service NOT WORK FOR NOW
                             //highlightCountry : [1], // GAUL Afghanistan
                         }
                     },
 
+
+                    filterFor: ['un_region_code', 'parentsector_code', 'purposecode', 'year', 'oda'],
+
                     filter: { //FX-filter format
-                        parentsector_code: ["600"],
                         un_region_code: ["034"], // Region = 'Southern Asia'
                         year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
                     },
@@ -2245,7 +2249,4 @@ define(function () {
             ]
         }
         }
-
-
-
-});
+    });

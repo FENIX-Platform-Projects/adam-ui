@@ -14,7 +14,7 @@ define(function ( ) {
             RESOURCE_PARTNER: 'donorcode',
             SECTOR: 'parentsector_code',
             SUB_SECTOR: 'purposecode',
-            oda: 'oda'
+            ODA: 'oda'
         },
         topic: {
             BY_COUNTRY: 'country',
