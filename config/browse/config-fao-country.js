@@ -5,7 +5,7 @@ define(function () {
     'use strict';
 
     return {
-            id: 'OTHER_SECTORS',
+        id: 'FAO_SECTOR',
         filter: {
             recipientcode: {
                 selector: {
@@ -13,7 +13,7 @@ define(function () {
                     default: ["625"],
                     config: { //Selectize configuration
                         maxItems: 1,
-                        placeholder: "All",
+                        placeholder: "Please select",
                         plugins: ['remove_button'],
                         mode: 'multi'
                     }
@@ -33,7 +33,7 @@ define(function () {
             parentsector_code: {
                 selector: {
                     id: "dropdown",
-                    default: ["600"],
+                    default: ["9999"],
                     config: { //Selectize configuration
                         maxItems: 1,
                         placeholder: "All",
@@ -54,31 +54,85 @@ define(function () {
                 }
             },
             purposecode: {
-                selector: {
-                    id: "dropdown",
-                    config: {
-                        maxItems: 1,
-                        placeholder: "All",
-                        plugins: ['remove_button'],
-                        mode: 'multi'
+                    selector: {
+                        id: "dropdown",
+                        config: {
+                            maxItems: 1,
+                            placeholder: "All",
+                            plugins: ['remove_button'],
+                            mode: 'multi'
+                        }
+                    },
+                    className: "col-sm-4",
+                    cl: {
+                        "codes": [
+                            "12240",
+                            "14030",
+                            "14031",
+                            "15170",
+                            "16062",
+                            "23070",
+                            "31110",
+                            "31120",
+                            "31130",
+                            "31140",
+                            "31150",
+                            "31161",
+                            "31162",
+                            "31163",
+                            "31164",
+                            "31165",
+                            "31166",
+                            "31181",
+                            "31182",
+                            "31191",
+                            "31192",
+                            "31193",
+                            "31194",
+                            "31195",
+                            "31210",
+                            "31220",
+                            "31261",
+                            "31281",
+                            "31282",
+                            "31291",
+                            "31310",
+                            "31320",
+                            "31381",
+                            "31382",
+                            "31391",
+                            "32161",
+                            "32162",
+                            "32163",
+                            "32165",
+                            "32267",
+                            "41010",
+                            "41020",
+                            "41030",
+                            "41040",
+                            "41050",
+                            "41081",
+                            "41082",
+                            "43040",
+                            "43050",
+                            "52010",
+                            "72040",
+                            "74010"
+                        ],
+                        "uid": "crs_dac",
+                        "version": "2016",
+                        "level": 2,
+                        "levels": 2
+                    },
+                    template: {
+                        hideSwitch: true,
+                        hideRemoveButton: true
+                    },
+                    dependencies: {
+                        "parentsector_code": {id: "parent", event: "select"}
                     }
                 },
-                className: "col-sm-4",
-                cl: {
-                    codes: ["60010", "60020", "60030", "60040", "60061", "60062", "60063"],
-                    "uid": "crs_dac",
-                    "version": "2016",
-                    "level": 2,
-                    "levels": 2
-                },
-                template: {
-                    hideSwitch: true,
-                    hideRemoveButton: true
-                },
-                dependencies: {
-                    "parentsector_code": {id: "parent", event: "select"} //obj or array of obj
-                }
-            },
+            
             "year-from": {
                 selector: {
                     id: "dropdown",
@@ -133,7 +187,7 @@ define(function () {
                         maxItems: 1
                     }
                 },
-                className: "col-sm-3",
+                className: "col-sm-4",
                 cl: {
                     uid: "crs_flow_amounts",
                     version: "2016"
@@ -175,7 +229,7 @@ define(function () {
                         "filter_total_ODA": ['recipientcode', 'year', 'oda']
                     },
 
-                    postProcess1: [
+                    postProcess: [
                         {
                             "name": "filter",
                             "sid": [
@@ -242,6 +296,30 @@ define(function () {
                             "rid": {
                                 "uid": "total_oda"
                             }
+                        },
+                        {
+                            "name": "addcolumn",
+                            "parameters": {
+                                "column": {
+                                    "dataType": "text",
+                                    "id": "indicator",
+                                    "title": {
+                                        "EN": "Indicator"
+                                    },
+                                    "domain": {
+                                        "codes": [
+                                            {
+                                                "extendedName": {
+                                                    "EN": "Adam Processes"
+                                                },
+                                                "idCodeList": "adam_processes"
+                                            }
+                                        ]
+                                    },
+                                    "subject": null
+                                },
+                                "value": "ODA"
+                            }
                         }
                     ]
                 },
@@ -290,7 +368,7 @@ define(function () {
 
                     filterFor: {
                         "filter_total_country_ODA": ['recipientcode', 'year', 'oda'],
-                        "filter_total_sector_country_oda": ['recipientcode', 'parentsector_code', 'year', 'oda']
+                        "filter_total_sector_country_oda": ['recipientcode', 'year', 'oda']
                     },
 
                     postProcess: [
@@ -425,13 +503,64 @@ define(function () {
                                             "usd_commitment"
                                         ]
                                     },
-                                    "parentsector_code": {
+                                    "purposecode": { // FAO Related purposecodes
                                         "codes": [
                                             {
-                                                "uid": "crs_dac",
+                                                "uid": "crs_purposes",
                                                 "version": "2016",
                                                 "codes": [
-                                                    "600"
+                                                    "12240",
+                                                    "14030",
+                                                    "14031",
+                                                    "15170",
+                                                    "16062",
+                                                    "23070",
+                                                    "31110",
+                                                    "31120",
+                                                    "31130",
+                                                    "31140",
+                                                    "31150",
+                                                    "31161",
+                                                    "31162",
+                                                    "31163",
+                                                    "31164",
+                                                    "31165",
+                                                    "31166",
+                                                    "31181",
+                                                    "31182",
+                                                    "31191",
+                                                    "31192",
+                                                    "31193",
+                                                    "31194",
+                                                    "31195",
+                                                    "31210",
+                                                    "31220",
+                                                    "31261",
+                                                    "31281",
+                                                    "31282",
+                                                    "31291",
+                                                    "31310",
+                                                    "31320",
+                                                    "31381",
+                                                    "31382",
+                                                    "31391",
+                                                    "32161",
+                                                    "32162",
+                                                    "32163",
+                                                    "32165",
+                                                    "32267",
+                                                    "41010",
+                                                    "41020",
+                                                    "41030",
+                                                    "41040",
+                                                    "41050",
+                                                    "41081",
+                                                    "41082",
+                                                    "43040",
+                                                    "43050",
+                                                    "52010",
+                                                    "72040",
+                                                    "74010"
                                                 ]
                                             }
                                         ]
@@ -637,17 +766,40 @@ define(function () {
                         aggregationFn: {"value": "sum"},
                         useDimensionLabelsIfExist: false,// || default raw else fenixtool
 
-                        config: { // Highcharts configuration
+                        config: {
                             chart: {
                                 events: {
                                     load: function(event) {
-                                        $.each(this.series, function (i, serie) {
-                                            if(serie.name == 'Total ODA'){
+                                        var _that = this;
+                                        var hasSubSector = false;
+                                        console.log(_that);
+
+                                        var isVisible = $.each(_that.series, function (i, serie) {
+                                            if(serie.name == '% Sub Sector/Sector'){
                                                 serie.update({
-                                                    visible: false
-                                                })
+                                                    yAxis: 'subsector-axis',
+                                                    dashStyle: 'shortdot',
+                                                    marker: {
+                                                        radius: 3
+                                                    }
+                                                });
+
+                                                return true;
                                             }
                                         });
+
+                                        if(!isVisible){
+                                            this.options.yAxis[1].title.text = '';
+                                            this.yAxis[1].visible = false;
+                                            this.yAxis[1].isDirty = true;
+                                            this.redraw();
+                                        } else {
+                                            this.options.yAxis[1].title.text= '%';
+                                            this.yAxis[1].visible = true;
+                                            this.yAxis[1].isDirty = true;
+                                            this.redraw();
+                                        }
+
                                     }
                                 }
                             },
@@ -656,21 +808,13 @@ define(function () {
                             },
                             yAxis: [{ //Primary Axis in default template
                             }, { // Secondary Axis
+                                id: 'subsector-axis',
                                 gridLineWidth: 0,
                                 title: {
                                     text: '%'
                                 },
                                 opposite: true
                             }],
-                            series: [{
-                                name: '% Sub Sector/Sector',
-                                yAxis: 1,
-                                dashStyle: 'shortdot',
-                                marker: {
-                                    radius: 3
-                                }
-                            }
-                            ],
                             exporting: {
                                 chartOptions: {
                                     legend: {
@@ -679,14 +823,14 @@ define(function () {
 
                                 }
                             }
+
                         }
                     },
 
                     filterFor: {
-                        "filter_total_country_sector_oda": ['recipientcode', 'parentsector_code', 'year', 'oda'],
-                        "filter_total_country_subsector_oda": ['recipientcode', 'parentsector_code', 'purposecode', 'year', 'oda'],
+                        "filter_total_country_sector_oda": ['recipientcode', 'year', 'oda'],
+                        "filter_total_country_subsector_oda": ['recipientcode', 'purposecode', 'year', 'oda'],
                     },
-
                     postProcess:[
                         {
                             "name": "union",
@@ -737,13 +881,64 @@ define(function () {
                                             }
                                         ]
                                     },
-                                    "parentsector_code": {
+                                    "purposecode": { // FAO Related purposecodes
                                         "codes": [
                                             {
-                                                "uid": "crs_dac",
+                                                "uid": "crs_purposes",
                                                 "version": "2016",
                                                 "codes": [
-                                                    "600"
+                                                    "12240",
+                                                    "14030",
+                                                    "14031",
+                                                    "15170",
+                                                    "16062",
+                                                    "23070",
+                                                    "31110",
+                                                    "31120",
+                                                    "31130",
+                                                    "31140",
+                                                    "31150",
+                                                    "31161",
+                                                    "31162",
+                                                    "31163",
+                                                    "31164",
+                                                    "31165",
+                                                    "31166",
+                                                    "31181",
+                                                    "31182",
+                                                    "31191",
+                                                    "31192",
+                                                    "31193",
+                                                    "31194",
+                                                    "31195",
+                                                    "31210",
+                                                    "31220",
+                                                    "31261",
+                                                    "31281",
+                                                    "31282",
+                                                    "31291",
+                                                    "31310",
+                                                    "31320",
+                                                    "31381",
+                                                    "31382",
+                                                    "31391",
+                                                    "32161",
+                                                    "32162",
+                                                    "32163",
+                                                    "32165",
+                                                    "32267",
+                                                    "41010",
+                                                    "41020",
+                                                    "41030",
+                                                    "41040",
+                                                    "41050",
+                                                    "41081",
+                                                    "41082",
+                                                    "43040",
+                                                    "43050",
+                                                    "52010",
+                                                    "72040",
+                                                    "74010"
                                                 ]
                                             }
                                         ]
@@ -758,8 +953,8 @@ define(function () {
                                     }
                                 }
                             },
-
-                            "rid":{"uid":"filter_total_country_sector_oda"}
+                            "rid":
+                            {"uid":"filter_total_country_sector_oda"}
                         }, // PART 1: TOTAL ODA FOR THE SECTOR IN COUNTRY: (1i) Filter
                         {
                             "name": "group",
@@ -781,9 +976,7 @@ define(function () {
                                         "rule": "first"
                                     }
                                 ]
-                            },
-                            "rid":{"uid":"total_country_sector_oda"}
-
+                            }
                         }, // (1ii): TOTAL ODA FOR THE SECTOR IN COUNTRY: Group by
                         {
                             "name": "addcolumn",
@@ -831,24 +1024,13 @@ define(function () {
                                             "usd_commitment"
                                         ]
                                     },
-                                    "parentsector_code": {
-                                        "codes": [
-                                            {
-                                                "uid": "crs_dac",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "600"
-                                                ]
-                                            }
-                                        ]
-                                    },
                                     "purposecode": {
                                         "codes": [
                                             {
                                                 "uid": "crs_purposes",
                                                 "version": "2016",
                                                 "codes": [
-                                                    "60010"
+                                                    "12240"
                                                 ]
                                             }
                                         ]
@@ -864,7 +1046,6 @@ define(function () {
                                             }
                                         ]
                                     },
-
                                     "year": {
                                         "time": [
                                             {
@@ -1074,7 +1255,60 @@ define(function () {
 
                     },
                     filter: { //FX-filter format
-                        parentsector_code: ["600"],
+                        purposecode: [
+                            "12240",
+                            "14030",
+                            "14031",
+                            "15170",
+                            "16062",
+                            "23070",
+                            "31110",
+                            "31120",
+                            "31130",
+                            "31140",
+                            "31150",
+                            "31161",
+                            "31162",
+                            "31163",
+                            "31164",
+                            "31165",
+                            "31166",
+                            "31181",
+                            "31182",
+                            "31191",
+                            "31192",
+                            "31193",
+                            "31194",
+                            "31195",
+                            "31210",
+                            "31220",
+                            "31261",
+                            "31281",
+                            "31282",
+                            "31291",
+                            "31310",
+                            "31320",
+                            "31381",
+                            "31382",
+                            "31391",
+                            "32161",
+                            "32162",
+                            "32163",
+                            "32165",
+                            "32267",
+                            "41010",
+                            "41020",
+                            "41030",
+                            "41040",
+                            "41050",
+                            "41081",
+                            "41082",
+                            "43040",
+                            "43050",
+                            "52010",
+                            "72040",
+                            "74010"
+                        ],
                         recipientcode: ["625"],
                         year: [{value: "2000", parent: 'from'}, {value: "2014", parent:  'to'}]
                     },
@@ -1206,8 +1440,8 @@ define(function () {
                         }
                     },
                     filterFor: {
-                        "filter_top_10_donors_sum": ['parentsector_code', 'recipientcode', 'year', 'oda'],
-                        "filter_top_all_donors_sum": ['parentsector_code', 'recipientcode', 'year', 'oda']
+                        "filter_top_10_donors_sum": ['recipientcode', 'year', 'oda'],
+                        "filter_top_all_donors_sum": ['recipientcode', 'year', 'oda']
                     },
 
                     postProcess: [
@@ -1256,13 +1490,64 @@ define(function () {
                                             }
                                         ]
                                     },
-                                    "parentsector_code": {
+                                    "purposecode": { // FAO Related purposecodes
                                         "codes": [
                                             {
-                                                "uid": "crs_dac",
+                                                "uid": "crs_purposes",
                                                 "version": "2016",
                                                 "codes": [
-                                                    "600"
+                                                    "12240",
+                                                    "14030",
+                                                    "14031",
+                                                    "15170",
+                                                    "16062",
+                                                    "23070",
+                                                    "31110",
+                                                    "31120",
+                                                    "31130",
+                                                    "31140",
+                                                    "31150",
+                                                    "31161",
+                                                    "31162",
+                                                    "31163",
+                                                    "31164",
+                                                    "31165",
+                                                    "31166",
+                                                    "31181",
+                                                    "31182",
+                                                    "31191",
+                                                    "31192",
+                                                    "31193",
+                                                    "31194",
+                                                    "31195",
+                                                    "31210",
+                                                    "31220",
+                                                    "31261",
+                                                    "31281",
+                                                    "31282",
+                                                    "31291",
+                                                    "31310",
+                                                    "31320",
+                                                    "31381",
+                                                    "31382",
+                                                    "31391",
+                                                    "32161",
+                                                    "32162",
+                                                    "32163",
+                                                    "32165",
+                                                    "32267",
+                                                    "41010",
+                                                    "41020",
+                                                    "41030",
+                                                    "41040",
+                                                    "41050",
+                                                    "41081",
+                                                    "41082",
+                                                    "43040",
+                                                    "43050",
+                                                    "52010",
+                                                    "72040",
+                                                    "74010"
                                                 ]
                                             }
                                         ]
@@ -1531,7 +1816,60 @@ define(function () {
 
                     },
                     filter: { //FX-filter format
-                        parentsector_code: ["600"],
+                        purposecode: [
+                                "12240",
+                                "14030",
+                                "14031",
+                                "15170",
+                                "16062",
+                                "23070",
+                                "31110",
+                                "31120",
+                                "31130",
+                                "31140",
+                                "31150",
+                                "31161",
+                                "31162",
+                                "31163",
+                                "31164",
+                                "31165",
+                                "31166",
+                                "31181",
+                                "31182",
+                                "31191",
+                                "31192",
+                                "31193",
+                                "31194",
+                                "31195",
+                                "31210",
+                                "31220",
+                                "31261",
+                                "31281",
+                                "31282",
+                                "31291",
+                                "31310",
+                                "31320",
+                                "31381",
+                                "31382",
+                                "31391",
+                                "32161",
+                                "32162",
+                                "32163",
+                                "32165",
+                                "32267",
+                                "41010",
+                                "41020",
+                                "41030",
+                                "41040",
+                                "41050",
+                                "41081",
+                                "41082",
+                                "43040",
+                                "43050",
+                                "52010",
+                                "72040",
+                                "74010"
+                        ],
                         recipientcode: ["625"],
                         year: [{value: "2000", parent: 'from'}, {value: "2014", parent:  'to'}]
                     },
@@ -2088,7 +2426,60 @@ define(function () {
 
                     },
                     filter: { //FX-filter format
-                        parentsector_code: ["600"],
+                        purposecode: [
+                            "12240",
+                            "14030",
+                            "14031",
+                            "15170",
+                            "16062",
+                            "23070",
+                            "31110",
+                            "31120",
+                            "31130",
+                            "31140",
+                            "31150",
+                            "31161",
+                            "31162",
+                            "31163",
+                            "31164",
+                            "31165",
+                            "31166",
+                            "31181",
+                            "31182",
+                            "31191",
+                            "31192",
+                            "31193",
+                            "31194",
+                            "31195",
+                            "31210",
+                            "31220",
+                            "31261",
+                            "31281",
+                            "31282",
+                            "31291",
+                            "31310",
+                            "31320",
+                            "31381",
+                            "31382",
+                            "31391",
+                            "32161",
+                            "32162",
+                            "32163",
+                            "32165",
+                            "32267",
+                            "41010",
+                            "41020",
+                            "41030",
+                            "41040",
+                            "41050",
+                            "41081",
+                            "41082",
+                            "43040",
+                            "43050",
+                            "52010",
+                            "72040",
+                            "74010"
+                        ],
                         recipientcode: ["625"],
                         year: [{value: "2000", parent: 'from'}, {value: "2014", parent: 'to'}]
                     },
@@ -2170,7 +2561,60 @@ define(function () {
                     },
 
                     filter: { //FX-filter format
-                        parentsector_code: ["600"],
+                        purposecode: [
+                            "12240",
+                            "14030",
+                            "14031",
+                            "15170",
+                            "16062",
+                            "23070",
+                            "31110",
+                            "31120",
+                            "31130",
+                            "31140",
+                            "31150",
+                            "31161",
+                            "31162",
+                            "31163",
+                            "31164",
+                            "31165",
+                            "31166",
+                            "31181",
+                            "31182",
+                            "31191",
+                            "31192",
+                            "31193",
+                            "31194",
+                            "31195",
+                            "31210",
+                            "31220",
+                            "31261",
+                            "31281",
+                            "31282",
+                            "31291",
+                            "31310",
+                            "31320",
+                            "31381",
+                            "31382",
+                            "31391",
+                            "32161",
+                            "32162",
+                            "32163",
+                            "32165",
+                            "32267",
+                            "41010",
+                            "41020",
+                            "41030",
+                            "41040",
+                            "41050",
+                            "41081",
+                            "41082",
+                            "43040",
+                            "43050",
+                            "52010",
+                            "72040",
+                            "74010"
+                        ],
                         un_region_code: ["034"], // Region = 'Southern Asia'
                         year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
                     },
@@ -2208,8 +2652,5 @@ define(function () {
                 }
             ]
         }
-        }
-
-
-
+    }
 });
