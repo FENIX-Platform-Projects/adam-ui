@@ -103,7 +103,7 @@ define([
                 name: "filter",
                 parameters: {
                     rows: process,
-                    columns: ["recipientcode", "donorcode", "parentsector_code", "purposecode", "year"]
+                    columns: ["recipientcode", "donorcode", "parentsector_code", "purposecode", "year", "value"]
                 }
             }];
 
