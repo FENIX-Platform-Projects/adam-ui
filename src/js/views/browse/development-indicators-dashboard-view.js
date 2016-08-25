@@ -4,7 +4,7 @@ define([
     'underscore',
     'views/base/view',
     'text!templates/browse/indicators-dashboard.hbs',
-    'config/browse/base-dashboard-config',
+    'config/browse/config-browse',
     'fx-dashboard/start',
     'lib/utils',
     'i18n!nls/browse',
@@ -89,7 +89,7 @@ define([
         setDashboardConfig: function(config){
             this.config = config;
             this.config.baseItems = config.items;
-            this.config.environment = BaseDashboardProperties.ENVIRONMENT;
+            this.config.environment = BaseDashboardProperties.dashboard.ENVIRONMENT;
         },
 
         renderDashboard: function () {
