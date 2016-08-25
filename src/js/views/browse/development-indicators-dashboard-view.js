@@ -11,7 +11,7 @@ define([
     'handlebars',
     'lib/config-utils',
     'amplify'
-], function ($, _, View, template, BaseDashboardProperties, Dashboard, Utils, i18nLabels, Handlebars, ConfigUtils) {
+], function ($, _, View, template, BaseBrowseConfig, Dashboard, Utils, i18nLabels, Handlebars, ConfigUtils) {
 
     'use strict';
 
@@ -89,7 +89,7 @@ define([
         setDashboardConfig: function(config){
             this.config = config;
             this.config.baseItems = config.items;
-            this.config.environment = BaseDashboardProperties.dashboard.ENVIRONMENT;
+            this.config.environment = BaseBrowseConfig.dashboard.ENVIRONMENT;
         },
 
         renderDashboard: function () {

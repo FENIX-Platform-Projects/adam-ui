@@ -1,10 +1,18 @@
 <div>
     <section data-topic="sector">
         <div class="row">
-            <div class="col-sm-12" id="tot-oda-container"> <!-- TOTAL ODA -->
+            <div class="col-sm-12" id="tot-oda-sector-container"> <!-- TOTAL ODA SECTOR -->
                 <div class="obj-box-header"><p title="{{label}}"><span class="display-box-header"><b>{{tot-oda}}</b>:</span> {{label}}</p></div>
                 <div class="obj-box">
-                    <div data-item="tot-oda"></div>
+                    <div data-item="tot-oda-sector"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row"> <!-- tot-oda-subsector-container container hidden via collapse class -->
+            <div class="col-sm-12 collapse" id="tot-oda-subsector-container"> <!-- TOTAL ODA SUB SECTOR -->
+                <div class="obj-box-header"><p title="{{label}}"><span class="display-box-header"><b>{{tot-oda}}</b>:</span> {{label}}</p></div>
+                <div class="obj-box">
+                    <div data-item="tot-oda-subsector"></div>
                 </div>
             </div>
         </div>
@@ -22,16 +30,6 @@
                 </div>
             </div>
         </div>
-
-       <!-- <div class="row">
-            <div class="col-sm-12" id="tot-oda-container">
-                <div class="obj-box-header"><p title="{{label}}"><b>{{item-2}}</b>: {{label}}</p></div>
-                <div class="obj-box">
-                    <div id="item-2a"></div>
-                </div>
-            </div>
-        </div>-->
-
         <div class="row">
             <!-- TOP RECIPIENTS -->
           <div class="col-sm-6" id="top-recipients-container">
@@ -57,34 +55,13 @@
 
         </div>
         <div class="row">
-            <!-- TOP CHANNELS -->
-          <!--  <div class="col-sm-6" id="top-channels-container">
-                <div class="obj-box-header"><p title="{{label}}"><span class="display-box-header"><b>{{top-implementing-channels}}</b>:</span> {{label}}</p></div>
-                <div class="obj-box">
-                    <div data-item="top-channels"></div>
-                </div>
-            </div>-->
             <div class="col-sm-12" id="top-subsectors-container"><!-- TOP SUB SECTORS -->
                 <div class="obj-box-header"><p title="{{label}}"><span class="display-box-header"><b>{{top-subsectors}}</b>:</span> {{label}}</p></div>
                 <div class="obj-box">
                     <div data-item="top-subsectors"></div>
                 </div>
             </div>
-            <!-- <div class="col-sm-6" id="test">
-                <div class="obj-box-header"><p title="{{label}}"><b>Top Sub Sectors</b>: {{label}}</p></div>
-                <div class="obj-box">
-                    <div id="item-4"></div>
-                </div>
-            </div>-->
         </div>
-       <!-- <div class="row">
-            <div class="col-sm-6">
-                <div class="obj-box-header"><p title="{{label}}"><b>{{item-4}}</b>: {{label}}</p></div>
-                <div class="obj-box">
-                    <div id="item-4"></div>
-                </div>
-            </div>
-        </div>-->
         <div class="row">
             <div class="col-sm-12" id="oda-regional-container"> <!-- ODA REGIONAL DISTRIBUTION  -->
                 <div class="obj-box-header"><p title="{{label}}"><span class="display-box-header"><b>{{oda-regional}}</b>:</span> {{label}}</p></div>
@@ -102,15 +79,6 @@
                 </div>
             </div>
         </div>
-        <!--  <div class="row">
-            <div class="col-sm-12">
-                <div class="obj-box-header"><p>Regional Income TEST</p></div>
-                <div class="obj-box">
-                    <div id="item-7"></div>
-                </div>
-            </div>
-        </div>-->
-
     </section>
     <section data-topic="country">
         <div class="row">
@@ -118,6 +86,36 @@
                 <div class="obj-box-header"><p title="{{label}}"><span class="display-box-header"><b>{{tot-oda}}</b>:</span> {{label}}</p></div>
                 <div class="obj-box">
                     <div data-item="tot-oda"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 collapse" id="tot-oda-sector-container"> <!-- TOTAL ODA SECTOR -->
+                <div class="obj-box-header"><p title="{{label}}"><span class="display-box-header"><b>{{tot-oda}}</b>:</span> {{label}}</p></div>
+                <div class="obj-box">
+                    <div data-item="tot-oda-sector"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row"> <!-- tot-oda-subsector-container container hidden via collapse class -->
+            <div class="col-sm-12 collapse" id="tot-oda-subsector-container"> <!-- TOTAL ODA SUB SECTOR -->
+                <div class="obj-box-header"><p title="{{label}}"><span class="display-box-header"><b>{{tot-oda}}</b>:</span> {{label}}</p></div>
+                <div class="obj-box">
+                    <div data-item="tot-oda-subsector"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6" id="top-sectors-container"> <!-- TOP SECTORS -->
+                <div class="obj-box-header"><p title="{{label}}"><span class="display-box-header"><b>{{top-sectors}}</b>:</span> {{label}}</p></div>
+                <div class="obj-box">
+                    <div data-item="top-sectors"></div>
+                </div>
+            </div>
+            <div class="col-sm-6" id="top-sectors-others-container"> <!-- TOP SECTORS VS OTHERS -->
+                <div class="obj-box-header"><p title="{{label}}"><span class="display-box-header"><b>{{top-sectors-others}}</b>:</span> {{label}}</p></div>
+                <div class="obj-box">
+                    <div data-item="top-sectors-others"></div>
                 </div>
             </div>
         </div>
@@ -189,9 +187,25 @@
 
         <div class="row">
             <div class="col-sm-12" id="tot-oda-container"> <!-- TOTAL ODA -->
-                <div class="obj-box-header"><p title="{{label}}"><span class="display-box-header"><b>{{tot-oda}}</b>:</span> {{label}}</p></div>
+                <div class="obj-box-header"><p title="{{label}}"><span class="display-box-header"><b> {{tot-oda}}</b>:</span> {{label}}</p></div>
                 <div class="obj-box">
                     <div data-item="tot-oda"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 collapse" id="tot-oda-sector-container"> <!-- TOTAL ODA SECTOR -->
+                <div class="obj-box-header"><p title="{{label}}"><span class="display-box-header"><b>{{tot-oda}}</b>:</span> {{label}}</p></div>
+                <div class="obj-box">
+                    <div data-item="tot-oda-sector"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row"> <!-- tot-oda-subsector-container container hidden via collapse class -->
+            <div class="col-sm-12 collapse" id="tot-oda-subsector-container"> <!-- TOTAL ODA SUB SECTOR -->
+                <div class="obj-box-header"><p title="{{label}}"><span class="display-box-header"><b>{{tot-oda}}</b>:</span> {{label}}</p></div>
+                <div class="obj-box">
+                    <div data-item="tot-oda-subsector"></div>
                 </div>
             </div>
         </div>
@@ -212,13 +226,27 @@
             </div>
         </div>
         <div class="row">
+            <div class="col-sm-6" id="top-sectors-container"> <!-- TOP SECTORS -->
+                <div class="obj-box-header"><p title="{{label}}"><span class="display-box-header"><b>{{top-sectors}}</b>:</span> {{label}}</p></div>
+                <div class="obj-box">
+                    <div data-item="top-sectors"></div>
+                </div>
+            </div>
+            <div class="col-sm-6" id="top-sectors-others-container"> <!-- TOP SECTORS VS OTHERS -->
+                <div class="obj-box-header"><p title="{{label}}"><span class="display-box-header"><b>{{top-sectors-others}}</b>:</span> {{label}}</p></div>
+                <div class="obj-box">
+                    <div data-item="top-sectors-others"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-sm-6" id="top-channel-categories-container"><!-- TOP CHANNEL CATEGORIES -->
                 <div class="obj-box-header"><p title="{{label}}"><span class="display-box-header"><b>{{top-channels}}</b>:</span> {{label}}</p></div>
                 <div class="obj-box">
                     <div data-item="top-channel-categories"></div>
                 </div>
             </div>
-            <div class="col-sm-6" id="top-subsectors-container"><!-- TOP SUB SECTORS -->
+            <div class="col-sm-6 collapse" id="top-subsectors-container"><!-- TOP SUB SECTORS -->
                 <div class="obj-box-header"><p title="{{label}}"><span class="display-box-header"><b>{{top-subsectors}}</b>:</span> {{label}}</p></div>
                 <div class="obj-box">
                     <div data-item="top-subsectors"></div>
@@ -246,9 +274,25 @@
     <section data-topic="country_donor">
         <div class="row">
             <div class="col-sm-12" id="tot-oda-container"> <!-- TOTAL ODA -->
-                <div class="obj-box-header"><p title="{{label}}"><span class="display-box-header"><b>{{tot-oda}}</b>:</span> {{label}}</p></div>
+                <div class="obj-box-header"><p title="{{label}}"><span class="display-box-header"><b> {{tot-oda}}</b>:</span> {{label}}</p></div>
                 <div class="obj-box">
                     <div data-item="tot-oda"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12" id="tot-oda-sector-container"> <!-- TOTAL ODA SECTOR -->
+                <div class="obj-box-header"><p title="{{label}}"><span class="display-box-header"><b>{{tot-oda}}</b>:</span> {{label}}</p></div>
+                <div class="obj-box">
+                    <div data-item="tot-oda-sector"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row"> <!-- tot-oda-subsector-container container hidden via collapse class -->
+            <div class="col-sm-12" id="tot-oda-subsector-container"> <!-- TOTAL ODA SUB SECTOR -->
+                <div class="obj-box-header"><p title="{{label}}"><span class="display-box-header"><b>{{tot-oda}}</b>:</span> {{label}}</p></div>
+                <div class="obj-box">
+                    <div data-item="tot-oda-subsector"></div>
                 </div>
             </div>
         </div>

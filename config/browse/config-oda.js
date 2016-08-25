@@ -17,8 +17,9 @@ define(function () {
                         id: "dropdown",
                         default: ["600"],
                         config: { //Selectize configuration
+                            allowEmptyOption: true,
                             maxItems: 1,
-                            placeholder: "All",
+                            placeholder: "Please select",
                             plugins: ['remove_button'],
                             mode: 'multi'
                         }
@@ -134,7 +135,7 @@ define(function () {
                 uid: "adam_usd_commitment",
 
                 items: [
-                    {
+                  {
                         id: "tot-oda", //ref [data-item=':id']
                         type: "chart", //chart || map || olap,
                         config: {
@@ -615,7 +616,7 @@ define(function () {
                         id: 'top-partners-others', // TOP RESOURCE PARTNERS Vs OTHER RESOURCE PARTNERS
                         type: 'chart',
                         config: {
-                            type: "pie",
+                            type: "pieold",
                             x: ["indicator"], //x axis and series
                             series: ["unitname"], // series
                             y: ["value"],//Y dimension
@@ -702,8 +703,7 @@ define(function () {
                         },
 
                         filterFor: {
-                            "filter_top_10_donors_sum": ['parentsector_code', 'year', 'oda'],
-                            "filter_all_donors_sum": ['parentsector_code', 'year', 'oda']
+                            "filter_top_10_donors_sum": ['parentsector_code', 'purposecode', 'year', 'oda']
                         },
 
                         postProcess: [
@@ -1003,7 +1003,7 @@ define(function () {
                             // (3iv): TOTAL ODA OTHERS CALCULATION: Add Column
                         ]
                     },
-                    {
+                     {
                         id: 'top-recipients', // TOP RECIPIENTS
                         type: 'chart',
                         config: {
@@ -1090,7 +1090,7 @@ define(function () {
                         id: 'top-recipients-others', // TOP RECIPIENTS Vs OTHER RECIPIENTS
                         type: 'chart',
                         config: {
-                            type: "pie",
+                            type: "pieold",
                             x: ["indicator"], //x axis and series
                             series: ["unitname"], // series
                             y: ["value"],//Y dimension
@@ -1175,9 +1175,9 @@ define(function () {
                                 }
                             }
                         },
+
                         filterFor: {
-                            "filter_top_10_recipients_sum": ['parentsector_code', 'year', 'oda'],
-                            "filter_all_recipients_sum": ['parentsector_code', 'year', 'oda']
+                            "filter_top_10_recipients_sum": ['parentsector_code', 'purposecode', 'year', 'oda']
                         },
 
                         postProcess: [
@@ -1475,7 +1475,7 @@ define(function () {
                             }
                         ]
                     },
-                    {
+                   {
                         id: 'top-channel-categories', // TOP CHANNEL OF DELIVERY CATEGORIES
                         type: 'chart',
                         config: {
@@ -1547,11 +1547,11 @@ define(function () {
                                 }
                             }]
                     },
-                    {
+                   {
                         id: 'top-subsectors', // TOP SUB SECTORS
                         type: 'chart',
                         config: {
-                            type: "pie",
+                            type: "pieold",
                             x: ["purposename"], //x axis and series
                             series: ["flowcategory_name"], // series
                             y: ["value"],//Y dimension
@@ -2458,7 +2458,7 @@ define(function () {
                         id: 'top-partners-others', // TOP DONORS Vs OTHER DONORS
                         type: 'chart',
                         config: {
-                            type: "pie",
+                            type: "pieold",
                             x: ["indicator"], //x axis and series
                             series: ["unitname"], // series
                             y: ["value"],//Y dimension
@@ -3394,7 +3394,7 @@ define(function () {
                         id: 'top-subsectors', // TOP SUB SECTORS
                         type: 'chart',
                         config: {
-                            type: "pie",
+                            type: "pieold",
                             x: ["purposename"], //x axis and series
                             series: ["flowcategory_name"], // series
                             y: ["value"],//Y dimension
@@ -5231,7 +5231,7 @@ define(function () {
                         id: 'top-recipients-others', // TOP RECIPIENTS Vs OTHER RECIPIENTS
                         type: 'chart',
                         config: {
-                            type: "pie",
+                            type: "pieold",
                             x: ["indicator"], //x axis and series
                             series: ["unitname"], // series
                             y: ["value"],//Y dimension
@@ -5704,7 +5704,7 @@ define(function () {
                         id: 'top-subsectors', // TOP SUB SECTORS
                         type: 'chart',
                         config: {
-                            type: "pie",
+                            type: "pieold",
                             x: ["purposename"], //x axis and series
                             series: ["flowcategory_name"], // series
                             y: ["value"],//Y dimension
@@ -7882,7 +7882,7 @@ define(function () {
                         id: 'top-sectors-others', // TOP SECTORS Vs OTHER SECTORS
                         type: 'chart',
                         config: {
-                            type: "pie",
+                            type: "pieold",
                             x: ["indicator"], //x axis and series
                             series: ["unitname"], // series
                             y: ["value"],//Y dimension
@@ -8285,7 +8285,7 @@ define(function () {
                         id: 'top-subsectors', // TOP SUB SECTORS
                         type: 'chart',
                         config: {
-                            type: "pie",
+                            type: "pieold",
                             x: ["purposename"], //x axis and series
                             series: ["flowcategory_name"], // series
                             y: ["value"],//Y dimension

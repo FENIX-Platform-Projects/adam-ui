@@ -5,6 +5,7 @@ define([
     'views/base/view',
     'text!templates/browse/oda-dashboard.hbs',
     //'fx-ds/start',
+    'config/browse/config-browse',
     'fx-dashboard/start',
     'lib/utils',
     'i18n!nls/browse',
@@ -12,8 +13,9 @@ define([
     'handlebars',
     'lib/config-utils',
     'config/submodules/fx-chart/highcharts_template',
+
     'amplify'
-], function ($, _, View, template, Dashboard, Utils, i18nLabels, i18nDashboardLabels, Handlebars, ConfigUtils, HighchartsTemplate) {
+], function ($, _, View, template, BaseBrowseConfig, Dashboard, Utils, i18nLabels, i18nDashboardLabels, Handlebars, ConfigUtils, HighchartsTemplate) {
 
     'use strict';
 
@@ -25,7 +27,8 @@ define([
             FAO_SECTOR_CHART_LOADED: 'fx.browse.chart.faosector.loaded'
         },
         config_types: {
-            FAO: 'FAO',
+            FAO_SECTOR: 'FAO_SECTOR',
+            OTHER_SECTORS: 'OTHER_SECTORS',
             BASE: 'BASE'
         },
         item_container_id: '-container',
@@ -100,38 +103,44 @@ define([
 
         },
 
-        setDashboardConfig: function(config, type){
+        setDashboardConfig: function(config){
+            this.baseConfig = config;
+            //console.log("=============== RE-SET DASHBOARD CONFIG items ");
+            //console.log(this.baseConfig.items.length);
+           // console.log("================================== ");
+
+
             this.config = config;
-           // console.log(config.items);
-
+            this.config_type = config.id;
             this.config.baseItems = config.items;
-            this.config_type = type || s.config_types.BASE;
-            this.config.environment = 'develop'
+            this.config.environment = BaseBrowseConfig.dashboard.ENVIRONMENT;
 
-
+            // Sets Highchart config for each chart
             _.each(this.config.items, _.bind(function ( item ) {
                 if (!_.isEmpty(item)) {
-                        if(item.type == "chart"){
-                            if(item.config.config){
-                               item.config.config = $.extend(true, {}, HighchartsTemplate, item.config.config);
-                            } else {
-                               item.config.config =  $.extend(true, {}, HighchartsTemplate);
-                            }
+                    if(item.type == "chart"){
+                        if(item.config.config){
+                            item.config.config = $.extend(true, {}, HighchartsTemplate, item.config.config);
+                        } else {
+                            item.config.config =  $.extend(true, {}, HighchartsTemplate);
                         }
+                    }
                 }
 
             }, this));
-
-
-            //  console.log("setDashboardConfig DONE");
-
         },
 
 
 
         renderDashboard: function () {
 
-         //console.log("renderDashboard");
+
+            console.log("=============== RENDER CALLED  ");
+           // console.log(this.baseConfig.items.length);
+           // console.log("================================== ");
+
+        // console.log("renderDashboard");
+           // console.log(this.config);
 
 
 
@@ -178,7 +187,38 @@ define([
         },
 
 
+
+        _removeDashboardItem: function (itemId) {
+
+            // Remove Item from config Items
+            this.config.items = _.reject( this.config.items, function(el) { return el.id === itemId; });
+
+
+
+        },
+
+        _collapseDashboardItem: function (itemId) {
+            //console.log("===================== COLLAPSE: "+'#'+itemId);
+
+
+            // Hide Item container
+            var itemContainerId = '#'+itemId + s.item_container_id;
+           // console.log(itemContainerId);
+           // console.log($(this.source).find(itemContainerId));
+            $(this.source).find(itemContainerId).addClass('collapse');
+
+        },
+
+        _expandDashboardItem: function (itemId) {
+           // console.log("===================== EXPAND: "+'#'+itemId + s.item_container_id);
+            // Show Item container
+            var itemContainerId = '#'+itemId + s.item_container_id;
+            $(this.source).find(itemContainerId).removeClass('collapse');
+        },
+
+
         _hideDashboardItem: function (itemId) {
+           // console.log("===================== HIDE: "+'#'+itemId + s.item_container_id);
             // Remove Item from config Items
             this.config.items = _.reject( this.config.items, function(el) { return el.id === itemId; });
 
@@ -189,48 +229,40 @@ define([
         },
 
         _showDashboardItem: function (itemId) {
+           // console.log("===================== SHOW: "+'#'+itemId + s.item_container_id);
             // Show Item container
             var itemContainerId = '#'+itemId + s.item_container_id;
             $(this.source).find(itemContainerId).show();
         },
 
-        updateDashboardConfigNew: function(uid, changeditem, removeItems){
+        updateDashboardTemplate: function(filterdisplayconfig){
 
-            // console.log("================ updateDashboardConfig");
-            //  console.log(uid + ' | '+ sectorSelected+ ' | '+subSectorSelected+ ' | '+ recipientSelected+ ' | '+ regioncode+ ' | '+ removeItems);
-            this.config.items = this.config.baseItems; // Reset Config Items
+            if(filterdisplayconfig){
 
-            var item1 = _.filter(this.config.items, {id: s.total_oda_id})[0];
+                var hide = filterdisplayconfig.hide;
+                var show = filterdisplayconfig.show;
 
-
-            //  console.log(item1);
-
-           // switch(this.config_type == s.config_types.FAO){
-           //     case true:
-                    //console.log("updateFAOConfig ");
-             //       this._updateFAOItem1ChartConfiguration(item1, sectorSelected, subSectorSelected);
-            //       break;
-             //   case false:
-                    // this._updateItem1ChartConfiguration(item1, sectorSelected, subSectorSelected);
-              //      break;
-           // }
-
-
-            if(changeditem.id === 'recipientcode') {
-                this._updateRegionalMapConfigurationNew(changeditem);
-            }
-
-            this.config.uid = uid;
-
-            if(removeItems){
-                for(var itemId in removeItems){
-                    this._hideDashboardItem(removeItems[itemId]);
+                for(var idx in hide){
+                    //this._removeDashboardItem(hide[idx]); // from configuration -  need to find a way to properly clone config!
+                    this._collapseDashboardItem(hide[idx]); // in the template
                 }
+
+                for(var idx in show){
+                    this._expandDashboardItem(show[idx]); // in the template
+                }
+
             }
 
         },
 
-        updateDashboardConfig: function(uid, sectorSelected, subSectorSelected, recipientSelected, regioncode, removeItems){
+
+
+      updateDashboardConfigUid: function(uid){
+        this.config.uid = uid;
+      },
+
+
+      /*  updateDashboardConfig: function(uid, sectorSelected, subSectorSelected, recipientSelected, regioncode, removeItems){
 
            // console.log("================ updateDashboardConfig");
           //  console.log(uid + ' | '+ sectorSelected+ ' | '+subSectorSelected+ ' | '+ recipientSelected+ ' | '+ regioncode+ ' | '+ removeItems);
@@ -265,7 +297,7 @@ define([
             }
 
         },
-
+*/
         showHiddenDashboardItems: function(showItems){
             if(showItems){
                 for(var itemId in showItems){
@@ -275,39 +307,34 @@ define([
 
         },
 
-        _updateRegionalMapConfigurationNew: function (changeditem) {
-            var map = _.filter(this.config.items, {id:'regional-map'})[0];
-            var self = this;
 
-            if(map && changeditem.regioncode){
+        setProperties: function (props) {
+            if(props){
+                if(props["regioncode"])
+                    this.regioncode = props["regioncode"];
+                else
+                    this.regioncode = null;
 
-                if(map.filter && map.filter.un_region_code){
-                    map.filter.un_region_code = [];
-                    map.filter.un_region_code.push(changeditem.regioncode)
-                }
-
-                if(map.config && map.config.fenix_ui_map){
-                    map.config.fenix_ui_map.zoomToCountry = ["3"];
-                   // map.config.fenix_ui_map.zoomToCountry.push(changeditem.values.values[0]); /// NEEDS to BE GAUL
-                }
-
+                if(props["gaulcode"])
+                    this.gaulcode = props["gaulcode"];
+                else
+                    this.gaulcode = null;
+            } else {
+                this.regioncode = null;
+                this.gaulcode = null;
             }
-
         },
 
-        _updateRegionalMapConfiguration: function (regioncode) {
+        updateItemsConfig: function () {
+            this._updateDashboardRegionalMapConfiguration();
+        },
+
+        _updateDashboardRegionalMapConfiguration: function () {
              var map = _.filter(this.config.items, {id:'regional-map'})[0];
+             var regioncode = this.regioncode;
+             var gaulcode = this.gaulcode;
 
-
-
-             if(map && regioncode){
-                 // modify regioncode  parent, key, value
-                // var filterConfig = this.configUtils.findByPropValue(map,  "filter", "un_region_code");
-
-                // var filterConfig = _.find(map, function (keys) {console.log(keys[0]) });//return keys[0] === 'filter' });
-
-                // console.log(filterConfig);
-
+              if(map && regioncode){
 
                  if(map.filter && map.filter.un_region_code){
                      map.filter.un_region_code = [];
@@ -317,11 +344,11 @@ define([
                  }
 
                  if(map.config && map.config.fenix_ui_map){
-                     map.config.fenix_ui_map.zoomToCountry = [];
-                     map.config.fenix_ui_map.zoomToCountry.push(regioncode)
+                     if(gaulcode) {
+                         map.config.fenix_ui_map.zoomToCountry = [];
+                         map.config.fenix_ui_map.zoomToCountry.push(gaulcode);
+                     }
                  }
-
-
              }
 
         },
@@ -396,7 +423,29 @@ define([
         },
 
         rebuildDashboard: function (filter) {
-            //console.log("======================== rebuild", filter);
+
+            console.log("=============== REBUILD CALLED  ");
+
+           this._disposeDashboards();
+
+           this.config.filter = filter;
+
+           this.dashboards.push(new Dashboard(
+               this.config
+           ));
+
+
+
+
+            // console.log("renderDashboard:this.dashboards ");
+            // console.log(this.dashboards);
+            //  this.browseDashboard.render(this.config);
+
+
+
+
+
+            console.log("======================== FINAL VALUES FOR DASHBOARD ========== ", filter);
             //console.log("========================= rebuild",  this.dashboards);
 
             //console.log(filter);
@@ -411,14 +460,14 @@ define([
                // layout: "injected"
            // });
 
-            _.each( this.dashboards, _.bind(function (dashboard) {
+           // _.each( this.dashboards, _.bind(function (dashboard) {
                // console.log(dashboard);
                // console.log($.isFunction(dashboard.refresh)
-                if (dashboard && $.isFunction(dashboard.refresh)) {
+              //  if (dashboard && $.isFunction(dashboard.refresh)) {
                     //console.log("REFRESH");
-                    dashboard.refresh(filter);
-                }
-            }, this));
+                 //   dashboard.refresh(filter);
+               // }
+           // }, this));
 
 
 

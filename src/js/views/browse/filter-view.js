@@ -10,11 +10,12 @@ define(
     'fx-common/utils',
     'lib/utils',
     'config/Config',
+    'config/browse/config-browse',
     'config/browse/Events',
     'q',
     'handlebars',
     'amplify'
-], function ($, _, View, template, i18nLabels, Filter/**, FilterConfCreator**/, FxUtils, Utils,  BaseConfig, BaseEvents, Q) {
+], function ($, _, View, template, i18nLabels, Filter/**, FilterConfCreator**/, FxUtils, Utils,  BaseConfig, BrowseConfig, BaseEvents, Q) {
 
     'use strict';
 
@@ -181,7 +182,8 @@ define(
         _renderFilter: function (config) {
             var self = this;
 
-           // console.log('render filter')
+
+            //console.log('render filter')
 
             if (this.filter && $.isFunction(this.filter.dispose)) {
                 this.filter.dispose();
@@ -206,37 +208,124 @@ define(
                 }
             });
 
+
+
+
+
+
+                // on Ready listeners
+                this.filter.on('ready', function (payload) {
+                   // console.log("========================= FilterView: ON READY ==============");
+                   // console.log(self._getFilterValues().values);
+
+                    if(self._getFilterValues().values[BrowseConfig.filter.RECIPIENT_COUNTRY]){
+                        var additionalProperties = self._getPropertiesObject(BrowseConfig.filter.RECIPIENT_COUNTRY, self._getFilterValues().values[BrowseConfig.filter.RECIPIENT_COUNTRY]);
+
+                        Q.all([
+                            self._onRecipientChangeGetRegionCode(self._getFilterValues().values[BrowseConfig.filter.RECIPIENT_COUNTRY]),
+                            self._onRecipientChangeGetGaulCode(self._getFilterValues().values[BrowseConfig.filter.RECIPIENT_COUNTRY])
+                        ]).then(function (result) {
+                             if (result) {
+                                 self._setRecipientProperties(result, additionalProperties);
+                            }
+                        }).catch(function (error) {
+                            self._regioncodeerror(error, additionalProperties)
+                        }).done(function () {
+                           // console.log("ONREADY: RECIPIENT PROPS UPDATE DONE ============ ", additionalProperties);
+
+                            amplify.publish(BaseEvents.FILTER_ON_READY,  $.extend(self._getFilterValues(), {"props": additionalProperties}));
+                        });
+
+                    }  else {
+                        amplify.publish(BaseEvents.FILTER_ON_READY, self._getFilterValues());
+                    }
+
+
+                  /*  if(filterItem){
+                        Q.all([
+                            self._onRecipientChange(filterItem)
+                        ]).then(function (result) {
+                            if (result) {
+                                self._setRegionCode(filterItem, result[0][0].parents[0].code);
+                            }
+                        }).catch(function (error) {
+                            self._regioncodeerror(error, filterItem)
+                        }).done(function () {
+                            console.log("RECIPIENT DONE ============ ", filterItem);
+                        });
+                    }
+*/
+
+                   // amplify.publish(BaseEvents.FILTER_ON_READY, self._getSelectedLabels());
+
+                    //console.log("================ filter ==============");
+                   // console.log(self._getFilterById('recipientcode'));
+
+
+
+
+                });
+
+
+
             // Add List Change listeners
             this.filter.on('change', function (payload) {
+
+               // console.log("========================= FilterView: ON CHANGE ==============");
+               // console.log(payload);
                 if(payload.id === s.ids.YEAR_TO || payload.id === s.ids.YEAR_FROM) {
                     var newRange = self._getObject(s.ids.YEAR, self._getSelectedLabels());
                     if (newRange) {
-
                         payload.id = s.ids.YEAR;
                         payload.values.labels = self._getObject(s.ids.YEAR, self._getSelectedLabels());
                         payload.values.values = self._getObject(s.ids.YEAR, self._getSelectedValues());
-                        //  payload = self..id = getFilterValues().year
-
                     }
 
                     amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
                 }
                 else if (payload.id === s.ids.RECIPIENT_COUNTRY) {
+                    var additionalProperties = self._getPropertiesObject(s.ids.RECIPIENT_COUNTRY, payload.values.values);
+
                     Q.all([
-                        self._onRecipientChange(payload)
+                        self._onRecipientChangeGetRegionCode(payload.values.values),
+                        self._onRecipientChangeGetGaulCode(payload.values.values)
                     ]).then(function (result) {
                         if (result) {
-                            self._setRegionCode(payload, result[0][0].parents[0].code);
+                            self._setRecipientProperties(result, additionalProperties);
                         }
                     }).catch(function (error) {
-                        self._regioncodeerror(error, payload)
+                        self._regioncodeerror(error, additionalProperties)
                     }).done(function () {
-                        console.log("RECIPIENT DONE ============ ", payload);
-                        amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
+                      //  console.log("ONCHANGE: RECIPIENT PROPS UPDATE DONE ============ ", additionalProperties);
+
+                        amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": additionalProperties}));
                     });
-                } else {
-                    amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
-                }
+                   }
+                     else {
+                        amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
+                    }
+
+
+
+
+
+
+
+                /*  Q.all([
+                      self._onRecipientChange(payload.values.values)
+                  ]).then(function (result) {
+                      if (result) {
+                          self._setRegionCode(payload, result[0][0].parents[0].code);
+                      }
+                  }).catch(function (error) {
+                      self._regioncodeerror(error, payload)
+                  }).done(function () {
+                      console.log("RECIPIENT DONE ============ ", payload);
+                      amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
+                  });
+              } else {
+                  amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
+              }*/
 
 
 
@@ -244,10 +333,10 @@ define(
             });
 
              // Filters are loaded
-                this.filter.on('ready', function () {
+               // this.filter.on('ready', function () {
 
-                    amplify.publish(BaseEvents.FILTER_ON_READY, self._getSelectedLabels());
-             });
+                  //  amplify.publish(BaseEvents.FILTER_ON_READY, self._getSelectedLabels());
+             //});
 
 
 
@@ -318,13 +407,26 @@ define(
             return this._getFilterValues().labels;
         },
 
+
+            _getFilterById: function(id){
+               var filter;
+
+                $.each(this.config, function (key, obj) {
+                     if(key === id){
+                         return filter = obj;
+                     }
+                });
+
+                return filter;
+            },
+
             /**
              *
              * @returns {Object}
              */
         getFilterValues: function(){
 
-           console.log("FINAL getFilterValues ============ 1");
+          // console.log("FINAL getFilterValues ============ 1");
             var values = this._getFilterValues();
 
             //clear uid values
@@ -334,9 +436,18 @@ define(
             values.values[s.ids.YEAR_TO] = [];
 
 
-            console.log(values);
+           // console.log(values);
             return values;
         },
+
+            clearFilterValue: function(filterid, values){
+
+                if(values.values[filterid]){
+                    values.values[filterid] = [];
+                }
+
+                return values;
+            },
 
             _processTimeRange: function(filter){
 
@@ -402,6 +513,14 @@ define(
 
             return this._updateValues(values, subSectorSelected);
         },
+
+
+            hasValues: function (filterid) {
+                var values = this._getSelectedValues();
+                return this._hasSelections(filterid, values);
+            },
+
+
             /**
              *
              * @param filterId
@@ -409,14 +528,16 @@ define(
              */
         getSelectedValues: function (filterId) {
             var values = this._getSelectedValues();
+
             var selectedValues = {};
             var itemSelected = this._hasSelections(filterId, values);
-            if (itemSelected) {
-                var filterObj = this._getObject(filterId, values);
-                selectedValues = this._getSelected(filterObj);
-            }
 
-            //console.log(selectedValues);
+                if (itemSelected) {
+                    selectedValues =  values[filterId];
+                 //var filterObj = this._getObject(filterId, values);
+                 //selectedValues = this._getSelected(filterObj);
+                }
+
             return selectedValues;
         },
 
@@ -492,10 +613,26 @@ define(
              * @returns {*}
              */
         isFAOSectorsSelected: function () {
-            var values = this._getSelectedValues();
+            var values = this.getSelectedValues(s.ids.SECTORS);
 
-            return this._containsValue(values, s.values.FAO_SECTORS);
+                console.log(values);
+            for(var i = 0; i < values.length; i++){
+                if(values[i] === s.values.FAO_SECTORS){
+                  return true;
+                }
+            }
+
+            return false;
         },
+
+
+
+            /*isFAOSectorsSelected: function () {
+                var values = this._getSelectedValues();
+
+                return this._containsValue(values, s.values.FAO_SECTORS);
+            },*/
+
             /**
              *
              * @param values
@@ -604,7 +741,7 @@ define(
                     Q.all([
                         self._onRecipientChange(item)
                     ]).then(function (result) {
-                        console.log("=========== ", result);
+                        //console.log("=========== ", result);
 
                         if (result) {
                             self._setRegionCode(item, result[0][0].parents[0].code);
@@ -728,7 +865,7 @@ define(
                     Q.all([
                         self._onRecipientChange(item)
                     ]).then(function (result) {
-                        console.log("============= RESULT ", result);
+                        //console.log("============= RESULT ", result);
                         if (result) {
                             self._setRegionCode(item, result[0][0].parents[0].code);
                         }
@@ -904,6 +1041,11 @@ define(
             item.regioncode = result;
         },
 
+
+            _setGaulCode: function (item, result) {
+                item.gaulcode = parseInt(result);
+            },
+
             /**
              *
              * @param error
@@ -1078,7 +1220,7 @@ define(
              * @private
              */
 
-        _onRecipientChange: function (recipient) {
+        /*_onRecipientChange: function (recipient) {
             var self = this;
               //  console.log("IS RECIPIENT")
                 if (recipient.values.values.length > 0) {
@@ -1092,7 +1234,59 @@ define(
                    });
                 }
 
-        },
+        },*/
+
+
+            _onRecipientChangeGetRegionCode: function (values) {
+                var self = this;
+                //  console.log("IS RECIPIENT")
+                if (values.length > 0) {
+                    //  console.log("IS RECIPIENT value")
+                    return Q.all([
+                        self._createRegionPromiseData("crs_un_regions_recipients", "2016", "2", "up", values[0])
+                    ]).then(function (c) {
+                        return c;
+                    }, function (r) {
+                        console.error(r);
+                    });
+                }
+
+            },
+
+
+            _onRecipientChangeGetGaulCode: function (values) {
+                var self = this;
+                var odaProps = self._getPropertiesObject(BrowseConfig.filter.ODA, self._getFilterValues().values[BrowseConfig.filter.ODA]);
+                var filterConfig = self._getFilterById(BrowseConfig.filter.RECIPIENT_COUNTRY);
+
+                if (values.length > 0) {
+                    //  console.log("IS RECIPIENT value")
+                    return Q.all([
+                        self._createGaulPromiseData(odaProps[BrowseConfig.filter.ODA].enumeration[0], Utils.getLocale(), filterConfig.cl.uid, filterConfig.cl.version, values)
+                    ]).then(function (c) {
+                        return c;
+                    }, function (r) {
+                        console.error(r);
+                    });
+                }
+
+            },
+
+
+            _setRecipientProperties: function (result, props) {
+                var self = this;
+
+                if (result) {
+                    var regionCodeResult = result[0][0];
+                    var gaulCodeResult = result[1][0];
+
+                    self._setRegionCode(props, regionCodeResult.parents[0].code);
+                    self._setGaulCode(props, gaulCodeResult.data[0][0]);
+                }
+            },
+
+
+
             /**
              *
              * @param codelist
@@ -1108,6 +1302,8 @@ define(
             var baseUrl = BaseConfig.SERVER + BaseConfig.CODELIST_SERVICE + BaseConfig.HIERARCHY_CODES_POSTFIX;
             baseUrl+= "/"+ codelist + "/" +version+ "/" + findcode + "?depth="+depth+"&direction="+direction;
 
+
+
         return Q($.ajax({
             url: baseUrl,
             type: "GET",
@@ -1116,6 +1312,26 @@ define(
             return c;
         }, function (r) {
             console.error(r);
+        });
+    },
+
+    _createGaulPromiseData : function (dataset, lang, codelist, version, codes) {
+
+        var baseUrl = BaseConfig.SERVER + BaseConfig.D3P_POSTFIX + dataset + "?dsd=true&full=true&language="+lang;
+        var data =  [{"name":"filter","parameters":{"rows":{"recipientcode":{"codes":[{"uid":codelist,"version":version,"codes":codes}]}}}},{"name":"filter","parameters":{"columns":["gaul0"]}}, {"name":"page","parameters":{"perPage":1, "page": 1}}];
+
+
+
+        return Q($.ajax({
+            url: baseUrl,
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: 'json'
+        })).then(function (c) {
+                    return c;
+        }, function (r) {
+             console.error(r);
         });
     },
 
@@ -1287,6 +1503,13 @@ define(
 
            // console.log(filterValue);
             return filterValue;
+        },
+
+        _getPropertiesObject: function (id, value) {
+            var additionalProperties = {};
+            additionalProperties[id] = value;
+
+            return additionalProperties;
         },
 
         _unbindEventListeners: function () {

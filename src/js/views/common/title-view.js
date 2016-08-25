@@ -3,9 +3,10 @@ define([
     'jquery',
     'views/base/view',
     'text!templates/common/title.hbs',
+    'config/Events',
     'handlebars',
     'amplify'
-], function ($, View, template, Handlebars) {
+], function ($, View, template, Events, Handlebars) {
 
     'use strict';
 
@@ -15,11 +16,11 @@ define([
     var s = {
         css_classes: {
             TITLE_ITEMS_LIST: "#fx-title-items-list"
-        },
-        events: {
-            ADD_ITEM: 'fx.title.item.add',
-            REMOVE_ITEM: 'fx.title.item.remove'
-        }
+        }//,
+       // events: {
+           // ADD_ITEM: 'fx.title.item.add',
+           // REMOVE_ITEM: 'fx.title.item.remove'
+       // }
     };
 
     var TitleView = View.extend({
@@ -182,16 +183,20 @@ define([
         },
 
         _bindEventListeners: function () {
-            amplify.subscribe(s.events.ADD_ITEM, this, this._onAdd);
-            amplify.subscribe(s.events.REMOVE_ITEM, this, this._onRemove);
+            //amplify.subscribe(s.events.ADD_ITEM, this, this._onAdd);
+            //amplify.subscribe(s.events.REMOVE_ITEM, this, this._onRemove);
+
+            amplify.subscribe(Events.TITLE_ADD_ITEM, this, this._onAdd);
+            amplify.subscribe(Events.TITLE_REMOVE_ITEM, this, this._onRemove);
+
         },
 
         _onAdd: function (e) {
             this._addItem(e);
         },
 
-        _onRemove: function (e) {
-            this.removeItem(e.id);
+        _onRemove: function (id) {
+            this.removeItem(id);
         },
 
         _addItem: function (item) {
@@ -251,8 +256,11 @@ define([
 
         _unbindEventListeners: function () {
             // Remove listeners
-            amplify.unsubscribe(s.events.ADD_ITEM, this._onAdd);
-            amplify.unsubscribe(s.events.REMOVE_ITEM, this._onRemove);
+           // amplify.unsubscribe(s.events.ADD_ITEM, this._onAdd);
+           // amplify.unsubscribe(s.events.REMOVE_ITEM, this._onRemove);
+
+            amplify.unsubscribe(Events.TITLE_REMOVE_ITEM, this._onAdd);
+            amplify.unsubscribe(Events.TITLE_ADD_ITEM, this._onRemove);
         },
 
         dispose: function () {
