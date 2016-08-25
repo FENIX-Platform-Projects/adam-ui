@@ -16,6 +16,10 @@ define(function () {
         "donor": {
             purposecode: {hide: ['top-sectors', 'top-sectors-others', 'top-subsectors', 'tot-oda-sector', 'tot-oda'], show: ['tot-oda-subsector']},
             parentsector_code: {hide: ['top-sectors', 'top-sectors-others', 'tot-oda-subsector', 'tot-oda'], show: ['top-subsectors', 'tot-oda-sector']}
+        },
+        "country_donor": {
+            purposecode: {hide: ['top-sectors', 'top-sectors-others', 'top-subsectors', 'tot-oda-sector', 'tot-oda'], show: ['tot-oda-subsector']},
+            parentsector_code: {hide: ['top-sectors', 'top-sectors-others', 'tot-oda-subsector', 'tot-oda'], show: ['top-subsectors', 'tot-oda-sector']}
         }
     }
 });
