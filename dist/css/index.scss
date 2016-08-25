@@ -1,5 +1,7 @@
 /* Dist - Index */
 
+
+$fx-ui-common: '../../submodules/fenix-ui-common/';
 /* RLM - Variables */
 @import '../../src/css/theme/variables';
 
@@ -15,7 +17,7 @@
 /* Base */
 @import '../../src/css/theme/default';
 
-/* Components */
+///* Components */
 @import '../../src/css/components/breadcrumbs';
 @import '../../src/css/components/fao-footer';
 @import '../../src/css/components/fao-topmenu';
@@ -23,7 +25,7 @@
 @import '../../src/css/components/icons';
 @import '../../src/css/components/jstree';
 @import '../../src/css/components/preload';
-@import '../../src/css/components/submenu';
+//@import '../../src/css/components/submenu';
 
 /* Typo3 */
 @import '../../src/css/theme/typo3-compatibility';
@@ -40,7 +42,7 @@
 
 /* Boostrap Queries */
 @import '../../submodules/fenix-ui-common/css/themes/fx-bootstrap-queries';
-$fx-ui-common: '../../submodules/fenix-ui-common/';
+
 
 
 @import '../../submodules/fenix-ui-common/css/base/fx-typography';

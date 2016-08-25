@@ -13343,7 +13343,6 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small, .h1 small, .h2 small
   overflow: hidden;
   text-overflow: ellipsis; }
 
-/* Components */
 /* BreadCrumbs */
 #breadcumb_container {
   height: 35px;
@@ -13678,74 +13677,6 @@ footer.fao-footer {
 @keyframes loading {
   100% {
     transform: rotate(360deg); } }
-/* Subemenu */
-.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:focus, .navbar-default .navbar-nav > .open > a:hover {
-  background-color: #f1f1f1;
-  border-right-color: transparent; }
-
-.dropdown.open .dropdown-menu {
-  z-index: 2; }
-.dropdown .dropdown-menu {
-  -moz-border-radius-topleft: 0;
-  -webkit-border-top-left-radius: 0;
-  border-top-left-radius: 0;
-  -moz-border-radius-topright: 0;
-  -webkit-border-top-right-radius: 0;
-  border-top-right-radius: 0;
-  -moz-border-radius-bottomright: 0;
-  -webkit-border-bottom-right-radius: 0;
-  border-bottom-right-radius: 0;
-  -moz-border-radius-bottomleft: 0;
-  -webkit-border-bottom-left-radius: 0;
-  border-bottom-left-radius: 0;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  -ms-border-radius: 0;
-  border-radius: 0;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
-  border: 0;
-  background-color: #f1f1f1;
-  min-width: 250px;
-  padding: 0; }
-  .dropdown .dropdown-menu > li {
-    height: 40px;
-    border-bottom: 1px solid white;
-    position: relative;
-    cursor: pointer; }
-    .dropdown .dropdown-menu > li:last-child {
-      border-bottom-color: transparent; }
-    .dropdown .dropdown-menu > li:hover {
-      background-color: #c3e2f3; }
-      .dropdown .dropdown-menu > li:hover:before {
-        content: '';
-        position: absolute;
-        width: 5px;
-        height: 100%;
-        background-color: #2686ba;
-        right: 0;
-        top: 0; }
-    .dropdown .dropdown-menu > li > a {
-      text-transform: uppercase;
-      color: #333333;
-      font-size: 12px;
-      position: relative;
-      top: 50%;
-      height: 100%;
-      padding-top: 12px;
-      -ms-transform: translateY(-50%);
-      -webkit-transform: translateY(-50%);
-      transform: translateY(-50%); }
-      .dropdown .dropdown-menu > li > a:hover {
-        background-color: transparent; }
-      .dropdown .dropdown-menu > li > a:active {
-        background-color: transparent; }
-      .dropdown .dropdown-menu > li > a:focus {
-        background-color: transparent; }
-      .dropdown .dropdown-menu > li > a:visited {
-        background-color: transparent; }
-
 /* Typo3 */
 /* Typo3 FAO Compatibility */
 body {
@@ -14173,7 +14104,7 @@ input[type="button"]::-moz-focus-inner {
   height: 15px;
   width: 15px;
   display: inline-block;
-  background-image: url("../../submodules/fenix-ui-common//css/img/fenix-catalog-sprite-small.svg");
+  background-image: url(".//css/img/fenix-catalog-sprite-small.svg");
   background-repeat: no-repeat;
   background-size: 150px 30px; }
 
@@ -14196,7 +14127,7 @@ input[type="button"]::-moz-focus-inner {
 
 .jstree-default .jstree-node,
 .jstree-default .jstree-icon {
-  background-image: url("../../submodules/fenix-ui-common//css/img/treejs-32px.svg"); }
+  background-image: url(".//css/img/treejs-32px.svg"); }
 
 .jstree-default .jstree-wholerow-clicked {
   background: none;
@@ -14535,7 +14466,7 @@ input[type="radio"]:disabled + label {
 .courtesy-img {
   width: 140px;
   height: 129px;
-  background-image: url("../../submodules/fenix-ui-common//css/img/mascot-01-gray.svg");
+  background-image: url(".//css/img/mascot-01-gray.svg");
   background-size: contain;
   background-repeat: no-repeat;
   margin: 25px auto; }
@@ -15188,11 +15119,11 @@ input[type="radio"]:disabled + label {
   background-repeat: no-repeat;
   margin: 25px auto; }
   .content-message-img.empty-img {
-    background-image: url("../../submodules/fenix-ui-common//css/img/mascot-empty-gray.svg"); }
+    background-image: url(".//css/img/mascot-empty-gray.svg"); }
   .content-message-img.error-img {
-    background-image: url("../../submodules/fenix-ui-common//css/img/mascot-error-gray.svg"); }
+    background-image: url(".//css/img/mascot-error-gray.svg"); }
   .content-message-img.huge-img {
-    background-image: url("../../submodules/fenix-ui-common//css/img/mascot-huge-gray.svg"); }
+    background-image: url(".//css/img/mascot-huge-gray.svg"); }
 
 body {
   background-color: #f8f8f8;
