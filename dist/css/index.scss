@@ -1,7 +1,5 @@
 /* Dist - Index */
 
-
-$fx-ui-common: '../../submodules/fenix-ui-common/';
 /* RLM - Variables */
 @import '../../src/css/theme/variables';
 
@@ -42,7 +40,7 @@ $fx-ui-common: '../../submodules/fenix-ui-common/';
 
 /* Boostrap Queries */
 @import '../../submodules/fenix-ui-common/css/themes/fx-bootstrap-queries';
-
+$fx-ui-common: '../../submodules/fenix-ui-common/';
 
 
 @import '../../submodules/fenix-ui-common/css/base/fx-typography';

@@ -14104,7 +14104,7 @@ input[type="button"]::-moz-focus-inner {
   height: 15px;
   width: 15px;
   display: inline-block;
-  background-image: url(".//css/img/fenix-catalog-sprite-small.svg");
+  background-image: url("../../submodules/fenix-ui-common//css/img/fenix-catalog-sprite-small.svg");
   background-repeat: no-repeat;
   background-size: 150px 30px; }
 
@@ -14127,7 +14127,7 @@ input[type="button"]::-moz-focus-inner {
 
 .jstree-default .jstree-node,
 .jstree-default .jstree-icon {
-  background-image: url(".//css/img/treejs-32px.svg"); }
+  background-image: url("../../submodules/fenix-ui-common//css/img/treejs-32px.svg"); }
 
 .jstree-default .jstree-wholerow-clicked {
   background: none;
@@ -14466,7 +14466,7 @@ input[type="radio"]:disabled + label {
 .courtesy-img {
   width: 140px;
   height: 129px;
-  background-image: url(".//css/img/mascot-01-gray.svg");
+  background-image: url("../../submodules/fenix-ui-common//css/img/mascot-01-gray.svg");
   background-size: contain;
   background-repeat: no-repeat;
   margin: 25px auto; }
@@ -15119,11 +15119,11 @@ input[type="radio"]:disabled + label {
   background-repeat: no-repeat;
   margin: 25px auto; }
   .content-message-img.empty-img {
-    background-image: url(".//css/img/mascot-empty-gray.svg"); }
+    background-image: url("../../submodules/fenix-ui-common//css/img/mascot-empty-gray.svg"); }
   .content-message-img.error-img {
-    background-image: url(".//css/img/mascot-error-gray.svg"); }
+    background-image: url("../../submodules/fenix-ui-common//css/img/mascot-error-gray.svg"); }
   .content-message-img.huge-img {
-    background-image: url(".//css/img/mascot-huge-gray.svg"); }
+    background-image: url("../../submodules/fenix-ui-common//css/img/mascot-huge-gray.svg"); }
 
 body {
   background-color: #f8f8f8;
