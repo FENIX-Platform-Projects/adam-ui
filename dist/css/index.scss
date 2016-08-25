@@ -3,13 +3,9 @@
 /* RLM - Variables */
 @import '../../src/css/theme/variables';
 
-
 .fx-sandbox{
   padding: 0 5px;
 }
-
-
-
 
 @import '../../src/css/fx-boot/bootstrap';
 
@@ -29,9 +25,6 @@
 @import '../../src/css/components/preload';
 @import '../../src/css/components/submenu';
 
-
-
-
 /* Typo3 */
 @import '../../src/css/theme/typo3-compatibility';
 
@@ -39,6 +32,7 @@
 @import '../../src/css/pages/home';
 @import '../../src/css/pages/analyze-data';
 @import '../../src/css/pages/browse-data';
+
 
 
 /* Fenix Common CSS */
@@ -59,6 +53,7 @@ $fx-ui-common: '../../submodules/fenix-ui-common/';
 @import '../../submodules/fenix-ui-common/css/components/fx-radio-checkbox';
 
 @import '../../submodules/fenix-ui-filter/src/css/filter';
+@import '../../submodules/fenix-ui-analysis/src/css/analysis';
 @import '../../submodules/fenix-ui-visualization-box/src/css/visualization-box';
 
 body {
