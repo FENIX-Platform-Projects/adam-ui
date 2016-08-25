@@ -22,7 +22,6 @@ require.config({
         tablePaths: pathProjectRoot + 'submodules/fenix-ui-table-creator/src/js/paths',
         filterPaths: pathProjectRoot + 'submodules/fenix-ui-filter/src/js/paths',
         analysisPaths: pathProjectRoot + 'submodules/fenix-ui-analysis/src/js/paths',
-        olapPaths: pathProjectRoot + 'submodules/fenix-ui-olap/src/js/paths',
         reportPaths: pathProjectRoot + 'submodules/fenix-ui-reports/src/js/paths',
         visualizationPaths: pathProjectRoot + 'submodules/fenix-ui-visualization-box/src/js/paths',
         dataEditorPaths: pathProjectRoot + 'submodules/fenix-ui-DataEditor/js/paths',
@@ -43,14 +42,14 @@ require([
     "analysisPaths",
     "catalogPaths",
     "visualizationPaths",
-    "olapPaths",
     "metadataViewerPaths",
     "chartPaths",
     "mapPaths",
     "reportPaths",
     "fenixMap",
-    "dashboardPaths"
-], function (Compiler, Common, Menu, Filter, Analysis, Catalog, Box, Olap, MetadataViewer, ChartCreator, MapCreator, Report, Map, Dashboard) {
+    "dashboardPaths",
+    "tablePaths"
+], function (Compiler, Common, Menu, Filter, Analysis, Catalog, Box, MetadataViewer, ChartCreator, MapCreator, Report, Map, Dashboard, Table) {
 
     'use strict';
 
@@ -74,9 +73,6 @@ require([
     var filterConfig = Filter;
     filterConfig.baseUrl = submodules_path + 'fenix-ui-filter/src/js';
 
-    var olapConfig = Olap;
-    olapConfig.baseUrl = submodules_path + 'fenix-ui-olap/src/js';
-
     var metadataViewerConfig = MetadataViewer;
     metadataViewerConfig.baseUrl = submodules_path + 'fenix-ui-metadata-viewer/src/js';
 
@@ -95,7 +91,10 @@ require([
     var dashboardConfig = Dashboard;
     dashboardConfig.baseUrl = submodules_path + 'fenix-ui-dashboard/src/js';
 
-    Compiler.resolve([commonConfig, catalogConfig, menuConfig, filterConfig, analysisConfig, boxConfig, olapConfig, metadataViewerConfig, chartConfig, mapCreatorConfig, reportConfig, mapConfig, dashboardConfig],
+    var tableConfig = Table;
+    tableConfig.baseUrl = submodules_path + 'fenix-ui-table-creator/src/js';
+
+    Compiler.resolve([commonConfig, catalogConfig, menuConfig, filterConfig, analysisConfig, boxConfig, metadataViewerConfig, chartConfig, mapCreatorConfig, reportConfig, mapConfig, dashboardConfig, tableConfig],
         {
             placeholders: {"FENIX_CDN": "http://fenixrepo.fao.org/cdn"},
 
