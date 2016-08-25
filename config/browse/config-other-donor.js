@@ -33,10 +33,8 @@ define(function () {
             parentsector_code: {
                 selector: {
                     id: "dropdown",
-                   // default: ["600"],
                     config: { //Selectize configuration
-                        maxItems: 1,
-                        placeholder: "Please select",
+                        placeholder: "All",
                         plugins: ['remove_button'],
                         mode: 'multi'
                     }
@@ -63,10 +61,9 @@ define(function () {
                         mode: 'multi'
                     }
                 },
-                className: "col-sm-3",
+                className: "col-sm-4",
                 cl: {
-                    codes: ["60010", "60020", "60030", "60040", "60061", "60062", "60063"],
-                    "uid": "crs_dac",
+                     "uid": "crs_dac",
                     "version": "2016",
                     "level": 2,
                     "levels": 2
@@ -962,7 +959,6 @@ define(function () {
                                     load: function(event) {
                                         var _that = this;
                                         var hasSubSector = false;
-                                        console.log(_that);
 
                                         var isVisible = $.each(_that.series, function (i, serie) {
                                             if(serie.name == '% Sub Sector/Sector'){
@@ -2170,7 +2166,7 @@ define(function () {
                                             "t"
                                         ]
                                     },
-                                    "parentsector_code": {
+                                    /*"parentsector_code": {
                                         "codes": [
                                             {
                                                 "uid": "crs_dac",
@@ -2180,7 +2176,7 @@ define(function () {
                                                 ]
                                             }
                                         ]
-                                    },
+                                    },*/
                                     "year": {
                                         "time": [
                                             {
@@ -2476,9 +2472,11 @@ define(function () {
                         }
 
                     },
+
+                    filterFor: ['donorcode', 'parentsector_code', 'purposecode', 'year', 'oda'],
+
                     filter: { //FX-filter format
                         donorcode: ["1"],
-                        parentsector_code: ["600"],
                         year: [{value: "2000", parent: 'from'}, {value: "2014", parent:  'to'}]
                     },
                     postProcess: [
@@ -2620,8 +2618,8 @@ define(function () {
                         }
                     },
                     filterFor: {
-                        "filter_top_10_recipients_sum": ['donorcode', 'parentsector_code', 'year', 'oda'],
-                        "filter_all_recipients_sum": ['donorcode', 'parentsector_code', 'year', 'oda']
+                        "filter_top_10_recipients_sum": ['donorcode', 'parentsector_code', 'purposecode', 'year', 'oda'],
+                        "filter_all_recipients_sum": ['donorcode', 'parentsector_code', 'purposecode', 'year', 'oda']
                     },
 
                     postProcess: [
@@ -2666,17 +2664,6 @@ define(function () {
                                                 "version": "2016",
                                                 "codes": [
                                                     "1"
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    "parentsector_code": {
-                                        "codes": [
-                                            {
-                                                "uid": "crs_dac",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "600"
                                                 ]
                                             }
                                         ]
@@ -2960,6 +2947,8 @@ define(function () {
                         }
 
                     },
+
+                    filterFor: ['donorcode', 'year', 'oda'],
 
                     filter: { //FX-filter format
                         donorcode: ["1"],
@@ -3406,9 +3395,11 @@ define(function () {
                         }
 
                     },
+
+                    filterFor: ['donorcode', 'year', 'parentsector_code', 'purposecode', 'oda'],
+
                     filter: { //FX-filter format
                         donorcode: ["1"],
-                        parentsector_code: ["600"],
                         year: [{value: "2000", parent: 'from'}, {value: "2014", parent:  'to'}]
                     },
                     postProcess: [
@@ -3519,9 +3510,11 @@ define(function () {
                         }
 
                     },
+
+                    filterFor: ['donorcode', 'year', 'parentsector_code', 'oda'],
+
                     filter: { //FX-filter format
                         donorcode: ["1"],
-                        parentsector_code: ["600"],
                         year: [{value: "2000", parent: 'from'}, {value: "2014", parent: 'to'}]
                     },
                     postProcess: [
@@ -3566,7 +3559,7 @@ define(function () {
                     type: 'chart',
                     config: {
                         type: "column",
-                        x: ["parentsector_code"], //x axis
+                        x: ["donorcode"], //x axis
                         series: ["un_continent_code"], // series
                         y: ["value"],//Y dimension
                         aggregationFn: {"value": "sum"},
@@ -3641,9 +3634,11 @@ define(function () {
                             }
                         }
                     },
+
+                    filterFor: ['donorcode', 'year', 'parentsector_code', 'purposecode', 'oda'],
+
                     filter: { //FX-filter format
                         donorcode: ["1"],
-                        parentsector_code: ["600"],
                         year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
                     },
 
@@ -3652,7 +3647,7 @@ define(function () {
                             "name": "group",
                             "parameters": {
                                 "by": [
-                                    "parentsector_code", "un_continent_code"
+                                    "donorcode", "un_continent_code"
                                 ],
                                 "aggregations": [
                                     {
@@ -3716,9 +3711,10 @@ define(function () {
                         }
                     },
 
+                    filterFor: ['donorcode', 'year', 'parentsector_code', 'purposecode', 'oda'],
+
                     filter: { //FX-filter format
                         donorcode: ["1"],
-                        parentsector_code: ["600"],
                         year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
                     },
                     postProcess: [
