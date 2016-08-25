@@ -158,7 +158,6 @@ define(function () {
                     },
                     template: {
                         hideHeaderIcon: false,
-                        headerIconClassName: 'glyphicon glyphicon-info-sign',
                         hideSwitch: true,
                         hideRemoveButton: true
                     }

@@ -10,20 +10,21 @@ define([
     'text!templates/analyze/error.hbs',
     'i18n!nls/analyze-compare',
     'i18n!nls/errors',
+    'i18n!nls/filter',
     'config/Events',
     'config/Config',
     'config/analyze/compare/Config',
     'fx-analysis/start',
     'fx-filter/start',
     'amplify'
-], function ($, _, log, Utils, FxUtils, View, template, errorTemplate, i18nLabels, i18nErrors, E, GC, AC, Analysis, Filter) {
+], function ($, _, log, Utils, FxUtils, View, template, errorTemplate, i18nLabels, i18nErrors, i18nFilter, E, GC, AC, Analysis, Filter) {
 
     'use strict';
 
     var s = {
-        FILTER : "#compare-filter",
-        ANALYSIS : "#compare-analysis",
-        ADD_BTN : "#add-btn"
+        FILTER: "#compare-filter",
+        ANALYSIS: "#compare-analysis",
+        ADD_BTN: "#add-btn"
     };
 
     var CompareView = View.extend({
@@ -54,7 +55,7 @@ define([
 
             this.$addBnt = this.$el.find(s.ADD_BTN);
 
-            this.readyComponents= 0;
+            this.readyComponents = 0;
         },
 
         _bindEventListeners: function () {
@@ -68,9 +69,9 @@ define([
 
         _onComponentReady: function () {
 
-            this.readyComponents ++;
+            this.readyComponents++;
 
-            if (this.readyComponents === 2){
+            if (this.readyComponents === 2) {
                 this.$addBnt.prop('disabled', false);
             }
         },
@@ -81,31 +82,55 @@ define([
             this.analysis.add(config);
         },
 
-        _getBoxModelFromFilter : function () {
+        _getBoxModelFromFilter: function () {
+
             var config = {},
                 values = this.filter.getValues(),
-                process= this.filter.getValues("fenix", ["recipientcode", "donorcode", "parentsector_code", "purposecode", "year-from", "year-to"]);
+                from = FxUtils.getNestedProperty("values.year-from", values)[0],
+                to = FxUtils.getNestedProperty("values.year-to", values)[0],
+                process = this.filter.getValues("fenix", ["recipientcode", "donorcode", "parentsector_code", "purposecode"]);
 
             config.uid = FxUtils.getNestedProperty("values.oda", values)[0];
 
-            config.process = process;
+            process["year"] = {
+                time: [{
+                    from: from,
+                    to: to
+                }]
+            };
+
+            config.process = [{
+                name: "filter",
+                parameters: {
+                    rows: process
+                }
+            }];
 
             return config;
         },
 
         _initComponents: function () {
 
-            this.filter = new Filter($.extend(true, {}, AC.filter, {
-                el : this.$el.find(s.FILTER),
+            var filterConfig = $.extend(true, {}, AC.filter, {
+                el: this.$el.find(s.FILTER),
                 environment: GC.ENVIRONMENT,
-                cache : GC.cache,
-            }));
+                cache: GC.cache,
+            });
+
+            _.each(filterConfig.items, function (value, key) {
+                if (!value.template) {
+                    value.template = {};
+                }
+                value.template.title = i18nFilter["filter_" + key];
+            });
+
+            this.filter = new Filter(filterConfig);
 
             this.analysis = new Analysis($.extend(true, {}, AC.analysis, {
                 el: this.$el.find(s.ANALYSIS),
                 environment: GC.ENVIRONMENT,
                 catalog: false,
-                cache : GC.cache,
+                cache: GC.cache,
             }));
 
         },
