@@ -102,7 +102,8 @@ define([
             config.process = [{
                 name: "filter",
                 parameters: {
-                    rows: process
+                    rows: process,
+                    columns: ["recipientcode", "donorcode", "parentsector_code", "purposecode", "year"]
                 }
             }];
 
