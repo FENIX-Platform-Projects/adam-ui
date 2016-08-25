@@ -14522,6 +14522,70 @@ input[type="radio"]:disabled + label {
   background-image: none;
   border: 1px solid #d8d8d8; }
 
+/* Analysis */
+.fx-grid-item {
+  padding: 5px; }
+
+.fx-grid-item[data-size="full"] {
+  width: 100%; }
+
+.fx-grid-item[data-size="half"] {
+  width: 50%; }
+
+.courtesy-img {
+  width: 140px;
+  height: 129px;
+  background-image: url("../../submodules/fenix-ui-common//css/img/mascot-01-gray.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin: 25px auto; }
+
+.pulse-button {
+  font-size: 20px;
+  display: inline-block;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  z-index: 2;
+  width: 37px;
+  height: 37px;
+  line-height: 37px;
+  padding: 0;
+  background-color: #0076ff;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  border-radius: 50%;
+  cursor: pointer;
+  vertical-align: middle;
+  margin: 10px;
+  box-shadow: 0 0 0 0 rgba(0, 118, 255, 0.7);
+  -webkit-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+  -moz-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+  -ms-animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+  animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1); }
+  .pulse-button span {
+    position: relative;
+    left: 1px; }
+  .pulse-button:hover, .pulse-button:focus, .pulse-button:active, .pulse-button:visited, .pulse-button.first-init {
+    color: white;
+    -webkit-animation: none;
+    -moz-animation: none;
+    -ms-animation: none;
+    animation: none; }
+
+@-webkit-keyframes pulse {
+  to {
+    box-shadow: 0 0 0 45px rgba(0, 118, 255, 0); } }
+@-moz-keyframes pulse {
+  to {
+    box-shadow: 0 0 0 45px rgba(0, 118, 255, 0); } }
+@-ms-keyframes pulse {
+  to {
+    box-shadow: 0 0 0 45px rgba(0, 118, 255, 0); } }
+@keyframes pulse {
+  to {
+    box-shadow: 0 0 0 45px rgba(0, 118, 255, 0); } }
 /* Visualization Box Style */
 .fx-box {
   height: 450px;
