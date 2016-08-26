@@ -135,12 +135,12 @@ define([
         renderDashboard: function () {
 
 
-            console.log("=============== RENDER CALLED  ");
+           // console.log("=============== RENDER CALLED  ");
            // console.log(this.baseConfig.items.length);
            // console.log("================================== ");
 
-        // console.log("renderDashboard");
-           // console.log(this.config);
+            console.log("renderDashboard");
+            console.log(this.config);
 
 
 
@@ -319,6 +319,11 @@ define([
                     this.gaulcode = props["gaulcode"];
                 else
                     this.gaulcode = null;
+
+                if(props["oda"])
+                    this.config.uid = props["oda"];
+
+
             } else {
                 this.regioncode = null;
                 this.gaulcode = null;
