@@ -128,6 +128,111 @@ define(function () {
                 uid: "adam_usd_commitment",
 
                 items: [
+                   /* {
+                        id: "tot-oda", //ref [data-item=':id']
+                        type: "chart", //chart || map || olap,
+                        config: {
+                            type: "line",
+                            x: ["year"], //x axis
+                            series: ["indicator"], // series
+                            y: ["value"],//Y dimension
+                            aggregationFn: {"value": "sum"},
+                            useDimensionLabelsIfExist: false,// || default raw else fenixtool
+
+                            config: {
+                                xAxis: {
+                                    type: 'datetime'
+                                }
+                            }
+                        },
+
+                        filterFor: {
+                            "filter_total_ODA": ['year', 'oda']
+                        },
+
+                        postProcess: [
+                            {
+                                "name": "filter",
+                                "sid": [
+                                    {
+                                        "uid": "adam_usd_aggregation_table"
+                                    }
+                                ],
+                                "parameters": {
+                                    "columns": [
+                                        "year",
+                                        "value",
+                                        "unitcode"
+                                    ],
+                                    "rows": {
+                                        "oda": {
+                                            "enumeration": [
+                                                "usd_commitment"
+                                            ]
+                                        },
+                                        "year": {
+                                            "time": [
+                                                {
+                                                    "from": 2000,
+                                                    "to": 2014
+                                                }
+                                            ]
+                                        }
+                                    }
+                                },
+                                "rid":{"uid":"filter_total_ODA"}
+                            },
+                            {
+                                "name": "group",
+                                "parameters": {
+                                    "by": [
+                                        "year"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": [
+                                                "value"
+                                            ],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": [
+                                                "unitcode"
+                                            ],
+                                            "rule": "first"
+                                        }
+                                    ]
+                                },
+                                "rid": {
+                                    "uid": "total_oda"
+                                }
+                            },
+                            {
+                                "name": "addcolumn",
+                                "parameters": {
+                                    "column": {
+                                        "dataType": "text",
+                                        "id": "indicator",
+                                        "title": {
+                                            "EN": "Indicator"
+                                        },
+                                        "domain": {
+                                            "codes": [
+                                                {
+                                                    "extendedName": {
+                                                        "EN": "Adam Processes"
+                                                    },
+                                                    "idCodeList": "adam_processes"
+                                                }
+                                            ]
+                                        },
+                                        "subject": null
+                                    },
+                                    "value": "ODA"
+                                }
+                            }
+                        ]
+                    },*/
                     {
                         id: "tot-oda-sector", //ref [data-item=':id']
                         type: "chart", //chart || map || olap,
@@ -1121,6 +1226,8 @@ define(function () {
                             }
 
                         },
+
+
                         filter: { //FX-filter format
                             parentsector_code: ["600"],
                             year: [{value: "2000", parent: 'from'}, {value: "2014", parent:  'to'}]
@@ -2214,7 +2321,7 @@ define(function () {
                         type: 'chart',
                         config: {
                             type: "column",
-                            x: ["parentsector_code"], //x axis
+                            x: ["unitcode"], //x axis
                             series: ["un_continent_code"], // series
                             y: ["value"],//Y dimension
                             aggregationFn: {"value": "sum"},
@@ -2299,7 +2406,7 @@ define(function () {
                                 "name": "group",
                                 "parameters": {
                                     "by": [
-                                        "parentsector_code", "un_continent_code"
+                                        "unitcode", "un_continent_code"
                                     ],
                                     "aggregations": [
                                         {
