@@ -14,7 +14,13 @@ define(function ( ) {
             RESOURCE_PARTNER: 'donorcode',
             SECTOR: 'parentsector_code',
             SUB_SECTOR: 'purposecode',
-            ODA: 'oda'
+            CHANNELS_SUBCATEGORY: 'channelsubcategory_code',
+            CHANNEL: 'channelcode',
+            ODA: 'oda',
+            YEAR: 'year',
+            YEAR_FROM: 'year-from',
+            YEAR_TO: 'year-to',
+            COUNTRY: 'countrycode'
         },
         topic: {
             BY_COUNTRY: 'country',
