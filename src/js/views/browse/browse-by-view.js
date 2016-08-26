@@ -15,13 +15,14 @@ define([
     'config/browse/config-oda',
     'config/browse/Config-oecd-fao',
     'config/browse/config-development-indicators',
-    'config/browse/config-display',
+    'config/browse/config-by-topic',
+    'config/browse/config-by-filter-values',
     'config/browse/config-browse',
     'lib/utils',
     'amplify',
     'bootstrap',
     'underscore'
-], function ($, $UI, View, TitleSubView, FilterSubView, DashboardOecdSubView ,DashboardIndicatorsSubView, DashboardModel, template, i18nLabels, Events, BaseBrowseEvents, BrowseOecdConfig, BrowseOecdFaoSectorsConfig, BrowseIndicatorsConfig, ConfigOdaDisplay, BaseBrowseConfig, Utils) {
+], function ($, $UI, View, TitleSubView, FilterSubView, DashboardOecdSubView ,DashboardIndicatorsSubView, DashboardModel, template, i18nLabels, Events, BaseBrowseEvents, BrowseOecdConfig, BrowseOecdFaoSectorsConfig, BrowseIndicatorsConfig, ConfigByTopic, ConfigByFilterValues, BaseBrowseConfig, Utils) {
 
     'use strict';
 
@@ -87,7 +88,8 @@ define([
            // this.recipientcode =  params.recipientcode;
             uidChanged = false;
             this.datasetType = BaseBrowseConfig.dashboard.DEFAULT_UID;
-            this.viewConfig = ConfigOdaDisplay[this.browse_type];
+            this.topicConfig = ConfigByTopic[this.browse_type];
+            this.filterValuesConfig = ConfigByFilterValues[this.browse_type];
 
             View.prototype.initialize.call(this, arguments);
         },
@@ -294,11 +296,211 @@ define([
          * @param selected filter
          * @private
          */
-
-
         _updateDashboard: function(selectedfilter){
 
+            var ovalues = this.subview('filters').getFilterValues(), confPath, displayConfigForSelectedFilter, displayConfigForSelectedFilterValues, dashboardConfigChanged;
+
+            console.log("================= _updateDashboard =============== ");
+            console.log(ovalues);
+
+            if(selectedfilter) {
+
+                // If selected filter has a value
+                if(selectedfilter.values.values.length > 0){
+
+                    console.log("================= _updateDashboard: "+selectedfilter.id+" HAS VALUES =============== ");
+
+
+                    // Update the TitleView (Add Item)
+                    amplify.publish(Events.TITLE_ADD_ITEM, this._getTitleItem(selectedfilter));
+
+                    // Configuration display (if appropriate)
+                    if(this.topicConfig){
+                        displayConfigForSelectedFilter = this.topicConfig[selectedfilter.id];
+                    }
+
+
+
+                    // Update dashboard properties
+                        if(selectedfilter['props']){
+                            this.subview('oecdDashboard').setProperties(selectedfilter['props']);
+                        }
+
+                }
+                // Else selected filter has no value (i.e.there has been a de-selection/removal)
+                else {
+
+                    console.log("================= _updateDashboard: "+selectedfilter.id+" is  0 =============== ");
+
+
+                    // Update the TitleView (Remove Item)
+                    amplify.publish(Events.TITLE_REMOVE_ITEM, selectedfilter.id);
+
+                    // Re-configure display (if appropriate)
+                    if(selectedfilter.dependencies && this.topicConfig){
+                        displayConfigForSelectedFilter = this.topicConfig[selectedfilter.dependencies[0]];
+                    }
+
+
+                    if(this.filterValuesConfig){
+                        displayConfigForSelectedFilterValues = this.filterValuesConfig[selectedfilter.id];
+                        var item = _.find(displayConfigForSelectedFilterValues, function(item){
+                            return item.value === "";
+                        });
+
+                        if(item && item.config){
+                          confPath =  item.config.path;
+
+                          if(item.display)
+                              displayConfigForSelectedFilter = item.display;
+                        }
+                    }
+                }
+
+
+                this._setDashboardConfiguration(confPath, ovalues, displayConfigForSelectedFilter);
+
+
+
+
+
+
+
+               /* "sector": {
+                    parentsector_code: [
+                        {
+                            value: "",
+                            config: {
+                                path: "config-all-sector", hide: ['top-subsectors', 'tot-oda-sector'], show: ['tot-oda', 'tot-oda-subsector']
+                            }
+                        },
+                        {value: "9999", config: {path: "config-fao-sector"}}
+                    ]
+                }
+*/
+
+
+
+
+
+               /* // Set Sector Related Dashboard Configuration
+                switch (this.subview('filters').isFAOSectorsSelected()) {
+                    case true:
+                        //  console.log(this.faoSectorDashboardConfig);
+                        this.subview('filters').clearFilterValue(BaseBrowseConfig.filter.SECTOR, ovalues);
+                        this.subview('oecdDashboard').setDashboardConfig(this.faoSectorDashboardConfig);
+                        break;
+                    case false:
+                        this.subview('oecdDashboard').setDashboardConfig(this.otherSectorsDashboardConfig);
+                        break;
+                }
+
+
+                // Hide/Show Dashboard Items
+                this.subview('oecdDashboard').updateDashboardTemplate(displayConfigForSelectedFilter);
+
+               // Update Dashboard Items Configuration
+                this.subview('oecdDashboard').updateItemsConfig();
+
+                // Update Dashboard Model
+                this._setOdaDashboardModelValues();
+
+
+                console.log("================= _updateDashboard END =============== ");
+                console.log(ovalues);
+
+                // Rebuild OECD Dashboard
+                this.subview('oecdDashboard').rebuildDashboard(ovalues);
+
+                // Rebuild Development Indicators Dashboard
+                if(this.browse_type === BaseBrowseConfig.topic.BY_COUNTRY || this.browse_type === BaseBrowseConfig.topic.BY_RESOURCE_PARTNER){
+                    this._setIndicatorDashboardModelValues();
+                    var ivalues = this.subview('filters').getIndicatorsValues();
+                    this.subview('indicatorsDashboard').rebuildDashboard(ivalues);
+                }*/
+
+            }
+
+        },
+
+
+        _setDashboardConfiguration : function(confPath, ovalues, displayConfigForSelectedFilter){
+            var self = this;
+            console.log("================= _setDashboardConfiguration Start =============== ");
+            console.log(ovalues);
+
+            if(confPath){
+                require(['config/browse/' + confPath], function(dialog) {
+
+                    self._rebuildDashboard(ovalues, displayConfigForSelectedFilter, dialog.dashboard);
+                });
+            } else {
+                self._rebuildDashboard(ovalues, displayConfigForSelectedFilter, this.otherSectorsDashboardConfig);
+            }
+        },
+
+
+        _rebuildDashboard : function(ovalues, displayConfigForSelectedFilter, dashboardConfig){
+
+            // Set Sector Related Dashboard Configuration
+            switch (this.subview('filters').isFAOSectorsSelected()) {
+                case true:
+                    //  console.log(this.faoSectorDashboardConfig);
+                    this.subview('filters').clearFilterValue(BaseBrowseConfig.filter.SECTOR, ovalues);
+                    this.subview('oecdDashboard').setDashboardConfig(this.faoSectorDashboardConfig);
+                    break;
+                case false:
+                    this.subview('oecdDashboard').setDashboardConfig(dashboardConfig);
+                    break;
+            }
+
+
+            // Hide/Show Dashboard Items
+            this.subview('oecdDashboard').updateDashboardTemplate(displayConfigForSelectedFilter);
+
+            // Update Dashboard Items Configuration
+            this.subview('oecdDashboard').updateItemsConfig();
+
+            // Update Dashboard Model
+            this._setOdaDashboardModelValues();
+
+
+            console.log("================= _rebuildDashboard END =============== ");
+            console.log(ovalues);
+
+            // Rebuild OECD Dashboard
+            this.subview('oecdDashboard').rebuildDashboard(ovalues);
+
+            // Rebuild Development Indicators Dashboard
+            if(this.browse_type === BaseBrowseConfig.topic.BY_COUNTRY || this.browse_type === BaseBrowseConfig.topic.BY_RESOURCE_PARTNER){
+                this._setIndicatorDashboardModelValues();
+                var ivalues = this.subview('filters').getIndicatorsValues();
+                this.subview('indicatorsDashboard').rebuildDashboard(ivalues);
+            }
+
+        },
+
+
+        _loadConfig : function (path) {
+            var self = this;
+          require(['config/browse/' + path], function(dialog) {
+               console.log(dialog);
+
+              self.otherSectorsDashboardConfig.dashboard = dialog;
+               ///return  dialog;
+            });
+
+        },
+
+        _updateDashboardOriginal: function(selectedfilter){
+
             var ovalues = this.subview('filters').getFilterValues(), displayConfigForSelectedFilter, dashboardConfigChanged;
+
+
+            // If selected filter has a value
+
+
+            // If selected filter has no value
 
             if(selectedfilter && selectedfilter.values.values.length > 0) {
 
@@ -310,8 +512,8 @@ define([
 
 
 
-                if(this.viewConfig){
-                    displayConfigForSelectedFilter = this.viewConfig[selectedfilter.id];
+                if(this.topicConfig){
+                    displayConfigForSelectedFilter = this.topicConfig[selectedfilter.id];
                 }
 
 
@@ -385,6 +587,11 @@ define([
                     this.subview('indicatorsDashboard').rebuildDashboard(ivalues);
                 }
             }
+
+
+
+
+
         },
 
 
@@ -473,6 +680,10 @@ define([
         },
 
         _setOdaDashboardModelValues: function(){
+
+            console.log("================= _setOdaDashboardModelValues  =============== ");
+            console.log(this.subview('title').getTitleAsArray());
+
             this.odaDashboardModel.set(s.dashboardModel.LABEL, this.subview('title').getTitleAsArray());
         },
 
