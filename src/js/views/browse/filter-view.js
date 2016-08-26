@@ -51,7 +51,7 @@ define(
             //CHANNELS: {uid: 'crs_channel', version: '2016'},
             RECIPIENT_DONORS: {uid: 'crs_recipientdonors', version: '2016'}
         },
-        ids: {
+        /*ids: {
             SECTORS: 'parentsector_code',
             SUB_SECTORS: 'purposecode',
             CHANNELS_SUBCATEGORY: 'channelsubcategory_code',
@@ -63,7 +63,7 @@ define(
             YEAR_FROM: 'year-from',
             YEAR_TO: 'year-to',
             ODA: 'oda'
-        },
+        },*/
         range: {
             FROM: 'from',
             TO: 'to'
@@ -236,7 +236,14 @@ define(
                             amplify.publish(BaseEvents.FILTER_ON_READY,  $.extend(self._getFilterValues(), {"props": additionalProperties}));
                         });
 
-                    }  else {
+                    }
+                    else if(self._getFilterValues().values[BrowseConfig.filter.ODA]) {
+
+                        var additionalProperties = self._getPropertiesObject(BrowseConfig.filter.ODA, self._getFilterValues().values[BrowseConfig.filter.ODA].enumeration[0]);
+
+                        amplify.publish(BaseEvents.FILTER_ON_READY, $.extend(self._getFilterValues(), {"props": additionalProperties}));
+                    }
+                    else {
                         amplify.publish(BaseEvents.FILTER_ON_READY, self._getFilterValues());
                     }
 
@@ -270,21 +277,36 @@ define(
 
             // Add List Change listeners
             this.filter.on('change', function (payload) {
+                console.log("========================= FilterView: ON CHANGE ==============");
+                console.log(payload);
 
-               // console.log("========================= FilterView: ON CHANGE ==============");
-               // console.log(payload);
-                if(payload.id === s.ids.YEAR_TO || payload.id === s.ids.YEAR_FROM) {
-                    var newRange = self._getObject(s.ids.YEAR, self._getSelectedLabels());
+                var fc =  self._getFilterConfigById(payload.id);
+                var dependencies = [];
+                if(fc && fc.dependencies) {
+                    for(var id in fc.dependencies) {
+                        dependencies.push(id);
+                    }
+
+                  payload["dependencies"] = dependencies;
+                }
+
+                if(payload.id === BrowseConfig.filter.YEAR_TO || payload.id === BrowseConfig.filter.YEAR_FROM) {
+                    var newRange = self._getObject(BrowseConfig.filter.YEAR, self._getSelectedLabels());
                     if (newRange) {
-                        payload.id = s.ids.YEAR;
-                        payload.values.labels = self._getObject(s.ids.YEAR, self._getSelectedLabels());
-                        payload.values.values = self._getObject(s.ids.YEAR, self._getSelectedValues());
+                        payload.id = BrowseConfig.filter.YEAR;
+                        payload.values.labels = self._getObject(BrowseConfig.filter.YEAR, self._getSelectedLabels());
+                        payload.values.values = self._getObject(BrowseConfig.filter.YEAR, self._getSelectedValues());
                     }
 
                     amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
                 }
-                else if (payload.id === s.ids.RECIPIENT_COUNTRY) {
-                    var additionalProperties = self._getPropertiesObject(s.ids.RECIPIENT_COUNTRY, payload.values.values);
+                if(payload.id === BrowseConfig.filter.ODA) {
+                    var additionalProperties = self._getPropertiesObject(BrowseConfig.filter.ODA, payload.values.values[0]);
+
+                    amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": additionalProperties}));
+                }
+                else if (payload.id === BrowseConfig.filter.RECIPIENT_COUNTRY) {
+                    var additionalProperties = self._getPropertiesObject(BrowseConfig.filter.RECIPIENT_COUNTRY, payload.values.values);
 
                     Q.all([
                         self._onRecipientChangeGetRegionCode(payload.values.values),
@@ -408,7 +430,7 @@ define(
         },
 
 
-            _getFilterById: function(id){
+            _getFilterConfigById: function(id){
                var filter;
 
                 $.each(this.config, function (key, obj) {
@@ -432,8 +454,8 @@ define(
             //clear uid values
             values.values["uid"] = [];
 
-            values.values[s.ids.YEAR_FROM] = [];
-            values.values[s.ids.YEAR_TO] = [];
+            values.values[BrowseConfig.filter.YEAR_FROM] = [];
+            values.values[BrowseConfig.filter.YEAR_TO] = [];
 
 
            // console.log(values);
@@ -451,15 +473,15 @@ define(
 
             _processTimeRange: function(filter){
 
-                var year_from =  filter.values[s.ids.YEAR_FROM], year_to =  filter.values[s.ids.YEAR_TO];
+                var year_from =  filter.values[BrowseConfig.filter.YEAR_FROM], year_to =  filter.values[BrowseConfig.filter.YEAR_TO];
 
                 //reformat to and from years
                 filter.values.year[0].value = year_from[0];
                 filter.values.year[1].value = year_to[0];
 
                 filter.labels.year.range = year_from[0] + '-' + year_to[0];
-                filter.labels[s.ids.YEAR_FROM] = [];
-                filter.labels[s.ids.YEAR_TO] = [];
+                filter.labels[BrowseConfig.filter.YEAR_FROM] = [];
+                filter.labels[BrowseConfig.filter.YEAR_TO] = [];
 
                 return filter;
             },
@@ -467,11 +489,11 @@ define(
 
             _processODA: function(filter){
 
-                var enumeration = [], oda =  filter.values[s.ids.ODA][0];
+                var enumeration = [], oda =  filter.values[BrowseConfig.filter.ODA][0];
                 enumeration.push(oda);
 
-                filter.values[s.ids.ODA] = {};
-                filter.values[s.ids.ODA].enumeration = enumeration;
+                filter.values[BrowseConfig.filter.ODA] = {};
+                filter.values[BrowseConfig.filter.ODA].enumeration = enumeration;
 
 
                 return filter;
@@ -488,9 +510,9 @@ define(
 
            // console.log("getOECDValues ================");
            // console.log(values);
-            //var sectorSelected = this._hasSelections(s.ids.SECTORS, values);
-            var subSectorSelected = this._hasSelections(s.ids.SUB_SECTORS, values);
-           // var channelsSelected = this._hasSelections(s.ids.CHANNELS, values);
+            //var sectorSelected = this._hasSelections(BrowseConfig.filter.SECTORS, values);
+            var subSectorSelected = this._hasSelections(BrowseConfig.filter.SUB_SECTOR, values);
+           // var channelsSelected = this._hasSelections(BrowseConfig.filter.CHANNELS, values);
 
             // Set the sector and sub sector code lists references
             // Updated to match the references as declared in the dataset metadata for the parentsector_code and purposecode fields
@@ -559,28 +581,28 @@ define(
                // console.log("============================= VALUES =================== ");
                // console.log(values);
 
-            var donorSelected = this._hasSelections(s.ids.DONOR, values);
-            var recipientSelected = this._hasSelections(s.ids.RECIPIENT_COUNTRY, values);
+            var donorSelected = this._hasSelections(BrowseConfig.filter.RESOURCE_PARTNER, values);
+            var recipientSelected = this._hasSelections(BrowseConfig.filter.RECIPIENT_COUNTRY, values);
 
 
             if(donorSelected){
-                cloneObj = this._getObject(s.ids.DONOR, values);
-                cloneLabelObj = this._getObject(s.ids.DONOR, labels);
+                cloneObj = this._getObject(BrowseConfig.filter.RESOURCE_PARTNER, values);
+                cloneLabelObj = this._getObject(BrowseConfig.filter.RESOURCE_PARTNER, labels);
             }
             if(recipientSelected) {
-                cloneObj = this._getObject(s.ids.RECIPIENT_COUNTRY, values);
-                cloneLabelObj = this._getObject(s.ids.RECIPIENT_COUNTRY, labels);
+                cloneObj = this._getObject(BrowseConfig.filter.RECIPIENT_COUNTRY, values);
+                cloneLabelObj = this._getObject(BrowseConfig.filter.RECIPIENT_COUNTRY, labels);
             }
 
 
            if(cloneObj) {
                 //======= UPDATE VALUES CONFIG
-                values[s.ids.COUNTRY] = cloneObj;
-                labels[s.ids.COUNTRY] = cloneLabelObj;
+                values[BrowseConfig.filter.COUNTRY] = cloneObj;
+                labels[BrowseConfig.filter.COUNTRY] = cloneLabelObj;
 
                 //======= Set everything in the values to be removed except the country
                 for (var filter in values) {
-                    if (filter !== s.ids.COUNTRY) {
+                    if (filter !== BrowseConfig.filter.COUNTRY) {
                         values[filter] = [];
                         labels[filter] = {};
                     }
@@ -613,7 +635,7 @@ define(
              * @returns {*}
              */
         isFAOSectorsSelected: function () {
-            var values = this.getSelectedValues(s.ids.SECTORS);
+            var values = this.getSelectedValues(BrowseConfig.filter.SECTOR);
 
                 console.log(values);
             for(var i = 0; i < values.length; i++){
@@ -643,7 +665,7 @@ define(
         _updateValues: function (values, subSectorSelected) {
             switch (this.isFAOSectorsSelected()) {
                 case true:
-                    values = this._updateValuesWithSubSectors(values, this._getObject(s.ids.SECTORS, values), subSectorSelected);
+                    values = this._updateValuesWithSubSectors(values, this._getObject(BrowseConfig.filter.SECTOR, values), subSectorSelected);
                     break;
                 case false:
                     values = values;
@@ -666,16 +688,16 @@ define(
             if (!subSectorSelected) {
                 // Get the purposecode filter component, which will contain all
                 // the purposecodes (sub-sectors) associated with the selected 'FAO-related Sectors'
-                var purposeCodeComponent = this.filter.getDomain(s.ids.SUB_SECTORS);
+                var purposeCodeComponent = this.filter.getDomain(BrowseConfig.filter.SUB_SECTOR);
 
                 if (purposeCodeComponent) {
                     var codes = [];
 
                     //======= UPDATE VALUES CONFIG
                     // Add purposecode to values
-                    values[s.ids.SUB_SECTORS] = {};
-                    values[s.ids.SUB_SECTORS].codes = [];
-                    values[s.ids.SUB_SECTORS].codes[0] = $.extend(true, {}, sectorvaluesobj); // clone the codes configuration of sectorvaluesobj
+                    values[BrowseConfig.filter.SUB_SECTOR] = {};
+                    values[BrowseConfig.filter.SUB_SECTOR].codes = [];
+                    values[BrowseConfig.filter.SUB_SECTOR].codes[0] = $.extend(true, {}, sectorvaluesobj); // clone the codes configuration of sectorvaluesobj
 
                     // console.log( values['purposecode'].codes[0]);
                     // Get the source of the purposecode component
@@ -685,16 +707,16 @@ define(
                         codes.push(sourceItem.id);
                     });
 
-                    values[s.ids.SUB_SECTORS].codes[0].codes = codes;
-                    values[s.ids.SUB_SECTORS].codes[0].uid = s.codeLists.SUB_SECTORS.uid;
-                    values[s.ids.SUB_SECTORS].codes[0].version = s.codeLists.SUB_SECTORS.version;
+                    values[BrowseConfig.filter.SUB_SECTOR].codes[0].codes = codes;
+                    values[BrowseConfig.filter.SUB_SECTOR].codes[0].uid = s.codeLists.SUB_SECTORS.uid;
+                    values[BrowseConfig.filter.SUB_SECTOR].codes[0].version = s.codeLists.SUB_SECTORS.version;
 
                 }
             }
 
             // Set Values parentsector_code to be removed
-            values[s.ids.SECTORS] = {};
-            values[s.ids.SECTORS].removeFilter = true;
+            values[BrowseConfig.filter.SECTOR] = {};
+            values[BrowseConfig.filter.SECTOR].removeFilter = true;
 
             return values;
         },
@@ -737,7 +759,7 @@ define(
             var item = itemArr[0];
 
 
-                if (item.id === s.ids.RECIPIENT_COUNTRY) {
+                if (item.id === BrowseConfig.filter.RECIPIENT_COUNTRY) {
                     Q.all([
                         self._onRecipientChange(item)
                     ]).then(function (result) {
@@ -754,12 +776,12 @@ define(
                             amplify.publish(s.events.COUNTRY_FILTER_READY, item);
                         });
                 }
-                else if (item.id === s.ids.CHANNELS_SUBCATEGORY) {
+                else if (item.id === BrowseConfig.filter.CHANNELS_SUBCATEGORY) {
                     Q.all([
-                        self._onParentChange(item, s.ids.CHANNELS)
+                        self._onParentChange(item, BrowseConfig.filter.CHANNEL)
                     ]).then(function (result) {
                             if (result) {
-                                self._populateChildFilter(result[0], s.ids.CHANNELS);
+                                self._populateChildFilter(result[0], BrowseConfig.filter.CHANNEL);
                             }
 
                         })
@@ -771,13 +793,13 @@ define(
                         });
 
                 }
-                else if (item.id === s.ids.SECTORS) {
+                else if (item.id === BrowseConfig.filter.SECTOR) {
                     Q.all([
-                        self._onParentChange(item, s.ids.SUB_SECTORS)
+                        self._onParentChange(item, BrowseConfig.filter.SUB_SECTOR)
                        // self._onSectorChange2(item)
                     ]).then(function (result) {
                             if (result) {
-                                self._populateChildFilter(result[0], s.ids.SUB_SECTORS);
+                                self._populateChildFilter(result[0], BrowseConfig.filter.SUB_SECTOR);
                                 //self._populateSubSectorFilter(result[0]);
                             }
 
@@ -789,7 +811,7 @@ define(
                             amplify.publish(s.events.SUB_SECTORS_FILTER_READY);
                         });
 
-                } else if (item.id === s.ids.YEAR) {
+                } else if (item.id === BrowseConfig.filter.YEAR) {
                     if(item.type === "to" || item.type === "from") {
                        // console.log("_onChangeEvent2: DONE 4");
                       amplify.publish(s.events.FILTER_ON_CHANGE, item);
@@ -861,7 +883,7 @@ define(
 
 
 
-                if (item.id === s.ids.RECIPIENT_COUNTRY) {
+                if (item.id === BrowseConfig.filter.RECIPIENT_COUNTRY) {
                     Q.all([
                         self._onRecipientChange(item)
                     ]).then(function (result) {
@@ -877,12 +899,12 @@ define(
                         amplify.publish(s.events.COUNTRY_FILTER_READY, item);
                     });
                 }
-                else if (item.id === s.ids.CHANNELS_SUBCATEGORY) {
+                else if (item.id === BrowseConfig.filter.CHANNELS_SUBCATEGORY) {
                     Q.all([
-                        self._onParentChange(item, s.ids.CHANNELS)
+                        self._onParentChange(item, BrowseConfig.filter.CHANNEL)
                     ]).then(function (result) {
                             if (result) {
-                                self._populateChildFilter(result[0], s.ids.CHANNELS);
+                                self._populateChildFilter(result[0], BrowseConfig.filter.CHANNEL);
                             }
 
                         })
@@ -894,13 +916,13 @@ define(
                         });
 
                 }
-                else if (item.id === s.ids.SECTORS) {
+                else if (item.id === BrowseConfig.filter.SECTOR) {
                     Q.all([
-                        self._onParentChange(item, s.ids.SUB_SECTORS)
+                        self._onParentChange(item, BrowseConfig.filter.SUB_SECTOR)
                         // self._onSectorChange2(item)
                     ]).then(function (result) {
                             if (result) {
-                                self._populateChildFilter(result[0], s.ids.SUB_SECTORS);
+                                self._populateChildFilter(result[0], BrowseConfig.filter.SUB_SECTOR);
                                 //self._populateSubSectorFilter(result[0]);
                             }
 
@@ -912,7 +934,7 @@ define(
                             amplify.publish(s.events.SUB_SECTORS_FILTER_READY);
                         });
 
-                } else if (item.id === s.ids.YEAR) {
+                } else if (item.id === BrowseConfig.filter.YEAR) {
                     if(item.type === "to" || item.type === "from") {
                         // console.log("_onChangeEvent2: DONE 4");
                         amplify.publish(s.events.FILTER_ON_CHANGE, item);
@@ -1072,11 +1094,11 @@ define(
              */
         _onChangeEvent: function(item){
 
-            if(item.id === s.ids.SECTORS){
+            if(item.id === BrowseConfig.filter.SECTOR){
                 this._onSectorChange(item);
             }
 
-            if(item.id === s.ids.RECIPIENT_COUNTRY){
+            if(item.id === BrowseConfig.filter.RECIPIENT_COUNTRY){
               this._onRecipientChange(item);
             }
 
@@ -1093,7 +1115,7 @@ define(
              */
         _onSectorChange: function (sector) {
             var self = this;
-            if(sector.id === s.ids.SECTORS) {
+            if(sector.id === BrowseConfig.filter.SECTOR) {
                 if (sector.value) {
                     var pcfilter = _.find(this.config, function (obj) {
                         return obj.components[0].id === 'purposecode';
@@ -1257,7 +1279,7 @@ define(
             _onRecipientChangeGetGaulCode: function (values) {
                 var self = this;
                 var odaProps = self._getPropertiesObject(BrowseConfig.filter.ODA, self._getFilterValues().values[BrowseConfig.filter.ODA]);
-                var filterConfig = self._getFilterById(BrowseConfig.filter.RECIPIENT_COUNTRY);
+                var filterConfig = self._getFilterConfigById(BrowseConfig.filter.RECIPIENT_COUNTRY);
 
                 if (values.length > 0) {
                     //  console.log("IS RECIPIENT value")
