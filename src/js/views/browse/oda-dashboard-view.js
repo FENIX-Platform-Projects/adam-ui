@@ -13,9 +13,9 @@ define([
     'handlebars',
     'lib/config-utils',
     'config/submodules/fx-chart/highcharts_template',
-
+    'views/common/progress-bar',
     'amplify'
-], function ($, _, View, template, BaseBrowseConfig, Dashboard, Utils, i18nLabels, i18nDashboardLabels, Handlebars, ConfigUtils, HighchartsTemplate) {
+], function ($, _, View, template, BaseBrowseConfig, Dashboard, Utils, i18nLabels, i18nDashboardLabels, Handlebars, ConfigUtils, HighchartsTemplate, ProgressBar) {
 
     'use strict';
 
@@ -55,6 +55,10 @@ define([
 
             this.source = $(this.template).find("[data-topic='" + this.topic + "']");//.prop('outerHTML');
 
+            this.pb = new ProgressBar({
+             el: '#progress-bar'
+            });
+
             View.prototype.initialize.call(this, arguments);
 
             //this.render();
@@ -66,7 +70,7 @@ define([
 
         render: function () {
             this.setElement(this.container);
-            this._unbindEventListeners();
+           this._unbindEventListeners();
 
 
 
@@ -133,7 +137,7 @@ define([
 
 
         renderDashboard: function () {
-
+         var self = this;
 
            // console.log("=============== RENDER CALLED  ");
            // console.log(this.baseConfig.items.length);
@@ -167,7 +171,13 @@ define([
 
 
 
-            this.dashboards.push(new Dashboard(this.config));
+           // this.dashboards.push(new Dashboard(this.config));
+
+
+            this.dashboard = new Dashboard(this.config);
+
+            this._loadProgressBar();
+
 
            // console.log("renderDashboard:this.dashboards ");
            // console.log(this.dashboards);
@@ -175,7 +185,15 @@ define([
         },
 
 
+
+
         _disposeDashboards : function () {
+            if (this.dashboard && $.isFunction(this.dashboard.dispose)) {
+                this.dashboard.dispose();
+            }
+        },
+
+       /* _disposeDashboards : function () {
 
             _.each( this.dashboards, _.bind(function (dashboard) {
                 if (dashboard && $.isFunction(dashboard.dispose)) {
@@ -185,7 +203,7 @@ define([
 
             this.dashboards = [];
         },
-
+*/
 
 
         _removeDashboardItem: function (itemId) {
@@ -427,17 +445,34 @@ define([
             }
         },
 
-        rebuildDashboard: function (filter) {
 
+        //rebuildDashboard: function (filter) {
+
+           // if (this.dashboard && $.isFunction(this.dashboard.refresh)) {
+                //console.log("REFRESH");
+              //  this.dashboard.refresh(filter);
+           // }
+       // },
+
+        rebuildDashboard: function (filter) {
+          var self = this;
             console.log("=============== REBUILD CALLED  ");
 
            this._disposeDashboards();
 
            this.config.filter = filter;
 
-           this.dashboards.push(new Dashboard(
+           this.dashboard =  new Dashboard(
                this.config
-           ));
+           );
+
+            this._loadProgressBar();
+
+
+          // this.dashboards.push(new Dashboard(
+            //   this.config
+          // ));
+
 
 
 
@@ -484,11 +519,37 @@ define([
         },
 
 
+        _loadProgressBar: function () {
+            var self = this;
+
+            this.pb.reset();
+            this.pb.show();
+
+
+            var percent = 100 / this.config.items.length;
+            this.dashboard.on('ready', function () {
+                self.pb.finish();
+
+                itemready
+
+            });
+
+            var count = 0;
+            this.dashboard.on('itemready', function () {
+                count = count + percent;
+                console.log(percent + ' - '+count);
+                self.pb.update(count);
+            });
+
+        },
+
+
 
         _bindEventListeners: function () {
           //  amplify.subscribe("BEFORE_RENDER", this, this._setChartOptions);
             // Add List Change listeners
-            amplify.subscribe(s.events.FAO_SECTOR_CHART_LOADED, this, this._sectorChartLoaded);
+           // amplify.subscribe(s.events.FAO_SECTOR_CHART_LOADED, this, this._sectorChartLoaded);
+
 
 
         },
@@ -503,6 +564,8 @@ define([
         _unbindEventListeners: function () {
             // Remove listeners
             amplify.unsubscribe(s.events.FAO_SECTOR_CHART_LOADED, this._sectorChartLoaded);
+
+
         },
 
 
