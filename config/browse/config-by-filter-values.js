@@ -10,7 +10,7 @@ define(function () {
                 {
                     value: "",
                     config: { path: "config-all-sector"},
-                    display: { hide: ['top-subsectors', 'tot-oda-sector', 'top-partners-others', 'top-recipients-others'], show: ['tot-oda']}
+                    display: { hide: ['tot-oda-sector', 'top-partners-others', 'top-recipients-others'], show: ['tot-oda', 'top-sectors']}
                 },
                 {value: "9999", config: {path: "config-fao-sector"}}
             ]
