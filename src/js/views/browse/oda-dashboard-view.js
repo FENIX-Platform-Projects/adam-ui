@@ -56,7 +56,7 @@ define([
             this.source = $(this.template).find("[data-topic='" + this.topic + "']");//.prop('outerHTML');
 
             this.pb = new ProgressBar({
-             el: '#progress-bar'
+             container: '#progress-bar-holder'
             });
 
             View.prototype.initialize.call(this, arguments);
@@ -532,7 +532,7 @@ define([
             });
 
             var count = 0;
-            this.dashboard.on('itemready', function () {
+            this.dashboard.on('ready.item', function () {
                 count = count + percent;
                 self.pb.update(count);
             });
