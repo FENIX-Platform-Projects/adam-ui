@@ -11,8 +11,8 @@ define(function () {
                     selector: {
                         id: "dropdown",
                         config: { //Selectize configuration
-                            allowEmptyOption: true,
-                            maxItems: 1,
+                           // allowEmptyOption: true,
+                            //maxItems: 1,
                             placeholder: "All",
                             plugins: ['remove_button'],
                             mode: 'multi'

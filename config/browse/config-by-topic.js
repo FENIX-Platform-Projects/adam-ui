@@ -6,7 +6,7 @@ define(function () {
 
     return {
         "sector": {
-            purposecode: {hide: ['top-sectors', 'top-subsectors', 'tot-oda-sector', 'top-recipients-all-sectors', 'top-partners-all-sectors'], show: ['tot-oda-subsector']},
+            purposecode: {hide: ['tot-oda', 'top-sectors', 'top-subsectors', 'tot-oda-sector', 'top-recipients-all-sectors', 'top-partners-all-sectors'], show: ['tot-oda-subsector', 'top-recipients', 'top-partners', 'top-partners-others', 'top-recipients-others']},
             parentsector_code: {hide: ['tot-oda', 'top-sectors', 'tot-oda-subsector', 'top-recipients-all-sectors', 'top-partners-all-sectors'], show: ['top-subsectors', 'tot-oda-sector', 'top-partners-others', 'top-recipients-others', 'top-recipients', 'top-partners']}
         },
         "country": {
