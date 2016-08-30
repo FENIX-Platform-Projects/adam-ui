@@ -314,7 +314,7 @@ define(function () {
                         ]
                     },
                     {
-                        id: "top-recipients", //ref [data-item=':id']
+                        id: "top-recipients-all-sectors", //ref [data-item=':id']
                         type: 'chart',
                         config: {
                             type: "column",
@@ -456,7 +456,7 @@ define(function () {
                         ]
                     },
                     {
-                        id: "top-partners", //ref [data-item=':id']
+                        id: "top-partners-all-sectors", //ref [data-item=':id']
                         type: 'chart',
                         config: {
                             type: "column",
