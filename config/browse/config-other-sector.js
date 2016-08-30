@@ -12,9 +12,10 @@ define(function () {
                         id: "dropdown",
                         default: ["600"],
                         config: { //Selectize configuration
-                            allowEmptyOption: true,
-                            maxItems: 1,
-                            placeholder: "Please select",
+                           // allowEmptyOption: true,
+                            //create: true,
+                            // maxItems: 1,
+                            placeholder: "All",
                             plugins: ['remove_button'],
                             mode: 'multi'
                         }
@@ -128,111 +129,6 @@ define(function () {
                 uid: "adam_usd_commitment",
 
                 items: [
-                   /* {
-                        id: "tot-oda", //ref [data-item=':id']
-                        type: "chart", //chart || map || olap,
-                        config: {
-                            type: "line",
-                            x: ["year"], //x axis
-                            series: ["indicator"], // series
-                            y: ["value"],//Y dimension
-                            aggregationFn: {"value": "sum"},
-                            useDimensionLabelsIfExist: false,// || default raw else fenixtool
-
-                            config: {
-                                xAxis: {
-                                    type: 'datetime'
-                                }
-                            }
-                        },
-
-                        filterFor: {
-                            "filter_total_ODA": ['year', 'oda']
-                        },
-
-                        postProcess: [
-                            {
-                                "name": "filter",
-                                "sid": [
-                                    {
-                                        "uid": "adam_usd_aggregation_table"
-                                    }
-                                ],
-                                "parameters": {
-                                    "columns": [
-                                        "year",
-                                        "value",
-                                        "unitcode"
-                                    ],
-                                    "rows": {
-                                        "oda": {
-                                            "enumeration": [
-                                                "usd_commitment"
-                                            ]
-                                        },
-                                        "year": {
-                                            "time": [
-                                                {
-                                                    "from": 2000,
-                                                    "to": 2014
-                                                }
-                                            ]
-                                        }
-                                    }
-                                },
-                                "rid":{"uid":"filter_total_ODA"}
-                            },
-                            {
-                                "name": "group",
-                                "parameters": {
-                                    "by": [
-                                        "year"
-                                    ],
-                                    "aggregations": [
-                                        {
-                                            "columns": [
-                                                "value"
-                                            ],
-                                            "rule": "SUM"
-                                        },
-                                        {
-                                            "columns": [
-                                                "unitcode"
-                                            ],
-                                            "rule": "first"
-                                        }
-                                    ]
-                                },
-                                "rid": {
-                                    "uid": "total_oda"
-                                }
-                            },
-                            {
-                                "name": "addcolumn",
-                                "parameters": {
-                                    "column": {
-                                        "dataType": "text",
-                                        "id": "indicator",
-                                        "title": {
-                                            "EN": "Indicator"
-                                        },
-                                        "domain": {
-                                            "codes": [
-                                                {
-                                                    "extendedName": {
-                                                        "EN": "Adam Processes"
-                                                    },
-                                                    "idCodeList": "adam_processes"
-                                                }
-                                            ]
-                                        },
-                                        "subject": null
-                                    },
-                                    "value": "ODA"
-                                }
-                            }
-                        ]
-                    },*/
                     {
                         id: "tot-oda-sector", //ref [data-item=':id']
                         type: "chart", //chart || map || olap,
@@ -649,40 +545,63 @@ define(function () {
                             aggregationFn: {"value": "sum"},
                             useDimensionLabelsIfExist: false,// || default raw else fenixtool
 
-                            config: { // Highcharts configuration
+
+                            config: {
                                 chart: {
-                                  events: {
-                                      load: function(event) {
-                                          $.each(this.series, function (i, serie) {
-                                              if(serie.name == 'Total ODA'){
-                                                  serie.update({
-                                                      visible: false
-                                                  })
-                                              }
-                                          });
-                                      }
-                                  }
+                                    events: {
+                                        load: function(event) {
+                                            var _that = this;
+                                            var hasSubSector = false;
+
+                                            $.each(this.series, function (i, serie) {
+                                                if(serie.name == 'Total ODA'){
+                                                    serie.update({
+                                                        visible: false
+                                                    })
+                                                }
+                                            });
+
+                                            var isVisible = $.each(_that.series, function (i, serie) {
+                                                if(serie.name == '% Sub Sector/Sector'){
+                                                    serie.update({
+                                                        yAxis: 'sector-axis',
+                                                        dashStyle: 'shortdot',
+                                                        marker: {
+                                                            radius: 3
+                                                        }
+                                                    });
+
+                                                    return true;
+                                                }
+                                            });
+
+                                            if(!isVisible){
+                                                this.options.yAxis[1].title.text = '';
+                                                this.yAxis[1].visible = false;
+                                                this.yAxis[1].isDirty = true;
+                                                this.redraw();
+                                            } else {
+                                                this.options.yAxis[1].title.text= '%';
+                                                this.yAxis[1].visible = true;
+                                                this.yAxis[1].isDirty = true;
+                                                this.redraw();
+                                            }
+
+                                        }
+                                    }
                                 },
                                 xAxis: {
                                     type: 'datetime'
                                 },
                                 yAxis: [{ //Primary Axis in default template
                                 }, { // Secondary Axis
+                                    id: 'sector-axis',
                                     gridLineWidth: 0,
                                     title: {
                                         text: '%'
                                     },
                                     opposite: true
                                 }],
-                                series: [{
-                                    name: '% Sub Sector/Sector',
-                                    yAxis: 1,
-                                    dashStyle: 'shortdot',
-                                    marker: {
-                                        radius: 3
-                                    }
-                                }
-                                ],
                                 exporting: {
                                     chartOptions: {
                                         legend: {
