@@ -426,9 +426,9 @@ define([
 
         _setDashboardConfiguration : function(confPath, ovalues, displayConfigForSelectedFilter){
             var self = this;
-            console.log("================= _setDashboardConfiguration Start =============== ");
-            console.log(ovalues);
-
+            //console.log("================= _setDashboardConfiguration Start =============== ");
+            //console.log(ovalues);
+          
             if(confPath){
                 require(['config/browse/' + confPath], function(dialog) {
 
@@ -680,10 +680,6 @@ define([
         },
 
         _setOdaDashboardModelValues: function(){
-
-            console.log("================= _setOdaDashboardModelValues  =============== ");
-            console.log(this.subview('title').getTitleAsArray());
-
             this.odaDashboardModel.set(s.dashboardModel.LABEL, this.subview('title').getTitleAsArray());
         },
 
