@@ -143,8 +143,8 @@ define([
            // console.log(this.baseConfig.items.length);
            // console.log("================================== ");
 
-            console.log("renderDashboard");
-            console.log(this.config);
+            //console.log("renderDashboard");
+           // console.log(this.config);
 
 
 
@@ -529,15 +529,11 @@ define([
             var percent = 100 / this.config.items.length;
             this.dashboard.on('ready', function () {
                 self.pb.finish();
-
-                itemready
-
             });
 
             var count = 0;
             this.dashboard.on('itemready', function () {
                 count = count + percent;
-                console.log(percent + ' - '+count);
                 self.pb.update(count);
             });
 
