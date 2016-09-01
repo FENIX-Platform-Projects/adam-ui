@@ -12,8 +12,6 @@ define([
     'i18n!nls/browse',
     'config/Events',
     'config/browse/Events',
-    'config/browse/config-oda',
-    'config/browse/Config-oecd-fao',
     'config/browse/config-development-indicators',
     'config/browse/config-by-topic',
     'config/browse/config-by-filter-values',
@@ -22,7 +20,7 @@ define([
     'amplify',
     'bootstrap',
     'underscore'
-], function ($, $UI, View, TitleSubView, FilterSubView, DashboardOecdSubView ,DashboardIndicatorsSubView, DashboardModel, template, i18nLabels, Events, BaseBrowseEvents, BrowseOecdConfig, BrowseOecdFaoSectorsConfig, BrowseIndicatorsConfig, ConfigByTopic, ConfigByFilterValues, BaseBrowseConfig, Utils) {
+], function ($, $UI, View, TitleSubView, FilterSubView, DashboardOecdSubView ,DashboardIndicatorsSubView, DashboardModel, template, i18nLabels, Events, BaseBrowseEvents, BrowseIndicatorsConfig, ConfigByTopic, ConfigByFilterValues, BaseBrowseConfig, Utils) {
 
     'use strict';
 
@@ -300,15 +298,15 @@ define([
 
             var ovalues = this.subview('filters').getFilterValues(), confPath, displayConfigForSelectedFilter, displayConfigForSelectedFilterValues, dashboardConfigChanged;
 
-            console.log("================= _updateDashboard =============== ");
-            console.log(ovalues);
+            //console.log("================= _updateDashboard =============== ");
+            //console.log(ovalues);
 
             if(selectedfilter) {
 
                 // If selected filter has a value
                 if(selectedfilter.values.values.length > 0){
 
-                    console.log("================= _updateDashboard: "+selectedfilter.id+" HAS VALUES =============== ");
+                  //  console.log("================= _updateDashboard: "+selectedfilter.id+" HAS VALUES =============== ");
 
 
                     // Update the TitleView (Add Item)
@@ -326,11 +324,15 @@ define([
                             this.subview('oecdDashboard').setProperties(selectedfilter['props']);
                         }
 
+
+
+                     this._setDashboardConfiguration(confPath, ovalues, displayConfigForSelectedFilter);
+
                 }
                 // Else selected filter has no value (i.e.there has been a de-selection/removal)
                 else {
 
-                    console.log("================= _updateDashboard: "+selectedfilter.id+" is  0 =============== ");
+                    //console.log("================= _updateDashboard: "+selectedfilter.id+" is  0 =============== ");
 
 
                     // Update the TitleView (Remove Item)
@@ -355,14 +357,11 @@ define([
                               displayConfigForSelectedFilter = item.display;
                         }
                     }
+
+
+                    if(confPath || displayConfigForSelectedFilter)
+                        this._setDashboardConfiguration(confPath, ovalues, displayConfigForSelectedFilter);
                 }
-
-
-                this._setDashboardConfiguration(confPath, ovalues, displayConfigForSelectedFilter);
-
-
-
-
 
 
 
@@ -465,8 +464,8 @@ define([
             this._setOdaDashboardModelValues();
 
 
-            console.log("================= _rebuildDashboard END =============== ");
-            console.log(ovalues);
+            //console.log("================= _rebuildDashboard END =============== ");
+           // console.log(ovalues);
 
             // Rebuild OECD Dashboard
             this.subview('oecdDashboard').rebuildDashboard(ovalues);
@@ -484,7 +483,7 @@ define([
         _loadConfig : function (path) {
             var self = this;
           require(['config/browse/' + path], function(dialog) {
-               console.log(dialog);
+               //console.log(dialog);
 
               self.otherSectorsDashboardConfig.dashboard = dialog;
                ///return  dialog;
