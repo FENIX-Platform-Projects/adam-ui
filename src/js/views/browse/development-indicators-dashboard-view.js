@@ -21,6 +21,14 @@ define([
         }
     };
 
+    /**
+     *
+     * Creates a new Development Indicators Dashboard View, which is composed of a custom item
+     * Instantiates the FENIX dashboard submodule and responsible for all development indicators dashboard related functionality.
+     * @class DashboardDevelopmentIndicatorsView
+     * @extends View
+     */
+
     var DashboardDevelopmentIndicatorsView = View.extend({
 
         // Automatically render after initialize
@@ -50,17 +58,17 @@ define([
             return i18nLabels;
         },
 
-       anchor: function(e) {
-           e.preventDefault();
-           e.stopPropagation();
+        anchor: function (e) {
+            e.preventDefault();
+            e.stopPropagation();
 
-          var nameLink = e.currentTarget.name;
+            var nameLink = e.currentTarget.name;
 
-          $('html, body').animate({
-           scrollTop: $('#'+nameLink).offset().top
-          }, 1000);
+            $('html, body').animate({
+                scrollTop: $('#' + nameLink).offset().top
+            }, 1000);
 
-       },
+        },
 
         render: function () {
             this.setElement(this.container);
@@ -76,7 +84,7 @@ define([
             this.configUtils = new ConfigUtils();
         },
 
-        getTemplateFunction: function() {
+        getTemplateFunction: function () {
             this.compiledTemplate = Handlebars.compile(this.source);
 
             var model = this.model.toJSON();
@@ -86,18 +94,20 @@ define([
             return this.compiledTemplate(data);
         },
 
-        setDashboardConfig: function(config){
+        setDashboardConfig: function (config) {
             this.config = config;
             this.config.baseItems = config.items;
             this.config.environment = BaseBrowseConfig.dashboard.ENVIRONMENT;
         },
+
 
         renderDashboard: function () {
 
             this.config.el = this.$el;
             this.config.items[0].topic = this.topic;
 
-            this.config.itemsRegistry =  {
+            // the path to the custom item is registered
+            this.config.itemsRegistry = {
                 custom: {
                     path: 'views/browse/development-indicators-item'
                 }
@@ -107,28 +117,28 @@ define([
 
             this.dashboard.on('indicators_ready', function (payload) {
 
-                 if(payload.data.size > 0){
+                if (payload.data.size > 0) {
                     $(this.el).show();
                 }
 
-           });
+            });
 
         },
 
         rebuildDashboard: function (filter) {
 
             //console.log("============================= REBUILD DASHBOARD =================");
-           // console.log(filter);
+            // console.log(filter);
             if (this.dashboard && $.isFunction(this.dashboard.refresh)) {
                 //console.log("REFRESH");
                 this.dashboard.refresh(filter);
             }
         },
 
-        _disposeDashboards : function () {
-          if (this.dashboard && $.isFunction(this.dashboard.dispose)) {
-               this.dashboard.dispose();
-          }
+        _disposeDashboards: function () {
+            if (this.dashboard && $.isFunction(this.dashboard.dispose)) {
+                this.dashboard.dispose();
+            }
         },
 
         dispose: function () {

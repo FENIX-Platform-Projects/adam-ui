@@ -4,7 +4,6 @@ define([
     'underscore',
     'views/base/view',
     'text!templates/browse/oda-dashboard.hbs',
-    //'fx-ds/start',
     'config/browse/config-browse',
     'fx-dashboard/start',
     'lib/utils',
@@ -35,6 +34,14 @@ define([
         total_oda_id: 'tot-oda'
     };
 
+    /**
+     *
+     * Creates a new ODA/OECD Dashboard View
+     * Instantiates the FENIX dashboard submodule, ProgressBar and responsible for all oda/oecd dashboard related functionality.
+     * @class DashboardView
+     * @extends View
+     */
+
     var DashboardView = View.extend({
 
         // Automatically render after initialize
@@ -50,18 +57,16 @@ define([
         initialize: function (params) {
             this.topic = params.topic;
             this.model.on("change", this.render, this);
-            //this.model.on("change", this.render);
             this.dashboards = [];
 
-            this.source = $(this.template).find("[data-topic='" + this.topic + "']");//.prop('outerHTML');
+            this.source = $(this.template).find("[data-topic='" + this.topic + "']");
 
             this.progressBar = new ProgressBar({
-             container: '#progress-bar-holder'
+                container: '#progress-bar-holder'
             });
 
             View.prototype.initialize.call(this, arguments);
 
-            //this.render();
         },
 
         getTemplateData: function () {
@@ -70,14 +75,10 @@ define([
 
         render: function () {
             this.setElement(this.container);
-           this._unbindEventListeners();
+            this._unbindEventListeners();
 
-
-
-          //  console.log("RENDER ========== ");
-
-            for(var it in this.config.items){
-
+            // Update the language related labels in the item configurations (charts)
+            for (var it in this.config.items) {
                 var item = this.config.items[it];
                 this._updateChartExportTitles(this.config.items[it], i18nDashboardLabels[item.id], this.model.get('label'));
             }
@@ -92,24 +93,22 @@ define([
         },
 
 
-    getTemplateFunction: function() {
-           this.compiledTemplate = Handlebars.compile(this.source.prop('outerHTML'));
+        getTemplateFunction: function () {
+
+            // Update the language related labels in the dashboard template
+
+            this.compiledTemplate = Handlebars.compile(this.source.prop('outerHTML'));
 
             var model = this.model.toJSON();
 
-       //console.log(model);
             var data = $.extend(true, model, i18nLabels, i18nDashboardLabels);
 
             return this.compiledTemplate(data);
 
         },
 
-        setDashboardConfig: function(config){
+        setDashboardConfig: function (config) {
             this.baseConfig = config;
-            //console.log("=============== RE-SET DASHBOARD CONFIG items ");
-            //console.log(this.baseConfig.items.length);
-           // console.log("================================== ");
-
 
             this.config = config;
             this.config_type = config.id;
@@ -117,13 +116,13 @@ define([
             this.config.environment = BaseBrowseConfig.dashboard.ENVIRONMENT;
 
             // Sets Highchart config for each chart
-            _.each(this.config.items, _.bind(function ( item ) {
+            _.each(this.config.items, _.bind(function (item) {
                 if (!_.isEmpty(item)) {
-                    if(item.type == "chart"){
-                        if(item.config.config){
+                    if (item.type == "chart") {
+                        if (item.config.config) {
                             item.config.config = $.extend(true, {}, HighchartsTemplate, item.config.config);
                         } else {
-                            item.config.config =  $.extend(true, {}, HighchartsTemplate);
+                            item.config.config = $.extend(true, {}, HighchartsTemplate);
                         }
                     }
                 }
@@ -131,138 +130,55 @@ define([
             }, this));
         },
 
-
-
         renderDashboard: function () {
-         var self = this;
-
-           // console.log("=============== RENDER CALLED  ");
-           // console.log(this.baseConfig.items.length);
-           // console.log("================================== ");
-
-            //console.log("renderDashboard");
-           // console.log(this.config);
-
-
-
-           // if (this.browseDashboard && this.browseDashboard.destroy) {
-              //  this.browseDashboard.destroy();
-            //}
-
+            var self = this;
 
             this.config.el = this.$el;
-
-            var data_id =   this.$el.find("[data-item='tot-oda']");
-
-
-
-
-           // console.log( $(this.el).length);
-
-           // this.browseDashboard = new Dashboard({
-
-                //Ignored if layout = injected
-               // container: s.css_classes.DASHBOARD_BROWSE_CONTAINER,
-               // layout: "injected"
-           // });
-
-
-
-           // this.dashboards.push(new Dashboard(this.config));
-
-
             this.dashboard = new Dashboard(this.config);
 
             this._loadProgressBar();
-
-
-           // console.log("renderDashboard:this.dashboards ");
-           // console.log(this.dashboards);
-          //  this.browseDashboard.render(this.config);
         },
 
-
-
-
-        _disposeDashboards : function () {
+        _disposeDashboards: function () {
             if (this.dashboard && $.isFunction(this.dashboard.dispose)) {
                 this.dashboard.dispose();
             }
         },
 
-       /* _disposeDashboards : function () {
-
-            _.each( this.dashboards, _.bind(function (dashboard) {
-                if (dashboard && $.isFunction(dashboard.dispose)) {
-                    dashboard.dispose();
-                }
-            }, this));
-
-            this.dashboards = [];
-        },
-*/
-
-
-        _removeDashboardItem: function (itemId) {
-
-            // Remove Item from config Items
-            this.config.items = _.reject( this.config.items, function(el) { return el.id === itemId; });
-
-
-
-        },
 
         _collapseDashboardItem: function (itemId) {
-            //console.log("===================== COLLAPSE: "+'#'+itemId);
+            // Hide/collapse Item container
+            var itemContainerId = '#' + itemId + s.item_container_id;
 
-
-            // Hide Item container
-            var itemContainerId = '#'+itemId + s.item_container_id;
-           // console.log(itemContainerId);
-           // console.log($(this.source).find(itemContainerId));
             $(this.source).find(itemContainerId).addClass('collapse');
 
         },
 
         _expandDashboardItem: function (itemId) {
-           // console.log("===================== EXPAND: "+'#'+itemId + s.item_container_id);
             // Show Item container
-            var itemContainerId = '#'+itemId + s.item_container_id;
+            var itemContainerId = '#' + itemId + s.item_container_id;
             $(this.source).find(itemContainerId).removeClass('collapse');
         },
 
 
-        _hideDashboardItem: function (itemId) {
-           // console.log("===================== HIDE: "+'#'+itemId + s.item_container_id);
-            // Remove Item from config Items
-            this.config.items = _.reject( this.config.items, function(el) { return el.id === itemId; });
-
-            // Hide Item container
-            var itemContainerId = '#'+itemId + s.item_container_id;
-            $(this.source).find(itemContainerId).hide();
-
-        },
-
         _showDashboardItem: function (itemId) {
-           // console.log("===================== SHOW: "+'#'+itemId + s.item_container_id);
             // Show Item container
-            var itemContainerId = '#'+itemId + s.item_container_id;
+            var itemContainerId = '#' + itemId + s.item_container_id;
             $(this.source).find(itemContainerId).show();
         },
 
-        updateDashboardTemplate: function(filterdisplayconfig){
+        updateDashboardTemplate: function (filterdisplayconfig) {
 
-            if(filterdisplayconfig){
+            if (filterdisplayconfig) {
 
                 var hide = filterdisplayconfig.hide;
                 var show = filterdisplayconfig.show;
 
-                for(var idx in hide){
-                    //this._removeDashboardItem(hide[idx]); // from configuration -  need to find a way to properly clone config!
+                for (var idx in hide) {
                     this._collapseDashboardItem(hide[idx]); // in the template
                 }
 
-                for(var idx in show){
+                for (var idx in show) {
                     this._expandDashboardItem(show[idx]); // in the template
                 }
 
@@ -271,71 +187,32 @@ define([
         },
 
 
-
-      updateDashboardConfigUid: function(uid){
-        this.config.uid = uid;
-      },
-
-
-      /*  updateDashboardConfig: function(uid, sectorSelected, subSectorSelected, recipientSelected, regioncode, removeItems){
-
-           // console.log("================ updateDashboardConfig");
-          //  console.log(uid + ' | '+ sectorSelected+ ' | '+subSectorSelected+ ' | '+ recipientSelected+ ' | '+ regioncode+ ' | '+ removeItems);
-            this.config.items = this.config.baseItems; // Reset Config Items
-
-            var item1 = _.filter(this.config.items, {id: s.total_oda_id})[0];
-
-
-          //  console.log(item1);
-
-            switch(this.config_type == s.config_types.FAO){
-                case true:
-                    //console.log("updateFAOConfig ");
-                    this._updateFAOItem1ChartConfiguration(item1, sectorSelected, subSectorSelected);
-                    break;
-                case false:
-                   // this._updateItem1ChartConfiguration(item1, sectorSelected, subSectorSelected);
-                    break;
-            }
-
-
-            if(recipientSelected) {
-                this._updateRegionalMapConfiguration(regioncode);
-            }
-
+        updateDashboardConfigUid: function (uid) {
             this.config.uid = uid;
-
-            if(removeItems){
-                for(var itemId in removeItems){
-                    this._hideDashboardItem(removeItems[itemId]);
-                }
-            }
-
         },
-*/
-        showHiddenDashboardItems: function(showItems){
-            if(showItems){
-                for(var itemId in showItems){
+
+        showHiddenDashboardItems: function (showItems) {
+            if (showItems) {
+                for (var itemId in showItems) {
                     this._showDashboardItem(showItems[itemId]);
                 }
             }
 
         },
 
-
         setProperties: function (props) {
-            if(props){
-                if(props["regioncode"])
+            if (props) {
+                if (props["regioncode"])
                     this.regioncode = props["regioncode"];
                 else
                     this.regioncode = null;
 
-                if(props["gaulcode"])
+                if (props["gaulcode"])
                     this.gaulcode = props["gaulcode"];
                 else
                     this.gaulcode = null;
 
-                if(props["oda"])
+                if (props["oda"])
                     this.config.uid = props["oda"];
 
 
@@ -350,89 +227,36 @@ define([
         },
 
         _updateDashboardRegionalMapConfiguration: function () {
-             var map = _.filter(this.config.items, {id:'regional-map'})[0];
-             var regioncode = this.regioncode;
-             var gaulcode = this.gaulcode;
+            var map = _.filter(this.config.items, {id: 'regional-map'})[0];
+            var regioncode = this.regioncode;
+            var gaulcode = this.gaulcode;
 
-              if(map && regioncode){
+            if (map && regioncode) {
 
-                 if(map.filter && map.filter.un_region_code){
-                     map.filter.un_region_code = [];
+                if (map.filter && map.filter.un_region_code) {
+                    map.filter.un_region_code = [];
 
-                     if(regioncode)
-                         map.filter.un_region_code.push(regioncode)
-                 }
+                    if (regioncode)
+                        map.filter.un_region_code.push(regioncode)
+                }
 
-                 if(map.config && map.config.fenix_ui_map){
-                     if(gaulcode) {
-                         map.config.fenix_ui_map.zoomToCountry = [];
-                         map.config.fenix_ui_map.zoomToCountry.push(gaulcode);
-                     }
-                 }
-             }
+                if (map.config && map.config.fenix_ui_map) {
+                    if (gaulcode) {
+                        map.config.fenix_ui_map.zoomToCountry = [];
+                        map.config.fenix_ui_map.zoomToCountry.push(gaulcode);
+                    }
+                }
+            }
 
-        },
-
-        _updateFAOItem1ChartConfiguration: function (item1, sectorSelected, subSectorSelected) {
-
-           // console.log("_updateFAOItem1ChartConfiguration");
-
-            // Set either parentsector_code or purposecode as the series in the first chart config
-            // Check the current selection via seriesname in config
-            var seriesname = item1.config.adapter.seriesDimensions[0];
-
-           // console.log(sectorSelected, subSectorSelected);
-            //console.log(seriesname);
-
-            var configFind = subSectorSelected && seriesname !== 'purposecode' ? 'parentsector_code': 'purposecode';
-            var configReplace = subSectorSelected && seriesname !== 'purposecode' ? 'purposecode': 'parentsector_code';
-
-
-            //console.log(configFind, configReplace);
-
-            // modify chartconfig seriesdimension
-            this.configUtils.findAndReplace(item1.config.adapter, configFind, configReplace);
-
-            // modify group by in filter
-            var grpByConfig = this.configUtils.findByPropValue(item1.filter,  "name", "pggroup");
-
-            if(subSectorSelected)
-                grpByConfig.parameters.by = ["purposecode", "year"];
-            else
-                grpByConfig.parameters.by = ["year"];
-
-        },
-        _updateItem1ChartConfiguration: function (item1, sectorSelected, subSectorSelected) {
-            // Set either parentsector_code or purposecode as the series in the first chart config
-            // Check the current selection via seriesname in config
-          //  var seriesname = item1.config.adapter.seriesDimensions[0];
-            var seriesname = item1.config.series[0];
-
-            var configFind = subSectorSelected && seriesname !== 'purposecode' ? 'parentsector_code': 'purposecode';
-            var configReplace = subSectorSelected && seriesname !== 'purposecode' ? 'purposecode': 'parentsector_code';
-
-          //  console.log(seriesname);
-          //  console.log(subSectorSelected);
-          //  console.log(configFind);
-          //  console.log(configReplace);
-
-            // modify chartconfig seriesdimension
-            this.configUtils.findAndReplace(item1.config, configFind, configReplace);
-
-            // modify group by in filter
-            var grpByConfig = this.configUtils.findByPropValue(item1.postProcess,  "name", "pggroup");
-         //   console.log(grpByConfig);
-
-            this.configUtils.findAndReplace(grpByConfig, configFind, configReplace);
         },
 
         _updateChartExportTitles: function (chartItem, title, subtitle) {
 
-            if( chartItem.config.config) {
+            if (chartItem.config.config) {
                 var chartItemTitle = chartItem.config.config.exporting.chartOptions.title,
                     chartItemSubTitle = chartItem.config.config.exporting.chartOptions.subtitle;
 
-                if(!chartItemTitle || !chartItemSubTitle){
+                if (!chartItemTitle || !chartItemSubTitle) {
                     chartItemTitle = chartItem.config.config.exporting.chartOptions.title = {};
                     chartItemSubTitle = chartItem.config.config.exporting.chartOptions.subtitle = {};
                 }
@@ -442,77 +266,19 @@ define([
             }
         },
 
-
-        //rebuildDashboard: function (filter) {
-
-           // if (this.dashboard && $.isFunction(this.dashboard.refresh)) {
-                //console.log("REFRESH");
-              //  this.dashboard.refresh(filter);
-           // }
-       // },
-
         rebuildDashboard: function (filter) {
-          var self = this;
-            //console.log("=============== REBUILD CALLED  ");
+            var self = this;
 
-           this._disposeDashboards();
+            this._disposeDashboards();
 
-           this.config.filter = filter;
+            this.config.filter = filter;
 
-           this.dashboard =  new Dashboard(
-               this.config
-           );
+            this.dashboard = new Dashboard(
+                this.config
+            );
 
             this._loadProgressBar();
 
-
-          // this.dashboards.push(new Dashboard(
-            //   this.config
-          // ));
-
-
-
-
-
-            // console.log("renderDashboard:this.dashboards ");
-            // console.log(this.dashboards);
-            //  this.browseDashboard.render(this.config);
-
-
-
-
-
-            //console.log("======================== FINAL VALUES FOR DASHBOARD ========== ", filter);
-            //console.log("========================= rebuild",  this.dashboards);
-
-            //console.log(filter);
-          //  if (this.browseDashboard && this.browseDashboard.destroy) {
-            //    this.browseDashboard.destroy();
-           // }
-
-            //this.browseDashboard = new Dashboard({
-
-                //Ignored if layout = injected
-              //  container: s.css_classes.DASHBOARD_BROWSE_CONTAINER,
-               // layout: "injected"
-           // });
-
-           // _.each( this.dashboards, _.bind(function (dashboard) {
-               // console.log(dashboard);
-               // console.log($.isFunction(dashboard.refresh)
-              //  if (dashboard && $.isFunction(dashboard.refresh)) {
-                    //console.log("REFRESH");
-                 //   dashboard.refresh(filter);
-               // }
-           // }, this));
-
-
-
-            //if (this.browseDashboard && $.isFunction(this.browseDashboard.refresh)) {
-             //   this.browseDashboard.refresh(values);
-            //}
-
-            //this.browseDashboard.rebuild(this.config, filter);
         },
 
 
@@ -535,39 +301,15 @@ define([
         },
 
 
-
         _bindEventListeners: function () {
-          //  amplify.subscribe("BEFORE_RENDER", this, this._setChartOptions);
-            // Add List Change listeners
-           // amplify.subscribe(s.events.FAO_SECTOR_CHART_LOADED, this, this._sectorChartLoaded);
-            //
 
         },
 
-        _updateProgressBar: function (count) {
-            if((chart.series[0].name).trim() == "Million USD")    {
-                chart.series[0].update({name: "FAO-Related Sectors"}, false);
-                chart.redraw();
-            }
-        },
-
-
-        _sectorChartLoaded: function (chart) {
-            if((chart.series[0].name).trim() == "Million USD")    {
-                chart.series[0].update({name: "FAO-Related Sectors"}, false);
-                chart.redraw();
-            }
-        },
 
         _unbindEventListeners: function () {
             // Remove listeners
-            amplify.unsubscribe(s.events.FAO_SECTOR_CHART_LOADED, this._sectorChartLoaded);
-
 
         },
-
-
-
 
         dispose: function () {
 

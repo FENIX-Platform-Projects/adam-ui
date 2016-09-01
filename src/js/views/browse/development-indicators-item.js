@@ -15,21 +15,28 @@ define([
     'i18n!nls/browse',
     'handlebars',
     'amplify'
-], function ($, log, _, ERR, EVT, C,  indicatorsCountryTemplate, indicatorsDonorTemplate, indicatorPartialTemplate, footerPartialTemplate, Utils, i18nLabels, Handlebars) {
+], function ($, log, _, ERR, EVT, C, indicatorsCountryTemplate, indicatorsDonorTemplate, indicatorPartialTemplate, footerPartialTemplate, Utils, i18nLabels, Handlebars) {
 
     'use strict';
 
     var defaultOptions = {
-        indicatorsOrder : [ 'INCOME.LEVEL', 'POP.TOT',  'NET.ODA.REC',  'SI.POV.GINI', 'NY.GNP.ATLS.CD', 'RUR.POP.PERC', 'NET.ODA.REC.PC', 'ODA.GNI', 'NY.GNP.PCAP.CD', 'NODA', 'AGRI.LAND.PERC', 'DT.ODA.ODAT.GN.ZS'],
-        indicatorProperties : {
+        indicatorsOrder: ['INCOME.LEVEL', 'POP.TOT', 'NET.ODA.REC', 'SI.POV.GINI', 'NY.GNP.ATLS.CD', 'RUR.POP.PERC', 'NET.ODA.REC.PC', 'ODA.GNI', 'NY.GNP.PCAP.CD', 'NODA', 'AGRI.LAND.PERC', 'DT.ODA.ODAT.GN.ZS'],
+        indicatorProperties: {
             CODE: 'code',
             GINI_CODE: 'SI.POV.GINI'
         },
-        context : {
+        context: {
             DONOR: 'donor',
             COUNTRY: 'country'
         }
     };
+
+    /**
+     *
+     * Returns a customised item for the Development Indicators Dashboard View
+     * Formats the payload and renders the development indicators template
+     * @class DevelopmentIndicatorsItem
+     */
 
     function DevelopmentIndicatorsItem(o) {
 
@@ -124,7 +131,7 @@ define([
 
         this.indicatortemplate = Handlebars.compile(indicatorsCountryTemplate);
 
-        if(this.topic == this.context.DONOR){
+        if (this.topic == this.context.DONOR) {
             this.indicatortemplate = Handlebars.compile(indicatorsDonorTemplate);
         }
 
@@ -143,9 +150,9 @@ define([
 
     DevelopmentIndicatorsItem.prototype._render = function () {
 
-        this.controller._trigger('indicators_ready',{data: {size: this.model.size}});
+        this.controller._trigger('indicators_ready', {data: {size: this.model.size}});
 
-         if(this.model.size > 0) {
+        if (this.model.size > 0) {
             var metadata = this.model.metadata.dsd.columns;
             var data = this._processPayload(this.model.data, metadata);
             data = $.extend(true, data, i18nLabels);
@@ -164,9 +171,9 @@ define([
             periodIndex = this._findWithAttr(metadata, "id", "period"),
             linkIndex = this._findWithAttr(metadata, "id", "link"),
             indicatorcodeIndex = this._findWithAttr(metadata, "id", "indicatorcode"),
-            itemnameIndex = this._findWithAttr(metadata, "id", "itemcode_"+Utils.getLocale()),
-            indicatornameIndex = this._findWithAttr(metadata, "id", "indicatorcode_"+Utils.getLocale()),
-            unitnameIndex = this._findWithAttr(metadata, "id", "unitcode_"+Utils.getLocale());
+            itemnameIndex = this._findWithAttr(metadata, "id", "itemcode_" + Utils.getLocale()),
+            indicatornameIndex = this._findWithAttr(metadata, "id", "indicatorcode_" + Utils.getLocale()),
+            unitnameIndex = this._findWithAttr(metadata, "id", "unitcode_" + Utils.getLocale());
 
         var newdata = {};
         var indicators = [],
@@ -179,7 +186,7 @@ define([
 
         // Create Array of Indicator Objects
         for (var i = 0, len = data.length; i < len; ++i) {
-            var indicatorObj =  {};
+            var indicatorObj = {};
 
             indicatorObj.name = data[i][indicatornameIndex];
             indicatorObj.css = data[i][indicatorcodeIndex];
@@ -193,23 +200,23 @@ define([
             indicatorObj.unit = data[i][unitnameIndex];
 
             // Track the presence of the
-            if(indicatorObj.code ===  this.indicatorProperties.GINI_CODE){
+            if (indicatorObj.code === this.indicatorProperties.GINI_CODE) {
                 hasGINI = true;
             }
 
-            if(indicatorObj.unit === null){
+            if (indicatorObj.unit === null) {
                 indicatorObj.unit = "";
             }
 
-            if(indicatorObj.value === null && indicatorObj.item){
+            if (indicatorObj.value === null && indicatorObj.item) {
                 indicatorObj.value = indicatorObj.item;
             }
 
-            if(indicatorObj.source === null){
+            if (indicatorObj.source === null) {
                 indicatorObj.source = "";
             }
 
-            if(indicatorObj.css)
+            if (indicatorObj.css)
                 indicatorObj.css = indicatorObj.css.replace(/\./g, "_");
 
             indicators.push(indicatorObj);
@@ -223,7 +230,7 @@ define([
         // Add the Footnote details to the reordered indicators
 
         for (var j = 0, len = indicators.length; j < len; ++j) {
-            var indicatorObj  =  indicators[j];
+            var indicatorObj = indicators[j];
 
             if ($.inArray(indicatorObj.source + indicatorObj.note, results) < 0) {
 
@@ -265,7 +272,7 @@ define([
 
         newdata.indicators = indicators;
 
-        if(hasGINI)
+        if (hasGINI)
             newdata.colIdx = 3;
         else
             newdata.colIdx = 4;
@@ -273,7 +280,7 @@ define([
         newdata.footnotes = footnote;
 
         // console.log(newdata);
-       //  console.log(newdata.indicators);
+        //  console.log(newdata.indicators);
         // console.log(newdata.footnotes);
 
         return newdata;
@@ -281,8 +288,8 @@ define([
 
 
     DevelopmentIndicatorsItem.prototype._findWithAttr = function (array, attr, value) {
-        for(var i = 0; i < array.length; i += 1) {
-            if(array[i][attr] === value) {
+        for (var i = 0; i < array.length; i += 1) {
+            if (array[i][attr] === value) {
                 return i;
             }
         }
@@ -301,7 +308,9 @@ define([
         }
 
         // filters out any undefined items in the reordered array
-        reordered_array = reordered_array.filter(function(e){return e});
+        reordered_array = reordered_array.filter(function (e) {
+            return e
+        });
 
         return reordered_array;
 
@@ -315,7 +324,7 @@ define([
     };
 
     DevelopmentIndicatorsItem.prototype._bindEventListeners = function () {
-       // amplify.subscribe(s.events.CUSTOM_ITEM_COUNTRY_RESPONSE, this, this._showCountryIndicators);
+        // amplify.subscribe(s.events.CUSTOM_ITEM_COUNTRY_RESPONSE, this, this._showCountryIndicators);
     };
 
     DevelopmentIndicatorsItem.prototype._unbindEventListeners = function () {
