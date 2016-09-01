@@ -12,7 +12,6 @@ define(function () {
                         id: "dropdown",
                         default: ["9999"],
                         config: { //Selectize configuration
-                            allowEmptyOption: true,
                             maxItems: 1,
                             placeholder: "Please select",
                             plugins: ['remove_button'],
