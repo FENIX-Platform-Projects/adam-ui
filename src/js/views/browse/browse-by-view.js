@@ -20,7 +20,7 @@ define([
     'amplify',
     'bootstrap',
     'underscore'
-], function ($, $UI, View, TitleSubView, FilterSubView, DashboardOecdSubView ,DashboardIndicatorsSubView, DashboardModel, template, i18nLabels, Events, BaseBrowseEvents, BrowseIndicatorsConfig, ConfigByTopic, ConfigByFilterValues, BaseBrowseConfig, Utils) {
+], function ($, $UI, View, TitleSubView, FilterSubView, DashboardOecdSubView, DashboardIndicatorsSubView, DashboardModel, template, i18nLabels, Events, BaseBrowseEvents, BrowseIndicatorsConfig, ConfigByTopic, ConfigByFilterValues, BaseBrowseConfig, Utils) {
 
     'use strict';
 
@@ -34,25 +34,11 @@ define([
             DASHBOARD_OECD_HOLDER: "#browse-oecd-content",
             DASHBOARD_INDICATORS_HOLDER: "#browse-indicator-content"
         },
-       /* events: {
-            FAO_SECTOR_CHART_LOADED: 'fx.browse.chart.faosector.loaded',
-            BAR_CHART_LOADED: 'fx.browse.chart.bar.loaded',
-            SUB_SECTORS_FILTER_READY: 'fx.filters.list.subsectors.ready',
-            TIMERANGE_FILTER_READY: 'fx.filters.list.timerange.ready',
-            COUNTRY_FILTER_READY: 'fx.filters.list.recipients.ready',
-            FILTER_ON_RESET: 'fx.filter.list.onreset'
-        },
-*/
         dashboardModel: {
-            COUNTRY:'selected_country',
+            COUNTRY: 'selected_country',
             TOPIC: 'topic',
             LABEL: 'label'
-        }//,
-
-       /* datasetType: {
-            oecd_uid: "adam_usd_commitment",
-            writable: true
-        }*/
+        }
     };
 
 
@@ -91,7 +77,7 @@ define([
 
         getTemplateData: function () {
             return i18nLabels;
-         },
+        },
 
         attach: function () {
 
@@ -117,8 +103,8 @@ define([
          * Based on the view the appropriate JS configuration files are loaded via requireJS
          * @private
          */
-        _loadDashboardConfigurations: function() {
-            require(['config/browse/config-other-'+this.browse_type, 'config/browse/config-fao-'+this.browse_type], _.bind(this._initSubViews, this));
+        _loadDashboardConfigurations: function () {
+            require(['config/browse/config-other-' + this.browse_type, 'config/browse/config-fao-' + this.browse_type], _.bind(this._initSubViews, this));
         },
 
 
@@ -127,14 +113,14 @@ define([
          * @private
          */
 
-        _initSubViews: function(ConfigOther, ConfigFAO){
+        _initSubViews: function (ConfigOther, ConfigFAO) {
 
-            if(!ConfigOther || !ConfigOther.dashboard || !ConfigOther.filter){
+            if (!ConfigOther || !ConfigOther.dashboard || !ConfigOther.filter) {
                 alert("Impossible to find default ODA dashboard/filter configuration for the topic: " + this.browse_type);
                 return;
             }
 
-            if(!ConfigFAO || !ConfigFAO.dashboard || !ConfigFAO.filter){
+            if (!ConfigFAO || !ConfigFAO.dashboard || !ConfigFAO.filter) {
                 alert("Impossible to find default FAO dashboard/filter configuration for the topic: " + this.browse_type);
                 return;
             }
@@ -144,31 +130,44 @@ define([
 
 
             //Set default dashboard configuration
-            if(ConfigOther.id === BaseBrowseConfig.dashboard.DEFAULT_CONFIG) {
+            if (ConfigOther.id === BaseBrowseConfig.dashboard.DEFAULT_CONFIG) {
                 this.defaultDashboardConfig = ConfigOther;
-            } else if (ConfigFAO.id === BaseBrowseConfig.dashboard.DEFAULT_CONFIG){
+            } else if (ConfigFAO.id === BaseBrowseConfig.dashboard.DEFAULT_CONFIG) {
                 this.defaultDashboardConfig = ConfigFAO;
             }
 
 
-            var titleSubView = new TitleSubView({autoRender: true, container: this.$el.find(s.css_classes.TITLE_BAR_ITEMS), title: i18nLabels.selections});
+            var titleSubView = new TitleSubView({
+                autoRender: true,
+                container: this.$el.find(s.css_classes.TITLE_BAR_ITEMS),
+                title: i18nLabels.selections
+            });
             this.subview('title', titleSubView);
 
-            var filtersSubView = new FilterSubView({autoRender: true, container: this.$el.find(s.css_classes.FILTER_HOLDER), config: this.defaultDashboardConfig.filter});
+            var filtersSubView = new FilterSubView({
+                autoRender: true,
+                container: this.$el.find(s.css_classes.FILTER_HOLDER),
+                config: this.defaultDashboardConfig.filter
+            });
             this.subview('filters', filtersSubView);
 
             this.odaDashboardModel = new DashboardModel();
 
             //DASHBOARD 1: ODA
-            var dashboardOecdSubView = new DashboardOecdSubView({autoRender: false, container: this.$el.find(s.css_classes.DASHBOARD_OECD_HOLDER), topic: this.browse_type, model:this.odaDashboardModel});
+            var dashboardOecdSubView = new DashboardOecdSubView({
+                autoRender: false,
+                container: this.$el.find(s.css_classes.DASHBOARD_OECD_HOLDER),
+                topic: this.browse_type,
+                model: this.odaDashboardModel
+            });
             dashboardOecdSubView.setDashboardConfig(this.defaultDashboardConfig.dashboard);
 
             this.subview('oecdDashboard', dashboardOecdSubView);
 
             //DASHBOARD 2: Development Indicators
-            if(this.browse_type === BaseBrowseConfig.topic.BY_COUNTRY || this.browse_type === BaseBrowseConfig.topic.BY_RESOURCE_PARTNER) {
+            if (this.browse_type === BaseBrowseConfig.topic.BY_COUNTRY || this.browse_type === BaseBrowseConfig.topic.BY_RESOURCE_PARTNER) {
 
-            var configIndicators = BrowseIndicatorsConfig[this.browse_type];
+                var configIndicators = BrowseIndicatorsConfig[this.browse_type];
 
                 if (!configIndicators || !configIndicators.items) {
                     alert("Impossible to find configuration for Development Indicators: ");
@@ -196,12 +195,12 @@ define([
          * Create the breadcrumb for the menu, indicating the current browse by view
          * @private
          */
-        _initMenuBreadcrumbItem: function() {
+        _initMenuBreadcrumbItem: function () {
             var label = "";
             var self = this;
 
             if (typeof self.browse_type !== 'undefined') {
-               label = i18nLabels[self.browse_type];
+                label = i18nLabels[self.browse_type];
             }
 
             return Utils.createMenuBreadcrumbItem(label, self.browse_type, self.page);
@@ -209,14 +208,14 @@ define([
 
 
         _initVariables: function () {
-           // Initialize bootstrap affix: Locks ('sticks') section, appears when scrolling
-          $(s.css_classes.BACK_TO_TOP_FIXED).affix({});
+            // Initialize bootstrap affix: Locks ('sticks') section, appears when scrolling
+            $(s.css_classes.BACK_TO_TOP_FIXED).affix({});
 
         },
 
         _bindEventListeners: function () {
-           amplify.subscribe(BaseBrowseEvents.FILTER_ON_READY, this, this._filtersLoaded);
-           amplify.subscribe(BaseBrowseEvents.FILTER_ON_CHANGE, this, this._updateDashboard);
+            amplify.subscribe(BaseBrowseEvents.FILTER_ON_READY, this, this._filtersLoaded);
+            amplify.subscribe(BaseBrowseEvents.FILTER_ON_CHANGE, this, this._updateDashboard);
         },
 
         /**
@@ -224,11 +223,11 @@ define([
          * @param selectedFilterItems (payload)
          * @private
          */
-        _filtersLoaded: function (payload){
+        _filtersLoaded: function (payload) {
 
             var selectedFilterItems = payload.labels;
 
-            if(payload["props"]){
+            if (payload["props"]) {
                 this.subview('oecdDashboard').setProperties(payload["props"]);
             }
 
@@ -239,7 +238,7 @@ define([
 
             this.subview('oecdDashboard').renderDashboard();
 
-            if(this.browse_type === BaseBrowseConfig.topic.BY_COUNTRY || this.browse_type === BaseBrowseConfig.topic.BY_RESOURCE_PARTNER){
+            if (this.browse_type === BaseBrowseConfig.topic.BY_COUNTRY || this.browse_type === BaseBrowseConfig.topic.BY_RESOURCE_PARTNER) {
                 this._setIndicatorDashboardModelValues();
                 this.subview('indicatorsDashboard').renderDashboard();
             }
@@ -252,33 +251,33 @@ define([
          * @param selected filter
          * @private
          */
-        _updateDashboard: function(selectedfilter){
+        _updateDashboard: function (selectedfilter) {
 
             var ovalues = this.subview('filters').getFilterValues(), confPath, displayConfigForSelectedFilter, displayConfigForSelectedFilterValues, dashboardConfigChanged;
 
             //console.log("================= _updateDashboard =============== ");
             //console.log(ovalues);
 
-            if(selectedfilter) {
+            if (selectedfilter) {
 
                 // If selected filter has a value
-                if(selectedfilter.values.values.length > 0){
+                if (selectedfilter.values.values.length > 0) {
 
                     // Update the TitleView (Add Item)
                     amplify.publish(Events.TITLE_ADD_ITEM, this._getTitleItem(selectedfilter));
 
                     // Configuration display (if appropriate)
-                    if(this.topicConfig){
+                    if (this.topicConfig) {
                         displayConfigForSelectedFilter = this.topicConfig[selectedfilter.id];
                     }
 
                     // Update dashboard properties
-                        if(selectedfilter['props']){
-                            this.subview('oecdDashboard').setProperties(selectedfilter['props']);
-                        }
+                    if (selectedfilter['props']) {
+                        this.subview('oecdDashboard').setProperties(selectedfilter['props']);
+                    }
 
 
-                     this._setDashboardConfiguration(confPath, ovalues, displayConfigForSelectedFilter);
+                    this._setDashboardConfiguration(confPath, ovalues, displayConfigForSelectedFilter);
 
                 }
                 // Else selected filter has no value (i.e.there has been a de-selection/removal)
@@ -290,26 +289,26 @@ define([
                     amplify.publish(Events.TITLE_REMOVE_ITEM, selectedfilter.id);
 
                     // Re-configure display (if appropriate)
-                    if(selectedfilter.dependencies && this.topicConfig){
+                    if (selectedfilter.dependencies && this.topicConfig) {
                         displayConfigForSelectedFilter = this.topicConfig[selectedfilter.dependencies[0]];
                     }
 
-                    if(this.filterValuesConfig){
+                    if (this.filterValuesConfig) {
                         displayConfigForSelectedFilterValues = this.filterValuesConfig[selectedfilter.id];
-                        var item = _.find(displayConfigForSelectedFilterValues, function(item){
+                        var item = _.find(displayConfigForSelectedFilterValues, function (item) {
                             return item.value === "";
                         });
 
-                        if(item && item.config){
-                          confPath =  item.config.path;
+                        if (item && item.config) {
+                            confPath = item.config.path;
 
-                          if(item.display)
-                              displayConfigForSelectedFilter = item.display;
+                            if (item.display)
+                                displayConfigForSelectedFilter = item.display;
                         }
                     }
 
 
-                    if(confPath || displayConfigForSelectedFilter)
+                    if (confPath || displayConfigForSelectedFilter)
                         this._setDashboardConfiguration(confPath, ovalues, displayConfigForSelectedFilter);
                 }
 
@@ -325,13 +324,13 @@ define([
          * @param displayConfigForSelectedFilter
          * @private
          */
-        _setDashboardConfiguration : function(confPath, ovalues, displayConfigForSelectedFilter){
+        _setDashboardConfiguration: function (confPath, ovalues, displayConfigForSelectedFilter) {
             var self = this;
             //console.log("================= _setDashboardConfiguration Start =============== ");
             //console.log(ovalues);
-          
-            if(confPath){
-                require(['config/browse/' + confPath], function(dialog) {
+
+            if (confPath) {
+                require(['config/browse/' + confPath], function (dialog) {
                     self._rebuildDashboard(ovalues, displayConfigForSelectedFilter, dialog.dashboard);
                 });
             } else {
@@ -347,7 +346,7 @@ define([
          * @private
          */
 
-        _rebuildDashboard : function(ovalues, displayConfigForSelectedFilter, dashboardConfig){
+        _rebuildDashboard: function (ovalues, displayConfigForSelectedFilter, dashboardConfig) {
 
             // Set Sector Related Dashboard Configuration
             switch (this.subview('filters').isFAOSectorsSelected()) {
@@ -373,13 +372,13 @@ define([
 
 
             //console.log("================= _rebuildDashboard END =============== ");
-           // console.log(ovalues);
+            // console.log(ovalues);
 
             // Rebuild OECD Dashboard
             this.subview('oecdDashboard').rebuildDashboard(ovalues);
 
             // Rebuild Development Indicators Dashboard
-            if(this.browse_type === BaseBrowseConfig.topic.BY_COUNTRY || this.browse_type === BaseBrowseConfig.topic.BY_RESOURCE_PARTNER){
+            if (this.browse_type === BaseBrowseConfig.topic.BY_COUNTRY || this.browse_type === BaseBrowseConfig.topic.BY_RESOURCE_PARTNER) {
                 this._setIndicatorDashboardModelValues();
                 var ivalues = this.subview('filters').getIndicatorsValues();
                 this.subview('indicatorsDashboard').rebuildDashboard(ivalues);
@@ -388,7 +387,7 @@ define([
         },
 
 
-        _getTitleItem: function(item){
+        _getTitleItem: function (item) {
 
             var titleItem = {}, labels = item.values.labels;
 
@@ -407,26 +406,27 @@ define([
         },
 
 
-        _setIndicatorDashboardModelValues: function(){
-            var country  = this.subview('title').getItemText(BaseBrowseConfig.filter.RECIPIENT_COUNTRY);
+        _setIndicatorDashboardModelValues: function () {
+            var country = this.subview('title').getItemText(BaseBrowseConfig.filter.RECIPIENT_COUNTRY);
             var donor = this.subview('title').getItemText(BaseBrowseConfig.filter.RESOURCE_PARTNER);
 
-            if(donor.length > 0)
+            if (donor.length > 0)
                 country = donor;
 
             this.indicatorsDashboardModel.set(s.dashboardModel.COUNTRY, country);
         },
 
-        _setOdaDashboardModelValues: function(){
+        _setOdaDashboardModelValues: function () {
             this.odaDashboardModel.set(s.dashboardModel.LABEL, this.subview('title').getTitleAsArray());
         },
 
-        backToTop: function(e) {
+        backToTop: function (e) {
 
-          e.preventDefault();
-          e.stopPropagation();
+            e.preventDefault();
+            e.stopPropagation();
 
-          $('html, body').animate({scrollTop: 0}, 'slow');return false;
+            $('html, body').animate({scrollTop: 0}, 'slow');
+            return false;
 
         },
 
@@ -437,7 +437,7 @@ define([
             View.prototype.dispose.call(this, arguments);
         }
 
-   });
+    });
 
     return BrowseByView;
 });
