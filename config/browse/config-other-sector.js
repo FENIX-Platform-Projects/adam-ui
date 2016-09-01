@@ -12,9 +12,7 @@ define(function () {
                         id: "dropdown",
                         default: ["600"],
                         config: { //Selectize configuration
-                           // allowEmptyOption: true,
-                            //create: true,
-                            // maxItems: 1,
+                            maxItems: 1,
                             placeholder: "All",
                             plugins: ['remove_button'],
                             mode: 'multi'

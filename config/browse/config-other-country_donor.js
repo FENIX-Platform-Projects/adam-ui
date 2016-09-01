@@ -12,10 +12,7 @@ define(function () {
                     id: "dropdown",
                     default: ["625"], // afghanistan
                     config: { //Selectize configuration
-                        maxItems: 1,
-                        placeholder: "All",
-                        plugins: ['remove_button'],
-                        mode: 'multi'
+                        maxItems: 1
                     }
                 },
                 className: "col-sm-3",
@@ -35,10 +32,7 @@ define(function () {
                     id: "dropdown",
                     default: ["1"], // Austria
                     config: { //Selectize configuration
-                        maxItems: 1,
-                        placeholder: "Please select",
-                        plugins: ['remove_button'],
-                        mode: 'multi'
+                        maxItems: 1
                     }
                 },
                 className: "col-sm-3",
