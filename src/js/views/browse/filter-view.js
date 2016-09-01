@@ -277,8 +277,8 @@ define(
 
             // Add List Change listeners
             this.filter.on('change', function (payload) {
-                console.log("========================= FilterView: ON CHANGE ==============");
-                console.log(payload);
+                //console.log("========================= FilterView: ON CHANGE ==============");
+                //console.log(payload);
 
                 var fc =  self._getFilterConfigById(payload.id);
                 var dependencies = [];
@@ -637,7 +637,7 @@ define(
         isFAOSectorsSelected: function () {
             var values = this.getSelectedValues(BrowseConfig.filter.SECTOR);
 
-                console.log(values);
+                //console.log(values);
             for(var i = 0; i < values.length; i++){
                 if(values[i] === s.values.FAO_SECTORS){
                   return true;

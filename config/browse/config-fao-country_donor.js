@@ -51,6 +51,7 @@ define(function () {
                 selector: {
                     id: "dropdown",
                     config: { //Selectize configuration
+                        default: ["9999"],
                         maxItems: 1,
                         placeholder: "Please select",
                         plugins: ['remove_button'],
@@ -81,7 +82,60 @@ define(function () {
                 },
                 className: "col-sm-4",
                 cl: {
-                    // codes: ["60010", "60020", "60030", "60040", "60061", "60062", "60063"],
+                    "codes": [
+                        "12240",
+                        "14030",
+                        "14031",
+                        "15170",
+                        "16062",
+                        "23070",
+                        "31110",
+                        "31120",
+                        "31130",
+                        "31140",
+                        "31150",
+                        "31161",
+                        "31162",
+                        "31163",
+                        "31164",
+                        "31165",
+                        "31166",
+                        "31181",
+                        "31182",
+                        "31191",
+                        "31192",
+                        "31193",
+                        "31194",
+                        "31195",
+                        "31210",
+                        "31220",
+                        "31261",
+                        "31281",
+                        "31282",
+                        "31291",
+                        "31310",
+                        "31320",
+                        "31381",
+                        "31382",
+                        "31391",
+                        "32161",
+                        "32162",
+                        "32163",
+                        "32165",
+                        "32267",
+                        "41010",
+                        "41020",
+                        "41030",
+                        "41040",
+                        "41050",
+                        "41081",
+                        "41082",
+                        "43040",
+                        "43050",
+                        "52010",
+                        "72040",
+                        "74010"
+                    ],
                     "uid": "crs_dac",
                     "version": "2016",
                     "level": 2,
@@ -92,7 +146,7 @@ define(function () {
                     hideRemoveButton: true
                 },
                 dependencies: {
-                    "parentsector_code": {id: "parent", event: "select"} //obj or array of obj
+                    "parentsector_code": {id: "parent", event: "select"}
                 }
             },
             "year-from": {
@@ -371,10 +425,10 @@ define(function () {
 
                     filterFor: {
                         "filter_total_donor_recipient_oda": ['donorcode', 'recipientcode', 'year', 'oda'],
-                        "filter_total_donor_recipient_sector_oda": ['donorcode', 'recipientcode', 'parentsector_code', 'year', 'oda'],
+                        "filter_total_donor_recipient_sector_oda": ['donorcode', 'recipientcode', 'year', 'oda'],
 
-                        "filter_total_oda_dac_members_by_year": ['parentsector_code', 'year', 'oda'],
-                        "filter_dac_members_by_donor_year": ['recipientcode', 'parentsector_code', 'year', 'oda']
+                        "filter_total_oda_dac_members_by_year": ['year', 'oda'],
+                        "filter_dac_members_by_donor_year": ['recipientcode', 'year', 'oda']
                     },
 
                     postProcess: [
@@ -562,13 +616,64 @@ define(function () {
                                             }
                                         ]
                                     },
-                                    "parentsector_code": {
+                                    "purposecode": { // FAO Related purposecodes
                                         "codes": [
                                             {
-                                                "uid": "crs_dac",
+                                                "uid": "crs_purposes",
                                                 "version": "2016",
                                                 "codes": [
-                                                    "700" // Humanitarian aid
+                                                    "12240",
+                                                    "14030",
+                                                    "14031",
+                                                    "15170",
+                                                    "16062",
+                                                    "23070",
+                                                    "31110",
+                                                    "31120",
+                                                    "31130",
+                                                    "31140",
+                                                    "31150",
+                                                    "31161",
+                                                    "31162",
+                                                    "31163",
+                                                    "31164",
+                                                    "31165",
+                                                    "31166",
+                                                    "31181",
+                                                    "31182",
+                                                    "31191",
+                                                    "31192",
+                                                    "31193",
+                                                    "31194",
+                                                    "31195",
+                                                    "31210",
+                                                    "31220",
+                                                    "31261",
+                                                    "31281",
+                                                    "31282",
+                                                    "31291",
+                                                    "31310",
+                                                    "31320",
+                                                    "31381",
+                                                    "31382",
+                                                    "31391",
+                                                    "32161",
+                                                    "32162",
+                                                    "32163",
+                                                    "32165",
+                                                    "32267",
+                                                    "41010",
+                                                    "41020",
+                                                    "41030",
+                                                    "41040",
+                                                    "41050",
+                                                    "41081",
+                                                    "41082",
+                                                    "43040",
+                                                    "43050",
+                                                    "52010",
+                                                    "72040",
+                                                    "74010"
                                                 ]
                                             }
                                         ]
@@ -766,13 +871,64 @@ define(function () {
                                             "t"
                                         ]
                                     },
-                                    "parentsector_code": {
+                                    "purposecode": { // FAO Related purposecodes
                                         "codes": [
                                             {
-                                                "uid": "crs_dac",
+                                                "uid": "crs_purposes",
                                                 "version": "2016",
                                                 "codes": [
-                                                    "700" // Humanitarian aid
+                                                    "12240",
+                                                    "14030",
+                                                    "14031",
+                                                    "15170",
+                                                    "16062",
+                                                    "23070",
+                                                    "31110",
+                                                    "31120",
+                                                    "31130",
+                                                    "31140",
+                                                    "31150",
+                                                    "31161",
+                                                    "31162",
+                                                    "31163",
+                                                    "31164",
+                                                    "31165",
+                                                    "31166",
+                                                    "31181",
+                                                    "31182",
+                                                    "31191",
+                                                    "31192",
+                                                    "31193",
+                                                    "31194",
+                                                    "31195",
+                                                    "31210",
+                                                    "31220",
+                                                    "31261",
+                                                    "31281",
+                                                    "31282",
+                                                    "31291",
+                                                    "31310",
+                                                    "31320",
+                                                    "31381",
+                                                    "31382",
+                                                    "31391",
+                                                    "32161",
+                                                    "32162",
+                                                    "32163",
+                                                    "32165",
+                                                    "32267",
+                                                    "41010",
+                                                    "41020",
+                                                    "41030",
+                                                    "41040",
+                                                    "41050",
+                                                    "41081",
+                                                    "41082",
+                                                    "43040",
+                                                    "43050",
+                                                    "52010",
+                                                    "72040",
+                                                    "74010"
                                                 ]
                                             }
                                         ]
@@ -869,13 +1025,64 @@ define(function () {
                                             "t"
                                         ]
                                     },
-                                    "parentsector_code": {
+                                    "purposecode": { // FAO Related purposecodes
                                         "codes": [
                                             {
-                                                "uid": "crs_dac",
+                                                "uid": "crs_purposes",
                                                 "version": "2016",
                                                 "codes": [
-                                                    "700" // Humanitarian aid
+                                                    "12240",
+                                                    "14030",
+                                                    "14031",
+                                                    "15170",
+                                                    "16062",
+                                                    "23070",
+                                                    "31110",
+                                                    "31120",
+                                                    "31130",
+                                                    "31140",
+                                                    "31150",
+                                                    "31161",
+                                                    "31162",
+                                                    "31163",
+                                                    "31164",
+                                                    "31165",
+                                                    "31166",
+                                                    "31181",
+                                                    "31182",
+                                                    "31191",
+                                                    "31192",
+                                                    "31193",
+                                                    "31194",
+                                                    "31195",
+                                                    "31210",
+                                                    "31220",
+                                                    "31261",
+                                                    "31281",
+                                                    "31282",
+                                                    "31291",
+                                                    "31310",
+                                                    "31320",
+                                                    "31381",
+                                                    "31382",
+                                                    "31391",
+                                                    "32161",
+                                                    "32162",
+                                                    "32163",
+                                                    "32165",
+                                                    "32267",
+                                                    "41010",
+                                                    "41020",
+                                                    "41030",
+                                                    "41040",
+                                                    "41050",
+                                                    "41081",
+                                                    "41082",
+                                                    "43040",
+                                                    "43050",
+                                                    "52010",
+                                                    "72040",
+                                                    "74010"
                                                 ]
                                             }
                                         ]
@@ -1093,11 +1300,11 @@ define(function () {
 
                     filterFor: {
 
-                        "filter_total_donor_recipient_subsector_oda": ['donorcode',  'recipientcode', 'parentsector_code', 'purposecode', 'year', 'oda'],
-                        "filter_total_donor_recipient_sector_oda": ['donorcode', 'recipientcode', 'parentsector_code', 'year', 'oda'],
+                        "filter_total_donor_recipient_subsector_oda": ['donorcode',  'recipientcode', 'purposecode', 'year', 'oda'],
+                        "filter_total_donor_recipient_sector_oda": ['donorcode', 'recipientcode', 'year', 'oda'],
 
-                        "filter_total_oda_dac_members_by_year": ['parentsector_code', 'year', 'oda'],
-                        "filter_dac_members_by_donor_year": ['recipientcode', 'parentsector_code', 'purposecode', 'year', 'oda']
+                        "filter_total_oda_dac_members_by_year": ['year', 'oda'],
+                        "filter_dac_members_by_donor_year": ['recipientcode', 'purposecode', 'year', 'oda']
                     },
 
                     postProcess: [
@@ -1172,24 +1379,13 @@ define(function () {
                                             }
                                         ]
                                     },
-                                    "parentsector_code": {
-                                        "codes": [
-                                            {
-                                                "uid": "crs_dac",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "700" // Humanitarian aid
-                                                ]
-                                            }
-                                        ]
-                                    },
                                     "purposecode": {
                                         "codes": [
                                             {
                                                 "uid": "crs_purposes",
                                                 "version": "2016",
                                                 "codes": [
-                                                    "72010"
+                                                    "74010"
                                                 ]
                                             }
                                         ]
@@ -1270,13 +1466,64 @@ define(function () {
                                             "usd_commitment"
                                         ]
                                     },
-                                    "parentsector_code": {
+                                    "purposecode": { // FAO Related purposecodes
                                         "codes": [
                                             {
-                                                "uid": "crs_dac",
+                                                "uid": "crs_purposes",
                                                 "version": "2016",
                                                 "codes": [
-                                                    "700" // Humanitarian aid
+                                                    "12240",
+                                                    "14030",
+                                                    "14031",
+                                                    "15170",
+                                                    "16062",
+                                                    "23070",
+                                                    "31110",
+                                                    "31120",
+                                                    "31130",
+                                                    "31140",
+                                                    "31150",
+                                                    "31161",
+                                                    "31162",
+                                                    "31163",
+                                                    "31164",
+                                                    "31165",
+                                                    "31166",
+                                                    "31181",
+                                                    "31182",
+                                                    "31191",
+                                                    "31192",
+                                                    "31193",
+                                                    "31194",
+                                                    "31195",
+                                                    "31210",
+                                                    "31220",
+                                                    "31261",
+                                                    "31281",
+                                                    "31282",
+                                                    "31291",
+                                                    "31310",
+                                                    "31320",
+                                                    "31381",
+                                                    "31382",
+                                                    "31391",
+                                                    "32161",
+                                                    "32162",
+                                                    "32163",
+                                                    "32165",
+                                                    "32267",
+                                                    "41010",
+                                                    "41020",
+                                                    "41030",
+                                                    "41040",
+                                                    "41050",
+                                                    "41081",
+                                                    "41082",
+                                                    "43040",
+                                                    "43050",
+                                                    "52010",
+                                                    "72040",
+                                                    "74010"
                                                 ]
                                             }
                                         ]
@@ -1504,13 +1751,64 @@ define(function () {
                                             "t"
                                         ]
                                     },
-                                    "parentsector_code": {
+                                    "purposecode": { // FAO Related purposecodes
                                         "codes": [
                                             {
-                                                "uid": "crs_dac",
+                                                "uid": "crs_purposes",
                                                 "version": "2016",
                                                 "codes": [
-                                                    "700" // Humanitarian aid
+                                                    "12240",
+                                                    "14030",
+                                                    "14031",
+                                                    "15170",
+                                                    "16062",
+                                                    "23070",
+                                                    "31110",
+                                                    "31120",
+                                                    "31130",
+                                                    "31140",
+                                                    "31150",
+                                                    "31161",
+                                                    "31162",
+                                                    "31163",
+                                                    "31164",
+                                                    "31165",
+                                                    "31166",
+                                                    "31181",
+                                                    "31182",
+                                                    "31191",
+                                                    "31192",
+                                                    "31193",
+                                                    "31194",
+                                                    "31195",
+                                                    "31210",
+                                                    "31220",
+                                                    "31261",
+                                                    "31281",
+                                                    "31282",
+                                                    "31291",
+                                                    "31310",
+                                                    "31320",
+                                                    "31381",
+                                                    "31382",
+                                                    "31391",
+                                                    "32161",
+                                                    "32162",
+                                                    "32163",
+                                                    "32165",
+                                                    "32267",
+                                                    "41010",
+                                                    "41020",
+                                                    "41030",
+                                                    "41040",
+                                                    "41050",
+                                                    "41081",
+                                                    "41082",
+                                                    "43040",
+                                                    "43050",
+                                                    "52010",
+                                                    "72040",
+                                                    "74010"
                                                 ]
                                             }
                                         ]
@@ -1607,24 +1905,13 @@ define(function () {
                                             "t"
                                         ]
                                     },
-                                    "parentsector_code": {
-                                        "codes": [
-                                            {
-                                                "uid": "crs_dac",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "700" // Humanitarian aid
-                                                ]
-                                            }
-                                        ]
-                                    },
                                     "purposecode": {
                                         "codes": [
                                             {
                                                 "uid": "crs_purposes",
                                                 "version": "2016",
                                                 "codes": [
-                                                    "72010"
+                                                    "74010"
                                                 ]
                                             }
                                         ]
@@ -1801,6 +2088,59 @@ define(function () {
 
                     },
                     filter: { //FX-filter format
+                        purposecode: ["12240",
+                            "14030",
+                            "14031",
+                            "15170",
+                            "16062",
+                            "23070",
+                            "31110",
+                            "31120",
+                            "31130",
+                            "31140",
+                            "31150",
+                            "31161",
+                            "31162",
+                            "31163",
+                            "31164",
+                            "31165",
+                            "31166",
+                            "31181",
+                            "31182",
+                            "31191",
+                            "31192",
+                            "31193",
+                            "31194",
+                            "31195",
+                            "31210",
+                            "31220",
+                            "31261",
+                            "31281",
+                            "31282",
+                            "31291",
+                            "31310",
+                            "31320",
+                            "31381",
+                            "31382",
+                            "31391",
+                            "32161",
+                            "32162",
+                            "32163",
+                            "32165",
+                            "32267",
+                            "41010",
+                            "41020",
+                            "41030",
+                            "41040",
+                            "41050",
+                            "41081",
+                            "41082",
+                            "43040",
+                            "43050",
+                            "52010",
+                            "72040",
+                            "74010"
+                        ],
                         recipientcode: ["625"],
                         donorcode: ["1"],
                         year: [{value: "2000", parent: 'from'}, {value: "2014", parent:  'to'}]
@@ -2389,6 +2729,59 @@ define(function () {
 
                     },
                     filter: { //FX-filter format
+                        purposecode: ["12240",
+                            "14030",
+                            "14031",
+                            "15170",
+                            "16062",
+                            "23070",
+                            "31110",
+                            "31120",
+                            "31130",
+                            "31140",
+                            "31150",
+                            "31161",
+                            "31162",
+                            "31163",
+                            "31164",
+                            "31165",
+                            "31166",
+                            "31181",
+                            "31182",
+                            "31191",
+                            "31192",
+                            "31193",
+                            "31194",
+                            "31195",
+                            "31210",
+                            "31220",
+                            "31261",
+                            "31281",
+                            "31282",
+                            "31291",
+                            "31310",
+                            "31320",
+                            "31381",
+                            "31382",
+                            "31391",
+                            "32161",
+                            "32162",
+                            "32163",
+                            "32165",
+                            "32267",
+                            "41010",
+                            "41020",
+                            "41030",
+                            "41040",
+                            "41050",
+                            "41081",
+                            "41082",
+                            "43040",
+                            "43050",
+                            "52010",
+                            "72040",
+                            "74010"
+                        ],
                         recipientcode: ["625"],
                         donorcode: ["1"],
                         year: [{value: "2000", parent: 'from'}, {value: "2014", parent: 'to'}]

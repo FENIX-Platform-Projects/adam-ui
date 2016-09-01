@@ -117,6 +117,8 @@ define([
 
         rebuildDashboard: function (filter) {
 
+            //console.log("============================= REBUILD DASHBOARD =================");
+           // console.log(filter);
             if (this.dashboard && $.isFunction(this.dashboard.refresh)) {
                 //console.log("REFRESH");
                 this.dashboard.refresh(filter);

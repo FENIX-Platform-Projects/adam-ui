@@ -5,7 +5,7 @@ define(function () {
     'use strict';
 
     return {
-            id: 'OTHER_SECTORS',
+        id: 'OTHER_SECTORS',
         filter: {
             recipientcode: {
                 selector: {
@@ -1769,7 +1769,7 @@ define(function () {
                         } // (4x): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Add Column
                     ]
                 },
-                  {
+                {
                     id: 'top-channel-categories', // TOP CHANNEL OF DELIVERY CATEGORIES
                     type: 'chart',
                     config: {

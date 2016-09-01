@@ -205,7 +205,7 @@ define(function () {
 
             items: [
                 {
-                    id: "tot-oda-sector", //ref [data-item=':id']
+                    id: "tot-oda", //ref [data-item=':id']
                     type: "chart", //chart || map || olap,
                     config: {
                         type: "line",
@@ -218,43 +218,173 @@ define(function () {
                         config: {
                             xAxis: {
                                 type: 'datetime'
+                            }
+                        }
+                    },
+
+                    filterFor: {
+                        "filter_total_ODA": ['donorcode', 'year', 'oda']
+                    },
+
+                    postProcess: [
+                        {
+                            "name": "filter",
+                            "sid": [
+                                {
+                                    "uid": "adam_usd_aggregation_table"
+                                }
+                            ],
+                            "parameters": {
+                                "columns": [
+                                    "year",
+                                    "value",
+                                    "unitcode"
+                                ],
+                                "rows": {
+                                    "oda": {
+                                        "enumeration": [
+                                            "usd_commitment"
+                                        ]
+                                    },
+                                    "donorcode": {
+                                        "codes": [
+                                            {
+                                                "uid": "crs_donors",
+                                                "version": "2016",
+                                                "codes": [
+                                                    "1"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "year": {
+                                        "time": [
+                                            {
+                                                "from": 2000,
+                                                "to": 2014
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "rid":{"uid":"filter_total_ODA"}
+                        },
+                        {
+                            "name": "group",
+                            "parameters": {
+                                "by": [
+                                    "year"
+                                ],
+                                "aggregations": [
+                                    {
+                                        "columns": [
+                                            "value"
+                                        ],
+                                        "rule": "SUM"
+                                    },
+                                    {
+                                        "columns": [
+                                            "unitcode"
+                                        ],
+                                        "rule": "first"
+                                    }
+                                ]
+                            },
+                            "rid": {
+                                "uid": "total_oda"
+                            }
+                        },
+                        {
+                            "name": "addcolumn",
+                            "parameters": {
+                                "column": {
+                                    "dataType": "text",
+                                    "id": "indicator",
+                                    "title": {
+                                        "EN": "Indicator"
+                                    },
+                                    "domain": {
+                                        "codes": [
+                                            {
+                                                "extendedName": {
+                                                    "EN": "Adam Processes"
+                                                },
+                                                "idCodeList": "adam_processes"
+                                            }
+                                        ]
+                                    },
+                                    "subject": null
+                                },
+                                "value": "ODA"
+                            }
+                        }
+                    ]
+                },
+                {
+                    id: "tot-oda-sector", //ref [data-item=':id']
+                    type: "chart", //chart || map || olap,
+                    config: {
+                        type: "line",
+                        x: ["year"], //x axis
+                        series: ["indicator"], // series
+                        y: ["value"],//Y dimension
+                        aggregationFn: {"value": "sum"},
+                        useDimensionLabelsIfExist: false,// || default raw else fenixtool
+
+                        config: {
+                            chart: {
+                                events: {
+                                    load: function(event) {
+                                        var _that = this;
+                                        var hasSubSector = false;
+
+                                        var isVisible = $.each(_that.series, function (i, serie) {
+                                            if(serie.name == '% Sector/Total'){
+                                                serie.update({
+                                                    yAxis: 'subsector-axis',
+                                                    dashStyle: 'shortdot',
+                                                    marker: {
+                                                        radius: 3
+                                                    }
+                                                });
+
+                                                return true;
+                                            }
+                                        });
+
+                                        if(!isVisible){
+                                            this.options.yAxis[1].title.text = '';
+                                            this.yAxis[1].visible = false;
+                                            this.yAxis[1].isDirty = true;
+                                            this.redraw();
+                                        } else {
+                                            this.options.yAxis[1].title.text= '%';
+                                            this.yAxis[1].visible = true;
+                                            this.yAxis[1].isDirty = true;
+                                            this.redraw();
+                                        }
+
+                                    }
+                                }
+                            },
+                            xAxis: {
+                                type: 'datetime'
                             },
                             yAxis: [{ //Primary Axis in default template
                             }, { // Secondary Axis
+                                id: 'subsector-axis',
                                 gridLineWidth: 0,
                                 title: {
                                     text: '%'
                                 },
                                 opposite: true
                             }],
-
-                            series: [{
-                                name: '% Sector/Total',
-                                yAxis: 1,
-                                dashStyle: 'shortdot',
-                                marker: {
-                                    radius: 3
-                                }
-                            }//,
-
-                                //   {
-                                //     name: 'ODA from Resource Partner in Sector'//,
-                                // type: 'column'
-                                // },
-                                // {
-                                // name: 'Total ODA from Resource Partner'//,
-                                //   // type: 'column'
-                                //},
-                                // {
-                                //name: 'OECD Average of ODA in that Sector'//,
-                                // type: 'column'
-                                //}
-                            ],
                             exporting: {
                                 chartOptions: {
                                     legend: {
                                         enabled: true
                                     }
+
                                 }
                             }
 
@@ -1049,7 +1179,6 @@ define(function () {
                                     load: function(event) {
                                         var _that = this;
                                         var hasSubSector = false;
-                                        console.log(_that);
 
                                         var isVisible = $.each(_that.series, function (i, serie) {
                                             if(serie.name == '% Sub Sector/Sector'){
@@ -1888,6 +2017,83 @@ define(function () {
                         useDimensionLabelsIfExist: false,// || default raw else fenixtool
 
                         config: {
+                            chart: {
+                                events: {
+                                    load: function(event) {
+                                        var _that = this;
+                                        var hasSubSector = false;
+
+                                        var isVisible = $.each(_that.series, function (i, serie) {
+                                            if(serie.name == '% ODA/GNI'){
+                                                serie.update({
+                                                    yAxis: 'percent-axis',
+                                                    dashStyle: 'shortdot',
+                                                    marker: {
+                                                        radius: 3
+                                                    }
+                                                });
+
+                                                return true;
+                                            }
+                                        });
+
+
+                                        var isVisible2 = $.each(_that.series, function (i, serie) {
+                                            if(serie.name == '% OECD Average of ODA/GNI'){
+                                                serie.update({
+                                                    yAxis: 'percent-axis',
+                                                    dashStyle: 'shortdot',
+                                                    marker: {
+                                                        radius: 3
+                                                    }
+                                                });
+
+                                                return true;
+                                            }
+                                        });
+
+
+                                        if(!isVisible && !isVisible2){
+                                            this.options.yAxis[1].title.text = '';
+                                            this.yAxis[1].visible = false;
+                                            this.yAxis[1].isDirty = true;
+                                            this.redraw();
+                                        }
+                                        else {
+                                            if(isVisible || isVisible2) {
+                                                this.options.yAxis[1].title.text = '%';
+                                                this.yAxis[1].visible = true;
+                                                this.yAxis[1].isDirty = true;
+                                                this.redraw();
+                                            }
+                                        }
+
+                                    }
+                                }
+                            },
+                            xAxis: {
+                                type: 'datetime'
+                            },
+                            yAxis: [{ //Primary Axis in default template
+                            }, { // Secondary Axis
+                                id: 'percent-axis',
+                                gridLineWidth: 0,
+                                title: {
+                                    text: '%'
+                                },
+                                opposite: true
+                            }],
+                            exporting: {
+                                chartOptions: {
+                                    legend: {
+                                        enabled: true
+                                    }
+
+                                }
+                            }
+
+                        }/*,
+                        config: {
                             xAxis: {
                                 type: 'datetime'
                             },
@@ -1925,7 +2131,7 @@ define(function () {
                                 }
                             }
 
-                        }
+                        }*/
                     },
 
 
@@ -1938,6 +2144,575 @@ define(function () {
                     },
 
                     postProcess: [
+
+                        {
+                            "name": "union",
+                            "sid": [
+                                {
+                                    "uid": "total_donor_oda"
+                                },
+                                {
+                                    "uid": "gni_donor_oda"
+                                },
+                                {
+                                    "uid":"ODA_on_GNI"
+                                },
+                                {
+                                    "uid": "oecd_oda_gni"
+                                }
+                            ],
+                            "parameters": {
+                            },
+                            "rid":{"uid":"union_process"}
+                        },
+
+                        {
+                            "name": "filter",
+                            "sid": [
+                                {
+                                    "uid": "adam_usd_aggregation_table"
+                                }
+                            ],
+                            "parameters": {
+                                "columns": [
+                                    "year",
+                                    "value",
+                                    "unitcode"
+                                ],
+                                "rows": {
+                                    "oda": {
+                                        "enumeration": [
+                                            "usd_commitment"
+                                        ]
+                                    },
+                                    "donorcode": {
+                                        "codes": [
+                                            {
+                                                "uid": "crs_donors",
+                                                "version": "2016",
+                                                "codes": [
+                                                    "1"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "year": {
+                                        "time": [
+                                            {
+                                                "from": 2000,
+                                                "to": 2014
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "rid":{"uid":"filter_total_ODA"}
+                        }, // PART 1: TOTAL ODA FOR DONOR (ALL SECTORS): (1i) Filter
+                        {
+                            "name": "group",
+                            "parameters": {
+                                "by": [
+                                    "year"
+                                ],
+                                "aggregations": [
+                                    {
+                                        "columns": [
+                                            "value"
+                                        ],
+                                        "rule": "SUM"
+                                    },
+                                    {
+                                        "columns": [
+                                            "unitcode"
+                                        ],
+                                        "rule": "first"
+                                    }
+                                ]
+                            },
+                            "rid":{"uid":"total_ODA"}
+                        },
+                        {
+                            "name": "addcolumn",
+                            "parameters": {
+                                "column": {
+                                    "dataType": "text",
+                                    "id": "indicator",
+                                    "title": {
+                                        "EN": "Indicator"
+                                    },
+                                    "domain": {
+                                        "codes": [
+                                            {
+                                                "extendedName": {
+                                                    "EN": "Adam Processes"
+                                                },
+                                                "idCodeList": "adam_processes"
+                                            }
+                                        ]
+                                    },
+                                    "subject": null
+                                },
+                                "value": "Total ODA from Resource Partner"
+                            },
+                            "rid": {
+                                "uid": "total_donor_oda"
+                            }
+                        },
+
+
+                        {
+                            "name": "filter",
+                            "sid": [
+                                {
+                                    "uid": "adam_donors_gni"
+                                }
+                            ],
+                            "parameters": {
+                                "columns": [
+                                    "year",
+                                    "value",
+                                    "unitcode"
+                                ],
+                                "rows": {
+                                    "donorcode": {
+                                        "codes": [
+                                            {
+                                                "uid": "crs_donors",
+                                                "version": "2016",
+                                                "codes": [
+                                                    "1"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "year": {
+                                        "time": [
+                                            {
+                                                "from": 2000,
+                                                "to": 2014
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "rid": {
+                                "uid": "filter_gni_donor_oda"
+                            }
+                        },
+                        {
+                            "name": "group",
+                            "parameters": {
+                                "by": [
+                                    "year"
+                                ],
+                                "aggregations": [
+                                    {
+                                        "columns": [
+                                            "value"
+                                        ],
+                                        "rule": "SUM"
+                                    },
+                                    {
+                                        "columns": [
+                                            "unitcode"
+                                        ],
+                                        "rule": "first"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "addcolumn",
+                            "parameters": {
+                                "column": {
+                                    "dataType": "text",
+                                    "id": "indicator",
+                                    "title": {
+                                        "EN": "Indicator"
+                                    },
+                                    "domain": {
+                                        "codes": [
+                                            {
+                                                "extendedName": {
+                                                    "EN": "Adam Processes"
+                                                },
+                                                "idCodeList": "adam_processes"
+                                            }
+                                        ]
+                                    },
+                                    "subject": null
+                                },
+                                "value": "Resource Partner GNI"
+                            },
+                            "rid": {
+                                "uid": "gni_donor_oda"
+                            }
+                        },
+
+
+                        {
+                            "name": "join",
+                            "sid": [
+                                {
+                                    "uid": "gni_donor_oda"
+                                },
+                                {
+                                    "uid": "total_donor_oda"
+                                }
+                            ],
+                            "parameters": {
+                                "joins": [
+                                    [
+
+                                        {
+                                            "type": "id",
+                                            "value": "year"
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "type": "id",
+                                            "value": "year"
+                                        }
+
+                                    ]
+                                ],
+                                "values": [
+                                ]
+                            },
+                            "rid":{"uid":"join_process_oda_gni"}
+                        },
+                        {
+                            "name": "addcolumn",
+                            "sid":[{"uid":"join_process_oda_gni"}],
+                            "parameters": {
+                                "column": {
+                                    "dataType": "number",
+                                    "id": "value",
+                                    "title": {
+                                        "EN": "Value"
+                                    },
+                                    "subject": null
+                                },
+                                "value": {
+                                    "keys":  ["1 = 1"],
+                                    "values":[" ( total_donor_oda_value / gni_donor_oda_value)*100"]
+                                }
+                            }
+                        },
+                        {
+                            "name": "filter",
+                            "parameters": {
+                                "columns": [
+                                    "year",
+                                    "value"
+                                ],
+                                "rows": {}
+                            }
+                        },
+                        {
+                            "name": "addcolumn",
+                            "parameters": {
+                                "column": {
+                                    "id": "unitcode",
+                                    "title": {
+                                        "EN": "Measurement Unit"
+                                    },
+                                    "domain": {
+                                        "codes": [{
+                                            "idCodeList": "crs_units",
+                                            "version": "2016",
+                                            "level": 1
+                                        }]
+                                    },
+                                    "dataType": "code",
+                                    "subject": "um"
+                                },
+                                "value": "percentage"
+                            }
+                        },
+                        {
+                            "name": "addcolumn",
+                            "parameters": {
+                                "column": {
+                                    "dataType": "text",
+                                    "id": "indicator",
+                                    "title": {
+                                        "EN": "Indicator"
+                                    },
+                                    "domain": {
+                                        "codes": [
+                                            {
+                                                "extendedName": {
+                                                    "EN": "Adam Processes"
+                                                },
+                                                "idCodeList": "adam_processes"
+                                            }
+                                        ]
+                                    },
+                                    "subject": null
+                                },
+                                "value": "% ODA/GNI"
+                            },
+                            "rid": {
+                                "uid": "ODA_on_GNI"
+                            }
+                        },
+
+                        {
+                            "name": "filter",
+                            "sid": [
+                                {
+                                    "uid": "adam_usd_aggregation_table"
+                                }
+                            ],
+                            "parameters": {
+                                "columns": [
+                                    "year",
+                                    "value",
+                                    "unitcode"
+                                ],
+                                "rows": {
+                                    "oda": {
+                                        "enumeration": [
+                                            "usd_commitment"
+                                        ]
+                                    },
+                                    "parentsector_code": {
+                                        "codes": [
+                                            {
+                                                "uid": "crs_dac",
+                                                "version": "2016",
+                                                "codes": [
+                                                    "NA"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "purposecode": {
+                                        "codes": [
+                                            {
+                                                "uid": "crs_purposes",
+                                                "version": "2016",
+                                                "codes": [
+                                                    "NA"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "donorcode": {
+                                        "codes": [
+                                            {
+                                                "uid": "crs_donors",
+                                                "version": "2016",
+                                                "codes": [
+                                                    "NA"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "recipientcode": {
+                                        "codes": [
+                                            {
+                                                "uid": "crs_recipients",
+                                                "version": "2016",
+                                                "codes": [
+                                                    "NA"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "dac_member": {
+                                        "enumeration": [
+                                            "t"
+                                        ]
+                                    },
+                                    "year": {
+                                        "time": [
+                                            {
+                                                "from": 2000,
+                                                "to": 2014
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "rid":{"uid":"all_subsectors_sum"}
+                        },
+                        {
+                            "name": "filter",
+                            "sid": [
+                                {
+                                    "uid": "adam_donors_gni"
+                                }
+                            ],
+                            "parameters": {
+                                "columns": [
+                                    "year",
+                                    "value",
+                                    "unitcode"
+                                ],
+                                "rows": {
+                                    "year": {
+                                        "time": [
+                                            {
+                                                "from": 2000,
+                                                "to": 2014
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "rid": {
+                                "uid": "filter_GNI_sum"
+                            }
+                        },
+                        {
+                            "name": "group",
+                            "parameters": {
+                                "by": [
+                                    "year"
+                                ],
+                                "aggregations": [
+                                    {
+                                        "columns": [
+                                            "value"
+                                        ],
+                                        "rule": "SUM"
+                                    },
+                                    {
+                                        "columns": [
+                                            "unitcode"
+                                        ],
+                                        "rule": "first"
+                                    }
+                                ]
+                            },
+                            "rid": {
+                                "uid": "GNI_sum"
+                            }
+                        },
+                        {
+                            "name": "join",
+                            "sid": [
+                                {
+                                    "uid": "GNI_sum"
+                                },
+                                {
+                                    "uid": "all_subsectors_sum"
+                                }
+                            ],
+                            "parameters": {
+                                "joins": [
+                                    [
+                                        {
+                                            "type": "id",
+                                            "value": "year"
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "type": "id",
+                                            "value": "year"
+                                        }
+                                    ]
+                                ],
+                                "values": [
+                                ]
+                            },
+                            "rid": {
+                                "uid": "join_oecd_avg"
+                            }
+                        },
+                        {
+                            "name": "addcolumn",
+                            "sid": [
+                                {
+                                    "uid": "join_oecd_avg"
+                                }
+                            ],
+                            "parameters": {
+                                "column": {
+                                    "dataType": "number",
+                                    "id": "value",
+                                    "title": {
+                                        "EN": "Value"
+                                    },
+                                    "subject": null
+                                },
+                                "value": {
+                                    "keys": [
+                                        "1 = 1"
+                                    ],
+                                    "values": [
+                                        " ( all_subsectors_sum_value / GNI_sum_value)*100"
+                                    ]
+                                }
+                            }
+                        },
+
+                        {
+                            "name": "addcolumn",
+                            "parameters": {
+                                "column": {
+                                    "dataType": "text",
+                                    "id": "indicator",
+                                    "title": {
+                                        "EN": "Indicator"
+                                    },
+                                    "domain": {
+                                        "codes": [
+                                            {
+                                                "extendedName": {
+                                                    "EN": "Adam Processes"
+                                                },
+                                                "idCodeList": "adam_processes"
+                                            }
+                                        ]
+                                    },
+                                    "subject": null
+                                },
+                                "value": "% OECD Average of ODA/GNI"
+                            }
+                        },
+                        {
+                            "name": "addcolumn",
+                            "parameters": {
+                                "column": {
+                                    "id": "unitcode",
+                                    "title": {
+                                        "EN": "Measurement Unit"
+                                    },
+                                    "domain": {
+                                        "codes": [{
+                                            "idCodeList": "crs_units",
+                                            "version": "2016",
+                                            "level": 1
+                                        }]
+                                    },
+                                    "dataType": "code"
+                                },
+                                "value": "percentage"
+                            }
+                        },
+                        {
+                            "name": "filter",
+                            "parameters": {
+                                "columns": [
+                                    "year",
+                                    "value",
+                                    "unitcode",
+                                    "indicator"
+                                ]
+                            },
+                            "rid":{
+                                "uid":"oecd_oda_gni"
+                            }
+                        }
+
+
+                    ]
+                    /*postProcess: [
 
                         {
                             "name": "union",
@@ -2337,17 +3112,17 @@ define(function () {
                                             "t"
                                         ]
                                     },
-                                    /*"parentsector_code": {
-                                     "codes": [
-                                     {
-                                     "uid": "crs_dac",
-                                     "version": "2016",
-                                     "codes": [
-                                     "600"
-                                     ]
-                                     }
-                                     ]
-                                     },*/
+                                    /!*"parentsector_code": {
+                                        "codes": [
+                                            {
+                                                "uid": "crs_dac",
+                                                "version": "2016",
+                                                "codes": [
+                                                    "600"
+                                                ]
+                                            }
+                                        ]
+                                    },*!/
                                     "year": {
                                         "time": [
                                             {
@@ -2611,7 +3386,7 @@ define(function () {
                                 "uid": "percentage_OECD_AVG_GNI"
                             }
                         } // (5vi) PERCENTAGE CALCULATION [OECD AVG/GNI]: Add Column
-                    ]
+                    ]*/
                 },
                 {
                     id: 'top-recipients', // TOP RECIPIENTS
@@ -3197,6 +3972,453 @@ define(function () {
                                     "subject": null
                                 },
                                 "value": "Other Recipients"
+                            },
+                            "rid": {
+                                "uid": "others"
+                            }
+                        }
+                    ]
+                },
+                {
+                    id: 'top-sectors', // TOP SECTORS
+                    type: 'chart',
+                    config: {
+                        type: "column",
+                        x: ["parentsector_name"], //x axis
+                        series: ["flowcategory_name"], // series
+                        y: ["value"],//Y dimension
+                        aggregationFn: {"value": "sum"},
+                        useDimensionLabelsIfExist: false,// || default raw else fenixtool
+                        config: {
+                            colors: ['#008080'],
+                            legend: {
+                                title: {
+                                    text: null
+                                }
+                            },
+                            plotOptions: {
+                                column: {
+                                    events: {
+                                        legendItemClick: function () {
+                                            return false;
+                                        }
+                                    }
+                                },
+                                allowPointSelect: false
+                            }
+                        }
+
+                    },
+
+                    filterFor: ['donorcode', 'year', 'oda'],
+
+                    filter: { //FX-filter format
+                        donorcode: ["1"],
+                        year: [{value: "2000", parent: 'from'}, {value: "2014", parent:  'to'}]
+                    },
+                    postProcess: [
+                        {
+                            "name": "group",
+                            "parameters": {
+                                "by": [
+                                    "parentsector_name"
+                                ],
+                                "aggregations": [
+                                    {
+                                        "columns": ["value"],
+                                        "rule": "SUM"
+                                    },
+                                    {
+                                        "columns": ["unitcode"],
+                                        "rule": "first"
+                                    },
+                                    {
+                                        "columns": ["flowcategory_name"],
+                                        "rule": "first"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "order",
+                            "parameters": {
+                                "value": "DESC"
+                            }
+                        },
+                        {
+                            "name": "page",
+                            "parameters": {
+                                "perPage": 10,  //top 10
+                                "page": 1
+                            }
+                        }]
+                },
+                {
+                    id: 'top-sectors-others', // TOP SECTORS Vs OTHER SECTORS
+                    type: 'chart',
+                    config: {
+                        type: "pieold",
+                        x: ["indicator"], //x axis and series
+                        series: ["unitname"], // series
+                        y: ["value"],//Y dimension
+                        aggregationFn: {"value": "sum"},
+                        useDimensionLabelsIfExist: false,// || default raw else fenixtool
+
+                        config: {
+                            colors: ['#008080'],
+                            legend: {
+                                title: {
+                                    text: null
+                                }
+                            },
+                            plotOptions: {
+                                pie: {
+                                    showInLegend: true
+                                },
+                                series: {
+                                    point: {
+                                        events: {
+                                            legendItemClick: function () {
+                                                return false; // <== returning false will cancel the default action
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            chart: {
+                                events: {
+                                    load: function (event) {
+                                        if (this.options.chart.forExport) {
+                                            Highcharts.each(this.series, function (series) {
+                                                series.update({
+                                                    dataLabels: {
+                                                        enabled: false
+                                                    }
+                                                }, false);
+                                            });
+                                            this.redraw();
+                                        }
+                                    }
+                                }
+
+                            },
+                            tooltip: {
+                                style: {width: '200px', whiteSpace: 'normal'},
+                                formatter: function () {
+                                    var val = this.y;
+                                    if (val.toFixed(0) < 1) {
+                                        val = (val * 1000).toFixed(2) + ' K'
+                                    } else {
+                                        val = val.toFixed(2) + ' USD Mil'
+                                    }
+
+                                    return '<b>' + this.percentage.toFixed(2) + '% (' + val + ')</b>';
+                                }
+                            },
+                            exporting: {
+                                buttons: {
+                                    toggleDataLabelsButton: {
+                                        enabled: false
+                                    }
+                                },
+                                chartOptions: {
+                                    legend: {
+                                        title: '',
+                                        enabled: true,
+                                        align: 'center',
+                                        layout: 'vertical',
+                                        useHTML: true,
+                                        labelFormatter: function () {
+                                            var val = this.y;
+                                            if (val.toFixed(0) < 1) {
+                                                val = (val * 1000).toFixed(2) + ' K'
+                                            } else {
+                                                val = val.toFixed(2) + ' USD Mil'
+                                            }
+
+                                            return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() + ': ' + this.percentage.toFixed(2) + '% (' + val + ')</span></div>';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    filterFor: {
+                        "filter_top_10_sectors_sum": ['donorcode', 'year', 'oda'],
+                        "filter_top_all_sectors_sum": ['donorcode', 'year', 'oda']
+                    },
+
+                    postProcess: [
+                        {
+                            "name": "union",
+                            "sid": [
+                                {
+                                    "uid": "top_10_sectors_sum"
+                                },
+                                {
+                                    "uid": "others"
+                                }
+                            ],
+                            "parameters": {},
+                            "rid": {
+                                "uid": "union_process"
+                            }
+                        },
+                        {
+                            "name": "filter",
+                            "sid": [
+                                {
+                                    "uid": "adam_usd_aggregation_table"
+                                }
+                            ],
+                            "parameters": {
+                                "columns": [
+                                    "parentsector_code",
+                                    "value",
+                                    "unitcode"
+                                ],
+                                "rows": {
+                                    "oda": {
+                                        "enumeration": [
+                                            "usd_commitment"
+                                        ]
+                                    },
+                                    "donorcode": {
+                                        "codes": [
+                                            {
+                                                "uid": "crs_donors",
+                                                "version": "2016",
+                                                "codes": [
+                                                    "1"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "year": {
+                                        "time": [
+                                            {
+                                                "from": 2000,
+                                                "to": 2014
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "rid": {
+                                "uid": "filter_top_10_sectors_sum"
+                            }
+                        },
+                        {
+                            "name": "group",
+                            "parameters": {
+                                "by": [
+                                    "parentsector_code"
+                                ],
+                                "aggregations": [
+                                    {
+                                        "columns": [
+                                            "value"
+                                        ],
+                                        "rule": "SUM"
+                                    },
+                                    {
+                                        "columns": [
+                                            "unitcode"
+                                        ],
+                                        "rule": "first"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "order",
+                            "parameters": {
+                                "value": "DESC"
+                            },
+                            "rid":{"uid":"filtered_dataset"}
+                        },
+                        {
+                            "name": "page",
+                            "parameters": {
+                                "perPage": 10,
+                                "page": 1
+                            }
+                        },
+                        {
+                            "name": "group",
+                            "parameters": {
+                                "by": [
+                                    "unitcode"
+                                ],
+                                "aggregations": [
+                                    {
+                                        "columns": [
+                                            "value"
+                                        ],
+                                        "rule": "SUM"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "addcolumn",
+                            "parameters": {
+                                "column": {
+                                    "dataType": "text",
+                                    "id": "indicator",
+                                    "title": {
+                                        "EN": "Indicator"
+                                    },
+                                    "domain": {
+                                        "codes": [
+                                            {
+                                                "extendedName": {
+                                                    "EN": "Adam Processes"
+                                                },
+                                                "idCodeList": "adam_processes"
+                                            }
+                                        ]
+                                    },
+                                    "subject": null
+                                },
+                                "value": "Top Sectors"
+                            },
+                            "rid": {
+                                "uid": "top_10_sectors_sum"
+                            }
+                        },
+                        {
+                            "name": "group",
+                            "sid":[{"uid":"filtered_dataset"}],
+                            "parameters": {
+                                "by": [
+                                    "unitcode"
+                                ],
+                                "aggregations": [
+                                    {
+                                        "columns": [
+                                            "value"
+                                        ],
+                                        "rule": "SUM"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "addcolumn",
+                            "parameters": {
+                                "column": {
+                                    "dataType": "text",
+                                    "id": "indicator",
+                                    "title": {
+                                        "EN": "Indicator"
+                                    },
+                                    "domain": {
+                                        "codes": [
+                                            {
+                                                "extendedName": {
+                                                    "EN": "Adam Processes"
+                                                },
+                                                "idCodeList": "adam_processes"
+                                            }
+                                        ]
+                                    },
+                                    "subject": null
+                                },
+                                "value": "sum of all sectors"
+                            },
+                            "rid": {
+                                "uid": "top_all_sectors_sum"
+                            }
+                        },
+                        {
+                            "name": "join",
+                            "sid": [
+                                {
+                                    "uid": "top_all_sectors_sum"
+                                },
+                                {
+                                    "uid": "top_10_sectors_sum"
+                                }
+                            ],
+                            "parameters": {
+                                "joins": [
+                                    [
+                                        {
+                                            "type": "id",
+                                            "value": "unitcode"
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "type": "id",
+                                            "value": "unitcode"
+                                        }
+                                    ]
+                                ],
+                                "values": []
+                            },
+                            "rid": {
+                                "uid": "join_process_total_sectors"
+                            }
+                        },
+                        {
+                            "name": "addcolumn",
+                            "sid": [
+                                {
+                                    "uid": "join_process_total_sectors"
+                                }
+                            ],
+                            "parameters": {
+                                "column": {
+                                    "dataType": "number",
+                                    "id": "value",
+                                    "title": {
+                                        "EN": "Value"
+                                    },
+                                    "subject": null
+                                },
+                                "value": {
+                                    "keys": [
+                                        "1 = 1"
+                                    ],
+                                    "values": [
+                                        "top_all_sectors_sum_value - top_10_sectors_sum_value"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "filter",
+                            "parameters": {
+                                "columns": [
+                                    "value",
+                                    "unitcode"
+                                ]
+                            }
+                        },
+                        {
+                            "name": "addcolumn",
+                            "parameters": {
+                                "column": {
+                                    "dataType": "text",
+                                    "id": "indicator",
+                                    "title": {
+                                        "EN": "Indicator"
+                                    },
+                                    "domain": {
+                                        "codes": [
+                                            {
+                                                "extendedName": {
+                                                    "EN": "Adam Processes"
+                                                },
+                                                "idCodeList": "adam_processes"
+                                            }
+                                        ]
+                                    },
+                                    "subject": null
+                                },
+                                "value": "Other Sectors"
                             },
                             "rid": {
                                 "uid": "others"

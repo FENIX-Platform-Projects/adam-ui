@@ -31,6 +31,7 @@ define(function () {
                 selector: {
                     id: "dropdown",
                     config: { //Selectize configuration
+                        maxItems: 1,
                         placeholder: "All",
                         plugins: ['remove_button'],
                         mode: 'multi'
@@ -276,45 +277,59 @@ define(function () {
                         useDimensionLabelsIfExist: false,// || default raw else fenixtool
 
                         config: {
+                            chart: {
+                                events: {
+                                    load: function(event) {
+                                        var _that = this;
+                                        var hasSubSector = false;
+
+                                        var isVisible = $.each(_that.series, function (i, serie) {
+                                            if(serie.name == '% Sector/Total'){
+                                                serie.update({
+                                                    yAxis: 'subsector-axis',
+                                                    dashStyle: 'shortdot',
+                                                    marker: {
+                                                        radius: 3
+                                                    }
+                                                });
+
+                                                return true;
+                                            }
+                                        });
+
+                                        if(!isVisible){
+                                            this.options.yAxis[1].title.text = '';
+                                            this.yAxis[1].visible = false;
+                                            this.yAxis[1].isDirty = true;
+                                            this.redraw();
+                                        } else {
+                                            this.options.yAxis[1].title.text= '%';
+                                            this.yAxis[1].visible = true;
+                                            this.yAxis[1].isDirty = true;
+                                            this.redraw();
+                                        }
+
+                                    }
+                                }
+                            },
                             xAxis: {
                                 type: 'datetime'
                             },
                             yAxis: [{ //Primary Axis in default template
                             }, { // Secondary Axis
+                                id: 'subsector-axis',
                                 gridLineWidth: 0,
                                 title: {
                                     text: '%'
                                 },
                                 opposite: true
                             }],
-
-                            series: [{
-                                name: '% Sector/Total',
-                                yAxis: 1,
-                                dashStyle: 'shortdot',
-                                marker: {
-                                    radius: 3
-                                }
-                            }//,
-
-                                //   {
-                                //     name: 'ODA from Resource Partner in Sector'//,
-                                // type: 'column'
-                                // },
-                                // {
-                                // name: 'Total ODA from Resource Partner'//,
-                                //   // type: 'column'
-                                //},
-                                // {
-                                //name: 'OECD Average of ODA in that Sector'//,
-                                // type: 'column'
-                                //}
-                            ],
                             exporting: {
                                 chartOptions: {
                                     legend: {
                                         enabled: true
                                     }
+
                                 }
                             }
 
@@ -1714,6 +1729,83 @@ define(function () {
                         useDimensionLabelsIfExist: false,// || default raw else fenixtool
 
                         config: {
+                            chart: {
+                                events: {
+                                    load: function(event) {
+                                        var _that = this;
+                                        var hasSubSector = false;
+
+                                        var isVisible = $.each(_that.series, function (i, serie) {
+                                            if(serie.name == '% ODA/GNI'){
+                                                serie.update({
+                                                    yAxis: 'percent-axis',
+                                                    dashStyle: 'shortdot',
+                                                    marker: {
+                                                        radius: 3
+                                                    }
+                                                });
+
+                                                return true;
+                                            }
+                                        });
+
+
+                                        var isVisible2 = $.each(_that.series, function (i, serie) {
+                                            if(serie.name == '% OECD Average of ODA/GNI'){
+                                                serie.update({
+                                                    yAxis: 'percent-axis',
+                                                    dashStyle: 'shortdot',
+                                                    marker: {
+                                                        radius: 3
+                                                    }
+                                                });
+
+                                                return true;
+                                            }
+                                        });
+
+
+                                        if(!isVisible && !isVisible2){
+                                            this.options.yAxis[1].title.text = '';
+                                            this.yAxis[1].visible = false;
+                                            this.yAxis[1].isDirty = true;
+                                            this.redraw();
+                                        }
+                                        else {
+                                            if(isVisible || isVisible2) {
+                                                this.options.yAxis[1].title.text = '%';
+                                                this.yAxis[1].visible = true;
+                                                this.yAxis[1].isDirty = true;
+                                                this.redraw();
+                                            }
+                                        }
+
+                                    }
+                                }
+                            },
+                            xAxis: {
+                                type: 'datetime'
+                            },
+                            yAxis: [{ //Primary Axis in default template
+                            }, { // Secondary Axis
+                                id: 'percent-axis',
+                                gridLineWidth: 0,
+                                title: {
+                                    text: '%'
+                                },
+                                opposite: true
+                            }],
+                            exporting: {
+                                chartOptions: {
+                                    legend: {
+                                        enabled: true
+                                    }
+
+                                }
+                            }
+
+                        }/*,
+                        config: {
                             xAxis: {
                                 type: 'datetime'
                             },
@@ -1751,7 +1843,7 @@ define(function () {
                                 }
                             }
 
-                        }
+                        }*/
                     },
 
 
@@ -2293,7 +2385,7 @@ define(function () {
                                     },
                                     "subject": null
                                 },
-                                "value": "% OECD Average OF ODA/GNI"
+                                "value": "% OECD Average of ODA/GNI"
                             }
                         },
                         {

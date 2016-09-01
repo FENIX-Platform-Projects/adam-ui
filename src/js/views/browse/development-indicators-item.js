@@ -38,6 +38,10 @@ define([
         $.extend(true, this, defaultOptions, o);
         this.$el = $(this.el);
 
+        //console.log("-------------------------------- this.model ----------------");
+
+        //console.log(this.model);
+
         this._renderTemplate();
 
         this._initVariables();
@@ -139,15 +143,16 @@ define([
 
     DevelopmentIndicatorsItem.prototype._render = function () {
 
-        this.controller._trigger('indicators_ready',{data: {size: this.model.data.length}});
+        this.controller._trigger('indicators_ready',{data: {size: this.model.size}});
 
-         if(this.model.data.length > 0) {
+         if(this.model.size > 0) {
             var metadata = this.model.metadata.dsd.columns;
             var data = this._processPayload(this.model.data, metadata);
             data = $.extend(true, data, i18nLabels);
             var html = this.indicatortemplate({data: data});
             $(this.el).html(html);
         }
+
     };
 
 

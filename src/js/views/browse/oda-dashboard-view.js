@@ -55,7 +55,7 @@ define([
 
             this.source = $(this.template).find("[data-topic='" + this.topic + "']");//.prop('outerHTML');
 
-            this.pb = new ProgressBar({
+            this.progressBar = new ProgressBar({
              container: '#progress-bar-holder'
             });
 
@@ -89,9 +89,6 @@ define([
             View.prototype.attach.call(this, arguments);
 
             this.configUtils = new ConfigUtils();
-
-            this._bindEventListeners();
-
         },
 
 
@@ -456,7 +453,7 @@ define([
 
         rebuildDashboard: function (filter) {
           var self = this;
-            console.log("=============== REBUILD CALLED  ");
+            //console.log("=============== REBUILD CALLED  ");
 
            this._disposeDashboards();
 
@@ -485,7 +482,7 @@ define([
 
 
 
-            console.log("======================== FINAL VALUES FOR DASHBOARD ========== ", filter);
+            //console.log("======================== FINAL VALUES FOR DASHBOARD ========== ", filter);
             //console.log("========================= rebuild",  this.dashboards);
 
             //console.log(filter);
@@ -520,23 +517,21 @@ define([
 
 
         _loadProgressBar: function () {
-            var self = this;
+            var self = this, increment = 0, percent = Math.round(100 / this.config.items.length);
 
-            this.pb.reset();
-            this.pb.show();
+            this.progressBar.reset();
+            this.progressBar.show();
 
 
-            var percent = 100 / this.config.items.length;
             this.dashboard.on('ready', function () {
-                self.pb.finish();
+                self.progressBar.finish();
             });
 
-            var count = 0;
+
             this.dashboard.on('ready.item', function () {
-                count = count + percent;
-                self.pb.update(count);
+                increment = increment + percent;
+                self.progressBar.update(increment);
             });
-
         },
 
 
@@ -545,10 +540,17 @@ define([
           //  amplify.subscribe("BEFORE_RENDER", this, this._setChartOptions);
             // Add List Change listeners
            // amplify.subscribe(s.events.FAO_SECTOR_CHART_LOADED, this, this._sectorChartLoaded);
-
-
+            //
 
         },
+
+        _updateProgressBar: function (count) {
+            if((chart.series[0].name).trim() == "Million USD")    {
+                chart.series[0].update({name: "FAO-Related Sectors"}, false);
+                chart.redraw();
+            }
+        },
+
 
         _sectorChartLoaded: function (chart) {
             if((chart.series[0].name).trim() == "Million USD")    {

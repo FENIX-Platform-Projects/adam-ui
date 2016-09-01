@@ -175,8 +175,6 @@ define(function () {
                 }
 
             },
-
-
             dashboard: {
                 //default dataset id
                 uid: "adam_usd_commitment",
@@ -193,25 +191,53 @@ define(function () {
                             aggregationFn: {"value": "sum"},
                             useDimensionLabelsIfExist: false,// || default raw else fenixtool
 
-                            config: { // Highcharts configuration
+                            config: {
+                                chart: {
+                                    events: {
+                                        load: function(event) {
+                                            var _that = this;
+                                            var hasSubSector = false;
+
+                                            var isVisible = $.each(_that.series, function (i, serie) {
+                                                if(serie.name == '% Sector/Total ODA'){
+                                                    serie.update({
+                                                        yAxis: 'subsector-axis',
+                                                        dashStyle: 'shortdot',
+                                                        marker: {
+                                                            radius: 3
+                                                        }
+                                                    });
+
+                                                    return true;
+                                                }
+                                            });
+
+                                            if(!isVisible){
+                                                this.options.yAxis[1].title.text = '';
+                                                this.yAxis[1].visible = false;
+                                                this.yAxis[1].isDirty = true;
+                                                this.redraw();
+                                            } else {
+                                                this.options.yAxis[1].title.text= '%';
+                                                this.yAxis[1].visible = true;
+                                                this.yAxis[1].isDirty = true;
+                                                this.redraw();
+                                            }
+
+                                        }
+                                    }
+                                },
                                 xAxis: {
                                     type: 'datetime'
                                 },
                                 yAxis: [{ //Primary Axis in default template
                                 }, { // Secondary Axis
+                                    id: 'subsector-axis',
                                     gridLineWidth: 0,
                                     title: {
                                         text: '%'
                                     },
                                     opposite: true
-                                }],
-                                series: [{
-                                    name: '% Sector/Total ODA',
-                                    yAxis: 1,
-                                    dashStyle: 'shortdot',
-                                    marker: {
-                                        radius: 3
-                                    }
                                 }],
                                 exporting: {
                                     chartOptions: {
@@ -221,6 +247,7 @@ define(function () {
 
                                     }
                                 }
+
                             }
                         },
 
@@ -649,40 +676,62 @@ define(function () {
                             aggregationFn: {"value": "sum"},
                             useDimensionLabelsIfExist: false,// || default raw else fenixtool
 
-                            config: { // Highcharts configuration
+                            config: {
                                 chart: {
-                                  events: {
-                                      load: function(event) {
-                                          $.each(this.series, function (i, serie) {
-                                              if(serie.name == 'Total ODA'){
-                                                  serie.update({
-                                                      visible: false
-                                                  })
-                                              }
-                                          });
-                                      }
-                                  }
+                                    events: {
+                                        load: function(event) {
+                                            var _that = this;
+                                            var hasSubSector = false;
+
+                                            $.each(this.series, function (i, serie) {
+                                                if(serie.name == 'Total ODA'){
+                                                    serie.update({
+                                                        visible: false
+                                                    })
+                                                }
+                                            });
+
+                                            var isVisible = $.each(_that.series, function (i, serie) {
+                                                if(serie.name == '% Sub Sector/Sector'){
+                                                    serie.update({
+                                                        yAxis: 'sector-axis',
+                                                        dashStyle: 'shortdot',
+                                                        marker: {
+                                                            radius: 3
+                                                        }
+                                                    });
+
+                                                    return true;
+                                                }
+                                            });
+
+                                            if(!isVisible){
+                                                this.options.yAxis[1].title.text = '';
+                                                this.yAxis[1].visible = false;
+                                                this.yAxis[1].isDirty = true;
+                                                this.redraw();
+                                            } else {
+                                                this.options.yAxis[1].title.text= '%';
+                                                this.yAxis[1].visible = true;
+                                                this.yAxis[1].isDirty = true;
+                                                this.redraw();
+                                            }
+
+                                        }
+                                    }
                                 },
                                 xAxis: {
                                     type: 'datetime'
                                 },
                                 yAxis: [{ //Primary Axis in default template
                                 }, { // Secondary Axis
+                                    id: 'sector-axis',
                                     gridLineWidth: 0,
                                     title: {
                                         text: '%'
                                     },
                                     opposite: true
                                 }],
-                                series: [{
-                                    name: '% Sub Sector/Sector',
-                                    yAxis: 1,
-                                    dashStyle: 'shortdot',
-                                    marker: {
-                                        radius: 3
-                                    }
-                                }
-                                ],
                                 exporting: {
                                     chartOptions: {
                                         legend: {
@@ -1360,7 +1409,7 @@ define(function () {
                                 }
                             }]
                     },
-                      {
+                    {
                         id: 'top-partners-others', // TOP RESOURCE PARTNERS Vs OTHER RESOURCE PARTNERS
                         type: 'chart',
                         config: {
@@ -1802,7 +1851,7 @@ define(function () {
                             // (3iv): TOTAL ODA OTHERS CALCULATION: Add Column
                         ]
                     },
-                     {
+                    {
                         id: 'top-recipients', // TOP RECIPIENTS
                         type: 'chart',
                         config: {
@@ -1937,7 +1986,7 @@ define(function () {
                                 }
                             }]
                     },
-                   {
+                    {
                         id: 'top-recipients-others', // TOP RECIPIENTS Vs OTHER RECIPIENTS
                         type: 'chart',
                         config: {
@@ -2670,7 +2719,7 @@ define(function () {
                         type: 'chart',
                         config: {
                             type: "column",
-                            x: ["flowcategory_name"], //x axis
+                            x: ["unitcode"], //x axis
                             series: ["un_continent_code"], // series
                             y: ["value"],//Y dimension
                             aggregationFn: {"value": "sum"},
@@ -2807,7 +2856,7 @@ define(function () {
                                 "name": "group",
                                 "parameters": {
                                     "by": [
-                                        "flowcategory_name", "un_continent_code"
+                                        "unitcode", "un_continent_code"
                                     ],
                                     "aggregations": [
                                         {

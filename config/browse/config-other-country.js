@@ -278,24 +278,52 @@ define(function () {
                         useDimensionLabelsIfExist: false,// || default raw else fenixtool
 
                         config: {
+                            chart: {
+                                events: {
+                                    load: function(event) {
+                                        var _that = this;
+                                        var hasSubSector = false;
+
+                                        var isVisible = $.each(_that.series, function (i, serie) {
+                                            if(serie.name == '% Sector/Total'){
+                                                serie.update({
+                                                    yAxis: 'subsector-axis',
+                                                    dashStyle: 'shortdot',
+                                                    marker: {
+                                                        radius: 3
+                                                    }
+                                                });
+
+                                                return true;
+                                            }
+                                        });
+
+                                        if(!isVisible){
+                                            this.options.yAxis[1].title.text = '';
+                                            this.yAxis[1].visible = false;
+                                            this.yAxis[1].isDirty = true;
+                                            this.redraw();
+                                        } else {
+                                            this.options.yAxis[1].title.text= '%';
+                                            this.yAxis[1].visible = true;
+                                            this.yAxis[1].isDirty = true;
+                                            this.redraw();
+                                        }
+
+                                    }
+                                }
+                            },
                             xAxis: {
                                 type: 'datetime'
                             },
                             yAxis: [{ //Primary Axis in default template
                             }, { // Secondary Axis
+                                id: 'subsector-axis',
                                 gridLineWidth: 0,
                                 title: {
                                     text: '%'
                                 },
                                 opposite: true
-                            }],
-                            series: [{
-                                name: '% Sector/Total',
-                                yAxis: 1,
-                                dashStyle: 'shortdot',
-                                marker: {
-                                    radius: 3
-                                }
                             }],
                             exporting: {
                                 chartOptions: {
@@ -664,7 +692,6 @@ define(function () {
                                     load: function(event) {
                                         var _that = this;
                                         var hasSubSector = false;
-                                        console.log(_that);
 
                                         var isVisible = $.each(_that.series, function (i, serie) {
                                             if(serie.name == '% Sub Sector/Sector'){
@@ -1077,7 +1104,7 @@ define(function () {
                             }
                         } // (3vi) PERCENTAGE CALCULATION: Add Column
                     ]
-                } ,
+                },
                  {
                     id: 'top-partners', // TOP DONORS
                     type: 'chart',
