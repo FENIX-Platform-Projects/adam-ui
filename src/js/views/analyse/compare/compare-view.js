@@ -6,14 +6,14 @@ define([
     'lib/utils',
     'fx-common/utils',
     'views/base/view',
-    'text!templates/analyze/compare/compare.hbs',
-    'text!templates/analyze/error.hbs',
-    'i18n!nls/analyze-compare',
+    'text!templates/analyse/compare/compare.hbs',
+    'text!templates/analyse/error.hbs',
+    'i18n!nls/analyse-compare',
     'i18n!nls/errors',
     'i18n!nls/filter',
     'config/Events',
     'config/Config',
-    'config/analyze/compare/Config',
+    'config/analyse/compare/Config',
     'fx-analysis/start',
     'fx-filter/start',
     'amplify'
@@ -40,15 +40,22 @@ define([
             return i18nLabels;
         },
 
+        initialize: function (params) {
+            this.analyse_type = params.filter;
+            this.page = params.page;
+
+            View.prototype.initialize.call(this, arguments);
+        },
+
         _initMenuBreadcrumbItem: function () {
             var label = "";
             var self = this;
 
-            if (typeof self.analyze_type !== 'undefined') {
-                label = i18nLabels[self.analyze_type];
+            if (typeof self.analyse_type !== 'undefined') {
+                label = i18nLabels[self.analyse_type];
             }
 
-            return Utils.createMenuBreadcrumbItem(label, self.analyze_type, self.page);
+            return Utils.createMenuBreadcrumbItem(label, self.analyse_type, self.page);
         },
 
         _initVariables: function () {
@@ -141,7 +148,7 @@ define([
             View.prototype.attach.call(this, arguments);
 
             //update State
-            amplify.publish(E.STATE_CHANGE, {menu: 'analyze', breadcrumb: this._initMenuBreadcrumbItem()});
+            amplify.publish(E.STATE_CHANGE, {menu: 'analyse', breadcrumb: this._initMenuBreadcrumbItem()});
 
             this._initVariables();
 
