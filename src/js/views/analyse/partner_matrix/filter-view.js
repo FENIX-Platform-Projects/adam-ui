@@ -128,7 +128,7 @@ define(
                         amplify.publish(BaseEvents.FILTER_ON_READY, $.extend(self._getFilterValues(), {"props": additionalProperties}));
 
                     }
-                    if (self._getFilterValues().values[PartnerMatrixConfig.filter.RESOURCE_PARTNER]) {
+                    else if (self._getFilterValues().values[PartnerMatrixConfig.filter.RESOURCE_PARTNER]) {
                         var additionalProperties = self._getPropertiesObject(PartnerMatrixConfig.topic.SELECTED_TOPIC, PartnerMatrixConfig.topic.RESOURCE_PARTNER_SELECTED);
 
                         amplify.publish(BaseEvents.FILTER_ON_READY, $.extend(self._getFilterValues(), {"props": additionalProperties}));
@@ -150,8 +150,8 @@ define(
 
                 // Filter on Change: Set some base properties for Recipient and the ODA, then publish Filter On Change Event
                 this.filter.on('change', function (payload) {
-                    //console.log("========================= FilterView: ON CHANGE ==============");
-                    //console.log(payload);
+                    console.log("========================= FilterView: ON CHANGE ==============");
+                    console.log(payload);
 
                     var fc = self._getFilterConfigById(payload.id);
                     var dependencies = [];
@@ -173,21 +173,21 @@ define(
 
                         amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
                     }
-                    if (payload.id === PartnerMatrixConfig.filter.ODA) {
+                    else if (payload.id === PartnerMatrixConfig.filter.ODA) {
                         var additionalProperties = self._getPropertiesObject(PartnerMatrixConfig.filter.ODA, payload.values.values[0]);
 
                         amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": additionalProperties}));
                     }
-                    else if (self._getFilterValues().values[PartnerMatrixConfig.filter.RECIPIENT_COUNTRY]) {
+                    else if (payload.id === PartnerMatrixConfig.filter.RECIPIENT_COUNTRY) {
                         var additionalProperties = self._getPropertiesObject(PartnerMatrixConfig.topic.SELECTED_TOPIC, PartnerMatrixConfig.topic.COUNTRY_SELECTED);
 
-                        amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(self._getFilterValues(), {"props": additionalProperties}));
+                        amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": additionalProperties}));
 
                     }
-                    else if (self._getFilterValues().values[PartnerMatrixConfig.filter.RESOURCE_PARTNER]) {
+                    else if (payload.id === PartnerMatrixConfig.filter.RESOURCE_PARTNER) {
                         var additionalProperties = self._getPropertiesObject(PartnerMatrixConfig.topic.SELECTED_TOPIC, PartnerMatrixConfig.topic.RESOURCE_PARTNER_SELECTED);
 
-                        amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(self._getFilterValues(), {"props": additionalProperties}));
+                        amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": additionalProperties}));
 
                     }
                     else {

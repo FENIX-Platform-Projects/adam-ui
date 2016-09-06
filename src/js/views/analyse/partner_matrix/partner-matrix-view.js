@@ -57,16 +57,13 @@ define([
         // In the end you might want to used precompiled templates.
         template: template,
 
-        events: {
-            'click #backToTopBtn': 'backToTop'
-        },
 
         initialize: function (params) {
             this.analyse_type = params.filter;
-            this.browse_type = BasePartnerMatrixConfig.dashboard.DEFAULT_TOPIC;
+            this.topic = BasePartnerMatrixConfig.dashboard.DEFAULT_TOPIC;
             this.page = params.page;
             this.datasetType = GeneralConfig.DEFAULT_UID;
-            this.topicConfig = ConfigByTopic[this.browse_type];
+            this.topicConfig = ConfigByTopic[this.topic];
 
             View.prototype.initialize.call(this, arguments);
         },
@@ -99,7 +96,7 @@ define([
          * @private
          */
         _loadDashboardConfigurations: function () {
-            require(['config/analyse/partner_matrix/config-' + this.browse_type], _.bind(this._initSubViews, this));
+            require(['config/analyse/partner_matrix/config-' + this.topic], _.bind(this._initSubViews, this));
         },
 
         /**
@@ -111,7 +108,7 @@ define([
             View.prototype.render.apply(this, arguments);
 
             if (!Config || !Config.dashboard || !Config.filter) {
-                alert("Impossible to find default dashboard/filter configuration for the topic: " + this.browse_type);
+                alert("Impossible to find default dashboard/filter configuration for the topic: " + this.topic);
                 return;
             }
 
@@ -135,14 +132,14 @@ define([
             this.subview('filters', filtersSubView);
 
             // Set Dashboard Model
-            this.odaDashboardModel = new DashboardModel();
+            this.dashboardModel = new DashboardModel();
 
             // Set DASHBOARD Sub View
             var dashboardSubView = new DashboardSubView({
                 autoRender: false,
                 container: this.$el.find(s.css_classes.DASHBOARD_HOLDER),
-                topic: this.browse_type,
-                model: this.odaDashboardModel
+                topic: this.topic,
+                model: this.dashboardModel
             });
             dashboardSubView.setDashboardConfig(this.defaultDashboardConfig.dashboard);
 
@@ -163,7 +160,7 @@ define([
 
         _initVariables: function () {
             // Initialize bootstrap affix: Locks ('sticks') section, appears when scrolling
-            $(s.css_classes.BACK_TO_TOP_FIXED).affix({});
+           // $(s.css_classes.BACK_TO_TOP_FIXED).affix({});
 
         },
 
@@ -193,6 +190,7 @@ define([
             // Set Dashboard Model
             this._setDashboardModelValues();
 
+            console.log("PARTNER MATRIX RENDER ==============");
             // Render Dashboard Model
             this.subview('dashboard').renderDashboard();
 
@@ -208,8 +206,11 @@ define([
 
             var ovalues = this.subview('filters').getFilterValues(), confPath, displayConfigForSelectedFilter, displayConfigForSelectedFilterValues, dashboardConfigChanged;
 
-            console.log("================= _updateDashboard =============== ");
-            console.log(ovalues);
+           // console.log("================= ovalues =============== ");
+           // console.log(ovalues);
+
+            //console.log("================= selectedfilter =============== ");
+           // console.log(selectedfilter);
 
             if (selectedfilter) {
 
@@ -224,9 +225,12 @@ define([
                         displayConfigForSelectedFilter = this.topicConfig[selectedfilter.id];
                     }
 
-                    // Update dashboard properties
+                    // Set dashboard configuration
                     if (selectedfilter['props']) {
-                        this.subview('dashboard').setProperties(selectedfilter['props']);
+                        if(selectedfilter['props']['selected_topic']) {
+                            confPath = selectedfilter['props']['selected_topic'];
+                            this.topic = confPath;
+                        }
                     }
 
 
@@ -268,7 +272,7 @@ define([
             //console.log(ovalues);
 
             if (confPath) {
-                require(['config/analyse/' + confPath], function (dialog) {
+                require(['config/analyse/partner_matrix/config-' + confPath], function (dialog) {
                     self._rebuildDashboard(ovalues, displayConfigForSelectedFilter, dialog.dashboard);
                 });
             } else {
@@ -286,9 +290,14 @@ define([
 
         _rebuildDashboard: function (ovalues, displayConfigForSelectedFilter, dashboardConfig) {
 
+            //console.log("================= _rebuildDashboard 1 =============== ");
+            //console.log(dashboardConfig);
+
             this.subview('dashboard').setDashboardConfig(dashboardConfig);
 
 
+           // console.log("================= _rebuildDashboard 2 =============== ");
+           // console.log(displayConfigForSelectedFilter);
             // Hide/Show Dashboard Items
             this.subview('dashboard').updateDashboardTemplate(displayConfigForSelectedFilter);
 
@@ -297,12 +306,11 @@ define([
             this._setDashboardModelValues();
 
 
-            //console.log("================= _rebuildDashboard END =============== ");
+            //console.log("================= _rebuildDashboard 3 =============== ");
             // console.log(ovalues);
 
-            // Rebuild Dashboard
-            this.subview('dashboard').rebuildDashboard(ovalues);
-
+             // Rebuild Dashboard
+                this.subview('dashboard').rebuildDashboard(ovalues, this.topic);
         },
 
 
@@ -326,18 +334,9 @@ define([
 
 
         _setDashboardModelValues: function () {
-            this.odaDashboardModel.set(s.dashboardModel.LABEL, this.subview('title').getTitleAsArray());
+            this.dashboardModel.set(s.dashboardModel.LABEL, this.subview('title').getTitleAsArray());
         },
 
-        backToTop: function (e) {
-
-            e.preventDefault();
-            e.stopPropagation();
-
-            $('html, body').animate({scrollTop: 0}, 'slow');
-            return false;
-
-        },
 
         dispose: function () {
 
