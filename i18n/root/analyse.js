@@ -1,10 +1,10 @@
 /*global define*/
 define({
     "title": "Analyse Data",
-    "text" : "Change me in 118n/root/analyze.js",
+    "text" : "Change me in 118n/root/analyse.js",
     "compare": "Compare",
     "agencies": "Implementing Agencies",
-    "donor_matrix": "Resource Partner Matrix",
+    "partner_matrix": "Resource Partner Matrix",
     "projects": "Project Analysis",
     "priority": "Priority Analysis"
 });

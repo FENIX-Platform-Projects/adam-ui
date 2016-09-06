@@ -13,12 +13,12 @@ define({
             "body": {
                 "EN": "Compare past ODA spending in two or more recipient countries, by two or more selected donors, channels of delivery, sectors or subsectors in a specific time period."
             },
-            "link": "#analyze/compare",
+            "link": "#analyse/compare",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/crowdprices/crowdprices.png"
         },
        // {
          //   "header": {
-          //      "EN": "Analyze data"
+          //      "EN": "Analyse data"
           //  },
           //  "title": {
            //     "EN": "Implementing Agencies"
@@ -26,7 +26,7 @@ define({
           //  "body": {
            //     "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
           //  },
-          //  "link": "#analyze/agencies",
+          //  "link": "#analyse/agencies",
           //  "img": "http://fenixrepo.fao.org/cdn/images/modules/trade_AFG/trade_AFG.png"
        // },
         {
@@ -39,7 +39,7 @@ define({
             "body": {
                 "EN": "Analyse the resource partner's spending in FAO-related sectors versus other sectors of the Official Development Assistance (ODA)."
             },
-            "link": "#analyze/donor_matrix",
+            "link": "#analyse/partner_matrix",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/env_AFG/environmental_AFG.png"
         },
         {
@@ -52,7 +52,7 @@ define({
             "body": {
                 "EN": "View information on implemented projects based on your selection."
             },
-            "link": "#analyze/projects",
+            "link": "#analyse/projects",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/monitoring/kenya/timeseries/kenya_monitoring_timeseries.png"
         },
         {
@@ -65,7 +65,7 @@ define({
             "body": {
                 "EN": "Analyse common priorities between FAO, National Governments and Resource Partners by intersecting FAO's countries programming framework, UNDAF documents and donors' spending priorities."
             },
-            "link": "#analyze/priority",
+            "link": "#analyse/priority",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/monitoring/kenya/timeseries/kenya_monitoring_timeseries.png"
         },
         {
@@ -78,7 +78,7 @@ define({
             "body": {
                 "EN": "Analyse FAO's comparative advantage with respect to the other implementing agencies in a specific area of intervention."
             },
-            "link": "#analyze/fao",
+            "link": "#analyse/fao",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/monitoring/kenya/timeseries/kenya_monitoring_timeseries.png"
         }
 

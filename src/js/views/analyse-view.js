@@ -2,7 +2,7 @@
 define([
     'views/base/view',
     'text!templates/common/modules.hbs',
-    'i18n!nls/analyze-modules',
+    'i18n!nls/analyse-modules',
     'config/Events',
     'handlebars',
     'amplify'
@@ -10,7 +10,7 @@ define([
 
     'use strict';
 
-    var AnalyzeView = View.extend({
+    var AnalyseView = View.extend({
 
         // Automatically render after initialize
         autoRender: true,
@@ -39,10 +39,10 @@ define([
             amplify.publish(E.STATE_CHANGE, {menu: 'analyse'});
 
 
-            this._displayAnalyzeOptions() ;
+            this._displayAnalyseOptions() ;
         },
 
-        _displayAnalyzeOptions: function () {
+        _displayAnalyseOptions: function () {
             var html = this.template({modules: moduleLabels["modules"]});
 
             this.$el.html(html);
@@ -50,5 +50,5 @@ define([
 
     });
 
-    return AnalyzeView;
+    return AnalyseView;
 });
