@@ -59,7 +59,8 @@ define([
             this.model.on(defaultOptions.events.CHANGE, this.render, this);
             this.dashboards = [];
 
-            this.source = $(this.template);
+            this.source = $(this.template).find("[data-topic='" + this.topic + "']").prop('outerHTML');
+
 
             //Initialize Progress Bar
             this.progressBar = new ProgressBar({
@@ -98,7 +99,7 @@ define([
 
             // Update the language related labels in the dashboard template
 
-            this.compiledTemplate = Handlebars.compile(this.source.prop('outerHTML'));
+            this.compiledTemplate = Handlebars.compile(this.source);
 
             var model = this.model.toJSON();
 
@@ -225,18 +226,25 @@ define([
             }
         },
 
-        rebuildDashboard: function (filter) {
+        rebuildDashboard: function (filter, topic) {
             var self = this;
 
             this._disposeDashboards();
-
             this.config.filter = filter;
 
+            // Re-Render the source template
+            if(topic) {
+                this.topic = topic;
+                this.source = $(this.template).find("[data-topic='" + this.topic + "']").prop('outerHTML');
+                this.render();
+            }
+
+            // Build new dashboard
             this.dashboard = new Dashboard(
                 this.config
             );
 
-            this._loadProgressBar();
+          //  this._loadProgressBar();
 
         },
 

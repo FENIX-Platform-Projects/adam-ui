@@ -136,10 +136,10 @@ define(function () {
                         "decimals":2,
                         "showRowHeaders":true,
                         "columns":["indicator"],
-                        "rows":["recipientcode_EN", "donorcode_EN"],
+                        "rows":["recipientcode", "donorcode"],
                         "aggregations":[],
-                        "values":["value"]//,
-                       // useDimensionLabelsIfExist: true
+                        "values":["value"],
+                        inputFormat : "fenixtool"
                     },
 
                     filterFor: {
@@ -182,7 +182,7 @@ define(function () {
                                         "time": [
                                             {
                                                 "from": 2000,
-                                                "to": 2001
+                                                "to": 2014
                                             }
                                         ]
                                     }
@@ -230,6 +230,7 @@ define(function () {
                                 "column": {
                                     "dataType": "text",
                                     "id": "indicator",
+                                    key:true,
                                     "title": {
                                         "EN": "Indicator"
                                     },
@@ -302,7 +303,7 @@ define(function () {
                                         "time": [
                                             {
                                                 "from": 2000,
-                                                "to": 2001
+                                                "to": 2014
                                             }
                                         ]
                                     }
