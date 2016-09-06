@@ -21,9 +21,9 @@
       },
     {
       "attrs": {
-        "id": "analyze"
+        "id": "analyse"
       },
-      "target": "#analyze",
+      "target": "#analyse",
       "label": {
         "EN": "Analyse Data"
       }
@@ -35,15 +35,6 @@
       "target": "#profiles",
       "label": {
         "EN": "Resource Partner Profiles"
-      }
-    },
-    {
-      "attrs": {
-        "id": "analysis"
-      },
-      "target": "#analysis",
-      "label": {
-        "EN": "Download"
       }
     }
   ],
