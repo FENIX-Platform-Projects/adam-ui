@@ -3,7 +3,7 @@ define([
     'jquery',
     'underscore',
     'views/base/view',
-    'text!templates/analyze/priority/dashboard.hbs',
+    'text!templates/analyse/priority/dashboard.hbs',
     'fx-dashboard/start',
     'lib/utils',
     'i18n!nls/browse',
