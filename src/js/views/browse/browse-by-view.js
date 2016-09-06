@@ -11,6 +11,7 @@ define([
     'text!templates/browse/browse.hbs',
     'i18n!nls/browse',
     'config/Events',
+    'config/Config',
     'config/browse/Events',
     'config/browse/config-development-indicators',
     'config/browse/config-by-topic',
@@ -20,15 +21,13 @@ define([
     'amplify',
     'bootstrap',
     'underscore'
-], function ($, $UI, View, TitleSubView, FilterSubView, DashboardOecdSubView, DashboardIndicatorsSubView, DashboardModel, template, i18nLabels, Events, BaseBrowseEvents, BrowseIndicatorsConfig, ConfigByTopic, ConfigByFilterValues, BaseBrowseConfig, Utils) {
+], function ($, $UI, View, TitleSubView, FilterSubView, DashboardOecdSubView, DashboardIndicatorsSubView, DashboardModel, template, i18nLabels, Events, GeneralConfig, BaseBrowseEvents, BrowseIndicatorsConfig, ConfigByTopic, ConfigByFilterValues, BaseBrowseConfig, Utils) {
 
     'use strict';
 
     var s = {
         css_classes: {
-            TITLE_BAR: "#fx-title",
             TITLE_BAR_ITEMS: "#fx-title-items",
-            TITLE_BAR_ITEMS_FIXED: "#browse-title-bar-fixed",
             BACK_TO_TOP_FIXED: "#browse-top-link-fixed",
             FILTER_HOLDER: "#browse-filter-holder",
             DASHBOARD_OECD_HOLDER: "#browse-oecd-content",
@@ -45,7 +44,7 @@ define([
     /**
      *
      * Creates a new Browse By View
-     * Browse By View comprises of a series of subviews: filter view and 2 dashboard views (development indicators and oecd/oda)
+     * Browse By View comprises of a series of subviews: title view, filter view and 2 dashboard views (development indicators and oecd/oda)
      * @class BrowseByView
      * @extends View
      */
@@ -68,7 +67,7 @@ define([
         initialize: function (params) {
             this.browse_type = params.filter;
             this.page = params.page;
-            this.datasetType = BaseBrowseConfig.dashboard.DEFAULT_UID;
+            this.datasetType = GeneralConfig.DEFAULT_UID;
             this.topicConfig = ConfigByTopic[this.browse_type];
             this.filterValuesConfig = ConfigByFilterValues[this.browse_type];
 
@@ -136,7 +135,7 @@ define([
                 this.defaultDashboardConfig = ConfigFAO;
             }
 
-
+            // Set TITLE Sub View
             var titleSubView = new TitleSubView({
                 autoRender: true,
                 container: this.$el.find(s.css_classes.TITLE_BAR_ITEMS),
@@ -144,6 +143,7 @@ define([
             });
             this.subview('title', titleSubView);
 
+            // Set FILTER Sub View
             var filtersSubView = new FilterSubView({
                 autoRender: true,
                 container: this.$el.find(s.css_classes.FILTER_HOLDER),
@@ -151,9 +151,10 @@ define([
             });
             this.subview('filters', filtersSubView);
 
+            // Set Dashboard Model
             this.odaDashboardModel = new DashboardModel();
 
-            //DASHBOARD 1: ODA
+            // Set DASHBOARD 1 Sub View: ODA
             var dashboardOecdSubView = new DashboardOecdSubView({
                 autoRender: false,
                 container: this.$el.find(s.css_classes.DASHBOARD_OECD_HOLDER),
@@ -164,7 +165,7 @@ define([
 
             this.subview('oecdDashboard', dashboardOecdSubView);
 
-            //DASHBOARD 2: Development Indicators
+            // Set DASHBOARD 2 Sub View: Development Indicators
             if (this.browse_type === BaseBrowseConfig.topic.BY_COUNTRY || this.browse_type === BaseBrowseConfig.topic.BY_RESOURCE_PARTNER) {
 
                 var configIndicators = BrowseIndicatorsConfig[this.browse_type];
@@ -227,17 +228,22 @@ define([
 
             var selectedFilterItems = payload.labels;
 
+            // Set Dashboard 1 (ODA) Properties
             if (payload["props"]) {
                 this.subview('oecdDashboard').setProperties(payload["props"]);
             }
 
+            // Build Title View
             this.subview('title').setLabels(selectedFilterItems);
             this.subview('title').build();
 
+            // Set ODA Dashboard Model Values
             this._setOdaDashboardModelValues();
 
+            // Render Dashboard 1: ODA
             this.subview('oecdDashboard').renderDashboard();
 
+            // Render Dashboard 2: Development Indicators (if appropriate)
             if (this.browse_type === BaseBrowseConfig.topic.BY_COUNTRY || this.browse_type === BaseBrowseConfig.topic.BY_RESOURCE_PARTNER) {
                 this._setIndicatorDashboardModelValues();
                 this.subview('indicatorsDashboard').renderDashboard();
@@ -308,9 +314,11 @@ define([
                     }
 
 
-                    if (confPath || displayConfigForSelectedFilter)
-                        this._setDashboardConfiguration(confPath, ovalues, displayConfigForSelectedFilter);
+                   // if (confPath || displayConfigForSelectedFilter)
+                       // this._setDashboardConfiguration(confPath, ovalues, displayConfigForSelectedFilter);
                 }
+
+                this._setDashboardConfiguration(confPath, ovalues, displayConfigForSelectedFilter);
 
             }
 
