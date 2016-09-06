@@ -107,7 +107,7 @@ define(
                 // instantiate filter
                 this.filter = new Filter({
                     el: this.$el.find(s.css_classes.FILTER_BROWSE),
-                    environment: 'develop',
+                    environment: BaseConfig.ENVIRONMENT,
                     items: config,
                     common: {
                         template: {
