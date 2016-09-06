@@ -5,9 +5,7 @@ define(function ( ) {
 
     return {
        dashboard: {
-            ENVIRONMENT : 'develop',
-            DEFAULT_CONFIG : 'OTHER_SECTORS', //OTHER_SECTORS || FAO_SECTOR
-            DEFAULT_UID: 'adam_usd_commitment'
+            DEFAULT_CONFIG : 'FAO_SECTOR' //OTHER_SECTORS || FAO_SECTOR
         },
         filter: {
             RECIPIENT_COUNTRY: 'recipientcode',
