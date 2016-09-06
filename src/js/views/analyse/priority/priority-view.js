@@ -4,14 +4,14 @@ define([
     'jquery-ui',
     'views/base/view',
     'views/common/title-view',
-    'views/analyze/priority/filter-view',
-    'views/analyze/priority/dashboard-view',
+    'views/analyse/priority/filter-view',
+    'views/analyse/priority/dashboard-view',
     'models/browse/dashboard',
-    'text!templates/analyze/priority/priority.hbs',
-    'i18n!nls/analyze',
+    'text!templates/analyse/priority/priority.hbs',
+    'i18n!nls/analyse',
     'config/Events',
     'config/browse/Events',
-    'config/analyze/priority/config',
+    'config/analyse/priority/config',
     'lib/utils',
     'amplify',
     'bootstrap'
@@ -112,7 +112,7 @@ define([
             View.prototype.attach.call(this, arguments);
 
             //update State
-            amplify.publish(E.STATE_CHANGE, {menu: 'analyze', breadcrumb: this._initMenuBreadcrumbItem()});
+            amplify.publish(E.STATE_CHANGE, {menu: 'analyse', breadcrumb: this._initMenuBreadcrumbItem()});
 
             this._initVariables();
 

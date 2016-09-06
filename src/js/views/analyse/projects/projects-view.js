@@ -3,12 +3,12 @@ define([
     'views/base/view',
     'fx-ds/start',
     'fx-filter/start',
-    'text!templates/analyze/projects/projects.hbs',
-    'text!templates/analyze/projects/dashboard.hbs',
+    'text!templates/analyse/projects/projects.hbs',
+    'text!templates/analyse/projects/dashboard.hbs',
     'i18n!nls/projects',
     'config/Events',
     'config/Config',
-    'config/analyze/projects/Config',
+    'config/analyse/projects/Config',
     'fx-filter/Fx-filter-configuration-creator',
     'handlebars',
     'lib/utils',
@@ -68,7 +68,7 @@ define([
             View.prototype.attach.call(this, arguments);
 
             //update State
-            amplify.publish(E.STATE_CHANGE, {menu: 'analyze', breadcrumb: this._initMenuBreadcrumbItem()});
+            amplify.publish(E.STATE_CHANGE, {menu: 'analyse', breadcrumb: this._initMenuBreadcrumbItem()});
 
             this._initVariables();
 
