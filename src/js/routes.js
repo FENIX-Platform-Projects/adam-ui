@@ -12,10 +12,11 @@ define(function () {
         match('browse', 'browse#show');
         match('browse/:filter', 'browse#browseby');
         match('browse/:filter/:recipientcode', 'browse#browseby');
-        match('analyze', 'analyze#show');
-        match('analyze/priority', 'analyze#priority');
-        match('analyze/compare', 'analyze#compare');
-        // match('analyze/projects', 'analyze#projects');
+        match('analyse', 'analyse#show');
+        match('analyse/priority', 'analyse#priority');
+        match('analyse/compare', 'analyse#compare');
+        match('analyse/partner_matrix', 'analyse#partner_matrix');
+        // match('analyse/projects', 'analyse#projects');
         match('login', 'login#show');
         //  match('analysis', 'analysis#show');
         match('*anything', '404#show');
