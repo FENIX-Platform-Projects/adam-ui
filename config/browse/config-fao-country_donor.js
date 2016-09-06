@@ -53,7 +53,7 @@ define(function () {
                     config: { //Selectize configuration
                         default: ["9999"],
                         maxItems: 1,
-                        placeholder: "Please select",
+                        placeholder: "All",
                         plugins: ['remove_button'],
                         mode: 'multi'
                     }
