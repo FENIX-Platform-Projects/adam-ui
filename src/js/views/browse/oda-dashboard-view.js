@@ -7,6 +7,7 @@ define([
     'config/browse/config-browse',
     'fx-dashboard/start',
     'lib/utils',
+    'config/Config',
     'i18n!nls/browse',
     'i18n!nls/browse-dashboard',
     'handlebars',
@@ -14,30 +15,29 @@ define([
     'config/submodules/fx-chart/highcharts_template',
     'views/common/progress-bar',
     'amplify'
-], function ($, _, View, template, BaseBrowseConfig, Dashboard, Utils, i18nLabels, i18nDashboardLabels, Handlebars, ConfigUtils, HighchartsTemplate, ProgressBar) {
+], function ($, _, View, template, BaseBrowseConfig, Dashboard, Utils, GeneralConfig, i18nLabels, i18nDashboardLabels, Handlebars, ConfigUtils, HighchartsTemplate, ProgressBar) {
 
     'use strict';
 
-    var s = {
-        css_classes: {
-            DASHBOARD_BROWSE_CONTAINER: '#dashboard-browse-container'
-        },
-        events: {
-            FAO_SECTOR_CHART_LOADED: 'fx.browse.chart.faosector.loaded'
-        },
-        config_types: {
-            FAO_SECTOR: 'FAO_SECTOR',
-            OTHER_SECTORS: 'OTHER_SECTORS',
-            BASE: 'BASE'
-        },
+    var defaultOptions = {
         item_container_id: '-container',
-        total_oda_id: 'tot-oda'
+        PROGRESS_BAR_CONTAINER: '#progress-bar-holder',
+        events: {
+            CHANGE: 'change'
+        },
+        itemTypes: {
+            CHART: 'chart'
+        },
+        css: {
+            COLLAPSE: 'collapse'
+        }
     };
 
     /**
      *
      * Creates a new ODA/OECD Dashboard View
      * Instantiates the FENIX dashboard submodule, ProgressBar and responsible for all oda/oecd dashboard related functionality.
+     * Including updates to the Dashboard model.
      * @class DashboardView
      * @extends View
      */
@@ -56,13 +56,14 @@ define([
 
         initialize: function (params) {
             this.topic = params.topic;
-            this.model.on("change", this.render, this);
+            this.model.on(defaultOptions.events.CHANGE, this.render, this);
             this.dashboards = [];
 
             this.source = $(this.template).find("[data-topic='" + this.topic + "']");
 
+            //Initialize Progress Bar
             this.progressBar = new ProgressBar({
-                container: '#progress-bar-holder'
+                container: defaultOptions.PROGRESS_BAR_CONTAINER
             });
 
             View.prototype.initialize.call(this, arguments);
@@ -113,12 +114,12 @@ define([
             this.config = config;
             this.config_type = config.id;
             this.config.baseItems = config.items;
-            this.config.environment = BaseBrowseConfig.dashboard.ENVIRONMENT;
+            this.config.environment = GeneralConfig.ENVIRONMENT;
 
             // Sets Highchart config for each chart
             _.each(this.config.items, _.bind(function (item) {
                 if (!_.isEmpty(item)) {
-                    if (item.type == "chart") {
+                    if (item.type == defaultOptions.itemTypes.CHART) {
                         if (item.config.config) {
                             item.config.config = $.extend(true, {}, HighchartsTemplate, item.config.config);
                         } else {
@@ -148,22 +149,22 @@ define([
 
         _collapseDashboardItem: function (itemId) {
             // Hide/collapse Item container
-            var itemContainerId = '#' + itemId + s.item_container_id;
+            var itemContainerId = '#' + itemId + defaultOptions.item_container_id;
 
-            $(this.source).find(itemContainerId).addClass('collapse');
+            $(this.source).find(itemContainerId).addClass(defaultOptions.css.COLLAPSE);
 
         },
 
         _expandDashboardItem: function (itemId) {
             // Show Item container
-            var itemContainerId = '#' + itemId + s.item_container_id;
-            $(this.source).find(itemContainerId).removeClass('collapse');
+            var itemContainerId = '#' + itemId + defaultOptions.item_container_id;
+            $(this.source).find(itemContainerId).removeClass(defaultOptions.css.COLLAPSE);
         },
 
 
         _showDashboardItem: function (itemId) {
             // Show Item container
-            var itemContainerId = '#' + itemId + s.item_container_id;
+            var itemContainerId = '#' + itemId + defaultOptions.item_container_id;
             $(this.source).find(itemContainerId).show();
         },
 
