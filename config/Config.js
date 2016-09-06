@@ -10,6 +10,8 @@ define(function () {
 
     return {
 
+        ENVIRONMENT : 'develop',
+        DEFAULT_UID: 'adam_usd_commitment',
         SERVER: SERVER,
         CODES_POSTFIX : '/codes/filter',
         HIERARCHY_CODES_POSTFIX : '/codes/hierarchy',
@@ -49,9 +51,7 @@ define(function () {
 
         CODELIST_POSTFIX: "/resources/",
 
-        CODELIST_SERVICE: "d3s_dev/msd",
-
-        ENVIRONMENT: "develop"
+        CODELIST_SERVICE: "d3s_dev/msd"
 
     };
 });
