@@ -36,7 +36,7 @@ define([
             amplify.publish(E.MENU_RESET_BREADCRUMB);
 
             //update State
-            amplify.publish(E.STATE_CHANGE, {menu: 'analyze'});
+            amplify.publish(E.STATE_CHANGE, {menu: 'analyse'});
 
 
             this._displayAnalyzeOptions() ;

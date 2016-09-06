@@ -2,9 +2,9 @@
 define([
     'chaplin',
     'controllers/base/controller',
-    'views/analyze-view',
-    'views/analyze/priority/priority-view',
-    'views/analyze/compare/compare-view',
+    'views/analyse-view',
+    'views/analyse/priority/priority-view',
+    'views/analyse/compare/compare-view',
     // 'views/analyze/projects/projects-view'
 ], function (Chaplin, Controller, AnalyzeView, PriorityView,CompareView /**, , ProjectsView**/) {
 
