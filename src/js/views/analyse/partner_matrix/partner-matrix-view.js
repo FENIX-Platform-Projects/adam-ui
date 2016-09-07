@@ -11,15 +11,13 @@ define([
     'i18n!nls/analyse',
     'config/Events',
     'config/Config',
-    'config/browse/Events',
-    'config/analyse/partner_matrix/config',
-    'config/analyse/partner_matrix/config-by-topic',
+    'config/analyse/partner_matrix/Events',
     'config/analyse/partner_matrix/config-partner-matrix',
     'lib/utils',
     'amplify',
     'bootstrap',
     'underscore'
-], function ($, $UI, View, TitleSubView, FilterSubView, DashboardSubView, DashboardModel, template, i18nLabels, Events, GeneralConfig, BaseBrowseEvents, Config, ConfigByTopic, BasePartnerMatrixConfig, Utils) {
+], function ($, $UI, View, TitleSubView, FilterSubView, DashboardSubView, DashboardModel, template, i18nLabels, Events, GeneralConfig, BaseMatrixEvents, BasePartnerMatrixConfig, Utils) {
 
     'use strict';
 
@@ -63,7 +61,7 @@ define([
             this.topic = BasePartnerMatrixConfig.dashboard.DEFAULT_TOPIC;
             this.page = params.page;
             this.datasetType = GeneralConfig.DEFAULT_UID;
-            this.topicConfig = ConfigByTopic[this.topic];
+           // this.topicConfig = ConfigByTopic[this.topic];
 
             View.prototype.initialize.call(this, arguments);
         },
@@ -104,7 +102,7 @@ define([
          * @private
          */
 
-        _initSubViews: function(Config) {
+        _initSubViews: function (Config) {
             View.prototype.render.apply(this, arguments);
 
             if (!Config || !Config.dashboard || !Config.filter) {
@@ -147,7 +145,7 @@ define([
 
         },
 
-        _initMenuBreadcrumbItem: function() {
+        _initMenuBreadcrumbItem: function () {
             var label = "";
             var self = this;
 
@@ -160,13 +158,13 @@ define([
 
         _initVariables: function () {
             // Initialize bootstrap affix: Locks ('sticks') section, appears when scrolling
-           // $(s.css_classes.BACK_TO_TOP_FIXED).affix({});
+            // $(s.css_classes.BACK_TO_TOP_FIXED).affix({});
 
         },
 
         _bindEventListeners: function () {
-            amplify.subscribe(BaseBrowseEvents.FILTER_ON_READY, this, this._filtersLoaded);
-            amplify.subscribe(BaseBrowseEvents.FILTER_ON_CHANGE, this, this._updateDashboard);
+            amplify.subscribe(BaseMatrixEvents.FILTER_ON_READY, this, this._filtersLoaded);
+            amplify.subscribe(BaseMatrixEvents.FILTER_ON_CHANGE, this, this._updateDashboard);
         },
 
         /**
@@ -190,7 +188,6 @@ define([
             // Set Dashboard Model
             this._setDashboardModelValues();
 
-            console.log("PARTNER MATRIX RENDER ==============");
             // Render Dashboard Model
             this.subview('dashboard').renderDashboard();
 
@@ -206,11 +203,11 @@ define([
 
             var ovalues = this.subview('filters').getFilterValues(), confPath, displayConfigForSelectedFilter, displayConfigForSelectedFilterValues, dashboardConfigChanged;
 
-           // console.log("================= ovalues =============== ");
-           // console.log(ovalues);
+            // console.log("================= ovalues =============== ");
+            // console.log(ovalues);
 
             //console.log("================= selectedfilter =============== ");
-           // console.log(selectedfilter);
+            // console.log(selectedfilter);
 
             if (selectedfilter) {
 
@@ -221,37 +218,43 @@ define([
                     amplify.publish(Events.TITLE_ADD_ITEM, this._getTitleItem(selectedfilter));
 
                     // Configuration display (if appropriate)
-                    if (this.topicConfig) {
-                        displayConfigForSelectedFilter = this.topicConfig[selectedfilter.id];
-                    }
+                   // if (this.topicConfig) {
+                      //  displayConfigForSelectedFilter = this.topicConfig[selectedfilter.id];
+                  //  }
 
                     // Set dashboard configuration
                     if (selectedfilter['props']) {
-                        if(selectedfilter['props']['selected_topic']) {
+                        if (selectedfilter['props']['selected_topic']) {
                             confPath = selectedfilter['props']['selected_topic'];
                             this.topic = confPath;
                         }
                     }
 
 
-                    this._setDashboardConfiguration(confPath, ovalues, displayConfigForSelectedFilter);
-
                 }
                 // Else selected filter has no value (i.e.there has been a de-selection/removal)
                 else {
 
-                    //console.log("================= _updateDashboard: "+selectedfilter.id+" is  0 =============== ");
-
                     // Update the TitleView (Remove Item)
                     amplify.publish(Events.TITLE_REMOVE_ITEM, selectedfilter.id);
 
-                    // Re-configure display (if appropriate)
-                    if (selectedfilter.dependencies && this.topicConfig) {
-                        displayConfigForSelectedFilter = this.topicConfig[selectedfilter.dependencies[0]];
+                    // Set dashboard configuration
+                    if (selectedfilter['props']) {
+                        if (selectedfilter['props']['selected_topic']) {
+                            confPath = selectedfilter['props']['selected_topic'];
+                            this.topic = confPath;
+                        }
                     }
+
+                    // Re-configure display (if appropriate)
+                   // if (selectedfilter.dependencies && this.topicConfig) {
+                      //  displayConfigForSelectedFilter = this.topicConfig[selectedfilter.dependencies[0]];
+                   // }
 
                 }
 
+
+                // console.log("================= _updateDashboard: OTHER =============== ");
                 this._setDashboardConfiguration(confPath, ovalues, displayConfigForSelectedFilter);
 
             }
@@ -268,7 +271,7 @@ define([
          */
         _setDashboardConfiguration: function (confPath, ovalues, displayConfigForSelectedFilter) {
             var self = this;
-            //console.log("================= _setDashboardConfiguration Start =============== ");
+            // console.log("================= _setDashboardConfiguration Start =============== ");
             //console.log(ovalues);
 
             if (confPath) {
@@ -296,8 +299,8 @@ define([
             this.subview('dashboard').setDashboardConfig(dashboardConfig);
 
 
-           // console.log("================= _rebuildDashboard 2 =============== ");
-           // console.log(displayConfigForSelectedFilter);
+            // console.log("================= _rebuildDashboard 2 =============== ");
+            // console.log(displayConfigForSelectedFilter);
             // Hide/Show Dashboard Items
             this.subview('dashboard').updateDashboardTemplate(displayConfigForSelectedFilter);
 
@@ -309,8 +312,8 @@ define([
             //console.log("================= _rebuildDashboard 3 =============== ");
             // console.log(ovalues);
 
-             // Rebuild Dashboard
-                this.subview('dashboard').rebuildDashboard(ovalues, this.topic);
+            // Rebuild Dashboard
+            this.subview('dashboard').rebuildDashboard(ovalues, this.topic);
         },
 
 
@@ -328,8 +331,8 @@ define([
 
         _unbindEventListeners: function () {
             // Remove listeners
-            amplify.unsubscribe(BaseBrowseEvents.FILTER_ON_READY, this._filtersLoaded);
-            amplify.unsubscribe(BaseBrowseEvents.FILTER_ON_CHANGE, this._updateDashboard);
+            amplify.unsubscribe(BaseMatrixEvents.FILTER_ON_READY, this._filtersLoaded);
+            amplify.unsubscribe(BaseMatrixEvents.FILTER_ON_CHANGE, this._updateDashboard);
         },
 
 
