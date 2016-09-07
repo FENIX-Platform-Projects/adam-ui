@@ -18,7 +18,7 @@ define(function () {
                         mode: 'multi'
                     }
                 },
-                className: "col-sm-3",
+                className: "col-sm-4",
                 cl: {
                     uid: "crs_recipients",
                     version: "2016",
@@ -33,6 +33,7 @@ define(function () {
             donorcode: {
                 selector: {
                     id: "dropdown",
+                    default: ["1"], // Austria
                     config: { //Selectize configuration
                         maxItems: 1,
                         placeholder: "All",
@@ -40,7 +41,7 @@ define(function () {
                         mode: 'multi'
                     }
                 },
-                className: "col-sm-3",
+                className: "col-sm-4",
                 cl: {
                     uid: "crs_donors",
                     version: "2016",
@@ -130,20 +131,20 @@ define(function () {
                     id: "partner-matrix",
                     type: 'table',
                     config: {
-                        "groupedRow":true,
+                        "groupedRow":false,
                         "aggregationFn":{"value":"sum"},
                         "formatter":"localstring",
                         "decimals":2,
                         "showRowHeaders":true,
                         "columns":["indicator"],
-                        "rows":["recipientcode", "donorcode"],
+                        "rows":["donorcode", "recipientcode"],
                         "aggregations":[],
                         "values":["value"],
                         inputFormat : "fenixtool"
                     },
 
                     filterFor: {
-                        "filter_total_ODA": ['year', 'oda', 'recipientcode']
+                        "filter_total_ODA": ['year', 'oda', 'recipientcode', 'donorcode']
                     },
 
                     postProcess: [
@@ -156,8 +157,8 @@ define(function () {
                             ],
                             "parameters": {
                                 "columns": [
-                                    "recipientcode",
                                     "donorcode",
+                                    "recipientcode",
                                     "value",
                                     "unitcode"
                                 ],
@@ -169,6 +170,17 @@ define(function () {
                                                 "version": "2016",
                                                 "codes": [
                                                     "625"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "donorcode": {
+                                        "codes": [
+                                            {
+                                                "uid": "crs_donors",
+                                                "version": "2016",
+                                                "codes": [
+                                                    "1"
                                                 ]
                                             }
                                         ]
@@ -194,7 +206,7 @@ define(function () {
                             "name": "group",
                             "parameters": {
                                 "by": [
-                                    "recipientcode", "donorcode"
+                                    "donorcode", "recipientcode"
                                 ],
                                 "aggregations": [
                                     {
@@ -218,129 +230,9 @@ define(function () {
                         {
                             "name": "select",
                             "parameters": {
-                                "query": "WHERE donorcode NOT IN (?)", // skipping regional recipient countries (e.g. "Africa, regional"; "North of Sahara, regional")
+                                "query": "WHERE donorcode NOT IN (?) and recipientcode NOT IN (?)", // skipping regional recipient countries (e.g. "Africa, regional"; "North of Sahara, regional")
                                 "queryParameters": [
-                                    {"value": 'NA'}
-                                ]
-                            }
-                        },
-                        {
-                            "name": "addcolumn",
-                            "parameters": {
-                                "column": {
-                                    "dataType": "text",
-                                    "id": "indicator",
-                                    key:true,
-                                    "title": {
-                                        "EN": "Indicator"
-                                    },
-                                    "domain": {
-                                        "codes": [
-                                            {
-                                                "extendedName": {
-                                                    "EN": "Adam Processes"
-                                                },
-                                                "idCodeList": "adam_processes"
-                                            }
-                                        ]
-                                    },
-                                    "subject": null
-                                },
-                                "value": "Total ODA"
-                            }
-                        }
-                    ]
-                },
-                {
-                    id: "top-partners-fao-oda",
-                    type: 'chart',
-                    config: {
-                        type: "column",
-                        x: ["donorcode_EN"], //x axis
-                        series: ["indicator"], // series
-                        y: ["value"],//Y dimension
-                        aggregationFn: {"value": "sum"},
-                        useDimensionLabelsIfExist: false// || default raw else fenixtool
-                    },
-
-                    filterFor: {
-                        "filter_total_ODA": ['year', 'oda', 'recipientcode']
-                    },
-
-                    postProcess: [
-                        {
-                            "name": "filter",
-                            "sid": [
-                                {
-                                    "uid": "adam_usd_aggregation_table"
-                                }
-                            ],
-                            "parameters": {
-                                "columns": [
-                                    "recipientcode",
-                                    "donorcode",
-                                    "value",
-                                    "unitcode"
-                                ],
-                                "rows": {
-                                    "recipientcode": {
-                                        "codes": [
-                                            {
-                                                "uid": "crs_recipients",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "625"
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    "oda": {
-                                        "enumeration": [
-                                            "usd_commitment"
-                                        ]
-                                    },
-                                    "year": {
-                                        "time": [
-                                            {
-                                                "from": 2000,
-                                                "to": 2014
-                                            }
-                                        ]
-                                    }
-                                }
-                            },
-                            "rid":{"uid":"filter_total_ODA"}
-                        },
-                        {
-                            "name": "group",
-                            "parameters": {
-                                "by": [
-                                    "recipientcode", "donorcode"
-                                ],
-                                "aggregations": [
-                                    {
-                                        "columns": [
-                                            "value"
-                                        ],
-                                        "rule": "SUM"
-                                    },
-                                    {
-                                        "columns": [
-                                            "unitcode"
-                                        ],
-                                        "rule": "first"
-                                    }
-                                ]
-                            },
-                            "rid": {
-                                "uid": "total_oda"
-                            }
-                        },
-                        {
-                            "name": "select",
-                            "parameters": {
-                                "query": "WHERE donorcode NOT IN (?)", // skipping regional recipient countries (e.g. "Africa, regional"; "North of Sahara, regional")
-                                "queryParameters": [
+                                    {"value": 'NA'},
                                     {"value": 'NA'}
                                 ]
                             }
@@ -359,6 +251,152 @@ define(function () {
                                 "page": 1
                             }
                         },
+                        {
+                            "name": "addcolumn",
+                            "parameters": {
+                                "column": {
+                                    "dataType": "text",
+                                    "id": "indicator",
+                                    "key": true,
+                                    "title": {
+                                        "EN": "Indicator"
+                                    },
+                                    "domain": {
+                                        "codes": [
+                                            {
+                                                "extendedName": {
+                                                    "EN": "Adam Processes"
+                                                },
+                                                "idCodeList": "adam_processes"
+                                            }
+                                        ]
+                                    },
+                                    "subject": null
+                                },
+                                "value": "Total ODA (mil $)"
+                            }
+                        }
+                    ]
+                }, // FAO SECTORS and TOTAL ODA by TOP 10 RESOURCE PARTNERS
+                {
+                    id: "tot-fao-oda",
+                    type: 'chart',
+                    config: {
+                        type: "line",
+                        x: ["year"], //x axis
+                        series: ["indicator"], // series
+                        y: ["value"],//Y dimension
+                        aggregationFn: {"value": "sum"},
+                        useDimensionLabelsIfExist: false,// || default raw else fenixtool
+
+                        config: {
+                            xAxis: {
+                                type: 'datetime'
+                            },
+                            exporting: {
+                                chartOptions: {
+                                    legend: {
+                                        enabled: true
+                                    }
+
+                                }
+                            }
+
+                        }
+                    },
+                    filterFor: {
+                        "filter_total_ODA": ['year', 'oda', 'recipientcode', 'donorcode']
+                    },
+
+                    postProcess: [
+                        {
+                            "name": "filter",
+                            "sid": [
+                                {
+                                    "uid": "adam_usd_aggregation_table"
+                                }
+                            ],
+                            "parameters": {
+                                "columns": [
+                                    "year",
+                                    "value",
+                                    "unitcode"
+                                ],
+                                "rows": {
+                                    "recipientcode": {
+                                        "codes": [
+                                            {
+                                                "uid": "crs_recipients",
+                                                "version": "2016",
+                                                "codes": [
+                                                    "625"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "donorcode": {
+                                        "codes": [
+                                            {
+                                                "uid": "crs_donors",
+                                                "version": "2016",
+                                                "codes": [
+                                                    "1"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "oda": {
+                                        "enumeration": [
+                                            "usd_commitment"
+                                        ]
+                                    },
+                                    "year": {
+                                        "time": [
+                                            {
+                                                "from": 2000,
+                                                "to": 2014
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "rid":{"uid":"filter_total_ODA"}
+                        },
+                        {
+                            "name": "group",
+                            "parameters": {
+                                "by": [
+                                    "year"
+                                ],
+                                "aggregations": [
+                                    {
+                                        "columns": [
+                                            "value"
+                                        ],
+                                        "rule": "SUM"
+                                    },
+                                    {
+                                        "columns": [
+                                            "unitcode"
+                                        ],
+                                        "rule": "first"
+                                    }
+                                ]
+                            },
+                            "rid": {
+                                "uid": "total_oda"
+                            }
+                        },
+                       /* {
+                            "name": "select",
+                            "parameters": {
+                                "query": "WHERE donorcode NOT IN (?) and recipientcode NOT IN (?)", // skipping regional recipient countries (e.g. "Africa, regional"; "North of Sahara, regional")
+                                "queryParameters": [
+                                    {"value": 'NA'},
+                                    {"value": 'NA'}
+                                ]
+                            }
+                        },*/
                         {
                             "name": "addcolumn",
                             "parameters": {
@@ -385,7 +423,7 @@ define(function () {
                         }
                     ]
                 }, // FAO SECTORS and TOTAL ODA by TOP 10 RESOURCE PARTNERS
-                {
+             {
                     id: 'top-channel-categories',
                     type: 'chart',
                     config: {
@@ -457,6 +495,7 @@ define(function () {
                     },
                     filter: { //FX-filter format
                         recipientcode: ["625"],
+                        donorcode: ["1"],
                         year: [{value: "2000", parent: 'from'}, {value: "2014", parent: 'to'}]
                     },
                     postProcess: [
@@ -495,174 +534,8 @@ define(function () {
                                 "page": 1
                             }
                         }]
-                }, // TOP CHANNELS
-                {
-                    id: "tot-oda-partners", //ref [data-item=':id']
-                    type: "chart", //chart || map || olap,
-                    config: {
-                        type: "line",
-                        x: ["year"], //x axis
-                        series: ["donorname"], // series
-                        y: ["value"],//Y dimension
-                        aggregationFn: {"value": "sum"},
-                        useDimensionLabelsIfExist: false,// || default raw else fenixtool
-
-                        config: {
-                            xAxis: {
-                                type: 'datetime'
-                            },
-                            exporting: {
-                                chartOptions: {
-                                    legend: {
-                                        enabled: true
-                                    }
-
-                                }
-                            }
-
-                        }
-                    },
-
-                    filter: { //FX-filter format
-                        recipientcode: ["625"],
-                        year: [{value: "2000", parent: 'from'}, {value: "2014", parent: 'to'}]
-                    },
-                    postProcess: [
-                        {
-                            "name": "group",
-                            "parameters": {
-                                "by": [
-                                    "donorname", "year"
-                                ],
-                                "aggregations": [
-                                    {
-                                        "columns": ["value"],
-                                        "rule": "SUM"
-                                    },
-                                    {
-                                        "columns": ["unitcode"],
-                                        "rule": "first"
-                                    },
-                                    {
-                                        "columns": ["flowcategory_name"],
-                                        "rule": "first"
-                                    }
-                                ]
-                            }
-                        }]
-                }, // TOTAL ODA from TOP 5 RESOURCE PARTNERS
-                {
-                    id: "tot-fao-oda-partners", //ref [data-item=':id']
-                    type: "chart", //chart || map || olap,
-                    config: {
-                        type: "line",
-                        x: ["year"], //x axis
-                        series: ["donorname"], // series
-                        y: ["value"],//Y dimension
-                        aggregationFn: {"value": "sum"},
-                        useDimensionLabelsIfExist: false,// || default raw else fenixtool
-
-                        config: {
-                            xAxis: {
-                                type: 'datetime'
-                            },
-                            exporting: {
-                                chartOptions: {
-                                    legend: {
-                                        enabled: true
-                                    }
-
-                                }
-                            }
-
-                        }
-                    },
-
-                    filter: { //FX-filter format
-                        purposecode: [
-                            "12240",
-                            "14030",
-                            "14031",
-                            "15170",
-                            "16062",
-                            "23070",
-                            "31110",
-                            "31120",
-                            "31130",
-                            "31140",
-                            "31150",
-                            "31161",
-                            "31162",
-                            "31163",
-                            "31164",
-                            "31165",
-                            "31166",
-                            "31181",
-                            "31182",
-                            "31191",
-                            "31192",
-                            "31193",
-                            "31194",
-                            "31195",
-                            "31210",
-                            "31220",
-                            "31261",
-                            "31281",
-                            "31282",
-                            "31291",
-                            "31310",
-                            "31320",
-                            "31381",
-                            "31382",
-                            "31391",
-                            "32161",
-                            "32162",
-                            "32163",
-                            "32165",
-                            "32267",
-                            "41010",
-                            "41020",
-                            "41030",
-                            "41040",
-                            "41050",
-                            "41081",
-                            "41082",
-                            "43040",
-                            "43050",
-                            "52010",
-                            "72040",
-                            "74010"
-                        ],
-                        recipientcode: ["625"],
-                        year: [{value: "2000", parent: 'from'}, {value: "2014", parent: 'to'}]
-                    },
-                    postProcess: [
-                        {
-                            "name": "group",
-                            "parameters": {
-                                "by": [
-                                    "donorname", "year"
-                                ],
-                                "aggregations": [
-                                    {
-                                        "columns": ["value"],
-                                        "rule": "SUM"
-                                    },
-                                    {
-                                        "columns": ["unitcode"],
-                                        "rule": "first"
-                                    },
-                                    {
-                                        "columns": ["flowcategory_name"],
-                                        "rule": "first"
-                                    }
-                                ]
-                            }
-                        }]
-                } // TOTAL FAO SECTORS ODA from TOP 5 RESOURCE PARTNERS
+                } // TOP CHANNELS
             ]
         }
     }
-
-
 });

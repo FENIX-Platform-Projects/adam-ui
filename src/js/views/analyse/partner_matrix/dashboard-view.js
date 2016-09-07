@@ -4,18 +4,17 @@ define([
     'underscore',
     'views/base/view',
     'text!templates/analyse/partner_matrix/dashboard.hbs',
-    'config/browse/config-browse',
     'fx-dashboard/start',
     'lib/utils',
     'config/Config',
-    'i18n!nls/browse',
-    'i18n!nls/partner-matrix',
+    'i18n!nls/analyse',
+    'i18n!nls/analyse-partner-matrix',
     'handlebars',
     'lib/config-utils',
     'config/submodules/fx-chart/highcharts_template',
     'views/common/progress-bar',
     'amplify'
-], function ($, _, View, template, BaseBrowseConfig, Dashboard, Utils, GeneralConfig, i18nLabels, i18nDashboardLabels, Handlebars, ConfigUtils, HighchartsTemplate, ProgressBar) {
+], function ($, _, View, template, Dashboard, Utils, GeneralConfig, i18nLabels, i18nDashboardLabels, Handlebars, ConfigUtils, HighchartsTemplate, ProgressBar) {
 
     'use strict';
 

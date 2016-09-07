@@ -5,7 +5,7 @@ define(function ( ) {
 
     return {
         dashboard: {
-            DEFAULT_TOPIC : 'recipient' //recipient, donor or recipient_donor
+            DEFAULT_TOPIC : 'country' //country, donor or country-donor
         },
         filter: {
             RECIPIENT_COUNTRY: 'recipientcode',
@@ -22,9 +22,9 @@ define(function ( ) {
         },
         topic: {
             SELECTED_TOPIC: 'selected_topic',
-            COUNTRY_SELECTED: 'recipient',
+            RECIPIENT_COUNTRY_SELECTED: 'country',
             RESOURCE_PARTNER_SELECTED: 'donor',
-            COUNTRY_AND_RESOURCE_PARTNER_SELECTED: 'recipient_donor'
+            RECIPIENT_AND_PARTNER_SELECTED: 'country-donor'
         }
     };
 });
