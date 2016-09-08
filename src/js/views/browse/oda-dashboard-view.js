@@ -274,10 +274,12 @@ define([
 
             this.config.filter = filter;
 
+            // Build new dashboard
             this.dashboard = new Dashboard(
                 this.config
             );
 
+            // Load Progress bar
             this._loadProgressBar();
 
         },
