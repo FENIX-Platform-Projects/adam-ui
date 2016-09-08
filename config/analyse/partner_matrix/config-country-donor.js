@@ -127,7 +127,7 @@ define(function () {
             uid: "adam_usd_commitment",
 
             items: [
-                {
+              /*  {
                     id: "partner-matrix",
                     type: 'table',
                     config: {
@@ -277,7 +277,7 @@ define(function () {
                             }
                         }
                     ]
-                }, // FAO SECTORS and TOTAL ODA by TOP 10 RESOURCE PARTNERS
+                }, // FAO SECTORS and TOTAL ODA by TOP 10 RESOURCE PARTNERS*/
                 {
                     id: "tot-fao-oda",
                     type: 'chart',
