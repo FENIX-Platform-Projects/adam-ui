@@ -9,12 +9,13 @@ define([
     'config/Config',
     'i18n!nls/analyse',
     'i18n!nls/analyse-partner-matrix',
+    'config/analyse/partner_matrix/Events',
     'handlebars',
     'lib/config-utils',
     'config/submodules/fx-chart/highcharts_template',
     'views/common/progress-bar',
     'amplify'
-], function ($, _, View, template, Dashboard, Utils, GeneralConfig, i18nLabels, i18nDashboardLabels, Handlebars, ConfigUtils, HighchartsTemplate, ProgressBar) {
+], function ($, _, View, template, Dashboard, Utils, GeneralConfig, i18nLabels, i18nDashboardLabels, BaseEvents, Handlebars, ConfigUtils, HighchartsTemplate, ProgressBar) {
 
     'use strict';
 
@@ -129,6 +130,24 @@ define([
                 }
 
             }, this));
+
+
+        },
+
+
+
+        updateDashboardItemConfiguration: function (itemid, property, values) {
+            var item = _.filter(this.config.items, {id: itemid})[0];
+
+            if (item) {
+                if (item.config && item.config[property]) {
+                    if(values[0] === 'false' || values[0] === 'true')
+                        item.config[property] = $.parseJSON(values[0]); // returns a Boolean
+                    else
+                        item.config[property] = values[0];
+
+                }
+            }
         },
 
         renderDashboard: function () {
@@ -238,14 +257,23 @@ define([
                 this.render();
             }
 
+
             // Build new dashboard
             this.dashboard = new Dashboard(
                 this.config
             );
 
-          //  this._loadProgressBar();
+            // Load Progress bar
+            //this._loadProgressBar();
 
         },
+
+
+        getDashboardConfig: function () {
+            return this.config;
+        },
+
+
 
 
         _loadProgressBar: function () {
@@ -257,6 +285,7 @@ define([
 
             this.dashboard.on('ready', function () {
                 self.progressBar.finish();
+                amplify.publish(BaseEvents.DASHBOARD_ON_READY);
             });
 
 
