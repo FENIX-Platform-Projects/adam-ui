@@ -152,35 +152,52 @@ define([
 
         var config = this._getUpdatedFilterConfig(FilterModel);
 
-        this.filter = new Filter({
-            el: s.FILTER_INTERACTION,
-            items: config
-        });
-
-        this.filter.on("ready", _.bind(function () {
-
-            var config = this._getOlapConfigFromFilter();
-
-            config = $.extend(true, {}, {
-                    model: this.model,
-                    el: s.OLAP_INTERACTION
-                }, config
-            );
+        // Display filter if more than one data row
+        if (this.model.size > 1) {
+            this.filter = new Filter({
+                el: s.FILTER_INTERACTION,
+                items: config
+            });
 
 
-            for (var d in config.derived) {
-                config.aggregations.push(d);
+            this.filter.on("ready", _.bind(function () {
+
+                var config = this._getOlapConfigFromFilter();
+
+                config = $.extend(true, {}, {
+                        model: this.model,
+                        el: s.OLAP_INTERACTION
+                    }, config
+                );
+
+
+                for (var d in config.derived) {
+                    config.aggregations.push(d);
+                }
+
+                this.olap = new OlapCreator(config);
+            }, this));
+
+            this.filter.on("change", _.bind(function () {
+
+                var config = this._getOlapConfigFromFilter();
+                this.olap.update(config);
+
+            }, this));
+
+        }
+        // Hide filter if only one data row
+        else {
+
+            this.config.model = this.model;
+            this.config.el = s.OLAP_INTERACTION;
+
+            for (var d in this.config.derived) {
+                this.config.aggregations.push(d);
             }
 
-            this.olap = new OlapCreator(config);
-        }, this));
-
-        this.filter.on("change", _.bind(function () {
-
-            var config = this._getOlapConfigFromFilter();
-            this.olap.update(config);
-
-        }, this));
+            this.olap = new OlapCreator(this.config);
+        }
 
     };
 
