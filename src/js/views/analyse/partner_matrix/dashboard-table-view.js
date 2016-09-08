@@ -13,7 +13,7 @@ define([
     'handlebars',
     'lib/config-utils',
     'amplify'
-], function ($, _, View, template, Dashboard, Utils, GeneralConfig, i18nLabels, i18nDashboardLabels,BaseEvents,  Handlebars, ConfigUtils) {
+], function ($, _, View, template, Dashboard, Utils, GeneralConfig, i18nLabels, i18nDashboardLabels, BaseEvents, Handlebars, ConfigUtils) {
 
     'use strict';
 
@@ -33,7 +33,7 @@ define([
 
     /**
      *
-     * Creates a new Table View, which is composed of a custom item
+     * Creates a new Table View, which is composed of a custom Table and associated filter item
      * Instantiates the FENIX dashboard submodule and responsible for the table dashboard related functionality.
      * @class TableView
      * @extends View
@@ -56,12 +56,7 @@ define([
             this.model.on(defaultOptions.events.CHANGE, this.render, this);
             this.dashboards = [];
 
-            console.log(this.topic);
-
-
             this.source = $(this.template).find("[data-topic='" + this.topic + "']").prop('outerHTML');
-
-            console.log(this.source);
 
             View.prototype.initialize.call(this, arguments);
 
@@ -74,10 +69,6 @@ define([
         render: function () {
             this.setElement(this.container);
             this._unbindEventListeners();
-
-            console.log("=============== render ===================");
-            console.log(this.container);
-            console.log(this.el);
 
             // Update the language related labels in the item configurations (charts)
             for (var it in this.config.items) {
@@ -97,10 +88,6 @@ define([
 
         getTemplateFunction: function () {
 
-            console.log("=============== getTemplateFunction ===================");
-            console.log(this.source);
-
-
             // Update the language related labels in the dashboard template
 
             this.compiledTemplate = Handlebars.compile(this.source);
@@ -116,16 +103,12 @@ define([
         setDashboardConfig: function (config) {
             this.baseConfig = config;
 
-            console.log("============================= setDashboardConfig TABLE DASHBOARD====================");
             this.config = config;
             this.config_type = config.id;
             this.config.baseItems = config.items;
             this.config.environment = GeneralConfig.ENVIRONMENT;
 
-            console.log("=============================== CONFIG ========================");
-            console.log(config );
         },
-
 
 
         updateDashboardItemConfiguration: function (itemid, property, values) {
@@ -133,7 +116,7 @@ define([
 
             if (item) {
                 if (item.config && item.config[property]) {
-                    if(values[0] === 'false' || values[0] === 'true')
+                    if (values[0] === 'false' || values[0] === 'true')
                         item.config[property] = $.parseJSON(values[0]); // returns a Boolean
                     else
                         item.config[property] = values[0];
@@ -149,9 +132,6 @@ define([
             this.config.items[0].topic = this.topic;
 
 
-            console.log(this.config.el);
-
-
             // the path to the custom item is registered
             this.config.itemsRegistry = {
                 custom: {
@@ -164,8 +144,8 @@ define([
             this.dashboard.on('table_ready', function (payload) {
 
                 //if (payload.data.size > 0) {
-                    //$(this.el).show();
-               // }
+                //$(this.el).show();
+                // }
 
             });
 
@@ -263,7 +243,7 @@ define([
 
 
             // Re-Render the source template
-            if(topic) {
+            if (topic) {
                 this.topic = topic;
                 this.source = $(this.template).find("[data-topic='" + this.topic + "']").prop('outerHTML');
                 this.render();
@@ -271,7 +251,6 @@ define([
 
 
             this.config.items[0].topic = this.topic;
-
 
 
             // the path to the custom item is registered
@@ -283,11 +262,6 @@ define([
 
             // Build new dashboard
             this.dashboard = new Dashboard(this.config);
-
-            // Build new dashboard
-            //this.dashboard = new Dashboard(
-              //  this.config
-          //  );
 
 
         },
