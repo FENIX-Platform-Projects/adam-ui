@@ -15,12 +15,11 @@ define([
     'config/Config',
     'config/analyse/partner_matrix/Events',
     'config/analyse/partner_matrix/config-partner-matrix',
-    'config/analyse/partner_matrix/config-matrix',
     'lib/utils',
     'amplify',
     'bootstrap',
     'underscore'
-], function ($, $UI, View, TitleSubView, FilterSubView, DashboardSubView, DashboardTableSubView, DashboardModel, TableModel, template, i18nLabels, Events, GeneralConfig, BaseMatrixEvents, BasePartnerMatrixConfig, MatrixItemConfig, Utils) {
+], function ($, $UI, View, TitleSubView, FilterSubView, DashboardSubView, DashboardTableSubView, DashboardModel, TableModel, template, i18nLabels, Events, GeneralConfig, BaseMatrixEvents, BasePartnerMatrixConfig, Utils) {
 
     'use strict';
 
