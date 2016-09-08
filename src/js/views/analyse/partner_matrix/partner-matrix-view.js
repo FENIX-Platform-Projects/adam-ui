@@ -159,9 +159,9 @@ define([
             var dashboardTableSubView = new DashboardTableSubView({
                 autoRender: false,
                 container: this.$el.find(s.css_classes.DASHBOARD_TABLE_HOLDER),
-                topic: this.topic,
-                model: this.tableDashboardModel
-            });
+               topic: this.topic,
+               model: this.tableDashboardModel
+          });
 
             dashboardTableSubView.setDashboardConfig(this.tableDashboardConfig.dashboard);
 
@@ -211,6 +211,7 @@ define([
 
             // Set Dashboard Model
             this._setDashboardModelValues();
+            this._setTableDashboardModelValues();
 
             // Render Dashboard Model
             this.subview('dashboard').renderDashboard();
@@ -253,7 +254,6 @@ define([
                     if (selectedfilter['props']) {
                         if (selectedfilter['props']['selected_topic']) {
                             confPath = selectedfilter['props']['selected_topic'];
-                            this.topic = confPath;
                         }
                     }
 
@@ -269,7 +269,6 @@ define([
                     if (selectedfilter['props']) {
                         if (selectedfilter['props']['selected_topic']) {
                             confPath = selectedfilter['props']['selected_topic'];
-                            this.topic = confPath;
                         }
                     }
 
@@ -302,6 +301,7 @@ define([
             //console.log(ovalues);
 
             if (confPath !== this.topic){
+                this.topic = confPath;
                 if (confPath) {
                     require(['config/analyse/partner_matrix/config-' + confPath, 'config/analyse/partner_matrix/config-table-' + confPath], function (dialog, dialog2) {
                         self._rebuildDashboard(ovalues, displayConfigForSelectedFilter, dialog.dashboard, dialog2.dashboard);
@@ -333,11 +333,14 @@ define([
             // console.log(displayConfigForSelectedFilter);
             // Hide/Show Dashboard Items
 
-            this.subview('dashboard').updateDashboardTemplate(displayConfigForSelectedFilter);
-            this.subview('tableDashboard').updateDashboardTemplate(displayConfigForSelectedFilter);
+           // this.subview('dashboard').updateDashboardTemplate(displayConfigForSelectedFilter);
+            //this.subview('tableDashboard').updateDashboardTemplate(displayConfigForSelectedFilter);
 
             // Update Dashboard Model
             this._setDashboardModelValues();
+
+            // Update Dashboard Model
+            this._setTableDashboardModelValues();
 
 
             //console.log("================= _rebuildDashboard 3 =============== ");
@@ -371,6 +374,9 @@ define([
 
         _setDashboardModelValues: function () {
             this.dashboardModel.set(s.dashboardModel.LABEL, this.subview('title').getTitleAsArray());
+        },
+
+        _setTableDashboardModelValues: function () {
             this.tableDashboardModel.set(s.dashboardModel.LABEL, this.subview('title').getTitleAsArray());
         },
 
