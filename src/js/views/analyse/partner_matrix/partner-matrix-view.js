@@ -6,18 +6,21 @@ define([
     'views/common/title-view',
     'views/analyse/partner_matrix/filter-view',
     'views/analyse/partner_matrix/dashboard-view',
+    'views/analyse/partner_matrix/dashboard-table-view',
     'models/analyse/dashboard',
+    'models/analyse/table',
     'text!templates/analyse/partner_matrix/partner-matrix.hbs',
     'i18n!nls/analyse',
     'config/Events',
     'config/Config',
     'config/analyse/partner_matrix/Events',
     'config/analyse/partner_matrix/config-partner-matrix',
+    'config/analyse/partner_matrix/config-matrix',
     'lib/utils',
     'amplify',
     'bootstrap',
     'underscore'
-], function ($, $UI, View, TitleSubView, FilterSubView, DashboardSubView, DashboardModel, template, i18nLabels, Events, GeneralConfig, BaseMatrixEvents, BasePartnerMatrixConfig, Utils) {
+], function ($, $UI, View, TitleSubView, FilterSubView, DashboardSubView, DashboardTableSubView, DashboardModel, TableModel, template, i18nLabels, Events, GeneralConfig, BaseMatrixEvents, BasePartnerMatrixConfig, MatrixItemConfig, Utils) {
 
     'use strict';
 
@@ -26,7 +29,8 @@ define([
             TITLE_BAR_ITEMS: "#fx-title-items",
             BACK_TO_TOP_FIXED: "#analyse-partner-matrix-top-link-fixed",
             FILTER_HOLDER: "#analyse-partner-matrix-filter-holder",
-            DASHBOARD_HOLDER: "#analyse-partner-matrix-content"
+            DASHBOARD_HOLDER: "#analyse-partner-matrix-content",
+            DASHBOARD_TABLE_HOLDER: "#analyse-table-content"
         },
         dashboardModel: {
             COUNTRY: 'selected_country',
@@ -94,7 +98,7 @@ define([
          * @private
          */
         _loadDashboardConfigurations: function () {
-            require(['config/analyse/partner_matrix/config-' + this.topic], _.bind(this._initSubViews, this));
+            require(['config/analyse/partner_matrix/config-' + this.topic, 'config/analyse/partner_matrix/config-table-' + this.topic], _.bind(this._initSubViews, this));
         },
 
         /**
@@ -102,7 +106,7 @@ define([
          * @private
          */
 
-        _initSubViews: function (Config) {
+        _initSubViews: function (Config, TableConfig) {
             View.prototype.render.apply(this, arguments);
 
             if (!Config || !Config.dashboard || !Config.filter) {
@@ -110,7 +114,14 @@ define([
                 return;
             }
 
+            if (!TableConfig || !TableConfig.dashboard) {
+                alert("Impossible to find default dashboard/filter configuration for the topic: " + this.topic);
+                return;
+            }
+
             this.defaultDashboardConfig = Config;
+            this.tableDashboardConfig = TableConfig;
+
             this.otherSectorsDashboardConfig = Config.dashboard;
 
             // Set TITLE Sub View
@@ -142,6 +153,20 @@ define([
             dashboardSubView.setDashboardConfig(this.defaultDashboardConfig.dashboard);
 
             this.subview('dashboard', dashboardSubView);
+
+            this.tableDashboardModel = new TableModel();
+
+           // Set DASHBOARD Table Sub View
+            var dashboardTableSubView = new DashboardTableSubView({
+                autoRender: false,
+                container: this.$el.find(s.css_classes.DASHBOARD_TABLE_HOLDER),
+                topic: this.topic,
+                model: this.tableDashboardModel
+            });
+
+            dashboardTableSubView.setDashboardConfig(this.tableDashboardConfig.dashboard);
+
+            this.subview('tableDashboard', dashboardTableSubView);
 
         },
 
@@ -191,7 +216,10 @@ define([
             // Render Dashboard Model
             this.subview('dashboard').renderDashboard();
 
+            this.subview('tableDashboard').renderDashboard();
+
         },
+
 
 
         /**
@@ -274,12 +302,15 @@ define([
             // console.log("================= _setDashboardConfiguration Start =============== ");
             //console.log(ovalues);
 
-            if (confPath) {
-                require(['config/analyse/partner_matrix/config-' + confPath], function (dialog) {
-                    self._rebuildDashboard(ovalues, displayConfigForSelectedFilter, dialog.dashboard);
-                });
-            } else {
-                self._rebuildDashboard(ovalues, displayConfigForSelectedFilter, this.otherSectorsDashboardConfig);
+            if (confPath !== this.topic){
+                if (confPath) {
+                    require(['config/analyse/partner_matrix/config-' + confPath, 'config/analyse/partner_matrix/config-table-' + confPath], function (dialog, dialog2) {
+                        self._rebuildDashboard(ovalues, displayConfigForSelectedFilter, dialog.dashboard, dialog2.dashboard);
+                    });
+                }
+            }
+            else {
+                self._rebuildDashboard(ovalues, displayConfigForSelectedFilter, self.subview('dashboard').getDashboardConfig(), self.subview('tableDashboard').getDashboardConfig());
             }
         },
 
@@ -291,19 +322,20 @@ define([
          * @private
          */
 
-        _rebuildDashboard: function (ovalues, displayConfigForSelectedFilter, dashboardConfig) {
+        _rebuildDashboard: function (ovalues, displayConfigForSelectedFilter, dashboardConfig, tableDashboardConfig) {
 
             //console.log("================= _rebuildDashboard 1 =============== ");
             //console.log(dashboardConfig);
 
             this.subview('dashboard').setDashboardConfig(dashboardConfig);
-
+            this.subview('tableDashboard').setDashboardConfig(tableDashboardConfig);
 
             // console.log("================= _rebuildDashboard 2 =============== ");
             // console.log(displayConfigForSelectedFilter);
             // Hide/Show Dashboard Items
-            this.subview('dashboard').updateDashboardTemplate(displayConfigForSelectedFilter);
 
+            this.subview('dashboard').updateDashboardTemplate(displayConfigForSelectedFilter);
+            this.subview('tableDashboard').updateDashboardTemplate(displayConfigForSelectedFilter);
 
             // Update Dashboard Model
             this._setDashboardModelValues();
@@ -314,6 +346,7 @@ define([
 
             // Rebuild Dashboard
             this.subview('dashboard').rebuildDashboard(ovalues, this.topic);
+            this.subview('tableDashboard').rebuildDashboard(ovalues, this.topic);
         },
 
 
@@ -333,11 +366,13 @@ define([
             // Remove listeners
             amplify.unsubscribe(BaseMatrixEvents.FILTER_ON_READY, this._filtersLoaded);
             amplify.unsubscribe(BaseMatrixEvents.FILTER_ON_CHANGE, this._updateDashboard);
+
         },
 
 
         _setDashboardModelValues: function () {
             this.dashboardModel.set(s.dashboardModel.LABEL, this.subview('title').getTitleAsArray());
+            this.tableDashboardModel.set(s.dashboardModel.LABEL, this.subview('title').getTitleAsArray());
         },
 
 
