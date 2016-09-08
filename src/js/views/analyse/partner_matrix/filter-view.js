@@ -25,9 +25,6 @@ define(
             range: {
                 FROM: 'from',
                 TO: 'to'
-            },
-            values: {
-                FAO_SECTORS: '9999'
             }
         };
 
@@ -155,8 +152,6 @@ define(
 
                 // Filter on Change: Set some base properties for Recipient and the ODA, then publish Filter On Change Event
                 this.filter.on('change', function (payload) {
-                    console.log("========================= FilterView: ON CHANGE ==============");
-                    console.log(payload);
 
                     var fc = self._getFilterConfigById(payload.id);
                     var dependencies = [];
@@ -217,13 +212,10 @@ define(
                             }
                         }
 
-                        console.log("========================= FilterView: ON CHANGE PARTNER ==============");
-
                         amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": additionalProperties}));
 
                     }
                     else {
-                        console.log("========================= FilterView: ON CHANGE ELSE ==============");
                         amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
                     }
 
@@ -453,23 +445,6 @@ define(
                 return this._hasSelections(id, values);
             },
 
-
-            /**
-             * Check if 'FAO Related Sectors' has been selected
-             * @returns {*|boolean}
-             */
-            isFAOSectorsSelected: function () {
-                var values = this.getSelectedValues(PartnerMatrixConfig.filter.SECTOR);
-
-                //console.log(values);
-                for (var i = 0; i < values.length; i++) {
-                    if (values[i] === s.values.FAO_SECTORS) {
-                        return true;
-                    }
-                }
-
-                return false;
-            },
 
 
             /**
