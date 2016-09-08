@@ -176,8 +176,8 @@ define([
                 config.aggregations.push(d);
             }
 
-            console.log("============  UPDATE TABLE ITEM ============");
-            console.log(JSON.stringify(config));
+           // console.log("============  UPDATE TABLE ITEM ============");
+            //console.log(JSON.stringify(config));
 
 
 
@@ -189,8 +189,8 @@ define([
             var config = this._getOlapConfigFromFilter();
            // config.inputFormat =  'fenixtool';
 
-            console.log("============  UPDATE TABLE ITEM ============");
-            console.log(JSON.stringify(config));
+           // console.log("============  UPDATE TABLE ITEM ============");
+           // console.log(JSON.stringify(config));
 
 
             this.olap.update(config);
