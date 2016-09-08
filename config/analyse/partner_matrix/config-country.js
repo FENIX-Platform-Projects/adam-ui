@@ -126,7 +126,7 @@ define(function () {
             uid: "adam_usd_commitment",
 
             items: [
-                {
+               /* {
                     id: "partner-matrix",
                     type: 'table',
                     config: {
@@ -250,8 +250,8 @@ define(function () {
                             }
                         }
                     ]
-                },
-                {
+                }, */
+               {
                     id: "top-partners-fao-oda",
                     type: 'chart',
                     config: {
