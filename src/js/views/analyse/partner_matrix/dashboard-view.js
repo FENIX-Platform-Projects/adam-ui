@@ -285,7 +285,7 @@ define([
 
             this.dashboard.on('ready', function () {
                 self.progressBar.finish();
-                amplify.publish(BaseEvents.DASHBOARD_ON_READY);
+               // amplify.publish(BaseEvents.DASHBOARD_ON_READY);
             });
 
 
