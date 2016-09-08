@@ -29,8 +29,7 @@ define([
         OLAP_INTERACTION: "#olap-interaction"
     };
 
-    var defaultOptions = {
-    };
+    var defaultOptions = {};
 
     /**
      *
@@ -141,8 +140,6 @@ define([
 
         this.controller._trigger('table_ready', {data: {size: this.model.size}});
 
-        console.log("================ RENDER ITEM ================");
-        console.log(this);
         if (this.model.size > 0) {
             var metadata = this.model.metadata.dsd.columns;
             this._processPayload();
@@ -171,15 +168,9 @@ define([
             );
 
 
-            for(var d in config.derived)
-            {
+            for (var d in config.derived) {
                 config.aggregations.push(d);
             }
-
-           // console.log("============  UPDATE TABLE ITEM ============");
-            //console.log(JSON.stringify(config));
-
-
 
             this.olap = new OlapCreator(config);
         }, this));
@@ -187,12 +178,6 @@ define([
         this.filter.on("change", _.bind(function () {
 
             var config = this._getOlapConfigFromFilter();
-           // config.inputFormat =  'fenixtool';
-
-           // console.log("============  UPDATE TABLE ITEM ============");
-           // console.log(JSON.stringify(config));
-
-
             this.olap.update(config);
 
         }, this));
@@ -211,7 +196,7 @@ define([
                 obj.template = {};
             }
             //Add i18n label
-            obj.template.title = Utils.getI18nLabel(key, i18nLabels, "filter_"+this.topic+"_");
+            obj.template.title = Utils.getI18nLabel(key, i18nLabels, "filter_" + this.topic + "_");
 
         }, this));
 
@@ -223,8 +208,8 @@ define([
         var values = this.filter.getValues();
         var groupedRow = false;
 
-        if(values.values.groupedRow.length>0){
-           groupedRow=true;
+        if (values.values.groupedRow.length > 0) {
+            groupedRow = true;
         }
 
         this.config.groupedRow = groupedRow;
@@ -241,7 +226,6 @@ define([
     };
 
     TableItem.prototype._bindEventListeners = function () {
-        // amplify.subscribe(s.events.CUSTOM_ITEM_COUNTRY_RESPONSE, this, this._showCountryIndicators);
     };
 
     TableItem.prototype._unbindEventListeners = function () {
