@@ -5,7 +5,7 @@ define([
     'views/base/view',
     'views/common/title-view',
     'views/analyse/partner_matrix/filter-view',
-    'views/analyse/partner_matrix/dashboard-view',
+    'views/analyse/partner_matrix/dashboard-charts-view',
     'views/analyse/partner_matrix/dashboard-table-view',
     'models/analyse/dashboard',
     'models/analyse/table',
@@ -19,22 +19,23 @@ define([
     'amplify',
     'bootstrap',
     'underscore'
-], function ($, $UI, View, TitleSubView, FilterSubView, DashboardSubView, DashboardTableSubView, DashboardModel, TableModel, template, i18nLabels, Events, GeneralConfig, BaseMatrixEvents, BasePartnerMatrixConfig, Utils) {
+], function ($, $UI, View, TitleSubView, FilterSubView, DashboardChartsSubView, DashboardTableSubView, DashboardModel, TableModel, template, i18nLabels, Events, GeneralConfig, BaseMatrixEvents, BasePartnerMatrixConfig, Utils) {
 
     'use strict';
 
     var s = {
         css_classes: {
-            TITLE_BAR_ITEMS: "#fx-title-items",
-            BACK_TO_TOP_FIXED: "#analyse-partner-matrix-top-link-fixed",
+            TITLE_BAR_ITEMS: "#analyse-partner-matrix-fx-title-items",
             FILTER_HOLDER: "#analyse-partner-matrix-filter-holder",
-            DASHBOARD_HOLDER: "#analyse-partner-matrix-content",
-            DASHBOARD_TABLE_HOLDER: "#analyse-table-content"
+            DASHBOARD_CHARTS_HOLDER: "#analyse-partner-matrix-charts-content",
+            DASHBOARD_TABLE_HOLDER: "#analyse-partner-matrix-table-content"
         },
         dashboardModel: {
-            COUNTRY: 'selected_country',
-            TOPIC: 'topic',
             LABEL: 'label'
+        },
+        paths: {
+          CHARTS_CONFIG: 'config/analyse/partner_matrix/config-charts-',
+          TABLE_CONFIG: 'config/analyse/partner_matrix/config-table-'
         }
     };
 
@@ -42,8 +43,8 @@ define([
     /**
      *
      * Creates a new Resource Partner Matrix View
-     * Browse By View comprises of a series of subviews: title view, filter view and 1 dashboard view
-     * @class BrowseByView
+     * Resource Partner Matrix View comprises of a series of subviews: title view, filter view and 2 dashboard views (charts dashboard and table dashboard)
+     * @class ResourcePartnerMatrixView
      * @extends View
      */
     var ResourcePartnerMatrixView = View.extend({
@@ -64,7 +65,6 @@ define([
             this.topic = BasePartnerMatrixConfig.dashboard.DEFAULT_TOPIC;
             this.page = params.page;
             this.datasetType = GeneralConfig.DEFAULT_UID;
-           // this.topicConfig = ConfigByTopic[this.topic];
 
             View.prototype.initialize.call(this, arguments);
         },
@@ -80,8 +80,6 @@ define([
             //update State
             amplify.publish(Events.STATE_CHANGE, {menu: 'analyse', breadcrumb: this._initMenuBreadcrumbItem()});
 
-            this._initVariables();
-
             this._bindEventListeners();
 
         },
@@ -89,39 +87,39 @@ define([
         render: function () {
             View.prototype.render.apply(this, arguments);
 
-            this._loadDashboardConfigurations();
+            this._loadConfigurations();
         },
 
         /**
-         * Based on the view the appropriate JS configuration file are loaded via requireJS
+         * Based on the topic (topic is determined by the current filter selections - see filter-view) the appropriate JS configuration files are loaded via requireJS
          * @private
          */
-        _loadDashboardConfigurations: function () {
-            require(['config/analyse/partner_matrix/config-' + this.topic, 'config/analyse/partner_matrix/config-table-' + this.topic], _.bind(this._initSubViews, this));
+        _loadConfigurations: function () {
+            require([s.paths.CHARTS_CONFIG + this.topic, s.paths.TABLE_CONFIG + this.topic], _.bind(this._initSubViews, this));
         },
 
         /**
-         * Initializes all sub views: Title, Filters, oecd/oda Dashboard and Indicators Dashboard
+         * Initializes all sub views: Title, Filter, Table Dashboard and Charts Dashboard
          * @private
          */
 
-        _initSubViews: function (Config, TableConfig) {
+        _initSubViews: function (ChartsConfig, TableConfig) {
             View.prototype.render.apply(this, arguments);
 
-            if (!Config || !Config.dashboard || !Config.filter) {
-                alert("Impossible to find default dashboard/filter configuration for the topic: " + this.topic);
+            // Charts Dashboard/filter Configuration
+            if (!ChartsConfig || !ChartsConfig.dashboard || !ChartsConfig.filter) {
+                alert("Impossible to find CHARTS dashboard/filter configuration for the topic: " + this.topic);
                 return;
             }
 
+            // Table Dashboard Configuration
             if (!TableConfig || !TableConfig.dashboard) {
-                alert("Impossible to find default dashboard/filter configuration for the topic: " + this.topic);
+                alert("Impossible to find TABLE dashboard configuration for the topic: " + this.topic);
                 return;
             }
 
-            this.defaultDashboardConfig = Config;
-            this.tableDashboardConfig = TableConfig;
-
-            this.otherSectorsDashboardConfig = Config.dashboard;
+            this.chartsConfig = ChartsConfig;
+            this.tableConfig = TableConfig;
 
             // Set TITLE Sub View
             var titleSubView = new TitleSubView({
@@ -131,44 +129,46 @@ define([
             });
             this.subview('title', titleSubView);
 
-            // Set Filter Sub View
+            // Set FILTER Sub View
             var filtersSubView = new FilterSubView({
                 autoRender: true,
                 container: this.$el.find(s.css_classes.FILTER_HOLDER),
-                config: this.defaultDashboardConfig.filter
+                config: this.chartsConfig.filter
             });
             this.subview('filters', filtersSubView);
 
-            // Set Dashboard Model
-            this.dashboardModel = new DashboardModel();
+            // Set CHARTS DASHBOARD Model
+            this.chartsDashboardModel = new DashboardModel();
 
-            // Set DASHBOARD Sub View
-            var dashboardSubView = new DashboardSubView({
+            // Set CHARTS DASHBOARD Sub View
+            var dashboardChartsSubView = new DashboardChartsSubView({
                 autoRender: false,
-                container: this.$el.find(s.css_classes.DASHBOARD_HOLDER),
+                container: this.$el.find(s.css_classes.DASHBOARD_CHARTS_HOLDER),
                 topic: this.topic,
-                model: this.dashboardModel
+                model: this.chartsDashboardModel
             });
-            dashboardSubView.setDashboardConfig(this.defaultDashboardConfig.dashboard);
+            dashboardChartsSubView.setDashboardConfig(this.chartsConfig.dashboard);
+            this.subview('chartsDashboard', dashboardChartsSubView);
 
-            this.subview('dashboard', dashboardSubView);
-
+            // Set TABLE DASHBOARD Model
             this.tableDashboardModel = new TableModel();
 
-           // Set DASHBOARD Table Sub View
+            // Set DASHBOARD Table Sub View
             var dashboardTableSubView = new DashboardTableSubView({
                 autoRender: false,
                 container: this.$el.find(s.css_classes.DASHBOARD_TABLE_HOLDER),
-               topic: this.topic,
-               model: this.tableDashboardModel
-          });
-
-            dashboardTableSubView.setDashboardConfig(this.tableDashboardConfig.dashboard);
-
+                topic: this.topic,
+                model: this.tableDashboardModel
+            });
+            dashboardTableSubView.setDashboardConfig(this.tableConfig.dashboard);
             this.subview('tableDashboard', dashboardTableSubView);
 
         },
 
+        /**
+         * Initializes the menu breadcrumb for the page
+         * @private
+         */
         _initMenuBreadcrumbItem: function () {
             var label = "";
             var self = this;
@@ -180,20 +180,15 @@ define([
             return Utils.createMenuBreadcrumbItem(label, self.analyse_type, self.page);
         },
 
-        _initVariables: function () {
-            // Initialize bootstrap affix: Locks ('sticks') section, appears when scrolling
-            // $(s.css_classes.BACK_TO_TOP_FIXED).affix({});
-
-        },
 
         _bindEventListeners: function () {
             amplify.subscribe(BaseMatrixEvents.FILTER_ON_READY, this, this._filtersLoaded);
-            amplify.subscribe(BaseMatrixEvents.FILTER_ON_CHANGE, this, this._updateDashboard);
+            amplify.subscribe(BaseMatrixEvents.FILTER_ON_CHANGE, this, this._updateDashboards);
         },
 
         /**
          * When filters have all loaded - the TitleView is built using the currently selected filters and the dashboards rendered
-         * @param selectedFilterItems (payload)
+         * @param payload Selected Filter Items
          * @private
          */
         _filtersLoaded: function (payload) {
@@ -202,86 +197,72 @@ define([
 
             // Set Dashboard Properties
             if (payload["props"]) {
-                this.subview('dashboard').setProperties(payload["props"]);
+                this.subview('chartsDashboard').setProperties(payload["props"]);
+                this.subview('tableDashboard').setProperties(payload["props"]);
             }
 
             // Build Title View
             this.subview('title').setLabels(selectedFilterItems);
             this.subview('title').build();
 
-            // Set Dashboard Model
-            this._setDashboardModelValues();
-            this._setTableDashboardModelValues();
+            // Update Dashboard Models (with labels - see _updateChartsDashboardModelValues)
+            this._updateChartsDashboardModelValues();
+            this._updateTableDashboardModelValues();
 
-            // Render Dashboard Model
-            this.subview('dashboard').renderDashboard();
-
+            // Render each Dashboard
+            this.subview('chartsDashboard').renderDashboard();
             this.subview('tableDashboard').renderDashboard();
 
         },
 
 
-
         /**
          * When a filter selection changes, each Dashboard and Title Sub View is rebuilt/refreshed
-         * @param selected filter
+         * @param selectedFilter The selected filter which has changed
          * @private
          */
-        _updateDashboard: function (selectedfilter) {
+        _updateDashboards: function (selectedFilter) {
 
-            var ovalues = this.subview('filters').getFilterValues(), confPath, displayConfigForSelectedFilter, displayConfigForSelectedFilterValues, dashboardConfigChanged;
+            var filterValues = this.subview('filters').getFilterValues(), filterDerivedTopic;
 
-            // console.log("================= ovalues =============== ");
-            // console.log(ovalues);
+            // console.log("================= filter values =============== ");
+            // console.log(values);
 
             //console.log("================= selectedfilter =============== ");
             // console.log(selectedfilter);
 
-            if (selectedfilter) {
+            if (selectedFilter) {
 
-                // If selected filter has a value
-                if (selectedfilter.values.values.length > 0) {
+                // If the selected filter has a value
+                if (selectedFilter.values.values.length > 0) {
 
                     // Update the TitleView (Add Item)
-                    amplify.publish(Events.TITLE_ADD_ITEM, this._getTitleItem(selectedfilter));
+                    amplify.publish(Events.TITLE_ADD_ITEM, this._createTitleItem(selectedFilter));
 
-                    // Configuration display (if appropriate)
-                   // if (this.topicConfig) {
-                      //  displayConfigForSelectedFilter = this.topicConfig[selectedfilter.id];
-                  //  }
-
-                    // Set dashboard configuration
-                    if (selectedfilter['props']) {
-                        if (selectedfilter['props']['selected_topic']) {
-                            confPath = selectedfilter['props']['selected_topic'];
+                    // Get topic
+                    if (selectedFilter['props']) {
+                        if (selectedFilter['props']['selected_topic']) {
+                            filterDerivedTopic = selectedFilter['props']['selected_topic'];
                         }
                     }
 
-
                 }
-                // Else selected filter has no value (i.e.there has been a de-selection/removal)
+                // Else selected filter has no value (i.e.there has been a de-selection)
                 else {
 
                     // Update the TitleView (Remove Item)
-                    amplify.publish(Events.TITLE_REMOVE_ITEM, selectedfilter.id);
+                    amplify.publish(Events.TITLE_REMOVE_ITEM, selectedFilter.id);
 
-                    // Set dashboard configuration
-                    if (selectedfilter['props']) {
-                        if (selectedfilter['props']['selected_topic']) {
-                            confPath = selectedfilter['props']['selected_topic'];
+                    // Get topic
+                    if (selectedFilter['props']) {
+                        if (selectedFilter['props']['selected_topic']) {
+                            filterDerivedTopic = selectedFilter['props']['selected_topic'];
                         }
                     }
-
-                    // Re-configure display (if appropriate)
-                   // if (selectedfilter.dependencies && this.topicConfig) {
-                      //  displayConfigForSelectedFilter = this.topicConfig[selectedfilter.dependencies[0]];
-                   // }
-
                 }
 
-
-                // console.log("================= _updateDashboard: OTHER =============== ");
-                this._setDashboardConfiguration(confPath, ovalues, displayConfigForSelectedFilter);
+                // Get Topic Related Dashboard Configuration
+                this._getDashboardConfiguration(filterDerivedTopic, filterValues);
 
             }
 
@@ -289,74 +270,75 @@ define([
 
 
         /**
-         * Load the appropriate JS configuration file via require, if appropriate
-         * @param confPath
-         * @param ovalues
-         * @param displayConfigForSelectedFilter
+         * Gets the appropriate JS configuration file via requireJS, if the topic has changed
+         * @param filterDerivedTopic
+         * @param filterValues
          * @private
          */
-        _setDashboardConfiguration: function (confPath, ovalues, displayConfigForSelectedFilter) {
+        _getDashboardConfiguration: function (filterDerivedTopic, filterValues) {
             var self = this;
-            // console.log("================= _setDashboardConfiguration Start =============== ");
-            //console.log(ovalues);
+            // console.log("================= _getDashboardConfiguration Start =============== ");
+            //console.log(filtervalues);
 
-            if (confPath !== this.topic){
-                this.topic = confPath;
-                if (confPath) {
-                    require(['config/analyse/partner_matrix/config-' + confPath, 'config/analyse/partner_matrix/config-table-' + confPath], function (dialog, dialog2) {
-                        self._rebuildDashboard(ovalues, displayConfigForSelectedFilter, dialog.dashboard, dialog2.dashboard);
-                    });
-                }
+            // If the topic has changed, rebuild dashboards with new configuration
+            if (filterDerivedTopic && filterDerivedTopic !== this.topic) {
+                // Re set the current topic
+                this.topic = filterDerivedTopic;
+
+                //Load new configuration files
+                require([s.paths.CHARTS_CONFIG + filterDerivedTopic, s.paths.TABLE_CONFIG + filterDerivedTopic], function (TopicChartsConfig, TopicTableConfig) {
+                    // Rebuild dashboards with new configurations
+                    self._rebuildDashboards(filterValues, TopicChartsConfig.dashboard, TopicTableConfig.dashboard);
+                });
             }
             else {
-                self._rebuildDashboard(ovalues, displayConfigForSelectedFilter, self.subview('dashboard').getDashboardConfig(), self.subview('tableDashboard').getDashboardConfig());
+                // Rebuild dashboards with existing configurations
+                self._rebuildDashboards(filterValues, self.subview('chartsDashboard').getDashboardConfig(), self.subview('tableDashboard').getDashboardConfig());
             }
         },
 
         /**
-         * Rebuild the dashboard
-         * @param ovalues
-         * @param displayConfigForSelectedFilter
-         * @param dashboardConfig
+         * Rebuild the dashboards
+         * @param filterValues
+         * @param chartsDashboardConfig
+         * @param tableDashboardConfig
          * @private
          */
 
-        _rebuildDashboard: function (ovalues, displayConfigForSelectedFilter, dashboardConfig, tableDashboardConfig) {
+        _rebuildDashboards: function (filterValues, chartsDashboardConfig, tableDashboardConfig) {
 
-            //console.log("================= _rebuildDashboard 1 =============== ");
+            //console.log("================= _rebuildDashboards 1 =============== ");
             //console.log(dashboardConfig);
 
-            this.subview('dashboard').setDashboardConfig(dashboardConfig);
+            // Set Dashboard Configuration
+            this.subview('chartsDashboard').setDashboardConfig(chartsDashboardConfig);
             this.subview('tableDashboard').setDashboardConfig(tableDashboardConfig);
 
-            // console.log("================= _rebuildDashboard 2 =============== ");
-            // console.log(displayConfigForSelectedFilter);
-            // Hide/Show Dashboard Items
-
-           // this.subview('dashboard').updateDashboardTemplate(displayConfigForSelectedFilter);
-            //this.subview('tableDashboard').updateDashboardTemplate(displayConfigForSelectedFilter);
-
-            // Update Dashboard Model
-            this._setDashboardModelValues();
-
-            // Update Dashboard Model
-            this._setTableDashboardModelValues();
+            // Update Dashboard Models (with labels - see _updateChartsDashboardModelValues)
+            this._updateChartsDashboardModelValues();
+            this._updateTableDashboardModelValues();
 
 
             //console.log("================= _rebuildDashboard 3 =============== ");
             // console.log(ovalues);
 
-            // Rebuild Dashboard
-            this.subview('dashboard').rebuildDashboard(ovalues, this.topic);
-            this.subview('tableDashboard').rebuildDashboard(ovalues, this.topic);
+            // Rebuild Dashboards
+            this.subview('chartsDashboard').rebuildDashboard(filterValues, this.topic);
+            this.subview('tableDashboard').rebuildDashboard(filterValues, this.topic);
         },
 
 
-        _getTitleItem: function (item) {
+        /**
+         * Create the Title Item (from the filterItem's id and label)
+         * @param filterItem
+         * @private
+         */
 
-            var titleItem = {}, labels = item.values.labels;
+        _createTitleItem: function (filterItem) {
 
-            titleItem.id = item.id;
+            var titleItem = {}, labels = filterItem.values.labels;
+
+            titleItem.id = filterItem.id;
 
             var key = Object.keys(labels)[0];
             titleItem.label = labels[key];
@@ -372,11 +354,11 @@ define([
         },
 
 
-        _setDashboardModelValues: function () {
-            this.dashboardModel.set(s.dashboardModel.LABEL, this.subview('title').getTitleAsArray());
+        _updateChartsDashboardModelValues: function () {
+            this.chartsDashboardModel.set(s.dashboardModel.LABEL, this.subview('title').getTitleAsArray());
         },
 
-        _setTableDashboardModelValues: function () {
+        _updateTableDashboardModelValues: function () {
             this.tableDashboardModel.set(s.dashboardModel.LABEL, this.subview('title').getTitleAsArray());
         },
 

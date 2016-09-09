@@ -13,20 +13,21 @@ define([
     'fx-common/pivotator/fenixtool',
     'config/analyse/partner_matrix/config-table-filter',
     'lib/utils',
+    'i18n!nls/table',
     'i18n!nls/filter',
     'fx-common/utils',
     'handlebars',
     'amplify'
-], function ($, log, _, ERR, EVT, C, Template, OlapCreator, Filter, FenixTool, FilterModel, Utils, i18nLabels, FxUtils, Handlebars) {
+], function ($, log, _, ERR, EVT, C, Template, OlapCreator, Filter, FenixTool, FilterModel, Utils, i18nTableLabels, i18nLabels, FxUtils, Handlebars) {
 
     'use strict';
 
     var Model;
 
     var s = {
-        CONFIGURATION_EXPORT: "#configuration-export",
-        FILTER_INTERACTION: "#filter-interaction",
-        OLAP_INTERACTION: "#olap-interaction"
+        TABLE_INFO: "#table-info",
+        TABLE_FILTER: "#table-filter",
+        TABLE: "#table"
     };
 
     var defaultOptions = {};
@@ -119,8 +120,11 @@ define([
 
     TableItem.prototype._renderTemplate = function () {
         this.indicatortemplate = Handlebars.compile(Template);
-        $(this.el).html(this.indicatortemplate);
 
+        var data = $.extend(true, {data: {size: this.model.size}}, i18nTableLabels);
+        var html = this.indicatortemplate(data);
+
+        $(this.el).html(html);
     };
 
     TableItem.prototype._initVariables = function () {
@@ -147,15 +151,14 @@ define([
 
     };
 
-
-    TableItem.prototype._processPayload = function () {
+    TableItem.prototype._processPayloadWithFilter = function () {
 
         var config = this._getUpdatedFilterConfig(FilterModel);
 
         // Display filter if more than one data row
         if (this.model.size > 1) {
             this.filter = new Filter({
-                el: s.FILTER_INTERACTION,
+                el: s.TABLE_FILTER,
                 items: config
             });
 
@@ -166,7 +169,7 @@ define([
 
                 config = $.extend(true, {}, {
                         model: this.model,
-                        el: s.OLAP_INTERACTION
+                        el: s.TABLE
                     }, config
                 );
 
@@ -190,7 +193,7 @@ define([
         else {
 
             this.config.model = this.model;
-            this.config.el = s.OLAP_INTERACTION;
+            this.config.el = s.TABLE;
 
             for (var d in this.config.derived) {
                 this.config.aggregations.push(d);
@@ -198,6 +201,28 @@ define([
 
             this.olap = new OlapCreator(this.config);
         }
+
+    };
+
+    TableItem.prototype._processPayload = function () {
+
+        var config = this._getUpdatedFilterConfig(FilterModel);
+
+        this.config.model = this.model;
+        this.config.el = s.TABLE;
+
+        for (var d in this.config.derived) {
+            this.config.aggregations.push(d);
+        }
+
+        this.olap = new OlapCreator(this.config);
+
+        //console.log("============ ROWS =============");
+        //console.log(this.olap);
+
+        //for(var key in this.olap){
+          //  console.log(key);
+       // }
 
     };
 
