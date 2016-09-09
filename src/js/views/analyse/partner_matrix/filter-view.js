@@ -194,7 +194,7 @@ define(
                             }
                         }
 
-                        console.log("========================= FilterView: ON CHANGE COUNTRY ==============");
+                        //console.log("========================= FilterView: ON CHANGE COUNTRY ==============");
                         amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": additionalProperties}));
 
                     }
