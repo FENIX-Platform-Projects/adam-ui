@@ -102,7 +102,7 @@ define(function () {
                             {
                                 "name": "select",
                                 "parameters": {
-                                    "query": "WHERE recipientcode NOT IN (?)", // skipping regional recipient countries (e.g. "Africa, regional"; "North of Sahara, regional")
+                                    "query": "WHERE recipientcode NOT IN (?) AND value > 0", // skipping regional recipient countries (e.g. "Africa, regional"; "North of Sahara, regional")
                                     "queryParameters": [
                                         {"value": 'NA'}
                                     ]

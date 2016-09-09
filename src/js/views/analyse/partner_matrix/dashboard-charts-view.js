@@ -3,7 +3,7 @@ define([
     'jquery',
     'underscore',
     'views/base/view',
-    'text!templates/analyse/partner_matrix/dashboard.hbs',
+    'text!templates/analyse/partner_matrix/charts-dashboard.hbs',
     'fx-dashboard/start',
     'lib/utils',
     'config/Config',
@@ -21,7 +21,7 @@ define([
 
     var defaultOptions = {
         item_container_id: '-container',
-        PROGRESS_BAR_CONTAINER: '#progress-bar-holder',
+        PROGRESS_BAR_CONTAINER: '#analyse-partner-matrix-progress-bar-holder',
         events: {
             CHANGE: 'change'
         },
@@ -35,19 +35,19 @@ define([
 
     /**
      *
-     * Creates a new Resource Partner Matrix Dashboard View
-     * Instantiates the FENIX dashboard submodule, ProgressBar and responsible for all resource partner matrix dashboard related functionality.
+     * Creates a new Charts Dashboard View
+     * Instantiates the FENIX dashboard submodule, ProgressBar and responsible for all charts dashboard related functionality.
      * Including updates to the Dashboard model.
-     * @class DashboardView
+     * @class ChartsDashboardView
      * @extends View
      */
 
-    var DashboardView = View.extend({
+    var ChartsDashboardView = View.extend({
 
-        // Automatically render after initialize
+        // DO NOT automatically render after initialize
         autoRender: false,
 
-        className: 'dashboard-browse',
+        className: 'analyse-partner-matrix-dashboard-charts',
 
         // Save the template string in a prototype property.
         // This is overwritten with the compiled template function.
@@ -60,7 +60,6 @@ define([
             this.dashboards = [];
 
             this.source = $(this.template).find("[data-topic='" + this.topic + "']").prop('outerHTML');
-
 
             //Initialize Progress Bar
             this.progressBar = new ProgressBar({
@@ -79,7 +78,7 @@ define([
             this.setElement(this.container);
             this._unbindEventListeners();
 
-            // Update the language related labels in the item configurations (charts)
+            // Update the language related labels in the dashboard item configurations
             for (var it in this.config.items) {
                 var item = this.config.items[it];
                 this._updateChartExportTitles(this.config.items[it], i18nDashboardLabels[item.id], this.model.get('label'));
@@ -96,13 +95,10 @@ define([
 
 
         getTemplateFunction: function () {
-
-            // Update the language related labels in the dashboard template
-
             this.compiledTemplate = Handlebars.compile(this.source);
-
             var model = this.model.toJSON();
 
+            // Update the language related labels in the dashboard template
             var data = $.extend(true, model, i18nLabels, i18nDashboardLabels);
 
             return this.compiledTemplate(data);
@@ -264,7 +260,7 @@ define([
             );
 
             // Load Progress bar
-            //this._loadProgressBar();
+            this._loadProgressBar();
 
         },
 
@@ -318,5 +314,5 @@ define([
 
     });
 
-    return DashboardView;
+    return ChartsDashboardView;
 });

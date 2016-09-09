@@ -14,10 +14,11 @@ define(function () {
                         id: "partner-matrix-2",
                         type: 'custom',
                         config: {
-                            "groupedRow":true,
+                            "groupedRow":false,
                             "aggregationFn":{"value":"sum"},
                             "formatter":"localstring",
                             "decimals":2,
+                            "pageSize": "150",
                             "showRowHeaders":true,
                             "columns":["indicator"],
                             "rows":["recipientcode", "donorcode"],
@@ -102,7 +103,7 @@ define(function () {
                             {
                                 "name": "select",
                                 "parameters": {
-                                    "query": "WHERE donorcode NOT IN (?)", // skipping regional recipient countries (e.g. "Africa, regional"; "North of Sahara, regional")
+                                    "query": "WHERE donorcode NOT IN (?) AND value > 0", // skipping regional recipient countries (e.g. "Africa, regional"; "North of Sahara, regional")
                                     "queryParameters": [
                                         {"value": 'NA'}
                                     ]
