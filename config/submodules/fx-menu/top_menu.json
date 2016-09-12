@@ -21,11 +21,11 @@
       },
     {
       "attrs": {
-        "id": "analyze"
+        "id": "analyse"
       },
-      "target": "#analyze",
+      "target": "#analyse",
       "label": {
-        "EN": "Analyze Data"
+        "EN": "Analyse Data"
       }
     },
     {
@@ -34,28 +34,7 @@
       },
       "target": "#profiles",
       "label": {
-        "EN": "Profiles"
-      }
-    },
-    {
-      "attrs": {
-        "id": "analysis"
-      },
-      "target": "#analysis",
-      "label": {
-        "EN": "Download"
-      }
-    },
-    {
-      "attrs": {
-        "id": "datamgmt"
-      },
-      "a_attrs": {
-        "rel": "external"
-      },
-      "target": "datamgmt.html",
-      "label": {
-        "EN": "Data Management"
+        "EN": "Resource Partner Profiles"
       }
     }
   ],

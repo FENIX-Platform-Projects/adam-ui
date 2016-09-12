@@ -7,8 +7,11 @@ define(function () {
         CODELIST_PREFIX = SERVER+ 'msd/resources/',
         CODELIST_HIERARCHY_PREFIX = SERVER+ 'msd/codes/hierarchy/';
 
+
     return {
 
+        ENVIRONMENT : 'develop',
+        DEFAULT_UID: 'adam_usd_commitment',
         SERVER: SERVER,
         CODES_POSTFIX : '/codes/filter',
         HIERARCHY_CODES_POSTFIX : '/codes/hierarchy',
@@ -23,7 +26,7 @@ define(function () {
 
         //Top Menu configuration
         TOP_MENU_CONFIG: 'config/submodules/fx-menu/top_menu.json',
-        TOP_MENU_TEMPLATE: 'fx-menu/templates/blank-fluid.html',
+        TOP_MENU_TEMPLATE: 'fx-menu/html/blank-fluid.html',
         TOP_MENU_SHOW_BREADCRUMB: true,
         TOP_MENU_SHOW_BREADCRUMB_HOME: false,
         TOP_MENU_SHOW_FOOTER: false,

@@ -3,9 +3,10 @@ define([
     'jquery',
     'views/base/view',
     'text!templates/common/title.hbs',
+    'config/Events',
     'handlebars',
     'amplify'
-], function ($, View, template, Handlebars) {
+], function ($, View, template, Events, Handlebars) {
 
     'use strict';
 
@@ -15,11 +16,11 @@ define([
     var s = {
         css_classes: {
             TITLE_ITEMS_LIST: "#fx-title-items-list"
-        },
-        events: {
-            ADD_ITEM: 'fx.title.item.add',
-            REMOVE_ITEM: 'fx.title.item.remove'
-        }
+        }//,
+       // events: {
+           // ADD_ITEM: 'fx.title.item.add',
+           // REMOVE_ITEM: 'fx.title.item.remove'
+       // }
     };
 
     var TitleView = View.extend({
@@ -54,13 +55,67 @@ define([
         getTemplateFunction: function() {
             var source = $(this.template).prop('outerHTML');
             var template = Handlebars.compile(source);
-            return template({title:  this.options.title});
+            return template({header:  this.options.header});
         },
 
         render: function () {
             this.setElement(this.container);
 
             $(this.container).html(this.getTemplateFunction());
+        },
+
+
+        build : function(){
+            var self = this, range = '';
+
+            $.each( this.options.labels, function( id, item ) {
+
+
+                if(!$.isEmptyObject(item)){
+
+                    item.id = id;
+
+                    var key = Object.keys(item)[0];
+                    item.label = item[key];
+
+                    self._addItem(item);
+                }
+            });
+
+            /**$.each( this.options.labels, function( id, item ) {
+
+                if(!$.isEmptyObject(item)){
+
+                    item.id = id;
+
+                    var key = Object.keys(item)[0];
+                    item.label = item[key];
+                    console.log(item.id,  item.label);
+
+
+                    if(id === 'year-from' || id === 'year-to' ) {
+
+                        if(range.length > 0){
+                            range += ' - ' + item.label;
+                        } else
+                            range =  item.label
+
+                        item.id = 'year';
+                        item.label =  range;
+                    }
+
+
+
+                    self._addItem(item);
+                }
+            });**/
+
+
+        },
+
+        setLabels : function(labels){
+            this.options.labels = labels;
+
         },
 
         show : function(){
@@ -128,16 +183,20 @@ define([
         },
 
         _bindEventListeners: function () {
-            amplify.subscribe(s.events.ADD_ITEM, this, this._onAdd);
-            amplify.subscribe(s.events.REMOVE_ITEM, this, this._onRemove);
+            //amplify.subscribe(s.events.ADD_ITEM, this, this._onAdd);
+            //amplify.subscribe(s.events.REMOVE_ITEM, this, this._onRemove);
+
+            amplify.subscribe(Events.TITLE_ADD_ITEM, this, this._onAdd);
+            amplify.subscribe(Events.TITLE_REMOVE_ITEM, this, this._onRemove);
+
         },
 
         _onAdd: function (e) {
             this._addItem(e);
         },
 
-        _onRemove: function (e) {
-            this.removeItem(e.name);
+        _onRemove: function (id) {
+            this.removeItem(id);
         },
 
         _addItem: function (item) {
@@ -165,12 +224,12 @@ define([
         },
 
         _replaceListItemText: function(item, replace) {
-             item.text(replace.text)
+             item.text(replace.label)
         },
 
         _updateList: function (item) {
 
-            var hiddenItem = this._findHiddenItem(item.name);
+            var hiddenItem = this._findHiddenItem(item.id);
 
             if(hiddenItem) {
                 this._replaceListItem(hiddenItem, item);
@@ -181,7 +240,7 @@ define([
         },
 
         _createListItem: function (item) {
-          return $('<li data-module="' + item.name + '" style="display:none">'+ this._formatText(item.text) +'</li>');
+          return $('<li data-module="' + item.id + '" style="display:none">'+ this._formatText(item.label) +'</li>');
         },
 
         _formatText: function(text){
@@ -197,8 +256,11 @@ define([
 
         _unbindEventListeners: function () {
             // Remove listeners
-            amplify.unsubscribe(s.events.ADD_ITEM, this._onAdd);
-            amplify.unsubscribe(s.events.REMOVE_ITEM, this._onRemove);
+           // amplify.unsubscribe(s.events.ADD_ITEM, this._onAdd);
+           // amplify.unsubscribe(s.events.REMOVE_ITEM, this._onRemove);
+
+            amplify.unsubscribe(Events.TITLE_REMOVE_ITEM, this._onAdd);
+            amplify.unsubscribe(Events.TITLE_ADD_ITEM, this._onRemove);
         },
 
         dispose: function () {

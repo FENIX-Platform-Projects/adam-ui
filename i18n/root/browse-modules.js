@@ -11,7 +11,7 @@ define({
                 "EN": "Sector"
             },
             "body": {
-                "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
+                "EN": "Analyse past ODA spending and top resource partners and recipient countries in specific OECD-DAC sectors and subsectors, for a specific time period."
             },
             "link": "#browse/sector",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/monitoring/kenya/timeseries/kenya_monitoring_timeseries.png"
@@ -21,10 +21,10 @@ define({
                 "EN": "Browse by"
             },
             "title": {
-                "EN": "Country"
+                "EN": "Recipient Country"
             },
             "body": {
-                "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
+                "EN": "Learn about total ODA spending, top resource partners, channels of delivery, sectors and subsectors in the Recipient Country and for the time period of your choice."
             },
             "link": "#browse/country",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/crowdprices/crowdprices.png"
@@ -34,10 +34,10 @@ define({
                 "EN": "Browse by"
             },
             "title": {
-                "EN": "Donor"
+                "EN": "Resource Partner"
             },
             "body": {
-                "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
+                "EN": "Find out the geographical operational outreach of the selected resource partner, and which top sectors and subsectors are the most financed through a certain channel of delivery."
             },
             "link": "#browse/donor",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/trade_AFG/trade_AFG.png"
@@ -47,10 +47,10 @@ define({
                 "EN": "Browse by"
             },
             "title": {
-                "EN": "Country and Donor"
+                "EN": "Recipient Country and Resource Partner"
             },
             "body": {
-                "EN": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
+                "EN": "Analyse a Resource Partner's ODA spending in a specific recipient country and time period, in relation to the top channels of delivery, sectors and subsectors."
             },
             "link": "#browse/country_donor",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/env_AFG/environmental_AFG.png"

@@ -9,7 +9,7 @@ define({
     "development_indicators": "Development Indicators",
     "text" : "Change me in 118n/root/browse.js",
     "sector": "By Sector",
-    "country": "By Country",
-    "donor": "By Donor",
-    "country_donor": "By Country & Donor"
+    "country": "By Recipient Country",
+    "donor": "By Resource Partner",
+    "country_donor": "By Recipient Country & Resource Partner"
 });

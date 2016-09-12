@@ -3,11 +3,9 @@
 /* RLM - Variables */
 @import '../../src/css/theme/variables';
 
-
 .fx-sandbox{
   padding: 0 5px;
 }
-
 
 @import '../../src/css/fx-boot/bootstrap';
 
@@ -17,7 +15,7 @@
 /* Base */
 @import '../../src/css/theme/default';
 
-/* Components */
+///* Components */
 @import '../../src/css/components/breadcrumbs';
 @import '../../src/css/components/fao-footer';
 @import '../../src/css/components/fao-topmenu';
@@ -25,8 +23,7 @@
 @import '../../src/css/components/icons';
 @import '../../src/css/components/jstree';
 @import '../../src/css/components/preload';
-@import '../../src/css/components/submenu';
-
+//@import '../../src/css/components/submenu';
 
 /* Typo3 */
 @import '../../src/css/theme/typo3-compatibility';
@@ -36,9 +33,37 @@
 @import '../../src/css/pages/analyze-data';
 @import '../../src/css/pages/browse-data';
 
+
+
+/* Fenix Common CSS */
+@import '../../submodules/fenix-ui-common/css/themes/fx-variables';
+
+/* Boostrap Queries */
+@import '../../submodules/fenix-ui-common/css/themes/fx-bootstrap-queries';
+$fx-ui-common: '../../submodules/fenix-ui-common/';
+
+
+@import '../../submodules/fenix-ui-common/css/base/fx-typography';
+
+@import '../../submodules/fenix-ui-common/css/utils/fx-mixins';
+@import '../../submodules/fenix-ui-common/css/components/fx-tabs';
+@import '../../submodules/fenix-ui-common/css/components/fx-buttons';
+@import '../../submodules/fenix-ui-common/css/components/fx-icons';
+@import '../../submodules/fenix-ui-common/css/vendor/fx-jstree';
+@import '../../submodules/fenix-ui-common/css/components/fx-radio-checkbox';
+
+@import '../../submodules/fenix-ui-filter/src/css/filter';
+@import '../../submodules/fenix-ui-analysis/src/css/analysis';
+@import '../../submodules/fenix-ui-visualization-box/src/css/visualization-box';
+
 body {
   background-color: $fenix-light-bg;
   font-family: "FrutigerLTW02-45Light", Arial, Helvetica, Verdana, sans-serif;
 }
+
+/*#partner-matrix-container .gt-freeze-div[id*="headDiv"]  table tr td {
+  background-color: #3c91c2 !important;
+}*/
+
 
 

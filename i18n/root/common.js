@@ -9,6 +9,7 @@ define({
     "courtesy_message" : "No results",
     "no_results" : "No Results",
     "selector_select_all" : "Select All",
-    "selector_select_none" : "Select None"
-
+    "selector_select_none" : "Select None",
+    "loading_in_progress" : "Loading in progress",
+    "completed" : "Completed"
 });
