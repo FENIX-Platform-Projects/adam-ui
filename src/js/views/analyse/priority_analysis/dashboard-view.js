@@ -3,7 +3,7 @@ define([
     'jquery',
     'underscore',
     'views/base/view',
-    'text!templates/analyse/priority/dashboard.hbs',
+    'text!templates/analyse/priority_analysis/dashboard.hbs',
     'fx-dashboard/start',
     'lib/utils',
     'i18n!nls/browse',
@@ -53,7 +53,7 @@ define([
             //this.model.on("change", this.render);
             this.dashboards = [];
 
-            this.source = $(this.template);//.find("[data-topic='" + this.topic + "']");//.prop('outerHTML');
+            c//.find("[data-topic='" + this.topic + "']");//.prop('outerHTML');
 
             View.prototype.initialize.call(this, arguments);
 

@@ -6,80 +6,52 @@ define(function () {
 
     return {
 
-        SECONDARY_MENU: {
-            url: 'config/browse/secondary_menu.json'
-        },
-
-            filter: {
-                "recipientcode": {
-                    default: ["600"],
-                    "cl": {"uid": "crs_recipients", "version": "2016"},
-                    "selector": {"id": "tree", "hideSummary": false},
-                    "template": {"title": "", "hideSwitch": true},
-                    "format": {"dimension": "recipientcode"},
-                    className: "col-sm-4",
-                    summaryRender : function (item) {
-                        return "<u><mark> " + item.label + "</mark></u>"
+        filter: {
+            recipientcode: {
+                selector: {
+                    id: "dropdown",
+                    default: ["625"], // afghanistan
+                    config: { //Selectize configuration
+                        maxItems: 1,
+                        placeholder: "All",
+                        plugins: ['remove_button'],
+                        mode: 'multi'
                     }
                 },
-                "donorcode": {
-                    default: ["600"],
-                    "cl": {"uid": "crs_donors", "version": "2016"},
-                    "selector": {"id": "tree", "hideSummary": false},
-                    "template": {"title": "", "hideSwitch": true},
-                    "format": {"dimension": "donorcode"},
-                    className: "col-sm-6",
-                    summaryRender : function (item) {
-                        return "<u><mark> " + item.label + "</mark></u>"
+                className: "col-sm-4",
+                cl: {
+                    uid: "crs_recipients",
+                    version: "2016",
+                    level: 1,
+                    levels: 1
+                },
+                template: {
+                    hideSwitch: true,
+                    hideRemoveButton: true
+                }
+            },
+            donorcode: {
+                selector: {
+                    id: "dropdown",
+                    config: { //Selectize configuration
+                        maxItems: 1,
+                        placeholder: "All",
+                        plugins: ['remove_button'],
+                        mode: 'multi'
                     }
                 },
-              /**  recipientcode2: {
-                    selector: {
-                        id: "dropdown",
-                        default: ["600"],
-                        config: { //Selectize configuration
-                           // maxItems: 1,
-                            placeholder: "Please select",
-                            plugins: ['remove_button'],
-                            mode: 'multi'
-                        }
-                    },
-                    className: "col-sm-3",
-                    cl: {
-                        uid: "crs_recipients",
-                        version: "2016",
-                        level: 1,
-                        levels: 1
-                    },
-                    template: {
-                        hideSwitch: true,
-                        hideRemoveButton: true
-                    }
+                className: "col-sm-4",
+                cl: {
+                    uid: "crs_donors",
+                    version: "2016",
+                    level: 1,
+                    levels: 1
                 },
-                donorcode: {
-                    selector: {
-                        id: "dropdown",
-                        default: ["600"],
-                        config: { //Selectize configuration
-                           // maxItems: 1,
-                            placeholder: "Please select",
-                            plugins: ['remove_button'],
-                            mode: 'multi'
-                        }
-                    },
-                    className: "col-sm-3",
-                    cl: {
-                        uid: "crs_donors",
-                        version: "2016",
-                        level: 1,
-                        levels: 1
-                    },
-                    template: {
-                        hideSwitch: true,
-                        hideRemoveButton: true
-                    }
-                },
-
+                template: {
+                    hideSwitch: true,
+                    hideRemoveButton: true
+                }
+            },
                 "year-from": {
                     selector: {
                         id: "dropdown",
@@ -100,9 +72,7 @@ define(function () {
                         hideRemoveButton: true
                     }
                 },
-
                 "year-to": {
-
                     selector: {
                         id: "dropdown",
                         from: 2000,
@@ -126,7 +96,7 @@ define(function () {
                         hideSwitch: true,
                         hideRemoveButton: true
                     }
-                }**/
+                }
             },
 
 
@@ -136,7 +106,7 @@ define(function () {
 
                 items: [
                     {
-                        id: 'venn',
+                        id: 'venn-analysis',
                         type: 'chart',
                         config: {
                             type: "venn",
@@ -150,6 +120,10 @@ define(function () {
 
                         },
                         filter: { //FX-filter format
+
+                           // recipientcode: ['Afghanistan', 'Bangladesh', 'Belize'],
+                          //  year: [{value: "2000", parent: 'from'}, {value: "2014", parent: 'to'}]
+
                            recipientname: ['Afghanistan', 'Bangladesh', 'Belize'],
                            year : [2014]//,
                          //  recipientcode: ["600"],
