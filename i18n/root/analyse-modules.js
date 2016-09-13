@@ -65,7 +65,7 @@ define({
             "body": {
                 "EN": "Analyse common priorities between FAO, National Governments and Resource Partners by intersecting FAO's countries programming framework, UNDAF documents and donors' spending priorities."
             },
-            "link": "#analyse/priority",
+            "link": "#analyse/priority_analysis",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/monitoring/kenya/timeseries/kenya_monitoring_timeseries.png"
         },
         {

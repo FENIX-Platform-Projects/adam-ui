@@ -3,11 +3,11 @@ define([
     'chaplin',
     'controllers/base/controller',
     'views/analyse-view',
-    'views/analyse/priority/priority-view',
+    'views/analyse/priority_analysis/priority-analysis-view',
     'views/analyse/compare/compare-view',
     'views/analyse/partner_matrix/partner-matrix-view',
     // 'views/analyze/projects/projects-view'
-], function (Chaplin, Controller, AnalyzeView, PriorityView,CompareView, ResourcePartnerMatrixView /**, , ProjectsView**/) {
+], function (Chaplin, Controller, AnalyzeView, PriorityAnalysisView, CompareView, ResourcePartnerMatrixView /**, , ProjectsView**/) {
 
     'use strict';
 
@@ -22,8 +22,8 @@ define([
             });
         },
 
-        priority: function (params, route) {
-            this.view = new PriorityView({
+        priority_analysis: function (params, route) {
+            this.view = new PriorityAnalysisView({
                 region: 'main',
                 filter: route.action,
                 page: Backbone.history.fragment
