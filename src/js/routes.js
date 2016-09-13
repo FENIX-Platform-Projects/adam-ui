@@ -13,7 +13,7 @@ define(function () {
         match('browse/:filter', 'browse#browseby');
         match('browse/:filter/:recipientcode', 'browse#browseby');
         match('analyse', 'analyse#show');
-        match('analyse/priority', 'analyse#priority');
+        match('analyse/priority_analysis', 'analyse#priority_analysis');
         match('analyse/compare', 'analyse#compare');
         match('analyse/partner_matrix', 'analyse#partner_matrix');
         // match('analyse/projects', 'analyse#projects');
