@@ -17,8 +17,8 @@ define(function () {
                             "groupedRow":false,
                             "formatter":"localstring",
                             "showRowHeaders":true,
-                            "values":[],
-                            "rows":[ "purposecode",  "projecttitle","projectshortdescription"],
+                            "values":["projectshortdescription"],
+                            "rows":[ "purposecode",  "projecttitle"],
                             "aggregations":[],
                             inputFormat : "fenixtool"
                         },
