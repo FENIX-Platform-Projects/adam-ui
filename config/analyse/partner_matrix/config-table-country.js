@@ -21,22 +21,44 @@ define(function () {
                             "pageSize": "150",
                             "showRowHeaders":true,
                             "columns":["indicator"],
-                            "rows":["recipientcode", "donorcode"],
+                            "rows":["recipientcode_EN", "donorcode_EN"],
                             "aggregations":[],
                             "values":["value"],
                             inputFormat : "fenixtool"
                         },
 
                         filterFor: {
-                            "filter_total_ODA": ['year', 'oda', 'recipientcode']
+                            "filter_all_subsectors": ['year', 'oda', 'recipientcode'],
+                            "filter_faosubsectors": ['year', 'oda', 'recipientcode']
                         },
 
                         postProcess: [
                             {
+                                "name": "union",
+                                "sid": [
+                                    {
+                                        "uid": "total_oda"
+                                    },
+                                    {
+                                        "uid": "related_oda"
+                                    },
+                                    {
+                                        "uid":"percentage_oda"
+                                    }
+
+                                ],
+                                "parameters": {
+                                },
+                                "rid":{"uid":"union_process"}
+
+                            },
+
+
+                            {
                                 "name": "filter",
                                 "sid": [
                                     {
-                                        "uid": "adam_usd_aggregation_table"
+                                        "uid": "adam_resource_matrix_oda"
                                     }
                                 ],
                                 "parameters": {
@@ -58,11 +80,6 @@ define(function () {
                                                 }
                                             ]
                                         },
-                                        "oda": {
-                                            "enumeration": [
-                                                "usd_commitment"
-                                            ]
-                                        },
                                         "year": {
                                             "time": [
                                                 {
@@ -70,16 +87,22 @@ define(function () {
                                                     "to": 2014
                                                 }
                                             ]
+                                        },
+                                        "oda": {
+                                            "enumeration": [
+                                                "usd_commitment"
+                                            ]
                                         }
                                     }
                                 },
-                                "rid":{"uid":"filter_total_ODA"}
+                                "rid":{"uid":"filter_all_subsectors"}
                             },
                             {
                                 "name": "group",
                                 "parameters": {
                                     "by": [
-                                        "recipientcode", "donorcode"
+                                        "recipientcode",
+                                        "donorcode"
                                     ],
                                     "aggregations": [
                                         {
@@ -92,21 +115,12 @@ define(function () {
                                             "columns": [
                                                 "unitcode"
                                             ],
-                                            "rule": "first"
+                                            "rule": "max"
                                         }
                                     ]
                                 },
                                 "rid": {
-                                    "uid": "total_oda"
-                                }
-                            },
-                            {
-                                "name": "select",
-                                "parameters": {
-                                    "query": "WHERE donorcode NOT IN (?) AND value > 0", // skipping regional recipient countries (e.g. "Africa, regional"; "North of Sahara, regional")
-                                    "queryParameters": [
-                                        {"value": 'NA'}
-                                    ]
+                                    "uid": "all_subsectors_sum"
                                 }
                             },
                             {
@@ -115,7 +129,7 @@ define(function () {
                                     "column": {
                                         "dataType": "text",
                                         "id": "indicator",
-                                        key:true,
+                                        "key": true,
                                         "title": {
                                             "EN": "Indicator"
                                         },
@@ -132,6 +146,232 @@ define(function () {
                                         "subject": null
                                     },
                                     "value": "Total ODA (mil $)"
+                                },
+                                "rid": {
+                                    "uid": "total_oda"
+                                }
+                            },
+
+                            {
+                                "name": "filter",
+                                "sid": [
+                                    {
+                                        "uid": "adam_resource_matrix_oda"
+                                    }
+                                ],
+                                "parameters": {
+                                    "columns": [
+                                        "recipientcode",
+                                        "donorcode",
+                                        "value",
+                                        "unitcode"
+                                    ],
+                                    "rows": {
+                                        "recipientcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_recipients",
+                                                    "version": "2016",
+                                                    "codes": [
+                                                        "625"
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "year": {
+                                            "time": [
+                                                {
+                                                    "from": 2000,
+                                                    "to": 2014
+                                                }
+                                            ]
+                                        },
+                                        "oda": {
+                                            "enumeration": [
+                                                "usd_commitment"
+                                            ]
+                                        },
+                                        "fao_sector": {
+                                            "enumeration": [
+                                                "1"
+                                            ]
+                                        }
+                                    }
+                                },
+                                "rid":{"uid":"filter_faosubsectors"}
+                            },
+                            {
+                                "name": "group",
+                                "parameters": {
+                                    "by": [
+                                        "recipientcode",
+                                        "donorcode"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": [
+                                                "value"
+                                            ],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": [
+                                                "unitcode"
+                                            ],
+                                            "rule": "first"
+                                        }
+                                    ]
+                                }},
+                            {
+                                "name": "addcolumn",
+                                "parameters": {
+                                    "column": {
+                                        "dataType": "text",
+                                        "id": "indicator",
+                                        "key": true,
+                                        "title": {
+                                            "EN": "Indicator"
+                                        },
+                                        "domain": {
+                                            "codes": [
+                                                {
+                                                    "extendedName": {
+                                                        "EN": "Adam Processes"
+                                                    },
+                                                    "idCodeList": "adam_processes"
+                                                }
+                                            ]
+                                        },
+                                        "subject": null
+                                    },
+                                    "value": "ODA in FAO sectors (mil $)"
+                                },
+                                "rid": {
+                                    "uid": "related_oda"
+                                }
+                            },
+                            {
+                                "name": "join",
+                                "sid": [
+                                    {
+                                        "uid": "total_oda"
+                                    },
+                                    {
+                                        "uid": "related_oda"
+                                    }
+                                ],
+                                "parameters": {
+                                    "joins": [
+                                        [
+
+                                            {
+                                                "type": "id",
+                                                "value": "recipientcode"
+                                            },
+                                            {
+                                                "type": "id",
+                                                "value": "donorcode"
+                                            }
+                                        ],
+                                        [
+                                            {
+                                                "type": "id",
+                                                "value": "recipientcode"
+                                            },
+                                            {
+                                                "type": "id",
+                                                "value": "donorcode"
+                                            }
+
+                                        ]
+                                    ],
+                                    "values": [
+                                    ]
+                                },
+                                "rid":{"uid":"join_process"}
+                            },
+                            {
+                                "name": "addcolumn",
+                                "sid":[{"uid":"join_process"}],
+                                "parameters": {
+                                    "column": {
+                                        "dataType": "number",
+                                        "id": "value",
+                                        "title": {
+                                            "EN": "FAO Sector (%)"
+                                        },
+                                        "subject": null
+                                    },
+                                    "value": {
+                                        "keys":  ["1 = 1"],
+                                        "values":[" ( related_oda_value / total_oda_value )*100"]
+
+                                    }
+                                }
+                            },
+                            {
+                                "name": "addcolumn",
+                                "parameters": {
+                                    "column": {
+                                        "id": "unitcode",
+                                        "title": {
+                                            "EN": "Measurement Unit"
+                                        },
+                                        "domain": {
+                                            "codes": [{
+                                                "idCodeList": "crs_units",
+                                                "version": "2016",
+                                                "level": 1
+                                            }]
+                                        },
+                                        "dataType": "code",
+                                        "subject": null
+                                    },
+                                    "value": "percentage"
+                                }
+                            },
+                            {
+                                "name": "addcolumn",
+                                "parameters": {
+                                    "column": {
+                                        "dataType": "text",
+                                        "id": "indicator",
+                                        "key": true,
+                                        "title": {
+                                            "EN": "Indicator"
+                                        },
+                                        "domain": {
+                                            "codes": [
+                                                {
+                                                    "extendedName": {
+                                                        "EN": "Adam Processes"
+                                                    },
+                                                    "idCodeList": "adam_processes"
+                                                }
+                                            ]
+                                        },
+                                        "subject": null
+                                    },
+                                    "value": "FAO Sectors (%)"
+                                }
+
+                            },
+
+                            {
+                                "name": "filter",
+                                "parameters": {
+                                    "columns": [
+                                        "recipientcode",
+                                        "donorcode",
+                                        "value",
+                                        "unitcode",
+                                        "indicator"
+                                    ],
+                                    "rows": {
+                                    }
+                                },
+                                "rid": {
+                                    "uid": "percentage_oda"
                                 }
                             }
                         ]
