@@ -297,6 +297,7 @@ define(function () {
                     title: {
                         text: null
                     },
+
                     itemDistance: 50,
                     itemMarginBottom: 5,
 
@@ -350,7 +351,9 @@ define(function () {
             title: {
                 text: 'Click to hide/show'
             },
+            align: 'center',
             padding: 0,
+            itemDistance: 40,
             itemStyle: {
                fontSize: '12px'
             },
