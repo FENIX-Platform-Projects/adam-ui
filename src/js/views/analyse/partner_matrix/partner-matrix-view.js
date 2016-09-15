@@ -246,8 +246,25 @@ define([
                         }
                     }
 
+
+                    if(selectedFilter.values.values[0] === 'all'){
+                        filterValues = this.subview('filters').clearFilterValue(selectedFilter.id,  this.subview('filters').getFilterValues());
+
+
+                     // Update the TitleView (Remove Item)
+                     amplify.publish(Events.TITLE_REMOVE_ITEM, selectedFilter.id);
+
+                    // Get topic
+                    if (selectedFilter['props']) {
+                        if (selectedFilter['props']['selected_topic']) {
+                            filterDerivedTopic = selectedFilter['props']['selected_topic'];
+                        }
+                    }
+                    }
+
+                    this._getDashboardConfiguration(filterDerivedTopic, filterValues);
                 }
-                // Else selected filter has no value (i.e.there has been a de-selection)
+               /* // Else selected filter has no value (i.e.there has been a de-selection)
                 else {
 
                     // Update the TitleView (Remove Item)
@@ -263,7 +280,7 @@ define([
 
                 // Get Topic Related Dashboard Configuration
                 this._getDashboardConfiguration(filterDerivedTopic, filterValues);
-
+*/
             }
 
         },
@@ -349,7 +366,7 @@ define([
         _unbindEventListeners: function () {
             // Remove listeners
             amplify.unsubscribe(BaseMatrixEvents.FILTER_ON_READY, this._filtersLoaded);
-            amplify.unsubscribe(BaseMatrixEvents.FILTER_ON_CHANGE, this._updateDashboard);
+            amplify.unsubscribe(BaseMatrixEvents.FILTER_ON_CHANGE, this._updateDashboards);
 
         },
 
