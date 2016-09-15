@@ -27,7 +27,8 @@ define([
     var s = {
         TABLE_INFO: "#table-info",
         TABLE_FILTER: "#table-filter",
-        TABLE: "#table"
+        TABLE: "#table",
+        TABLE_SIZE: "#table-size"
     };
 
     var defaultOptions = {};
@@ -42,6 +43,7 @@ define([
     function TableItem(o) {
 
         var self = this;
+        this.model = {};
 
         $.extend(true, this, defaultOptions, o);
         this.$el = $(this.el);
@@ -121,7 +123,7 @@ define([
     TableItem.prototype._renderTemplate = function () {
         this.indicatortemplate = Handlebars.compile(Template);
 
-        var data = $.extend(true, {data: {size: this.model.size}}, i18nTableLabels);
+        var data = $.extend(true, {data:  this.model}, i18nTableLabels);
         var html = this.indicatortemplate(data);
 
         $(this.el).html(html);
@@ -142,7 +144,7 @@ define([
 
     TableItem.prototype._render = function () {
 
-        this.controller._trigger('table_ready', {data: {size: this.model.size}});
+       // this.controller._trigger('table_ready', {data: {size: this.model.size}});
 
         if (this.model.size > 0) {
             var metadata = this.model.metadata.dsd.columns;
@@ -179,6 +181,8 @@ define([
                 }
 
                 this.olap = new OlapCreator(config);
+
+
             }, this));
 
             this.filter.on("change", _.bind(function () {
@@ -216,13 +220,6 @@ define([
         }
 
         this.olap = new OlapCreator(this.config);
-
-        //console.log("============ ROWS =============");
-        //console.log(this.olap);
-
-        //for(var key in this.olap){
-          //  console.log(key);
-       // }
 
     };
 
@@ -262,16 +259,22 @@ define([
 
 
     TableItem.prototype._destroyCustomItem = function () {
-
         //TODO
         log.info("Destroyed Custom: " + this.id);
     };
 
     TableItem.prototype._bindEventListeners = function () {
+        var self = this;
+
+       this.olap.on('ready', function () {
+            var rowSize = this.olap.model.rows.length;
+            $(self.el).find(s.TABLE_SIZE).html(rowSize);
+       });
     };
 
     TableItem.prototype._unbindEventListeners = function () {
-        //TODO
+       //this.olap.off('ready');
+       //this.filter.off('ready');
     };
 
     TableItem.prototype._dispose = function () {

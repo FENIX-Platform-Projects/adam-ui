@@ -1,5 +1,5 @@
 /*global define*/
 define({
-    results: 'Results Found',
-    rows: 'Rows'
+    results: 'Results',
+    rowsFound: 'Rows Found'
 });
