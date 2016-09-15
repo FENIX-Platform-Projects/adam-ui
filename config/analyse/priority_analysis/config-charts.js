@@ -117,6 +117,27 @@ define(function () {
                             aggregationFn: {"value": "sum"},
                             useDimensionLabelsIfExist: false,// || default raw else fenixtool
                             // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
+                            config: {
+                                fnClickCallback: function(){
+                                    console.log("============ IN CALLBACK ===========");
+                                    var value = "";
+                                    if(this.listnames.length == 1){
+                                        value += "Elements X only in "
+                                    } else {
+                                        value += "Common X elements in "
+                                    }
+
+                                    for (var name in this.listnames){
+                                        value += this.listnames[name] + " ";
+                                    }
+                                    value += ":\n";
+
+                                    for (var val in this.list){
+                                        value += this.list[val] + "\n";
+                                    }
+                                    alert(value);
+                                }
+                            }
 
                         },
                         filter: { //FX-filter format
