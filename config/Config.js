@@ -10,6 +10,20 @@ define(function () {
 
     return {
 
+        SELECTORS: {
+            RECIPIENT_COUNTRY: 'recipientcode',
+            RESOURCE_PARTNER: 'donorcode',
+            SECTOR: 'parentsector_code',
+            SUB_SECTOR: 'purposecode',
+            CHANNELS_SUBCATEGORY: 'channelsubcategory_code',
+            CHANNEL: 'channelcode',
+            ODA: 'oda',
+            YEAR: 'year',
+            YEAR_FROM: 'year-from',
+            YEAR_TO: 'year-to',
+            COUNTRY: 'countrycode'
+        },
+
         ENVIRONMENT : 'develop',
         DEFAULT_UID: 'adam_usd_commitment',
         SERVER: SERVER,
@@ -52,6 +66,7 @@ define(function () {
         CODELIST_POSTFIX: "/resources/",
 
         CODELIST_SERVICE: "d3s_dev/msd"
+
 
     };
 });
