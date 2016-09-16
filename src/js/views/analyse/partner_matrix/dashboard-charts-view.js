@@ -149,7 +149,10 @@ define([
         renderDashboard: function () {
             var self = this;
 
-            this.config.el = this.$el;
+            this.config.el = this.el;
+
+            //console.log("===================== renderDashboard ==============");
+            //console.log(this.config);
             this.dashboard = new Dashboard(this.config);
 
             this._loadProgressBar();
