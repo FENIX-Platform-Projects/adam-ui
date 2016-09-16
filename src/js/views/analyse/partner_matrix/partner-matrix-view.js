@@ -15,11 +15,11 @@ define([
     'config/Config',
     'config/analyse/partner_matrix/Events',
     'config/analyse/partner_matrix/config-partner-matrix',
+    'config/analyse/partner_matrix/config-filter',
     'lib/utils',
     'amplify',
-    'bootstrap',
     'underscore'
-], function ($, $UI, View, TitleSubView, FilterSubView, DashboardChartsSubView, DashboardTableSubView, DashboardModel, TableModel, template, i18nLabels, Events, GeneralConfig, BaseMatrixEvents, BasePartnerMatrixConfig, Utils) {
+], function ($, $UI, View, TitleSubView, FilterSubView, DashboardChartsSubView, DashboardTableSubView, DashboardModel, TableModel, template, i18nLabels, Events, GeneralConfig, BaseMatrixEvents, BasePartnerMatrixConfig, BaseFilterConfig, Utils, amplify, _) {
 
     'use strict';
 
@@ -33,9 +33,12 @@ define([
         dashboardModel: {
             LABEL: 'label'
         },
+        values: {
+            ALL: 'all'
+        },
         paths: {
-          CHARTS_CONFIG: 'config/analyse/partner_matrix/config-charts-',
-          TABLE_CONFIG: 'config/analyse/partner_matrix/config-table-'
+            CHARTS_CONFIG: 'config/analyse/partner_matrix/config-charts-',
+            TABLE_CONFIG: 'config/analyse/partner_matrix/config-table-'
         }
     };
 
@@ -77,8 +80,10 @@ define([
 
             View.prototype.attach.call(this, arguments);
 
+            this.$el = $(this.el);
+
             //update State
-            amplify.publish(Events.STATE_CHANGE, {menu: 'analyse', breadcrumb: this._initMenuBreadcrumbItem()});
+            amplify.publish(Events.STATE_CHANGE, {menu: 'analyse', breadcrumb: this._createMenuBreadcrumbItem()});
 
             this._bindEventListeners();
 
@@ -91,7 +96,8 @@ define([
         },
 
         /**
-         * Based on the topic (topic is determined by the current filter selections - see filter-view) the appropriate JS configuration files are loaded via requireJS
+         * Based on the topic, which is determined by the current filter selections (see filter-view)
+         * the appropriate dashboard JS configuration files are loaded via requireJS
          * @private
          */
         _loadConfigurations: function () {
@@ -100,14 +106,23 @@ define([
 
         /**
          * Initializes all sub views: Title, Filter, Table Dashboard and Charts Dashboard
+         * @param ChartsConfig Chart Dashboard configuration
+         * @param TableConfig Table Dashboard configuration
          * @private
          */
 
         _initSubViews: function (ChartsConfig, TableConfig) {
+
             View.prototype.render.apply(this, arguments);
 
-            // Charts Dashboard/filter Configuration
-            if (!ChartsConfig || !ChartsConfig.dashboard || !ChartsConfig.filter) {
+            // Filter Configuration
+            if (!BaseFilterConfig || !BaseFilterConfig.filter) {
+                alert("Impossible to find filter configuration for the topic: " + this.topic);
+                return;
+            }
+
+            // Charts Dashboard Configuration
+            if (!ChartsConfig || !ChartsConfig.dashboard) {
                 alert("Impossible to find CHARTS dashboard/filter configuration for the topic: " + this.topic);
                 return;
             }
@@ -133,7 +148,7 @@ define([
             var filtersSubView = new FilterSubView({
                 autoRender: true,
                 container: this.$el.find(s.css_classes.FILTER_HOLDER),
-                config: this.chartsConfig.filter
+                config: BaseFilterConfig.filter
             });
             this.subview('filters', filtersSubView);
 
@@ -166,10 +181,10 @@ define([
         },
 
         /**
-         * Initializes the menu breadcrumb for the page
+         * Create the Menu breadcrumb item for the page
          * @private
          */
-        _initMenuBreadcrumbItem: function () {
+        _createMenuBreadcrumbItem: function () {
             var label = "";
             var self = this;
 
@@ -183,11 +198,12 @@ define([
 
         _bindEventListeners: function () {
             amplify.subscribe(BaseMatrixEvents.FILTER_ON_READY, this, this._filtersLoaded);
-            amplify.subscribe(BaseMatrixEvents.FILTER_ON_CHANGE, this, this._updateDashboards);
+            amplify.subscribe(BaseMatrixEvents.FILTER_ON_CHANGE, this, this._filtersChanged);
         },
 
         /**
-         * When filters have all loaded - the TitleView is built using the currently selected filters and the dashboards rendered
+         * When the filters have all loaded the TitleView is built using the currently selected filter values
+         * and the dashboards are rendered
          * @param payload Selected Filter Items
          * @private
          */
@@ -217,93 +233,86 @@ define([
 
 
         /**
-         * When a filter selection changes, each Dashboard and Title Sub View is rebuilt/refreshed
-         * @param selectedFilter The selected filter which has changed
+         * When a filter selection changes the view is updated
+         * @param changedFilter The filter which has changed
          * @private
          */
-        _updateDashboards: function (selectedFilter) {
+        _filtersChanged: function (changedFilter) {
 
-            var filterValues = this.subview('filters').getFilterValues(), filterDerivedTopic;
+            var allFilterValues = this.subview('filters').getFilterValues();
+
+            this._updateView(changedFilter, allFilterValues);
+
+        },
+
+        /**
+         * Each Dashboard and Title Sub View is rebuilt/refreshed
+         * @param changedFilter The filter which has changed
+         * @param allFilterValues All (selected) filter values
+         * @private
+         */
+
+        _updateView: function (changedFilter, allFilterValues) {
+
+            var filterValues = allFilterValues;
 
             // console.log("================= filter values =============== ");
-            // console.log(values);
+            // console.log(filterValues);
 
-            //console.log("================= selectedfilter =============== ");
-            // console.log(selectedfilter);
+            console.log("================= selectedfilter =============== ");
+            console.log(changedFilter);
 
-            if (selectedFilter) {
+            if (changedFilter) {
 
-                // If the selected filter has a value
-                if (selectedFilter.values.values.length > 0) {
+                var topic = this.topic;
 
-                    // Update the TitleView (Add Item)
-                    amplify.publish(Events.TITLE_ADD_ITEM, this._createTitleItem(selectedFilter));
+                // If the changed filter has a value
+                if (changedFilter.values.values.length > 0) {
 
                     // Get topic
-                    if (selectedFilter['props']) {
-                        if (selectedFilter['props']['selected_topic']) {
-                            filterDerivedTopic = selectedFilter['props']['selected_topic'];
+                    if (changedFilter['props']) {
+                        if (changedFilter['props']['selected_topic']) {
+                            topic = changedFilter['props']['selected_topic'];
                         }
                     }
 
+                    // All is selected
+                    if (changedFilter.values.values[0] === s.values.ALL) {
 
-                    if(selectedFilter.values.values[0] === 'all'){
-                        filterValues = this.subview('filters').clearFilterValue(selectedFilter.id,  this.subview('filters').getFilterValues());
+                        // Update the TitleView (Remove Item)
+                        amplify.publish(Events.TITLE_REMOVE_ITEM, changedFilter.id);
 
-
-                     // Update the TitleView (Remove Item)
-                     amplify.publish(Events.TITLE_REMOVE_ITEM, selectedFilter.id);
-
-                    // Get topic
-                    if (selectedFilter['props']) {
-                        if (selectedFilter['props']['selected_topic']) {
-                            filterDerivedTopic = selectedFilter['props']['selected_topic'];
-                        }
-                    }
+                    } else {
+                        // Update the TitleView (Add Item)
+                        amplify.publish(Events.TITLE_ADD_ITEM, this._createTitleItem(changedFilter));
                     }
 
-                    this._getDashboardConfiguration(filterDerivedTopic, filterValues);
-                }
-               /* // Else selected filter has no value (i.e.there has been a de-selection)
-                else {
-
-                    // Update the TitleView (Remove Item)
-                    amplify.publish(Events.TITLE_REMOVE_ITEM, selectedFilter.id);
-
-                    // Get topic
-                    if (selectedFilter['props']) {
-                        if (selectedFilter['props']['selected_topic']) {
-                            filterDerivedTopic = selectedFilter['props']['selected_topic'];
-                        }
-                    }
+                    this._getDashboardConfiguration(topic, filterValues);
                 }
 
-                // Get Topic Related Dashboard Configuration
-                this._getDashboardConfiguration(filterDerivedTopic, filterValues);
-*/
             }
 
         },
 
 
         /**
-         * Gets the appropriate JS configuration file via requireJS, if the topic has changed
-         * @param filterDerivedTopic
+         * Get the appropriate Dashboard JS configuration file via requireJS, if the topic has changed
+         * @param topic
          * @param filterValues
          * @private
          */
-        _getDashboardConfiguration: function (filterDerivedTopic, filterValues) {
+        _getDashboardConfiguration: function (topic, filterValues) {
             var self = this;
             // console.log("================= _getDashboardConfiguration Start =============== ");
             //console.log(filtervalues);
 
             // If the topic has changed, rebuild dashboards with new configuration
-            if (filterDerivedTopic && filterDerivedTopic !== this.topic) {
+            if (topic !== this.topic) {
                 // Re set the current topic
-                this.topic = filterDerivedTopic;
+                this.topic = topic;
 
                 //Load new configuration files
-                require([s.paths.CHARTS_CONFIG + filterDerivedTopic, s.paths.TABLE_CONFIG + filterDerivedTopic], function (TopicChartsConfig, TopicTableConfig) {
+                require([s.paths.CHARTS_CONFIG + topic, s.paths.TABLE_CONFIG + topic], function (TopicChartsConfig, TopicTableConfig) {
                     // Rebuild dashboards with new configurations
                     self._rebuildDashboards(filterValues, TopicChartsConfig.dashboard, TopicTableConfig.dashboard);
                 });
