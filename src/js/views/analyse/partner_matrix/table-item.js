@@ -149,6 +149,8 @@ define([
         if (this.model.size > 0) {
             var metadata = this.model.metadata.dsd.columns;
             this._processPayload();
+        } else {
+            $(this.el).find(s.TABLE_SIZE).html(0);
         }
 
     };
