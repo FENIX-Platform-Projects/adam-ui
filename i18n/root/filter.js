@@ -9,11 +9,9 @@ define({
     "filter_channelcode": "Channels of Delivery",
     "filter_year-from": "From",
     "filter_year-to": "To",
-    "filter_uid": "ODA",
-    "filter_oda": "ODA",
+    "filter_oda": "OECD CRS ODA",
     "filter_country_groupedRow": "Table rows are grouped by Recipient Country (uncheck to enable sort on all columns)",
     "filter_donor_groupedRow": "Table rows are grouped by Resource Partner (uncheck to enable sort on all columns)",
     "filter_country-donor_groupedRow": "Table rows are grouped by Resource Partner (uncheck to enable sort on all columns)",
-    "filter_tooltip_old": "Official Development Assistance (ODA) - Grants, Grant-Like, Loans and Equity Investment",
-    "filter_tooltip_oda": "The ODA data shown in the chart is on money that flows out of donor countries, not necessarily the money that flows into recipient countries. There are multiple reasons why these two might not match up as lots of ODA is actually spent in the donor country (but still qualifies as ODA, if the economic welfare of a developing country is the ‘main’ aim). For example, some of it goes towards debt relief, or student costs in the donor country. Where not specifically mentioned, ODA refers to CRS data."
+    "filter_tooltip_oda": "The ODA data shown below is on resources that flow out of donor countries or resource partners, not necessarily the money that flows into recipient countries. The reason why these two data might not correspond is that ODA can also be spent in the donor country, for example towards debt relief and migrant crisis support. The ADAM is based on CRS dataset thus where not specifically indicated the data refers to CRS ODA."
 });
