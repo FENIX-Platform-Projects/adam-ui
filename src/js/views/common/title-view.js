@@ -16,7 +16,8 @@ define([
     var s = {
         css_classes: {
             TITLE_ITEMS_LIST: "#fx-title-items-list"
-        }//,
+        },
+        exclusions: ['all']
        // events: {
            // ADD_ITEM: 'fx.title.item.add',
            // REMOVE_ITEM: 'fx.title.item.remove'
@@ -66,12 +67,25 @@ define([
 
 
         build : function(){
-            var self = this, range = '';
+            var self = this, range = '', containsExclusion;
 
-            $.each( this.options.labels, function( id, item ) {
+            var optionLabels = self.options.labels;
 
+
+            $.each( optionLabels, function( id, item ) {
+                for(var exclusion in s.exclusions){
+                    var exclude = s.exclusions[exclusion];
+                   if(item[exclude]) {
+                        optionLabels[id] = [];
+                    }
+                }
+            });
+
+            $.each(optionLabels, function( id, item ) {
 
                 if(!$.isEmptyObject(item)){
+                    //console.log(id);
+                    //console.log(item);
 
                     item.id = id;
 
@@ -192,6 +206,19 @@ define([
         },
 
         _onAdd: function (e) {
+           // console.log("============== ");
+           // console.log(e);
+
+           /* $.each( optionLabels, function( id, item ) {
+                for(var exclusion in s.exclusions){
+                    var exclude = s.exclusions[exclusion];
+                    if(item[exclude]) {
+                        optionLabels[id] = [];
+                    }
+                }
+            });*/
+
+
             this._addItem(e);
         },
 
