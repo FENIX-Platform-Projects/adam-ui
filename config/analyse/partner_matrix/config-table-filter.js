@@ -12,7 +12,7 @@ define(function () {
                 id : "input",
                 type : "checkbox",
                 source : [
-                    { value : "groupedRow", label : "Group row"},
+                    { value : "groupedRow", label : "Group row"}
 
                 ],
                 default: ["groupedRow"]

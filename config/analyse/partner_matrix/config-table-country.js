@@ -6,6 +6,7 @@ define(function () {
 
     return {
             dashboard: {
+
                 //default dataset id
                 uid: "adam_usd_commitment",
 
