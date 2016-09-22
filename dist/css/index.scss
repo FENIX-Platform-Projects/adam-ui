@@ -61,9 +61,56 @@ body {
   font-family: "FrutigerLTW02-45Light", Arial, Helvetica, Verdana, sans-serif;
 }
 
+#venn-analysis-container {
+  /**font-size: 12px;**/
+}
 /*#partner-matrix-container .gt-freeze-div[id*="headDiv"]  table tr td {
   background-color: #3c91c2 !important;
 }*/
+
+.gt-hd-icon.gt-hd-asc{
+  @extend .fa;
+  @extend .fa-caret-up;
+}
+
+.gt-hd-icon{
+  @extend .fa;
+  @extend .fa-sort;
+}
+
+
+.gt-hd-icon.gt-hd-desc{
+  @extend .fa;
+  @extend .fa-caret-down;
+}
+
+//table rows
+.gt-row td .gt-inner {
+ // background-color: plum;
+}
+
+//table header
+.gt-hd-row td .gt-inner  {
+  font-weight: 600;
+  font-size: 14px;
+  background-color: #ABC8E1;
+  text-transform: none;
+}
+
+// Table Page size drop-down
+.gt-pagesize-select {
+  width: 48px
+}
+
+// Text area
+#venn-diagram-info-box textarea {
+  width: 100%;
+  height: 500px;
+  padding: 10px;
+  resize: none;
+}
+
+
 
 
 

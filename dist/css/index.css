@@ -10790,7 +10790,7 @@ button_new_2:before {
   src: url("//netdna.bootstrapcdn.com/font-awesome/4.2.0/fonts/fontawesome-webfont.eot?#iefix&v=4.2.0") format("embedded-opentype"), url("//netdna.bootstrapcdn.com/font-awesome/4.2.0/fonts/fontawesome-webfont.woff?v=4.2.0") format("woff"), url("//netdna.bootstrapcdn.com/font-awesome/4.2.0/fonts/fontawesome-webfont.ttf?v=4.2.0") format("truetype"), url("//netdna.bootstrapcdn.com/font-awesome/4.2.0/fonts/fontawesome-webfont.svg?v=4.2.0#fontawesomeregular") format("svg");
   font-weight: normal;
   font-style: normal; }
-.fa {
+.fa, .gt-hd-icon.gt-hd-asc, .gt-hd-icon, .gt-hd-icon.gt-hd-desc {
   display: inline-block;
   font: normal normal normal 14px/1 FontAwesome;
   font-size: inherit;
@@ -10847,9 +10847,9 @@ button_new_2:before {
 .pull-left {
   float: left; }
 
-.fa.pull-left {
+.fa.pull-left, .pull-left.gt-hd-icon {
   margin-right: .3em; }
-.fa.pull-right {
+.fa.pull-right, .pull-right.gt-hd-icon {
   margin-left: .3em; }
 
 .fa-spin {
@@ -10980,10 +10980,10 @@ button_new_2:before {
 .fa-google-plus:before {
   content: ""; }
 
-.fa-caret-down:before {
+.fa-caret-down:before, .gt-hd-icon.gt-hd-desc:before {
   content: ""; }
 
-.fa-caret-up:before {
+.fa-caret-up:before, .gt-hd-icon.gt-hd-asc:before {
   content: ""; }
 
 .fa-caret-left:before {
@@ -10991,6 +10991,9 @@ button_new_2:before {
 
 .fa-caret-right:before {
   content: ""; }
+
+.fa-sort:before, .gt-hd-icon:before {
+  content: ""; }
 
 .fa-rss-square:before {
   content: ""; }
@@ -11791,7 +11794,7 @@ div[data-module="sector"] .fx-catalog-modular-form-content {
       -webkit-box-shadow: 0 0 0 white;
       -moz-box-shadow: 0 0 0 white;
       box-shadow: 0 0 0 white; }
-    .panel-group .panel-body .btn span.fa {
+    .panel-group .panel-body .btn span.fa, .panel-group .panel-body .btn span.gt-hd-icon {
       margin-right: 10px; }
 
 .fx-panel-plus, .fx-panel-minus, .fx-panel-required {
@@ -15129,8 +15132,25 @@ body {
   background-color: #f8f8f8;
   font-family: "FrutigerLTW02-45Light", Arial, Helvetica, Verdana, sans-serif; }
 
+#venn-analysis-container {
+  /**font-size: 12px;**/ }
+
 /*#partner-matrix-container .gt-freeze-div[id*="headDiv"]  table tr td {
   background-color: #3c91c2 !important;
 }*/
+.gt-hd-row td .gt-inner {
+  font-weight: 600;
+  font-size: 14px;
+  background-color: #ABC8E1;
+  text-transform: none; }
+
+.gt-pagesize-select {
+  width: 48px; }
+
+#venn-diagram-info-box textarea {
+  width: 100%;
+  height: 500px;
+  padding: 10px;
+  resize: none; }
 
 /*# sourceMappingURL=index.css.map */
