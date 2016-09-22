@@ -11,14 +11,13 @@ define([
     'fx-table/start',
     'fx-filter/start',
     'fx-common/pivotator/fenixtool',
-    'config/analyse/priority_analysis/config-table-filter',
     'lib/utils',
     'i18n!nls/table',
     'i18n!nls/filter',
     'fx-common/utils',
     'handlebars',
     'amplify'
-], function ($, log, _, ERR, EVT, C, Template, OlapCreator, Filter, FenixTool, FilterModel, Utils, i18nTableLabels, i18nLabels, FxUtils, Handlebars) {
+], function ($, log, _, ERR, EVT, C, Template, OlapCreator, Filter, FenixTool, Utils, i18nTableLabels, i18nLabels, FxUtils, Handlebars) {
 
     'use strict';
 
@@ -27,8 +26,12 @@ define([
     var s = {
         TABLE_INFO: "#table-info",
         TABLE_FILTER: "#table-filter",
-        TABLE: "#table"
-    };
+        TABLE: "#table",
+        TABLE_SIZE: "#table-size",
+        TABLE_SOURCE: "#table-source",
+        CPF: "#cpf",
+        UNDAF: "#undaf"
+   };
 
     var defaultOptions = {};
 
@@ -42,6 +45,7 @@ define([
     function TableItem(o) {
 
         var self = this;
+        this.model = {};
 
         $.extend(true, this, defaultOptions, o);
         this.$el = $(this.el);
@@ -121,7 +125,7 @@ define([
     TableItem.prototype._renderTemplate = function () {
         this.indicatortemplate = Handlebars.compile(Template);
 
-        var data = $.extend(true, {data: {size: this.model.size}}, i18nTableLabels);
+        var data = $.extend(true, {data:  this.model}, i18nTableLabels);
         var html = this.indicatortemplate(data);
 
         $(this.el).html(html);
@@ -142,71 +146,40 @@ define([
 
     TableItem.prototype._render = function () {
 
-        this.controller._trigger('table_ready', {data: {size: this.model.size}});
+       // this.controller._trigger('table_ready', {data: {size: this.model.size}});
 
         if (this.model.size > 0) {
             var metadata = this.model.metadata.dsd.columns;
+
             this._processPayload();
-        }
 
-    };
+            console.log("=================== RENDER ================");
+            console.log(this.config.selections);
 
-    TableItem.prototype._processPayloadWithFilter = function () {
+            if(this.config.selections) {
+                console.log("=================== RENDER 2 ================");
+                console.log(this.config.selections.recipient);
+                 if(this.config.selections.recipient !== 'all'){
+                     console.log("_processSource "+this.config.selections.recipient);
 
-        var config = this._getUpdatedFilterConfig(FilterModel);
-
-        // Display filter if more than one data row
-        if (this.model.size > 1) {
-            this.filter = new Filter({
-                el: s.TABLE_FILTER,
-                items: config
-            });
-
-
-            this.filter.on("ready", _.bind(function () {
-
-                var config = this._getOlapConfigFromFilter();
-
-                config = $.extend(true, {}, {
-                        model: this.model,
-                        el: s.TABLE
-                    }, config
-                );
-
-
-                for (var d in config.derived) {
-                    config.aggregations.push(d);
-                }
-
-                this.olap = new OlapCreator(config);
-            }, this));
-
-            this.filter.on("change", _.bind(function () {
-
-                var config = this._getOlapConfigFromFilter();
-                this.olap.update(config);
-
-            }, this));
-
-        }
-        // Hide filter if only one data row
-        else {
-
-            this.config.model = this.model;
-            this.config.el = s.TABLE;
-
-            for (var d in this.config.derived) {
-                this.config.aggregations.push(d);
+                    this._processSource();
+                } else {
+                     console.log("NO _processSource "+this.config.selections.recipient);
+                 }
+            }
+            else {
+                this._processSource();
             }
 
-            this.olap = new OlapCreator(this.config);
+        } else {
+            $(this.el).find(s.TABLE_SIZE).html(0);
         }
 
     };
+
 
     TableItem.prototype._processPayload = function () {
 
-        var config = this._getUpdatedFilterConfig(FilterModel);
 
         this.config.model = this.model;
         this.config.el = s.TABLE;
@@ -226,6 +199,76 @@ define([
 
     };
 
+    TableItem.prototype._processSource = function () {
+
+        this.config.model = this.model;
+
+        console.log(" =======================  _processSource 1=================== ");
+        console.log(this.config);
+
+
+        var colIdxCpf;
+        var colIdxUndaf;
+        var colIdxRecipient;
+
+        for(var col in this.config.model.metadata.dsd.columns){
+            var id = this.config.model.metadata.dsd.columns[col].id;
+            console.log(id);
+            if(id === 'cpf_period'){
+                colIdxCpf = col;
+            }
+
+            if(id === 'undaf_period'){
+                colIdxUndaf = col;
+            }
+
+            if(id === 'recipientcode_'+Utils.getLocale()){
+                colIdxRecipient = col;
+            }
+        }
+
+        console.log(" =======================  _processSource 2=================== ");
+        console.log(colIdxCpf, colIdxUndaf, colIdxRecipient);
+
+
+       var cpfPeriod = _.chain(this.config.model.data).filter(function (x) { return x[colIdxCpf]!== 'NA' }).first().value();
+       var undafPeriod = _.chain(this.config.model.data).filter(function (x) { return x[colIdxUndaf]!== 'NA'}).first().value();
+       var recipient = _.chain(this.config.model.data).filter(function (x) { return x[colIdxRecipient]!== 'NA' }).first().value();
+
+
+        var cpfPeriod = _.chain(this.config.model.data).first().value();
+        var undafPeriod = _.chain(this.config.model.data).first().value();
+        var recipient = _.chain(this.config.model.data).first().value();
+
+
+        console.log(" =======================  _processSource 2=================== ");
+        console.log(cpfPeriod);
+
+        if(cpfPeriod && cpfPeriod[colIdxCpf]) {
+            cpfPeriod = cpfPeriod[colIdxCpf];
+        } else {
+            cpfPeriod = "Period NA"
+        }
+
+        if(undafPeriod && undafPeriod[colIdxUndaf]) {
+            undafPeriod =undafPeriod[colIdxUndaf];
+        } else {
+            undafPeriod = "Period NA"
+        }
+
+        if(recipient[colIdxRecipient]) {
+            recipient = recipient[colIdxRecipient];
+        } else {
+            recipient = "Country"
+        }
+
+        var cpf = recipient + ' CPF ' + cpfPeriod ;
+        var undaf = recipient + ' UNDAF ' + undafPeriod;
+
+        $(this.el).find(s.TABLE_SOURCE).find(s.CPF).html("<a href='' target='_blank'>"+cpf+"</a>");
+        $(this.el).find(s.TABLE_SOURCE).find(s.UNDAF).html("<a href='' target='_blank'>"+undaf+"</a>");
+
+    };
 
     TableItem.prototype._getUpdatedFilterConfig = function (items) {
         var conf = $.extend(true, {}, items),
@@ -262,12 +305,17 @@ define([
 
 
     TableItem.prototype._destroyCustomItem = function () {
-
         //TODO
         log.info("Destroyed Custom: " + this.id);
     };
 
     TableItem.prototype._bindEventListeners = function () {
+        var self = this;
+
+       this.olap.on('ready', function () {
+            var rowSize = this.olap.model.rows.length;
+            $(self.el).find(s.TABLE_SIZE).html(rowSize);
+       });
     };
 
     TableItem.prototype._unbindEventListeners = function () {
