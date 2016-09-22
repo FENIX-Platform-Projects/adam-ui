@@ -375,17 +375,17 @@ define([
         _unbindEventListeners: function () {
             // Remove listeners
             amplify.unsubscribe(BaseMatrixEvents.FILTER_ON_READY, this._filtersLoaded);
-            amplify.unsubscribe(BaseMatrixEvents.FILTER_ON_CHANGE, this._updateDashboards);
+            amplify.unsubscribe(BaseMatrixEvents.FILTER_ON_CHANGE, this._filtersChanged);
 
         },
 
 
         _updateChartsDashboardModelValues: function () {
-            this.chartsDashboardModel.set(s.dashboardModel.LABEL, this.subview('title').getTitleAsArray());
+            this.chartsDashboardModel.set(s.dashboardModel.LABEL, this.subview('title').getTitleAsLabel());
         },
 
         _updateTableDashboardModelValues: function () {
-            this.tableDashboardModel.set(s.dashboardModel.LABEL, this.subview('title').getTitleAsArray());
+            this.tableDashboardModel.set(s.dashboardModel.LABEL, this.subview('title').getTitleAsLabel());
         },
 
 
