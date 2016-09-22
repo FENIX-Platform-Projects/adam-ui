@@ -11,7 +11,7 @@ define(function () {
                 uid: "adam_priority_analysis",
 
                 items: [
-   /*              {
+              {
                         id: "top-partners",
                         type: 'chart',
                         config: {
@@ -43,7 +43,7 @@ define(function () {
                                         "unitcode"
                                     ],
                                     "rows": {
-                                       /!* "recipientcode": {
+                                       /* "recipientcode": {
                                             "codes": [
                                                 {
                                                     "uid": "crs_recipients",
@@ -53,7 +53,7 @@ define(function () {
                                                     ]
                                                 }
                                             ]
-                                        },*!/
+                                        },*/
                                         "purposecode": {
                                             "codes": [
                                                 {
@@ -142,7 +142,7 @@ define(function () {
                             }
 
                         ]
-                    }, // TOP 10 RESOURCE PARTNERS*/
+                    }, // TOP 10 RESOURCE PARTNERS
                     {
                         id: "financing-priorities",
                         type: 'chart',
