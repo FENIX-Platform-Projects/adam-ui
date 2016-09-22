@@ -153,19 +153,10 @@ define([
 
             this._processPayload();
 
-            console.log("=================== RENDER ================");
-            console.log(this.config.selections);
-
             if(this.config.selections) {
-                console.log("=================== RENDER 2 ================");
-                console.log(this.config.selections.recipient);
-                 if(this.config.selections.recipient !== 'all'){
-                     console.log("_processSource "+this.config.selections.recipient);
-
+                  if(this.config.selections.recipient !== 'all'){
                     this._processSource();
-                } else {
-                     console.log("NO _processSource "+this.config.selections.recipient);
-                 }
+                }
             }
             else {
                 this._processSource();
@@ -203,9 +194,6 @@ define([
 
         this.config.model = this.model;
 
-        console.log(" =======================  _processSource 1=================== ");
-        console.log(this.config);
-
 
         var colIdxCpf;
         var colIdxUndaf;
@@ -213,7 +201,7 @@ define([
 
         for(var col in this.config.model.metadata.dsd.columns){
             var id = this.config.model.metadata.dsd.columns[col].id;
-            console.log(id);
+
             if(id === 'cpf_period'){
                 colIdxCpf = col;
             }
@@ -227,39 +215,28 @@ define([
             }
         }
 
-        console.log(" =======================  _processSource 2=================== ");
-        console.log(colIdxCpf, colIdxUndaf, colIdxRecipient);
-
 
        var cpfPeriod = _.chain(this.config.model.data).filter(function (x) { return x[colIdxCpf]!== 'NA' }).first().value();
        var undafPeriod = _.chain(this.config.model.data).filter(function (x) { return x[colIdxUndaf]!== 'NA'}).first().value();
        var recipient = _.chain(this.config.model.data).filter(function (x) { return x[colIdxRecipient]!== 'NA' }).first().value();
 
 
-        var cpfPeriod = _.chain(this.config.model.data).first().value();
-        var undafPeriod = _.chain(this.config.model.data).first().value();
-        var recipient = _.chain(this.config.model.data).first().value();
-
-
-        console.log(" =======================  _processSource 2=================== ");
-        console.log(cpfPeriod);
-
         if(cpfPeriod && cpfPeriod[colIdxCpf]) {
             cpfPeriod = cpfPeriod[colIdxCpf];
         } else {
-            cpfPeriod = "Period NA"
+            cpfPeriod = ""
         }
 
         if(undafPeriod && undafPeriod[colIdxUndaf]) {
             undafPeriod =undafPeriod[colIdxUndaf];
         } else {
-            undafPeriod = "Period NA"
+            undafPeriod = ""
         }
 
-        if(recipient[colIdxRecipient]) {
+        if(recipient && recipient[colIdxRecipient]) {
             recipient = recipient[colIdxRecipient];
         } else {
-            recipient = "Country"
+            recipient = ""
         }
 
         var cpf = recipient + ' CPF ' + cpfPeriod ;

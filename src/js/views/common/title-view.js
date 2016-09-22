@@ -182,15 +182,25 @@ define([
       return clonedTitle; //$('ul[class*="fx-title-items"]').clone().appendTo('#title-bar-block');
      },
 
-     getTitleAsArray: function (){
-             this._cleanUpDuplications();
+     getTitleAsLabel: function (){
+            this._cleanUpDuplications();
 
-             var arr = this.$titleItemsList.find('li').map(function(i, el) {
-             return $(el).text();
-             }).get();
+            var arr = this.$titleItemsList.find('li').map(function(i, el) {
+                return $(el).text();
+            }).get();
 
             return arr.join(' / ');
      },
+
+        getTitleAsArray: function (){
+            this._cleanUpDuplications();
+
+            var arr = this.$titleItemsList.find('li').map(function(i, el) {
+                return $(el).text();
+            }).get();
+
+            return arr;
+        },
 
     _initVariables: function () {
            this.$titleItemsList = this.container.find(s.css_classes.TITLE_ITEMS_LIST);
@@ -232,6 +242,10 @@ define([
 
         removeItem: function (name) {
             this._findListItem(name).remove();
+        },
+
+        hideItem: function (name) {
+            this._findListItem(name).hide();
         },
 
         _addToList: function (item) {

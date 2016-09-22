@@ -325,7 +325,7 @@ define([
 
         _renderChartsDashboards: function (newValues) {
 
-            console.log("================= _renderChartsDashboards =============== ");
+            //console.log("================= _renderChartsDashboards =============== ");
 
             var filterValues = this.subview('filters').getFilterValues(), filterDerivedTopic;
 
