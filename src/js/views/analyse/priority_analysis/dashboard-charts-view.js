@@ -154,14 +154,15 @@ define([
             }
         },
 
-        renderDashboard: function () {
+        renderDashboard: function (topic) {
             var self = this;
 
 
             this.config.el = this.el;
+            this.topic = topic;
 
-
-
+            console.log(" ================= RENDER THIS TOPIC ============");
+            console.log(this.topic);
 
 
            // this.config.el.removeClass(defaultOptions.css.COLLAPSE);
@@ -258,29 +259,6 @@ define([
             }
         },
 
-        rebuildDashboard: function (filter, topic) {
-            var self = this;
-
-            this._disposeDashboards();
-            this.config.filter = filter;
-
-            // Re-Render the source template
-            if(topic) {
-                this.topic = topic;
-                this.source = $(this.template).find("[data-topic='" + this.topic + "']").prop('outerHTML');
-                this.render();
-            }
-
-
-            // Build new dashboard
-            this.dashboard = new Dashboard(
-                this.config
-            );
-
-            // Load Progress bar
-            this._loadProgressBar();
-
-        },
 
 
         getDashboardConfig: function () {
