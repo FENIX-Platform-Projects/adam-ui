@@ -6,5 +6,5 @@ define({
     "agencies": "Implementing Agencies",
     "partner_matrix": "Resource Partner Matrix",
     "projects": "Project Analysis",
-    "priority": "Priority Analysis"
+    "priority_analysis": "Priority Analysis"
 });
