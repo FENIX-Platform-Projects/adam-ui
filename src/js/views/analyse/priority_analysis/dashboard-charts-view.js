@@ -292,79 +292,7 @@ define([
 
         _bindEventListeners: function () {
             console.log("BIND")
-            this.dashboard.on('click.item', function (values) {
-                // console.log("-------------------- DASHBOARD CHART VIEW: ON click.item ");
-                // console.log(values);
 
-                alert()
-
-                // reset others
-                $("div[id^='resultC']").css('color', 'black');
-
-                //set selected
-                $(values.values.selected).css('color', 'red');
-
-
-                var listnames = values.values.listnames;
-                var list = values.values.list;
-                var series = values.values.series;
-
-                var value = "";
-                if (listnames.length == 1) {
-                    value += "Priorities only in ";
-                } else {
-                    value += "Common priorities in ";
-                }
-
-                // get first list
-                var firstList = listnames[0];
-
-                // find associated series code/label list
-                var seriesCodeLabels= _.find(series,function(rw){
-                    return rw.name == firstList;
-                });
-
-                var count = 0;
-                for (var name in listnames) {
-                    value += listnames[name];
-
-                    if(count < listnames.length-2){
-                        value += ", ";
-                    }
-
-                    if(count == listnames.length - 2){
-                        value += " and ";
-                    }
-
-
-                    count++;
-                }
-                value += ":\n";
-
-                if (seriesCodeLabels) {
-                    for (var val in list) {
-                        var label = list[val];
-                        var id = seriesCodeLabels.codelist.find(function(o){
-                            if (o.title=== label) {
-                                return o;
-                            }
-                        }).id;
-
-                        value += label + " - " + id+ "\n";
-                    }
-                }
-
-                var divId = '#'+values.id+'-info';
-
-
-                $('#'+values.id+'-info').val(value);
-
-
-
-
-
-
-            });
         },
 
 
