@@ -157,7 +157,6 @@ define([
         renderDashboard: function () {
             var self = this;
 
-            console.log("================= renderDashboard =============== ");
 
             this.config.el = this.el;
 

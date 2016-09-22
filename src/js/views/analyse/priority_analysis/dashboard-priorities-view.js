@@ -270,8 +270,6 @@ define([
             this._disposeDashboards();
             this.config.filter = filter;
 
-            console.log(" ================ rebuildDashboard");
-            console.log(this.config.filter);
 
             // Update
             if(selections) {
@@ -386,7 +384,6 @@ define([
             });
 
             this.dashboard.on('ready.item', function () {
-                console.log( 'this.dashboard.on(ready.item)');
                 increment = increment + percent;
                 self.progressBar.update(increment);
             });
