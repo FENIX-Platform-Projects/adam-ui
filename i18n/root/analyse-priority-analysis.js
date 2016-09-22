@@ -13,6 +13,7 @@ define({
     "fao": "FAO",
     "all": "All",
     "top-partners": "Top Resource Partners",
+    "top-recipients": "Top Recipient Countries",
     "top-channels": "Top Channels of Delivery",
     "financing-priorities": "Financing priorities"
 });
