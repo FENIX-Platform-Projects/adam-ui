@@ -342,7 +342,7 @@ define([
             this._updateChartsDashboardModelValues();
 
             this.subview('chartsDashboard').setDashboardConfig(this.chartsConfig.dashboard);
-           // TEST: this.subview('chartsDashboard').renderDashboard();
+            this.subview('chartsDashboard').renderDashboard();
 
 
             //console.log("================= selectedfilter =============== ");
