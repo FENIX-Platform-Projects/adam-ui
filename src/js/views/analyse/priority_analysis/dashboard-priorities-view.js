@@ -323,7 +323,7 @@ define([
 
 
             // Bind the events
-            this._bindEventListeners();
+            //this._bindEventListeners();
 
             // Load Progress bar
             this._loadProgressBar();
@@ -390,15 +390,17 @@ define([
 
             this.dashboard.on('click.item', function (values) {
 
+                console.log("p view", values)
+
                 // reset others
                 $("div[id^='resultC']").css('color', 'black');
 
                 //set selected
-                $(values.values.selected).css('color', 'red');
+                $(values.selected).css('color', 'red');
 
-                var listnames = values.values.listnames;
-                var list = values.values.list;
-                var series = values.values.series;
+                var listnames = values.listnames;
+                var list = values.list;
+                var series = values.series;
 
                 var title = "";
                 if (listnames.length == 1) {
@@ -467,6 +469,9 @@ define([
                 if(value.length === 0){
                    value = i18nDashboardLabels.none;
                 }
+
+                console.log("---------------------------------------")
+                console.log(value)
 
                 $('#'+values.id+'-info').val(value);
 

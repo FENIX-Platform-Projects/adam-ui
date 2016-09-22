@@ -169,6 +169,7 @@ define([
 
             this.dashboard = new Dashboard(this.config);
 
+            this._bindEventListeners();
             this._loadProgressBar();
         },
 
@@ -307,9 +308,17 @@ define([
                 self.progressBar.update(increment);
             });
 
+
+        },
+
+
+        _bindEventListeners: function () {
+            console.log("BIND")
             this.dashboard.on('click.item', function (values) {
-               // console.log("-------------------- DASHBOARD CHART VIEW: ON click.item ");
-               // console.log(values);
+                // console.log("-------------------- DASHBOARD CHART VIEW: ON click.item ");
+                // console.log(values);
+
+                alert()
 
                 // reset others
                 $("div[id^='resultC']").css('color', 'black');
@@ -318,7 +327,7 @@ define([
                 $(values.values.selected).css('color', 'red');
 
 
-               var listnames = values.values.listnames;
+                var listnames = values.values.listnames;
                 var list = values.values.list;
                 var series = values.values.series;
 
@@ -334,7 +343,7 @@ define([
 
                 // find associated series code/label list
                 var seriesCodeLabels= _.find(series,function(rw){
-                        return rw.name == firstList;
+                    return rw.name == firstList;
                 });
 
                 var count = 0;
@@ -350,7 +359,7 @@ define([
                     }
 
 
-                  count++;
+                    count++;
                 }
                 value += ":\n";
 
@@ -378,11 +387,6 @@ define([
 
 
             });
-        },
-
-
-        _bindEventListeners: function () {
-
         },
 
 
