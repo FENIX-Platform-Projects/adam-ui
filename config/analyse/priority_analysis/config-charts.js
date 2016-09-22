@@ -6,188 +6,256 @@ define(function () {
 
     return {
 
-        filter: {
-            recipientcode: {
-                selector: {
-                    id: "dropdown",
-                    default: ["625"], // afghanistan
-                    config: { //Selectize configuration
-                        maxItems: 1,
-                        placeholder: "All",
-                        plugins: ['remove_button'],
-                        mode: 'multi'
-                    }
-                },
-                className: "col-sm-4",
-                cl: {
-                    uid: "crs_recipients",
-                    version: "2016",
-                    level: 1,
-                    levels: 1
-                },
-                template: {
-                    hideSwitch: true,
-                    hideRemoveButton: true
-                }
-            },
-            donorcode: {
-                selector: {
-                    id: "dropdown",
-                    config: { //Selectize configuration
-                        maxItems: 1,
-                        placeholder: "All",
-                        plugins: ['remove_button'],
-                        mode: 'multi'
-                    }
-                },
-                className: "col-sm-4",
-                cl: {
-                    uid: "crs_donors",
-                    version: "2016",
-                    level: 1,
-                    levels: 1
-                },
-                template: {
-                    hideSwitch: true,
-                    hideRemoveButton: true
-                }
-            },
-                "year-from": {
-                    selector: {
-                        id: "dropdown",
-                        from: 2000,
-                        to: 2014,
-                        default: [2000],
-                        config: { //Selectize configuration
-                            maxItems: 1
-                        }
-                    },
-                    className: "col-sm-2",
-                    format: {
-                        type: "static",
-                        output: "time"
-                    },
-                    template: {
-                        hideSwitch: true,
-                        hideRemoveButton: true
-                    }
-                },
-                "year-to": {
-                    selector: {
-                        id: "dropdown",
-                        from: 2000,
-                        to: 2014,
-                        default: [2014],
-                        config: {
-                            maxItems: 1
-                        }
-                    },
-                    className: "col-sm-2",
-                    format: {
-                        type: "static",
-                        output: "time"
-                    },
-
-                    dependencies: {
-                        "year-from": {id: "min", event: "select"}
-                    },
-
-                    template: {
-                        hideSwitch: true,
-                        hideRemoveButton: true
-                    }
-                }
-            },
-
-
             dashboard: {
                 //default dataset id
-                uid: "adam_usd_commitment",
+                uid: "adam_priority_analysis",
 
                 items: [
-                    {
-                        id: 'venn-analysis',
+   /*              {
+                        id: "top-partners",
                         type: 'chart',
                         config: {
-                            type: "venn",
-                            renderer: "jvenn",
-                            x: ["donorname"], //x axis and series
-                            series: ["recipientname"], // series
-                            y: ["donorname"],//Y dimension
+                            type: "column",
+                            x: ["donorcode_EN"], //x axis
+                            series: ["indicator"], // series
+                            y: ["value"],//Y dimension
                             aggregationFn: {"value": "sum"},
-                            useDimensionLabelsIfExist: false,// || default raw else fenixtool
-                            // filterFor: ['parentsector_code', 'purposecode', 'year-from', 'year-to'],
-                            config: {
-                                fnClickCallback: function(){
-                                    console.log("============ IN CALLBACK ===========");
-                                    var value = "";
-                                    if(this.listnames.length == 1){
-                                        value += "Elements X only in "
-                                    } else {
-                                        value += "Common X elements in "
-                                    }
-
-                                    for (var name in this.listnames){
-                                        value += this.listnames[name] + " ";
-                                    }
-                                    value += ":\n";
-
-                                    for (var val in this.list){
-                                        value += this.list[val] + "\n";
-                                    }
-                                    alert(value);
-                                }
-                            }
-
+                            useDimensionLabelsIfExist: false// || default raw else fenixtool
                         },
-                        filter: { //FX-filter format
 
-                           // recipientcode: ['Afghanistan', 'Bangladesh', 'Belize'],
-                          //  year: [{value: "2000", parent: 'from'}, {value: "2014", parent: 'to'}]
-
-                           recipientname: ['Afghanistan', 'Bangladesh', 'Belize'],
-                           year : [2014]//,
-                         //  recipientcode: ["600"],
-                         //  donorcode: ["600"]
+                        filterFor: {
+                          //  "filter_top_10": ['year', 'purposecode', 'recipientcode']
+                            "filter_top_10": ['year', 'purposecode']
                         },
+
                         postProcess: [
+                            {
+                                "name": "filter",
+                                "sid": [
+                                    {
+                                        "uid": "adam_priority_analysis"
+                                    }
+                                ],
+                                "parameters": {
+                                    "columns": [
+                                        "donorcode",
+                                        "value",
+                                        "unitcode"
+                                    ],
+                                    "rows": {
+                                       /!* "recipientcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_recipients",
+                                                    "version": "2016",
+                                                    "codes": [
+                                                        "625"
+                                                    ]
+                                                }
+                                            ]
+                                        },*!/
+                                        "purposecode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_purposes",
+                                                    "version": "2016",
+                                                    "codes": [
+                                                        "99820"
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        "year": {
+                                            "time": [
+                                                {
+                                                    "from": 2000,
+                                                    "to": 2014
+                                                }
+                                            ]
+                                        }
+                                    }
+                                },
+                                "rid":{"uid":"filter_top_10"}
+                            },
                             {
                                 "name": "group",
                                 "parameters": {
                                     "by": [
-                                        "recipientname", "donorname"
+                                        "donorcode"
                                     ],
                                     "aggregations": [
                                         {
-                                            "columns": ["value"],
+                                            "columns": [
+                                                "value"
+                                            ],
                                             "rule": "SUM"
                                         },
                                         {
-                                            "columns": ["unitcode"],
-                                            "rule": "first"
-                                        },
-                                        {
-                                            "columns": ["flowcategory"],
+                                            "columns": [
+                                                "unitcode"
+                                            ],
                                             "rule": "first"
                                         }
                                     ]
                                 }
                             },
                             {
-                                "name": "select",
+                                "name": "order",
                                 "parameters": {
-                                    "query": "WHERE recipientname<>?",
-                                    "queryParameters": [{"value": "NA"}]
+                                    "value": "DESC"
+                                }
+                            },
+                            {
+                                "name": "page",
+                                "parameters": {
+                                    "perPage": 10,
+                                    "page": 1
+                                },
+                                "rid":{"uid":"top_10"}
+                            },
+                            {
+                                "name": "addcolumn",
+                                "parameters": {
+                                    "column": {
+                                        "dataType": "text",
+                                        "id": "indicator",
+                                        "title": {
+                                            "EN": "Indicator"
+                                        },
+                                        "domain": {
+                                            "codes": [
+                                                {
+                                                    "extendedName": {
+                                                        "EN": "Adam Processes"
+                                                    },
+                                                    "idCodeList": "adam_processes"
+                                                }
+                                            ]
+                                        },
+                                        "subject": null
+                                    },
+                                    "value": "ODA" // PART 1 FINAL INDICATOR NAME
+                                },
+                                "rid": {
+                                    "uid": "oda"
+                                }
+                            }
+
+                        ]
+                    }, // TOP 10 RESOURCE PARTNERS*/
+                    {
+                        id: "financing-priorities",
+                        type: 'chart',
+                        config: {
+                            type: "column",
+                            x: ["purposecode_EN"], //x axis
+                            series: ["donorcode_EN"], // series
+                            y: ["value"],//Y dimension
+                            aggregationFn: {"value": "sum"},
+                            useDimensionLabelsIfExist: false,// || default raw else fenixtool
+
+                           config: {
+                                plotOptions: {
+                                    column: {
+                                        stacking: 'normal'
+                                    }
+                                }
+                            }
+                        },
+
+                        filterFor: {
+                            //"filter_top_10": ['year', 'purposecode', 'recipientcode']
+                            "filter_top_10": ['year', 'purposecode']
+                        },
+
+                        postProcess: [
+                            {
+                                "name": "filter",
+                                "sid": [
+                                    {
+                                        "uid": "adam_priority_analysis"
+                                    }
+                                ],
+                                "parameters": {
+                                    "columns": [
+                                        "donorcode",
+                                        "purposecode",
+                                        "value",
+                                        "unitcode"
+                                    ],
+                                    "rows": {
+                                        "year": {
+                                            "time": [
+                                                {
+                                                    "from": 2000,
+                                                    "to": 2014
+                                                }
+                                            ]
+                                        },
+                                        /*"recipientcode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_recipients",
+                                                    "version": "2016",
+                                                    "codes": [
+                                                        "625"
+                                                    ]
+                                                }
+                                            ]
+                                        },*/
+                                        "purposecode": {
+                                            "codes": [
+                                                {
+                                                    "uid": "crs_purposes",
+                                                    "version": "2016",
+                                                    "codes": [
+                                                        "99820"
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    }
+                                },
+                                "rid":{"uid":"filter_top_10"}
+                            },
+                            {
+                                "name": "group",
+                                "parameters": {
+                                    "by": [
+                                        "donorcode",
+                                        "purposecode"
+                                    ],
+                                    "aggregations": [
+                                        {
+                                            "columns": [
+                                                "value"
+                                            ],
+                                            "rule": "SUM"
+                                        },
+                                        {
+                                            "columns": [
+                                                "unitcode"
+                                            ],
+                                            "rule": "first"
+                                        }
+                                    ]
                                 }
                             },
                             {
                                 "name": "order",
                                 "parameters": {
-                                    "recipientname": "DESC"
+                                    "value": "DESC"
                                 }
-                            }
-                           ]
-                    }
+                            }//,
+                           // {
+                             //   "name": "page",
+                              //  "parameters": {
+                                //    "perPage": 10,
+                                //    "page": 1
+                               // }
+                           // },
+                        ]
+                    } // TOP 10 RESOURCE PARTNERS
                 ]
             }
     }

@@ -3,26 +3,29 @@ define([
     'jquery',
     'underscore',
     'views/base/view',
-    'text!templates/analyse/priority_analysis/charts-dashboard.hbs',
+    'text!templates/analyse/priority_analysis/priorities-dashboard.hbs',
     'fx-dashboard/start',
     'lib/utils',
     'config/Config',
     'i18n!nls/analyse',
     'i18n!nls/analyse-priority-analysis',
     'config/analyse/priority_analysis/Events',
+    'config/submodules/fx-chart/jvenn_template',
+    'config/analyse/priority_analysis/config-priority-analysis',
+    'views/common/progress-bar',
     'handlebars',
     'lib/config-utils',
-    'config/submodules/fx-chart/highcharts_template',
-    'config/submodules/fx-chart/jvenn_template',
-    'views/common/progress-bar',
     'amplify'
-], function ($, _, View, template, Dashboard, Utils, GeneralConfig, i18nLabels, i18nDashboardLabels, BaseEvents, Handlebars, ConfigUtils, HighchartsTemplate, JVennTemplate, ProgressBar) {
+], function ($, _, View, template, Dashboard, Utils, GeneralConfig, i18nLabels, i18nDashboardLabels, BaseEvents,  JVennTemplate, BasePriorityAnalysisConfig, ProgressBar, Handlebars, ConfigUtils) {
 
     'use strict';
 
     var defaultOptions = {
-        item_container_id: '-container',
-        PROGRESS_BAR_CONTAINER: '#analyse-pa-charts-progress-bar-holder',
+        container: '-container',
+        PROGRESS_BAR_CONTAINER: '#analyse-pa-priorities-progress-bar-holder',
+        paths: {
+            TABLE_ITEM: 'views/analyse/priority_analysis/table-item'
+        },
         events: {
             CHANGE: 'change'
         },
@@ -37,19 +40,18 @@ define([
 
     /**
      *
-     * Creates a new Charts Dashboard View
-     * Instantiates the FENIX dashboard submodule, ProgressBar and responsible for all charts dashboard related functionality.
-     * Including updates to the Dashboard model.
-     * @class ChartsDashboardView
+     * Creates a new PrioritiesView, which is composed of a custom Table and Venn Chart
+     * Instantiates the FENIX dashboard submodule and responsible for the priorities dashboard related functionality.
+     * @class TableView
      * @extends View
      */
 
-    var ChartsDashboardView = View.extend({
+    var PrioritiesView = View.extend({
 
-        // DO NOT automatically render after initialize
+        // Automatically render after initialize
         autoRender: false,
 
-        className: 'analyse-priority-analysis-dashboard-charts',
+        className: 'dashboard-priorities',
 
         // Save the template string in a prototype property.
         // This is overwritten with the compiled template function.
@@ -61,7 +63,7 @@ define([
             this.model.on(defaultOptions.events.CHANGE, this.render, this);
             this.dashboards = [];
 
-            this.source = $(this.template).find("[data-topic='" + this.topic + "']").prop('outerHTML');
+            this.source = $(this.template).prop('outerHTML');
 
             //Initialize Progress Bar
             this.progressBar = new ProgressBar({
@@ -80,10 +82,10 @@ define([
             this.setElement(this.container);
             this._unbindEventListeners();
 
-            // Update the language related labels in the dashboard item configurations
+            // Update the language related labels in the item configurations (charts)
             for (var it in this.config.items) {
                 var item = this.config.items[it];
-                this._updateChartExportTitles(this.config.items[it], i18nDashboardLabels[item.id], this.model.get('label'));
+              //  this._updateChartExportTitles(this.config.items[it], i18nDashboardLabels[item.id], this.model.get('label'));
             }
 
             $(this.el).html(this.getTemplateFunction());
@@ -97,15 +99,20 @@ define([
 
 
         getTemplateFunction: function () {
-            this.compiledTemplate = Handlebars.compile(this.source);
-            var model = this.model.toJSON();
 
             // Update the language related labels in the dashboard template
+
+            this.compiledTemplate = Handlebars.compile(this.source);
+
+            var model = this.model.toJSON();
+
             var data = $.extend(true, model, i18nLabels, i18nDashboardLabels);
 
             return this.compiledTemplate(data);
 
         },
+
+
 
         setDashboardConfig: function (config) {
             this.baseConfig = config;
@@ -115,16 +122,12 @@ define([
             this.config.baseItems = config.items;
             this.config.environment = GeneralConfig.ENVIRONMENT;
 
-            var baseTemplate =  HighchartsTemplate;
+            var baseTemplate =  JVennTemplate;
 
             // Sets Highchart config for each chart
             _.each(this.config.items, _.bind(function (item) {
                 if (!_.isEmpty(item)) {
                     if (item.type == defaultOptions.itemTypes.CHART) {
-                        if(item.config.type == defaultOptions.itemTypes.VENN){
-                            baseTemplate =  JVennTemplate;
-                        }
-
                         if (item.config.config) {
                             item.config.config = $.extend(true, {}, baseTemplate, item.config.config);
                         } else {
@@ -139,13 +142,12 @@ define([
         },
 
 
-
         updateDashboardItemConfiguration: function (itemid, property, values) {
             var item = _.filter(this.config.items, {id: itemid})[0];
 
             if (item) {
                 if (item.config && item.config[property]) {
-                    if(values[0] === 'false' || values[0] === 'true')
+                    if (values[0] === 'false' || values[0] === 'true')
                         item.config[property] = $.parseJSON(values[0]); // returns a Boolean
                     else
                         item.config[property] = values[0];
@@ -157,20 +159,25 @@ define([
         renderDashboard: function () {
             var self = this;
 
-            console.log("================= renderDashboard =============== ");
+            this.config.el = this.$el;
 
-            this.config.el = this.el;
-
-
-
+            if(this.config.items.length > 0)
+                this.config.items[0].config.topic = this.topic;
 
 
-           // this.config.el.removeClass(defaultOptions.css.COLLAPSE);
-
+            // the path to the custom item is registered
+            this.config.itemsRegistry = {
+                custom: {
+                    path: 'views/analyse/priority_analysis/table-item'
+                }
+            };
 
             this.dashboard = new Dashboard(this.config);
 
+            this._bindEventListeners();
+
             this._loadProgressBar();
+
         },
 
         _disposeDashboards: function () {
@@ -182,7 +189,7 @@ define([
 
         _collapseDashboardItem: function (itemId) {
             // Hide/collapse Item container
-            var itemContainerId = '#' + itemId + defaultOptions.item_container_id;
+            var itemContainerId = '#' + itemId + defaultOptions.container;
 
             $(this.source).find(itemContainerId).addClass(defaultOptions.css.COLLAPSE);
 
@@ -190,14 +197,14 @@ define([
 
         _expandDashboardItem: function (itemId) {
             // Show Item container
-            var itemContainerId = '#' + itemId + defaultOptions.item_container_id;
+            var itemContainerId = '#' + itemId + defaultOptions.container;
             $(this.source).find(itemContainerId).removeClass(defaultOptions.css.COLLAPSE);
         },
 
 
         _showDashboardItem: function (itemId) {
             // Show Item container
-            var itemContainerId = '#' + itemId + defaultOptions.item_container_id;
+            var itemContainerId = '#' + itemId + defaultOptions.container;
             $(this.source).find(itemContainerId).show();
         },
 
@@ -220,7 +227,6 @@ define([
 
         },
 
-
         updateDashboardConfigUid: function (uid) {
             this.config.uid = uid;
         },
@@ -242,9 +248,9 @@ define([
             }
         },
 
-        _updateChartExportTitles: function (chartItem, title, subtitle) {
+        /*_updateChartExportTitles: function (chartItem, title, subtitle) {
 
-            if (chartItem.config.config) {
+           if (chartItem.config.config ) {
                 var chartItemTitle = chartItem.config.config.exporting.chartOptions.title,
                     chartItemSubTitle = chartItem.config.config.exporting.chartOptions.subtitle;
 
@@ -256,26 +262,70 @@ define([
                 chartItemTitle.text = title;
                 chartItemSubTitle.text = subtitle;
             }
-        },
+        },*/
 
-        rebuildDashboard: function (filter, topic) {
+        rebuildDashboard: function (filter, topic, selections) {
             var self = this;
 
             this._disposeDashboards();
             this.config.filter = filter;
 
+            console.log(" ================ rebuildDashboard");
+            console.log(this.config.filter);
+
+            // Update
+            if(selections) {
+
+
+                var keys;
+                // find item
+                for (var idx in selections) {
+                    var item = selections[idx];
+
+                    if(_.contains(Object.keys(item), BasePriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED)){
+                        keys = item;
+                    }
+
+                    this._updateDashboardItem(BasePriorityAnalysisConfig.items.VENN_DIAGRAM, item);
+                }
+
+                if(keys) {
+                    var fao = {fao: keys[BasePriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED]};
+                    this._updateDashboardItem(BasePriorityAnalysisConfig.items.VENN_DIAGRAM, fao);
+
+                    // set recipient selection info on table config, to understand selection status
+                    this.config.items[0].config.selections = keys;
+                }
+
+            }
+
             // Re-Render the source template
-            if(topic) {
+            if (topic) {
                 this.topic = topic;
-                this.source = $(this.template).find("[data-topic='" + this.topic + "']").prop('outerHTML');
+                this.source = $(this.template).prop('outerHTML');
                 this.render();
             }
 
 
-            // Build new dashboard
-            this.dashboard = new Dashboard(
-                this.config
-            );
+            if(this.config.items.length > 0)
+                this.config.items[0].config.topic = this.topic;
+
+
+
+            // the path to the custom item is registered
+            this.config.itemsRegistry = {
+                custom: {
+                    path: defaultOptions.paths.TABLE_ITEM
+                }
+            };
+
+
+            // Build new dashboard: RE-INSTATE
+            this.dashboard = new Dashboard(this.config);
+
+
+            // Bind the events
+            this._bindEventListeners();
 
             // Load Progress bar
             this._loadProgressBar();
@@ -288,29 +338,60 @@ define([
         },
 
 
+        _updateDashboardItem: function(itemid, props){
+
+            for(var idx in props){
+                var type = idx;
+                var value = props[idx];
+
+                // find item
+                var item =  _.find(this.config.items, function(o){
+                    return o.id === itemid;
+                });
+
+                // update the process
+                if(item) {
+                    var process = _.filter(item.postProcess, function(obj){
+                        return obj.rid && obj.rid.uid === type;
+                    });
+
+                    // update the indicator value
+                    if(process && process.length === 1)
+                        var label = value;
+                        if(i18nDashboardLabels[value])
+                            label = i18nDashboardLabels[value];
+
+                        process[0].parameters.value = i18nDashboardLabels[type] + ' ('+ label +')';
+                }
+
+            }
+        },
 
 
         _loadProgressBar: function () {
-            var self = this, increment = 0, percent = Math.round(100 / this.config.items.length);
 
             this.progressBar.reset();
             this.progressBar.show();
 
+        },
+
+
+        _bindEventListeners: function () {
+
+            var self = this, increment = 0, percent = Math.round(100 / this.config.items.length);
+
 
             this.dashboard.on('ready', function () {
                 self.progressBar.finish();
-               // amplify.publish(BaseEvents.DASHBOARD_ON_READY);
             });
 
-
             this.dashboard.on('ready.item', function () {
+                console.log( 'this.dashboard.on(ready.item)');
                 increment = increment + percent;
                 self.progressBar.update(increment);
             });
 
             this.dashboard.on('click.item', function (values) {
-               // console.log("-------------------- DASHBOARD CHART VIEW: ON click.item ");
-               // console.log(values);
 
                 // reset others
                 $("div[id^='resultC']").css('color', 'black');
@@ -318,16 +399,15 @@ define([
                 //set selected
                 $(values.values.selected).css('color', 'red');
 
-
-               var listnames = values.values.listnames;
+                var listnames = values.values.listnames;
                 var list = values.values.list;
                 var series = values.values.series;
 
-                var value = "";
+                var title = "";
                 if (listnames.length == 1) {
-                    value += "Priorities only in ";
+                    title += i18nDashboardLabels.prioritiesOnlyIn + " ";
                 } else {
-                    value += "Common priorities in ";
+                    title += i18nDashboardLabels.commonPrioritiesIn + " ";
                 }
 
                 // get first list
@@ -335,26 +415,31 @@ define([
 
                 // find associated series code/label list
                 var seriesCodeLabels= _.find(series,function(rw){
-                        return rw.name == firstList;
+                    return rw.name == firstList;
                 });
 
+                // title
                 var count = 0;
                 for (var name in listnames) {
-                    value += listnames[name];
+                    title += listnames[name];
 
                     if(count < listnames.length-2){
-                        value += ", ";
+                        title += ", ";
                     }
 
                     if(count == listnames.length - 2){
-                        value += " and ";
+                        title += " "+i18nDashboardLabels.and + " ";
                     }
 
-
-                  count++;
+                    count++;
                 }
-                value += ":\n";
 
+                $('#'+values.id+'-title').html(title);
+
+                // priorities list
+                var value = "";
+                var codes = [];
+                var codeGroups = [];
                 if (seriesCodeLabels) {
                     for (var val in list) {
                         var label = list[val];
@@ -364,28 +449,40 @@ define([
                             }
                         }).id;
 
+
+                        codes.push(id);
+
+                        var codeGrp = id.substring(0, 2);
+
+                        if($.inArray(codeGrp, codeGroups) === -1) {
+                            codeGroups.push(codeGrp);
+                            if(codeGroups.length > 1){
+                                value += "\n";
+                            }
+                        }
+
                         value += label + " - " + id+ "\n";
+
                     }
                 }
 
-                var divId = '#'+values.id+'-info';
-
+                // No priorities
+                if(value.length === 0){
+                   value = i18nDashboardLabels.none;
+                }
 
                 $('#'+values.id+'-info').val(value);
 
-
-
-
-
+                amplify.publish(BaseEvents.VENN_ON_CHANGE,{values: {purposecode: codes}});
 
             });
         },
 
 
-        _bindEventListeners: function () {
+        _increment: function () {
+            // Remove listeners
 
         },
-
 
         _unbindEventListeners: function () {
             // Remove listeners
@@ -404,5 +501,5 @@ define([
 
     });
 
-    return ChartsDashboardView;
+    return PrioritiesView;
 });

@@ -7,24 +7,35 @@ define(function () {
     return {
             dashboard: {
                 //default dataset id
-                uid: "adam_usd_commitment",
+                uid: "adam_cpf_undaf_priorities_table",
 
                 items: [
-                    {
-                        id: "priority-analysis",
+              {
+                        id: "priorities-table",
                         type: 'custom',
                         config: {
                             "groupedRow":false,
                             "formatter":"localstring",
                             "showRowHeaders":true,
-                            "values":["projectshortdescription"],
-                            "rows":[ "purposecode",  "projecttitle"],
+                           // "values":["projectshortdescription"],
+                          //  "rows":[ "purposecode",  "projecttitle"],
+                            "rows":[ "recipientcode", "purposecode", "undaf_stated_priority", "cpf_stated_priority"],
                             "aggregations":[],
-                            inputFormat : "fenixtool"
+                            inputFormat : "fenixtool",
+
+                            config : {
+                                pageSize: 150,
+                                columns : [
+                                    {id: "recipientcode_EN", width: 200},
+                                    {id: "purposecode_EN", width: 200},
+                                    {id: "undaf_stated_priority", width: 300},
+                                    {id: "cpf_stated_priority", width: 300}
+                                ]
+                            }
                         },
 
                         filterFor: {
-                            "filter_total_ODA": ['year', 'donorcode', 'recipientcode']
+                            "filter_priorities": ['recipientcode']
                         },
 
                         postProcess: [
@@ -32,44 +43,39 @@ define(function () {
                                 "name": "filter",
                                 "sid": [
                                     {
-                                        "uid": "adam_usd_commitment"
+                                        "uid": "adam_cpf_undaf_priorities_table"
                                     }
                                 ],
                                 "parameters": {
                                     "columns": [
                                         "purposecode",
-                                        "projecttitle",
-                                        "projectshortdescription"
+                                        "undaf_stated_priority",
+                                        "cpf_stated_priority",
+                                        "undaf_period",
+                                        "cpf_period",
+                                        "recipientcode"
                                     ],
                                     "rows": {
-                                        "donorcode": {
+                                        "recipientcode": {
                                             "codes": [
                                                 {
-                                                    "uid": "crs_donors",
+                                                    "uid": "crs_recipients",
                                                     "version": "2016",
                                                     "codes": [
-                                                        "1"
+                                                        "625"
                                                     ]
-                                                }
-                                            ]
-                                        },
-                                        "year": {
-                                            "time": [
-                                                {
-                                                    "from": 2000,
-                                                    "to": 2014
                                                 }
                                             ]
                                         }
                                     }
                                 },
-                                "rid":{"uid":"filter_total_ODA"}
+                                "rid":{"uid":"filter_priorities"}
                             },
                             {
                                 "name": "group",
                                 "parameters": {
                                     "by": [
-                                        "purposecode",  "projecttitle", "projectshortdescription"
+                                        "purposecode", "undaf_stated_priority", "cpf_stated_priority",  "undaf_period", "cpf_period", "recipientcode"
                                     ],
                                     "aggregations": [
 

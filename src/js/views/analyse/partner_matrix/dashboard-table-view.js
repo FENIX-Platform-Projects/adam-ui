@@ -73,7 +73,7 @@ define([
             // Update the language related labels in the item configurations (charts)
             for (var it in this.config.items) {
                 var item = this.config.items[it];
-                this._updateChartExportTitles(this.config.items[it], i18nDashboardLabels[item.id], this.model.get('label'));
+              //  this._updateChartExportTitles(this.config.items[it], i18nDashboardLabels[item.id], this.model.get('label'));
             }
 
             $(this.el).html(this.getTemplateFunction());
@@ -129,7 +129,9 @@ define([
             var self = this;
 
             this.config.el = this.$el;
-            this.config.items[0].topic = this.topic;
+
+            if(this.config.items.length > 0)
+              this.config.items[0].topic = this.topic;
 
 
             // the path to the custom item is registered
@@ -219,9 +221,9 @@ define([
             }
         },
 
-        _updateChartExportTitles: function (chartItem, title, subtitle) {
+        /*_updateChartExportTitles: function (chartItem, title, subtitle) {
 
-            if (chartItem.config.config) {
+           if (chartItem.config.config ) {
                 var chartItemTitle = chartItem.config.config.exporting.chartOptions.title,
                     chartItemSubTitle = chartItem.config.config.exporting.chartOptions.subtitle;
 
@@ -233,7 +235,7 @@ define([
                 chartItemTitle.text = title;
                 chartItemSubTitle.text = subtitle;
             }
-        },
+        },*/
 
         rebuildDashboard: function (filter, topic) {
             var self = this;
