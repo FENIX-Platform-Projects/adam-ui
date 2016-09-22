@@ -447,8 +447,8 @@ define(
                     values.values[BaseConfig.SELECTORS.RESOURCE_PARTNER] = [];
                 }
 
-                console.log("FINAL getFilterValues ============ END");
-                console.log(values);
+                //console.log("FINAL getFilterValues ============ END");
+               // console.log(values);
 
                 return values;
             },
