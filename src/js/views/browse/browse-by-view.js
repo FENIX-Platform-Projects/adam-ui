@@ -259,6 +259,9 @@ define([
          */
         _updateDashboard: function (selectedfilter) {
 
+           // console.log("================= _updateDashboard =============== ");
+           // console.log(this.subview('filters'));
+
             var ovalues = this.subview('filters').getFilterValues(), confPath, displayConfigForSelectedFilter, displayConfigForSelectedFilterValues, dashboardConfigChanged;
 
             //console.log("================= _updateDashboard =============== ");
@@ -425,7 +428,7 @@ define([
         },
 
         _setOdaDashboardModelValues: function () {
-            this.odaDashboardModel.set(s.dashboardModel.LABEL, this.subview('title').getTitleAsArray());
+            this.odaDashboardModel.set(s.dashboardModel.LABEL, this.subview('title').getTitleAsLabel());
         },
 
         backToTop: function (e) {
