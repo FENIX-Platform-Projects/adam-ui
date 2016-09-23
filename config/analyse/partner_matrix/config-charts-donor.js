@@ -89,8 +89,8 @@ define(function () {
 
                    filterFor: {
                        "filter_top_10": ['year', 'oda', 'donorcode'],
-                       "filter_faosubsectors": ['year', 'oda', 'donorcode'],
-                       "filter_total_oda": ['year', 'oda', 'donorcode']
+                       "filter_fao_sector": ['year', 'oda'],
+                       "filter_total_oda": ['year', 'oda']
                    },
 
                   postProcess: [
@@ -108,19 +108,17 @@ define(function () {
                               }
                           ],
                           "parameters": {
-                          }
+                          },
+                          "rid":{"uid":"union_process"}
 
                       },
                       {
                           "name": "order",
                           "parameters": {
-                              "indicator":"DESC",
+                              "indicator": "DESC",
                               "value": "DESC"
-                          },
-
-                          "rid":{"uid":"union_process"}
+                          }
                       },
-
 
                       {
                           "name": "filter",
@@ -143,14 +141,6 @@ define(function () {
                                               "codes": [
                                                   "1"
                                               ]
-                                          }
-                                      ]
-                                  },
-                                  "year": {
-                                      "time": [
-                                          {
-                                              "from": 2000,
-                                              "to": 2014
                                           }
                                       ]
                                   },
@@ -224,34 +214,14 @@ define(function () {
                                           }
                                       ]
                                   },
-                                  "donorcode": {
-                                      "codes": [
-                                          {
-                                              "uid": "crs_donors",
-                                              "version": "2016",
-                                              "codes": [
-                                                  "1"
-                                              ]
-                                          }
-                                      ]
-                                  },
-                                  "year": {
-                                      "time": [
-                                          {
-                                              "from": 2000,
-                                              "to": 2014
-                                          }
-                                      ]
-                                  },
                                   "fao_sector": {
                                       "enumeration": [
                                           "1"
                                       ]
                                   }
-
                               }
                           },
-                          "rid":{"uid":"filter_faosubsectors"}
+                          "rid":{"uid":"filter_fao_sector"}
                       },
                       {
                           "name": "group",
@@ -296,7 +266,7 @@ define(function () {
                                   },
                                   "subject": null
                               },
-                              "value": "ODA in FAO Sectors"
+                              "value": "ODA in FAO sectors"
                           },
                           "rid":{"uid":"fao_sector"}
 
@@ -330,25 +300,6 @@ define(function () {
                                           {
                                               "uid":"top_10",
                                               "column":"recipientcode"
-                                          }
-                                      ]
-                                  },
-                                  "donorcode": {
-                                      "codes": [
-                                          {
-                                              "uid": "crs_donors",
-                                              "version": "2016",
-                                              "codes": [
-                                                  "1"
-                                              ]
-                                          }
-                                      ]
-                                  },
-                                  "year": {
-                                      "time": [
-                                          {
-                                              "from": 2000,
-                                              "to": 2014
                                           }
                                       ]
                                   }
@@ -504,6 +455,7 @@ define(function () {
                           "parameters": {
                               "columns": [
                                   "recipientcode",
+                                  "donorcode",
                                   "value",
                                   "unitcode",
                                   "indicator"

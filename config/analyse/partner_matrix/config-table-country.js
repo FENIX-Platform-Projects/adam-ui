@@ -25,7 +25,18 @@ define(function () {
                             "rows":["recipientcode_EN", "donorcode_EN"],
                             "aggregations":[],
                             "values":["value"],
-                            inputFormat : "fenixtool"
+                            inputFormat : "fenixtool",
+
+                            config: {
+                                pageSize: 150,
+                                columns: [
+                                    {id: "recipientcode_EN", width: 200},
+                                    {id: "donorcode_EN", width: 200},
+                                    {id: "indicator", width: 200},
+                                    {id: "indicator", width: 200},
+                                    {id: "indicator", width: 200}
+                                ]
+                            }
                         },
 
                         filterFor: {
