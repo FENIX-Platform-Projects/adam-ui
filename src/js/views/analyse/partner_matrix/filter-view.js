@@ -122,29 +122,47 @@ define(
 
 
                     // For the Recipient Country, set the topic as RECIPIENT_COUNTRY_SELECTED
-                    if (self._getFilterValues().values[BaseConfig.SELECTORS.RECIPIENT_COUNTRY]) {
-                        var additionalProperties = self._getPropertiesObject(PartnerMatrixConfig.topic.SELECTED_TOPIC, PartnerMatrixConfig.topic.RECIPIENT_COUNTRY_SELECTED);
+                    if (self._getFilterValues().values[BaseConfig.SELECTORS.RECIPIENT_COUNTRY] || self._getFilterValues().values[BaseConfig.SELECTORS.RESOURCE_PARTNER]) {
 
-                        // If both the Recipient Country and Resource Partner selected, set the topic as RECIPIENT_AND_PARTNER_SELECTED
-                        if (self._getFilterValues().values[BaseConfig.SELECTORS.RESOURCE_PARTNER]) {
-                            additionalProperties = self._getPropertiesObject(PartnerMatrixConfig.topic.SELECTED_TOPIC, PartnerMatrixConfig.topic.RECIPIENT_AND_PARTNER_SELECTED);
+                        var partnerValues = self._getFilterValues().values[BaseConfig.SELECTORS.RESOURCE_PARTNER][0];
+                        var recipientValues = self._getFilterValues().values[BaseConfig.SELECTORS.RECIPIENT_COUNTRY][0];
+
+                        var topic;
+
+                        //FROM FILTER: All Resource Partners selected
+                        if (partnerValues === 'all') {
+                            // FROM FILTER: All recipients are selected
+                            // --> All Recipients + All Partners
+                            if (recipientValues === 'all') {
+                                topic = PartnerMatrixConfig.topic.RECIPIENT_COUNTRY_SELECTED;
+                            }
+                            // FROM PAYLOAD: 1 recipients selected
+                            // --> 1 Recipient + All Partners
+                            else {
+                                topic = PartnerMatrixConfig.topic.RECIPIENT_COUNTRY_SELECTED;
+                            }
                         }
+                        //FROM FILTER: 1 Resource Partners selected
+                        else {
+                            // FROM PAYLOAD: All recipients are selected
+                            // --> All Recipients + 1 Partner
+                            if (recipientValues === 'all') {
+                                topic = PartnerMatrixConfig.topic.RESOURCE_PARTNER_SELECTED;
+                            }
+                            // FROM PAYLOAD: 1 recipients selected
+                            // --> 1 Recipients + 1 Partner
+                            else {
+                                topic = PartnerMatrixConfig.topic.RECIPIENT_AND_PARTNER_SELECTED;
+                            }
+                        }
+
+                        var additionalProperties = self._getPropertiesObject(PartnerMatrixConfig.topic.SELECTED_TOPIC, topic);
+
 
                         amplify.publish(BaseEvents.FILTER_ON_READY, $.extend(self._getFilterValues(), {"props": additionalProperties}));
 
                     }
-                    // If Resource Partner selected, set the topic as RESOURCE_PARTNER_SELECTED
-                    else if (self._getFilterValues().values[BaseConfig.SELECTORS.RESOURCE_PARTNER]) {
-                        var additionalProperties = self._getPropertiesObject(PartnerMatrixConfig.topic.SELECTED_TOPIC, PartnerMatrixConfig.topic.RESOURCE_PARTNER_SELECTED);
 
-                        // If both the Recipient Country and Resource Partner selected, set the topic as RECIPIENT_AND_PARTNER_SELECTED
-                        if (self._getFilterValues().values[BaseConfig.SELECTORS.RECIPIENT_COUNTRY]) {
-                            additionalProperties = self._getPropertiesObject(PartnerMatrixConfig.topic.SELECTED_TOPIC, PartnerMatrixConfig.topic.RECIPIENT_AND_PARTNER_SELECTED);
-                        }
-
-                        amplify.publish(BaseEvents.FILTER_ON_READY, $.extend(self._getFilterValues(), {"props": additionalProperties}));
-
-                    }
                     // For ODA set its value to the props object
                     else if (self._getFilterValues().values[BaseConfig.SELECTORS.ODA]) {
                         var additionalProperties = self._getPropertiesObject(BaseConfig.SELECTORS.ODA, self._getFilterValues().values[BaseConfig.SELECTORS.ODA].enumeration[0]);
@@ -156,7 +174,6 @@ define(
                     }
 
                 });
-
 
 
                 this.filter.on('click', function (payload) {
@@ -171,8 +188,8 @@ define(
                 // Filter on Change: Set some base properties for Recipient and the ODA, then publish Filter On Change Event
                 this.filter.on('change', function (payload) {
 
-                    console.log("FILTER ALL ==========");
-                    console.log(payload.values.values);
+                   // console.log("FILTER ALL ==========");
+                   // console.log(payload.values.values);
 
                     var fc = self._getFilterConfigById(payload.id);
                     var dependencies = [];
@@ -201,39 +218,42 @@ define(
                         amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": additionalProperties}));
                     }
                     else if (payload.id === BaseConfig.SELECTORS.RECIPIENT_COUNTRY) {
+
                         if(payload.values.values.length > 0) {
 
-                            var selectedTopic = PartnerMatrixConfig.topic.RECIPIENT_COUNTRY_SELECTED;
-                            var partnerValues = self._getFilterValues().values[BaseConfig.SELECTORS.RESOURCE_PARTNER];
-
-                            if (partnerValues[0] !== 'all') { //A Resource Partner IS selected
-                                if (payload.values.values[0] === 'all') { // All recipients are selected
-                                    selectedTopic = PartnerMatrixConfig.topic.RESOURCE_PARTNER_SELECTED;
-                                } else {
-                                    selectedTopic = PartnerMatrixConfig.topic.RECIPIENT_AND_PARTNER_SELECTED;
+                            var recipientPayloadValue = payload.values.values[0];
+                            var partnerValues = self._getFilterValues().values[BaseConfig.SELECTORS.RESOURCE_PARTNER][0];
+                            var topic;
+                            //FROM FILTER: All Resource Partners selected
+                            if (partnerValues === 'all') {
+                                // FROM PAYLOAD: All recipients are selected
+                                // --> All Recipients + All Partners
+                                if (recipientPayloadValue === 'all') {
+                                    topic = PartnerMatrixConfig.topic.RECIPIENT_COUNTRY_SELECTED;
                                 }
-                            } else { //All  Resource Partners selected
-                                if (payload.values.values[0] === 'all') { // All recipients are selected
-                                    selectedTopic = PartnerMatrixConfig.topic.RECIPIENT_COUNTRY_SELECTED;
+                                // FROM PAYLOAD: 1 recipients selected
+                                // --> 1 Recipient + All Partners
+                                else {
+                                    topic = PartnerMatrixConfig.topic.RECIPIENT_COUNTRY_SELECTED;
+                                }
+                            }
+                            //FROM FILTER: 1 Resource Partners selected
+                            else {
+                                // FROM PAYLOAD: All recipients are selected
+                                // --> All Recipients + 1 Partner
+                                if (recipientPayloadValue === 'all') {
+                                    topic = PartnerMatrixConfig.topic.RESOURCE_PARTNER_SELECTED;
+                                }
+                                // FROM PAYLOAD: 1 recipients selected
+                                // --> 1 Recipients + 1 Partner
+                                else {
+                                    topic = PartnerMatrixConfig.topic.RECIPIENT_AND_PARTNER_SELECTED;
                                 }
                             }
 
+                            var additionalProperties = self._getPropertiesObject(PartnerMatrixConfig.topic.SELECTED_TOPIC, topic);
 
-                            var additionalProperties = self._getPropertiesObject(PartnerMatrixConfig.topic.SELECTED_TOPIC, selectedTopic);
-
-                            /*  // If both the Recipient Country and Resource Partner selected, set the topic as an attribute of the props object
-                             if(payload.values.values.length > 0) {
-                             // If both the Recipient Country and Resource Partner selected, set the topic as an attribute of the props object
-                             if (self._getFilterValues().values[BaseConfig.SELECTORS.RESOURCE_PARTNER]) {
-                             additionalProperties = self._getPropertiesObject(PartnerMatrixConfig.topic.SELECTED_TOPIC, PartnerMatrixConfig.topic.RECIPIENT_AND_PARTNER_SELECTED);
-                             }
-                             } else {
-                             if (self._getFilterValues().values[BaseConfig.SELECTORS.RESOURCE_PARTNER]) {
-                             additionalProperties = self._getPropertiesObject(PartnerMatrixConfig.topic.SELECTED_TOPIC, PartnerMatrixConfig.topic.RESOURCE_PARTNER_SELECTED);
-                             }
-                             }*/
-
-                            console.log("========================= FilterView: ON CHANGE COUNTRY ============== " + selectedTopic);
+                            //console.log("========================= FilterView: ON CHANGE COUNTRY ============== " + topic);
                             amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": additionalProperties}));
                         }
 
@@ -241,37 +261,41 @@ define(
                     else if (payload.id === BaseConfig.SELECTORS.RESOURCE_PARTNER) {
 
                         if(payload.values.values.length > 0) {
-                            var selectedTopic = PartnerMatrixConfig.topic.RESOURCE_PARTNER_SELECTED;
-                            var recipientValues = self._getFilterValues().values[BaseConfig.SELECTORS.RECIPIENT_COUNTRY];
 
-                            if (recipientValues[0] !== 'all') { //A Recipient Country IS selected
-                                if (payload.values.values[0] === 'all') { // All resource partners selected
+                            var partnerPayloadValue = payload.values.values[0];
+                            var recipientValues = self._getFilterValues().values[BaseConfig.SELECTORS.RECIPIENT_COUNTRY][0];
+                            var selectedTopic;
+
+                            //FROM FILTER: All Recipients selected
+                            if (recipientValues === 'all') {
+                                // FROM PAYLOAD: All partners are selected
+                                // --> All Partners + All Recipients
+                                if (partnerPayloadValue === 'all') {
                                     selectedTopic = PartnerMatrixConfig.topic.RECIPIENT_COUNTRY_SELECTED;
-                                } else {
-                                    selectedTopic = PartnerMatrixConfig.topic.RECIPIENT_AND_PARTNER_SELECTED;
                                 }
-                            } else { //All  Recipients selected
-                                if (payload.values.values[0] === 'all') { // All resource partners are selected
+                                // FROM PAYLOAD: 1 partner selected
+                                // --> 1 Partner + All Recipients
+                                else {
+                                    selectedTopic = PartnerMatrixConfig.topic.RESOURCE_PARTNER_SELECTED;
+                                }
+                            }
+                            //FROM FILTER: 1 Recipient selected
+                            else {
+                                // FROM PAYLOAD: All partners are selected
+                                // --> All Partners + 1 Recipient
+                                if (partnerPayloadValue === 'all') {
                                     selectedTopic = PartnerMatrixConfig.topic.RECIPIENT_COUNTRY_SELECTED;
+                                }
+                                // FROM PAYLOAD: 1 partner selected
+                                // --> 1 Partner + 1 Recipient
+                                else {
+                                    selectedTopic = PartnerMatrixConfig.topic.RECIPIENT_AND_PARTNER_SELECTED;
                                 }
                             }
 
                             var additionalProperties = self._getPropertiesObject(PartnerMatrixConfig.topic.SELECTED_TOPIC, selectedTopic);
 
-                            /* var additionalProperties = self._getPropertiesObject(PartnerMatrixConfig.topic.SELECTED_TOPIC, PartnerMatrixConfig.topic.RESOURCE_PARTNER_SELECTED);
-
-                             if(payload.values.values[0] === 'all') {
-                             if (self._getFilterValues().values[BaseConfig.SELECTORS.RECIPIENT_COUNTRY]) {
-                             additionalProperties = self._getPropertiesObject(PartnerMatrixConfig.topic.SELECTED_TOPIC, PartnerMatrixConfig.topic.RECIPIENT_COUNTRY_SELECTED);
-                             }
-                             } else {
-                             // If both the Recipient Country and Resource Partner selected, set the topic as an attribute of the props object
-                             if (self._getFilterValues().values[BaseConfig.SELECTORS.RECIPIENT_COUNTRY]) {
-                             additionalProperties = self._getPropertiesObject(PartnerMatrixConfig.topic.SELECTED_TOPIC, PartnerMatrixConfig.topic.RECIPIENT_AND_PARTNER_SELECTED);
-                             }
-                             }*/
-
-                            console.log("========================= FilterView: ON PARTNER ============== " + selectedTopic);
+                            //console.log("========================= FilterView: ON PARTNER ============== " + selectedTopic);
                             amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": additionalProperties}));
 
                         }
