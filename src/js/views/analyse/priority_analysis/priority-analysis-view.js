@@ -14,14 +14,13 @@ define([
     'config/Events',
     'config/Config',
     'config/analyse/priority_analysis/Events',
-    'config/analyse/priority_analysis/config-charts',
     'config/analyse/priority_analysis/config-table',
     'config/analyse/priority_analysis/config-priority-analysis',
     'config/analyse/priority_analysis/config-filter',
     'lib/utils',
     'amplify',
     'underscore'
-], function ($, $UI, View, TitleSubView, FilterSubView, DashboardChartsSubView, DashboardPrioritiesSubView, DashboardModel, TableModel, template, i18nLabels, Events, GeneralConfig, BasePriorityAnalysisEvents,  ChartsConfig, TableConfig, BasePriorityAnalysisConfig, BaseFilterConfig, Utils, amplify, _) {
+], function ($, $UI, View, TitleSubView, FilterSubView, DashboardChartsSubView, DashboardPrioritiesSubView, DashboardModel, TableModel, template, i18nLabels, Events, GeneralConfig, BasePriorityAnalysisEvents, TableConfig, BasePriorityAnalysisConfig, BaseFilterConfig, Utils, amplify, _) {
 
     'use strict';
 
@@ -39,7 +38,8 @@ define([
             ALL: 'all'
         },
         paths: {
-          VENN_CONFIG: 'config/analyse/priority_analysis/config-venn-'
+          VENN_CONFIG: 'config/analyse/priority_analysis/config-venn-',
+          CHARTS_CONFIG: 'config/analyse/priority_analysis/config-charts-'
         }
     };
 
@@ -103,7 +103,7 @@ define([
          */
         _loadConfigurations: function () {
            // require([s.paths.CHARTS_CONFIG + this.topic, s.paths.TABLE_CONFIG + this.topic], _.bind(this._initSubViews, this));
-            require([s.paths.VENN_CONFIG + this.topic], _.bind(this._initSubViews, this));
+            require([s.paths.CHARTS_CONFIG + this.topic, s.paths.VENN_CONFIG + this.topic], _.bind(this._initSubViews, this));
         },
 
         /**
@@ -112,7 +112,7 @@ define([
          * @private
          */
 
-        _initSubViews: function (VennConfig) {
+        _initSubViews: function (ChartsConfig, VennConfig) {
 
             View.prototype.render.apply(this, arguments);
 
@@ -167,7 +167,7 @@ define([
             // Set CHARTS DASHBOARD Model
             this.chartsDashboardModel = new DashboardModel();
 
-            // Set CHARTS DASHBOARD Sub View
+           /* // Set CHARTS DASHBOARD Sub View
             var dashboardChartsSubView = new DashboardChartsSubView({
                 autoRender: false,
                 container: this.$el.find(s.css_classes.DASHBOARD_CHARTS_HOLDER),
@@ -175,7 +175,7 @@ define([
                 model: this.chartsDashboardModel
             });
             dashboardChartsSubView.setDashboardConfig(this.chartsConfig.dashboard);
-            this.subview('chartsDashboard', dashboardChartsSubView);
+            this.subview('chartsDashboard', dashboardChartsSubView);*/
 
             // Set TABLE DASHBOARD Model
             this.prioritiesDashboardModel = new TableModel();
@@ -225,11 +225,21 @@ define([
 
             var selectedFilterItems = payload.labels;
 
-            // Set Dashboard Properties
-            if (payload["props"]) {
-              //  this.subview('chartsDashboard').setProperties(payload["props"]);
+            // Set topic and set Dashboard Properties
+            if (payload['props']) {
+
+                var selectedTopicObj = _.find(payload['props'], function(obj){
+                    if(obj['selected_topic'])
+                        return obj;
+                });
+
+                if (selectedTopicObj) {
+                    this.topic = selectedTopicObj["selected_topic"];
+                }
+
                 this.subview('prioritiesDashboard').setProperties(payload["props"]);
             }
+
 
             // Build Title View
             this.subview('title').setLabels(selectedFilterItems);
@@ -252,6 +262,10 @@ define([
          * @private
          */
         _filtersChanged: function (changedFilter) {
+
+            if(this.subview('chartsDashboard')) {
+                this.subview('chartsDashboard').clear();
+            }
 
             var allFilterValues = this.subview('filters').getFilterValues();
 
@@ -291,17 +305,10 @@ define([
                                 return obj;
                         });
 
-                        var selectionsObj = _.find(changedFilter['props'], function(obj){
-                            if(obj['selections'])
-                                return obj;
-                        });
-
                         if (selectedTopicObj) {
                             topic = selectedTopicObj["selected_topic"];
                         }
-                        if (selectionsObj) {
-                            selections = selectionsObj['selections'];
-                        }
+
                     }
 
                     // All is selected
@@ -315,7 +322,7 @@ define([
                         amplify.publish(Events.TITLE_ADD_ITEM, this._createTitleItem(changedFilter));
                     }
 
-                    this._getDashboardConfiguration(topic, filterValues, selections);
+                    this._getDashboardConfiguration(topic, filterValues, changedFilter['props']);
                 }
 
             }
@@ -337,12 +344,26 @@ define([
            // console.log("======================================= extendedFilterValues");
             //console.log(extendedFilterValues);
 
+
+            // Set CHARTS DASHBOARD Sub View
             this.chartsConfig.dashboard.filter = extendedFilterValues;
 
-            this._updateChartsDashboardModelValues();
 
-            this.subview('chartsDashboard').setDashboardConfig(this.chartsConfig.dashboard);
-            this.subview('chartsDashboard').renderDashboard(this.topic);
+            var dashboardChartsSubView = new DashboardChartsSubView({
+                autoRender: false,
+                container: this.$el.find(s.css_classes.DASHBOARD_CHARTS_HOLDER),
+                topic: this.topic,
+                model: this.chartsDashboardModel
+            });
+            dashboardChartsSubView.setDashboardConfig(this.chartsConfig.dashboard);
+            this.subview('chartsDashboard', dashboardChartsSubView);
+
+            this._updateChartsDashboardModelValues();
+            this.subview('chartsDashboard').renderDashboard();
+
+
+           // this.subview('chartsDashboard').setDashboardConfig(this.chartsConfig.dashboard);
+            //this.subview('chartsDashboard').renderDashboard(this.topic);
 
 
             //console.log("================= selectedfilter =============== ");
@@ -368,7 +389,10 @@ define([
                 this.topic = topic;
 
                 //Load new configuration files
-                require([s.paths.VENN_CONFIG + topic], function (TopicVennConfig) {
+                require([s.paths.CHARTS_CONFIG + topic, s.paths.VENN_CONFIG + topic], function (TopicChartConfig, TopicVennConfig) {
+
+                    self.chartsConfig = TopicChartConfig;
+
 
                     var venn  =  _.find(self.prioritiesConfig.dashboard.items, function(o){
                         return o.id === BasePriorityAnalysisConfig.items.VENN_DIAGRAM;
