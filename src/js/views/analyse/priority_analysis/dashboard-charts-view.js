@@ -58,15 +58,21 @@ define([
 
         initialize: function (params) {
             this.topic = params.topic;
+            //this.model = params.model;
+            this.container = params.container;
             this.model.on(defaultOptions.events.CHANGE, this.render, this);
             this.dashboards = [];
 
             this.source = $(this.template).find("[data-topic='" + this.topic + "']").prop('outerHTML');
 
+           // console.log("INITIALIZE FOR "+this.topic);
+            //console.log(this.source)
             //Initialize Progress Bar
             this.progressBar = new ProgressBar({
                 container: defaultOptions.PROGRESS_BAR_CONTAINER
             });
+
+
 
             View.prototype.initialize.call(this, arguments);
 
@@ -77,7 +83,7 @@ define([
         },
 
         render: function () {
-            this.setElement(this.container);
+           // this.el = this.container;
             this._unbindEventListeners();
 
             // Update the language related labels in the dashboard item configurations
@@ -86,17 +92,22 @@ define([
                 this._updateChartExportTitles(this.config.items[it], i18nDashboardLabels[item.id], this.model.get('label'));
             }
 
-            $(this.el).html(this.getTemplateFunction());
+
+            $(this.container).html(this.getTemplateFunction());
         },
 
         attach: function () {
             View.prototype.attach.call(this, arguments);
+
+         //   this.$el =  $(this.el);
 
             this.configUtils = new ConfigUtils();
         },
 
 
         getTemplateFunction: function () {
+
+
             this.compiledTemplate = Handlebars.compile(this.source);
             var model = this.model.toJSON();
 
@@ -154,29 +165,24 @@ define([
             }
         },
 
-        renderDashboard: function (topic) {
-            var self = this;
+        renderDashboard: function () {
+            this.render();
 
-
-            this.config.el = this.el;
-            this.topic = topic;
-
-            console.log(" ================= RENDER THIS TOPIC ============");
-            console.log(this.topic);
-
-
-           // this.config.el.removeClass(defaultOptions.css.COLLAPSE);
-
-
+            this.config.el = this.container;
             this.dashboard = new Dashboard(this.config);
 
             this._bindEventListeners();
             this._loadProgressBar();
         },
 
+
+        clear: function () {
+            this.container.empty();
+        },
+
         _disposeDashboards: function () {
             if (this.dashboard && $.isFunction(this.dashboard.dispose)) {
-                this.dashboard.dispose();
+                 this.dashboard.dispose();
             }
         },
 
@@ -291,7 +297,6 @@ define([
 
 
         _bindEventListeners: function () {
-            console.log("BIND")
 
         },
 
@@ -303,6 +308,7 @@ define([
 
         dispose: function () {
 
+           // console.log("======================== DISPOSE ME CHARTS=================");
             this._disposeDashboards();
 
             this._unbindEventListeners();

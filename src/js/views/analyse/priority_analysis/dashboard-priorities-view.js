@@ -94,6 +94,8 @@ define([
         attach: function () {
             View.prototype.attach.call(this, arguments);
 
+            this.$el = $(this.el);
+
             this.configUtils = new ConfigUtils();
         },
 
@@ -241,7 +243,11 @@ define([
         },
 
         setProperties: function (props) {
+
             if (props) {
+
+                this._updateItems(props);
+
                 if (props["oda"])
                     this.config.uid = props["oda"];
 
@@ -264,16 +270,17 @@ define([
             }
         },*/
 
-        rebuildDashboard: function (filter, topic, selections) {
+        rebuildDashboard: function (filter, topic, props) {
             var self = this;
 
             this._disposeDashboards();
             this.config.filter = filter;
 
 
-            // Update
-            if(selections) {
+            if(props)
+              this._updateItems(props);
 
+          /*  if(selections) {
 
                 var keys;
                 // find item
@@ -295,7 +302,7 @@ define([
                     this.config.items[0].config.selections = keys;
                 }
 
-            }
+            }*/
 
             // Re-Render the source template
             if (topic) {
@@ -323,13 +330,44 @@ define([
 
 
             // Bind the events
-            //this._bindEventListeners();
+            this._bindEventListeners();
 
             // Load Progress bar
             this._loadProgressBar();
 
         },
 
+
+        _updateItems: function(props){
+
+            var selectionsObj = _.find(props, function(obj){
+                if(obj['selections'])
+                    return obj;
+            });
+
+            if (selectionsObj) {
+                var selections = selectionsObj['selections'];
+                var keys;
+                // find item
+                for (var idx in selections) {
+                    var item = selections[idx];
+
+                    if(_.contains(Object.keys(item), BasePriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED)){
+                        keys = item;
+                    }
+
+                    this._updateDashboardItem(BasePriorityAnalysisConfig.items.VENN_DIAGRAM, item);
+                }
+
+                if(keys) {
+                    var fao = {fao: keys[BasePriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED]};
+                    this._updateDashboardItem(BasePriorityAnalysisConfig.items.VENN_DIAGRAM, fao);
+
+                    // set recipient selection info on table config, to understand selection status
+                    this.config.items[0].config.selections = keys;
+                }
+            }
+        },
 
         getDashboardConfig: function () {
             return this.config;
@@ -386,11 +424,11 @@ define([
             this.dashboard.on('ready.item', function () {
                 increment = increment + percent;
                 self.progressBar.update(increment);
+
+
             });
 
             this.dashboard.on('click.item', function (values) {
-
-                console.log("p view", values)
 
                 // reset others
                 $("div[id^='resultC']").css('color', 'black');
@@ -470,8 +508,6 @@ define([
                    value = i18nDashboardLabels.none;
                 }
 
-                console.log("---------------------------------------")
-                console.log(value)
 
                 $('#'+values.id+'-info').val(value);
 
