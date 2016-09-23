@@ -498,7 +498,8 @@ define([
                             }
                         }
 
-                        value += label + " - " + id+ "\n";
+                        //value += label + " - " + id+ "\n";
+                        value += label + "\n";
 
                     }
                 }
