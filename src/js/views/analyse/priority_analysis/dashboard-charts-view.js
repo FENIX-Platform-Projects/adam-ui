@@ -99,15 +99,11 @@ define([
         attach: function () {
             View.prototype.attach.call(this, arguments);
 
-         //   this.$el =  $(this.el);
-
             this.configUtils = new ConfigUtils();
         },
 
 
         getTemplateFunction: function () {
-
-
             this.compiledTemplate = Handlebars.compile(this.source);
             var model = this.model.toJSON();
 
