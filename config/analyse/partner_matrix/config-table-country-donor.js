@@ -12,7 +12,7 @@ define(function () {
 
                 items: [
                     {
-                        id: "partner-matrix-2",
+                        id: "partner-matrix",
                         type: 'custom',
                         config: {
                             "groupedRow":false,
