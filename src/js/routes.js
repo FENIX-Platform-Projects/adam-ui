@@ -16,6 +16,8 @@ define(function () {
         match('analyse/priority_analysis', 'analyse#priority_analysis');
         match('analyse/compare', 'analyse#compare');
         match('analyse/partner_matrix', 'analyse#partner_matrix');
+        match('analyse/comp_advantage', 'analyse#comp_advantage');
+
         // match('analyse/projects', 'analyse#projects');
         match('login', 'login#show');
         //  match('analysis', 'analysis#show');
