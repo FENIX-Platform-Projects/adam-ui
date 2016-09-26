@@ -60,6 +60,7 @@ define([
 
         initialize: function (params) {
             this.topic = params.topic;
+
             this.model.on(defaultOptions.events.CHANGE, this.render, this);
             this.dashboards = [];
 
@@ -113,8 +114,6 @@ define([
             return this.compiledTemplate(data);
 
         },
-
-
 
         setDashboardConfig: function (config) {
             this.baseConfig = config;
@@ -316,7 +315,6 @@ define([
                 this.config.items[0].config.topic = this.topic;
 
 
-
             // the path to the custom item is registered
             this.config.itemsRegistry = {
                 custom: {
@@ -324,8 +322,7 @@ define([
                 }
             };
 
-
-            // Build new dashboard: RE-INSTATE
+            // Build new dashboard
             this.dashboard = new Dashboard(this.config);
 
 
@@ -424,8 +421,6 @@ define([
             this.dashboard.on('ready.item', function () {
                 increment = increment + percent;
                 self.progressBar.update(increment);
-
-
             });
 
             this.dashboard.on('click.item', function (values) {
@@ -518,10 +513,6 @@ define([
         },
 
 
-        _increment: function () {
-            // Remove listeners
-
-        },
 
         _unbindEventListeners: function () {
             // Remove listeners
