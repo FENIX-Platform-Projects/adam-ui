@@ -6,5 +6,6 @@ define({
     "agencies": "Implementing Agencies",
     "partner_matrix": "Resource Partner Matrix",
     "projects": "Project Analysis",
-    "priority_analysis": "Priority Analysis"
+    "priority_analysis": "Priority Analysis",
+    "comp_advantage": "FAO Comparative Advantage"
 });

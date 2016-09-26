@@ -6,8 +6,9 @@ define([
     'views/analyse/priority_analysis/priority-analysis-view',
     'views/analyse/compare/compare-view',
     'views/analyse/partner_matrix/partner-matrix-view',
+    'views/analyse/comp_advantage/comp-advantage-view',
     // 'views/analyze/projects/projects-view'
-], function (Chaplin, Controller, AnalyzeView, PriorityAnalysisView, CompareView, ResourcePartnerMatrixView /**, , ProjectsView**/) {
+], function (Chaplin, Controller, AnalyzeView, PriorityAnalysisView, CompareView, ResourcePartnerMatrixView, ComparativeAdvantageView /**, , ProjectsView**/) {
 
     'use strict';
 
@@ -40,6 +41,14 @@ define([
 
         partner_matrix: function (params, route) {
             this.view = new  ResourcePartnerMatrixView({
+                region: 'main',
+                filter: route.action,
+                page: Backbone.history.fragment
+            });
+        },
+
+        comp_advantage: function (params, route) {
+            this.view = new  ComparativeAdvantageView({
                 region: 'main',
                 filter: route.action,
                 page: Backbone.history.fragment

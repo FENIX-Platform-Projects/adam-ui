@@ -78,7 +78,7 @@ define({
             "body": {
                 "EN": "Analyse FAO's comparative advantage with respect to the other implementing agencies in a specific area of intervention."
             },
-            "link": "#analyse/fao",
+            "link": "#analyse/comp_advantage",
             "img": "http://fenixrepo.fao.org/cdn/images/modules/monitoring/kenya/timeseries/kenya_monitoring_timeseries.png"
         }
 
