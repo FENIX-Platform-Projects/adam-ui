@@ -15146,10 +15146,10 @@ body {
   font-size: 14px;
   text-transform: none; }
 
-/** Table Highlighted Columns: Comparative Advantage Only */
-div[data-item="comp_advantage"] .gt-col-1_11-ratio, .gt-col-1_11-purposecode_en, .gt-col-1_11-year {
-  background-color: #eef6ff; }
-
+/*!** Table Highlighted Columns: Comparative Advantage Only *!
+div[data-item="comp_advantage"] .gt-col-1_11-ratio, div[data-item="comp_advantage"] .gt-col-1_11-purposecode_en, div[data-item="comp_advantage"] .gt-col-1_11-year  {
+  background-color:#eef6ff;
+}*/
 /** Table Cell Alignment */
 .gt-inner-left {
   text-align: left; }
@@ -15157,6 +15157,15 @@ div[data-item="comp_advantage"] .gt-col-1_11-ratio, .gt-col-1_11-purposecode_en,
 /**  Table Page size drop-down */
 .gt-pagesize-select {
   width: 48px; }
+
+.big-col-width {
+  width: 246px; }
+
+.smaller-col-width {
+  width: 66px; }
+
+.small-col-width {
+  width: 96px; }
 
 /*.gt-row-selected td {
 !**  background-color: #e6f1ff; **!
