@@ -15,10 +15,11 @@ define([
     'lib/utils',
     'i18n!nls/table',
     'i18n!nls/filter',
+    'i18n!nls/analyse-comp-advantage',
     'fx-common/utils',
     'handlebars',
     'amplify'
-], function ($, log, _, ERR, EVT, C, Template, OlapCreator, Filter, FenixTool, FilterModel, Utils, i18nTableLabels, i18nLabels, FxUtils, Handlebars) {
+], function ($, log, _, ERR, EVT, C, Template, OlapCreator, Filter, FenixTool, FilterModel, Utils, i18nTableLabels, i18nLabels, i18nLabelsComparativeAdvantage, FxUtils, Handlebars) {
 
     'use strict';
 
@@ -124,7 +125,11 @@ define([
     TableItem.prototype._renderTemplate = function () {
         this.indicatortemplate = Handlebars.compile(Template);
 
-        var data = $.extend(true, {data:  this.model}, i18nTableLabels);
+        var labels = $.extend(true, i18nTableLabels, i18nLabelsComparativeAdvantage);
+
+        console.log(labels);
+
+        var data = $.extend(true, {data:  this.model}, labels);
         var html = this.indicatortemplate(data);
 
         $(this.el).html(html);
