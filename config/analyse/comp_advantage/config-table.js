@@ -21,7 +21,7 @@ define(function () {
                             "decimals":2,
                             "pageSize": "150",
                             "showRowHeaders":true,
-                            "rows":["purposecode_EN", "recipientcode_EN", "year", "delivery",  "fao_delivery", "total_fao_delivery", "advantage_ratio", "ratio"], //"delivery",  "fao_delivery", "total_fao_delivery", "advantage_ratio", "ratio"
+                            "rows":["purposecode_EN", "year", "delivery",  "fao_delivery", "total_fao_delivery", "advantage_ratio", "ratio"], //"delivery",  "fao_delivery", "total_fao_delivery", "advantage_ratio", "ratio"
                             //"rows":["purposecode_EN", "recipientcode_EN", "year", "ratio"], //"delivery",  "fao_delivery", "total_fao_delivery", "advantage_ratio", "ratio"
 
 
@@ -32,20 +32,24 @@ define(function () {
                             config: {
                                 pageSize: 150,
                                 height: 700,
+                                autoSelectFirstRow: false,
                                 customRowAttribute : function(record,rn,grid){
-                                    this.autoSelectFirstRow = false;
+                                    grid.columnList[0].styleClass = 'gt-col-1_11-purposecode_en';
+                                    grid.columnList[1].styleClass = 'gt-col-1_11-year';
+                                    grid.columnList[6].styleClass = 'gt-col-1_11-ratio';
 
-                                    if (record[7] === 'YES'){
-                                        return 'style="background-color:#e6ffe6"';
-                                    } else {
-                                        return 'style="background-color:#f4f4f4"'
+                                    if (record[6] === 'YES'){
+                                        grid.columnList[0].styleClass = null;
+                                        grid.columnList[1].styleClass = null;
+                                        grid.columnList[6].styleClass = null;
+                                        return 'style="background-color:#A4C368"'; // green
                                     }
+
                                 },
                                 columns: [
                                     {id: "purposecode_EN", width: 250},
-                                    {id: "recipientcode_EN", width: 170},
                                     {id: "year", width: 70, align: 'center'},
-                                    {id: "delivery", width: 100,  align: 'center',
+                                    {id: "delivery", width: 100, align: 'center', title: "FAO delivery in sub-sector & country &divide; Total FAO delivery in country",
                                         renderer: function (value, record, columnObj, grid, colNo, rowNo) {
                                             var val = value;
 
@@ -55,7 +59,7 @@ define(function () {
 
                                         return  val;
                                     }},
-                                    {id: "fao_delivery",  width: 100,
+                                    {id: "fao_delivery", width: 100,  align: 'center', title: "FAO delivery in sub-sector & country &divide; Total delivery by all ODA implementing agencies in sub-sector & country",
                                         renderer: function (value, record, columnObj, grid, colNo, rowNo) {
                                             var val = value;
 
@@ -64,7 +68,7 @@ define(function () {
                                             }
                                             return  val;
                                         }},
-                                    {id: "total_fao_delivery",
+                                    {id: "total_fao_delivery",  align: 'center', title: "Total FAO delivery in country &divide; Total agricultural delivery by all ODA implementing agencies in country",
                                         renderer: function (value, record, columnObj, grid, colNo, rowNo) {
                                             var val = value;
 
@@ -73,7 +77,7 @@ define(function () {
                                             }
                                             return  val;
                                         }},
-                                    {id: "advantage_ratio",
+                                    {id: "advantage_ratio",  align: 'center', title: "FAO Delivery over Total Delivery &divide Total FAO Delivery over Total Agriculture",
                                         renderer: function (value, record, columnObj, grid, colNo, rowNo) {
                                             var val = value;
                                             if(val && val > 0){
@@ -82,26 +86,10 @@ define(function () {
                                             return  val;
                                         }},
                                     {
-                                        id: 'ratio', width: 100,
+                                        id: 'ratio', width: 100,  align: 'center', title: "Ratio > 1 = 'Yes' while Ratio < 1 = 'No'",
                                         renderer: function (value, record1, columnObj, grid, colNo, rowNo) {
                                             var lowCase = value.toLowerCase();
-                                            var newCase = lowCase.charAt(0).toUpperCase() + lowCase.slice(1);
-
-                                            //console.log(this);
-
-                                            var fmt = '<span>' + newCase+'</span>'
-                                            if (value === 'YES') {
-                                              // console.log();
-
-                                                fmt = newCase;
-                                            // fmt = '<span style="color:green; font-weight: bold" >' +newCase +'</span>';
-
-
-                                            }
-
-
-
-                                            return fmt;
+                                            return lowCase.charAt(0).toUpperCase() + lowCase.slice(1);
                                         }
                                     }]
 
