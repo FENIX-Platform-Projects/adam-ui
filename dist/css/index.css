@@ -14996,7 +14996,7 @@ input[type="radio"]:disabled + label {
   background-color: #f4f4f4 !important; }
 
 /* Freezed Rows */
-.gt-freeze-div[id*="bodyDiv"] td {
+.fx-box .gt-freeze-div[id*="bodyDiv"] td {
   background-color: #f4f4f4 !important; }
 
 /* Freezed Header */
@@ -15132,25 +15132,41 @@ body {
   background-color: #f8f8f8;
   font-family: "FrutigerLTW02-45Light", Arial, Helvetica, Verdana, sans-serif; }
 
-#venn-analysis-container {
-  /**font-size: 12px;**/ }
-
-/*#partner-matrix-container .gt-freeze-div[id*="headDiv"]  table tr td {
-  background-color: #3c91c2 !important;
-}*/
-.gt-hd-row td .gt-inner {
-  font-weight: 600;
-  font-size: 14px;
-  background-color: #ABC8E1;
-  text-transform: none; }
-
-.gt-pagesize-select {
-  width: 48px; }
-
+/** Venn Text Area */
 #venn-diagram-info-box textarea {
   width: 100%;
   height: 500px;
   padding: 10px;
   resize: none; }
+
+/** Table Sort Icons */
+/** Table Header */
+.gt-hd-row td .gt-inner {
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: none; }
+
+/** Table Highlighted Columns: Comparative Advantage Only */
+div[data-item="comp_advantage"] .gt-col-1_11-ratio, .gt-col-1_11-purposecode_en, .gt-col-1_11-year {
+  background-color: #eef6ff; }
+
+/** Table Cell Alignment */
+.gt-inner-left {
+  text-align: left; }
+
+/**  Table Page size drop-down */
+.gt-pagesize-select {
+  width: 48px; }
+
+/*.gt-row-selected td {
+!**  background-color: #e6f1ff; **!
+
+}
+
+!* Freezed Rows *!
+.gt-freeze-div[id*="bodyDiv"] td {
+!**  background-color: #f4f4f4 !important;**!
+
+}*/
 
 /*# sourceMappingURL=index.css.map */
