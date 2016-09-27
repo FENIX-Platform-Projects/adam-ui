@@ -12,8 +12,8 @@ define({
     "partner": "Partners",
     "fao": "FAO",
     "all": "All",
-    "top-partners": "Top Resource Partners",
-    "top-recipients": "Top Recipient Countries",
-    "top-channels": "Top Channels of Delivery",
-    "financing-priorities": "Financing priorities"
+    "top-partners": "Top Resource Partners for selected priorities",
+    "top-recipients": "Top Recipient Countries for selected priorities",
+    "top-channels": "Top Channels of Delivery for selected priorities",
+    "financing-priorities": "Financing Priorities for selected priorities"
 });

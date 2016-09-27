@@ -161,6 +161,22 @@ define(function () {
                                 column: {
                                     stacking: 'normal'
                                 }
+                            },
+                            tooltip: {
+                                 formatter: function () {
+                                     var unit = 'USD Mil';
+
+                                     return '<b>' +
+                                         this.series.name + '</b><br/>' +
+                                         Highcharts.numberFormat(this.y, 2, '.', ',') + ' ' + unit;
+                                }
+                            },
+                            exporting: {
+                                buttons: {
+                                    toggleDataLabelsButton: {
+                                        enabled: false
+                                    }
+                                }
                             }
                         }
                     },
