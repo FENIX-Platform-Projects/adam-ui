@@ -29,6 +29,7 @@ define(function () {
 
                             config: {
                                 pageSize: 150,
+                                autoSelectFirstRow: false,
                                 columns: [
                                     {id: "recipientcode_EN", width: 200},
                                     {id: "donorcode_EN", width: 200},

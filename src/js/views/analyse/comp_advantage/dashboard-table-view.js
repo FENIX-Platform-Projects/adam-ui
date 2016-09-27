@@ -9,12 +9,11 @@ define([
     'config/Config',
     'i18n!nls/analyse',
     'i18n!nls/analyse-comp-advantage',
-    'config/analyse/comp_advantage/Events',
     'views/common/progress-bar',
     'handlebars',
     'lib/config-utils',
     'amplify'
-], function ($, _, View, template, Dashboard, Utils, GeneralConfig, i18nLabels, i18nDashboardLabels, BaseEvents, ProgressBar, Handlebars, ConfigUtils) {
+], function ($, _, View, template, Dashboard, Utils, GeneralConfig, i18nLabels, i18nDashboardLabels, ProgressBar, Handlebars, ConfigUtils) {
 
     'use strict';
 
@@ -56,21 +55,15 @@ define([
         template: template,
 
         initialize: function (params) {
-            $.extend(true, this, defaultOptions);
+           // $.extend(true, this, defaultOptions);
             var self = this;
 
-
-            this.dashboards = [];
-            this.container = params.container;
+           // this.container = params.container;
             this.model = params.model;
-            this.model.on(self.events.CHANGE, this.render, this);
+            this.model.on(defaultOptions.events.CHANGE, this.render, this);
             this.source = $(this.template).prop('outerHTML');
 
-            //Initialize Progress Bar
-            this.progressBar = new ProgressBar({
-                container: self.PROGRESS_BAR_CONTAINER
-            });
-
+            this.dashboards = [];
 
             View.prototype.initialize.call(this, arguments);
 
@@ -92,12 +85,14 @@ define([
 
             $(this.el).html(this.getTemplateFunction());
 
+            //Initialize Progress Bar
+            this.progressBar = new ProgressBar({
+                container: defaultOptions.PROGRESS_BAR_CONTAINER
+            });
         },
 
         attach: function () {
             View.prototype.attach.call(this, arguments);
-
-            this.$el = $(this.el);
 
             this.configUtils = new ConfigUtils();
         },
@@ -106,7 +101,6 @@ define([
         getTemplateFunction: function () {
 
             // Update the language related labels in the dashboard template
-
 
             this.compiledTemplate = Handlebars.compile(this.source);
 
@@ -147,17 +141,16 @@ define([
             var self = this;
 
             this.config.el = this.$el;
+          //  this.config.el = this.$el;
 
             // the path to the custom item is registered
             this.config.itemsRegistry = {
                 custom: {
-                    path: self.paths.TABLE_ITEM
+                    path: defaultOptions.paths.TABLE_ITEM
                 }
             };
 
             this.dashboard = new Dashboard(this.config);
-
-            this._bindEventListeners();
 
             this._loadProgressBar();
 
@@ -172,22 +165,22 @@ define([
 
         _collapseDashboardItem: function (itemId) {
             // Hide/collapse Item container
-            var itemContainerId = '#' + itemId + this.container;
+            var itemContainerId = '#' + itemId + defaultOptions.container;
 
-            $(this.source).find(itemContainerId).addClass(this.css.COLLAPSE);
+            $(this.source).find(itemContainerId).addClass(defaultOptions.css.COLLAPSE);
 
         },
 
         _expandDashboardItem: function (itemId) {
             // Show Item container
-            var itemContainerId = '#' + itemId + this.container;
-            $(this.source).find(itemContainerId).removeClass(this.css.COLLAPSE);
+            var itemContainerId = '#' + itemId + defaultOptions.container;
+            $(this.source).find(itemContainerId).removeClass(defaultOptions.css.COLLAPSE);
         },
 
 
         _showDashboardItem: function (itemId) {
             // Show Item container
-            var itemContainerId = '#' + itemId + this.container;
+            var itemContainerId = '#' + itemId + defaultOptions.container;
             $(this.source).find(itemContainerId).show();
         },
 
@@ -257,16 +250,13 @@ define([
             // the path to the custom item is registered
             this.config.itemsRegistry = {
                 custom: {
-                    path:self.paths.TABLE_ITEM
+                    path:defaultOptions.paths.TABLE_ITEM
                 }
             };
 
             // Build new dashboard
             this.dashboard = new Dashboard(this.config);
 
-
-            // Bind the events
-            this._bindEventListeners();
 
             // Load Progress bar
             this._loadProgressBar();
@@ -279,21 +269,17 @@ define([
         },
 
         _loadProgressBar: function () {
+            var self = this, increment = 0, percent = Math.round(100 / this.config.items.length);
 
             this.progressBar.reset();
             this.progressBar.show();
 
-        },
-
-
-        _bindEventListeners: function () {
-
-            var self = this, increment = 0, percent = Math.round(100 / this.config.items.length);
-
 
             this.dashboard.on('ready', function () {
                 self.progressBar.finish();
+                // amplify.publish(BaseEvents.DASHBOARD_ON_READY);
             });
+
 
             this.dashboard.on('ready.item', function () {
                 increment = increment + percent;
@@ -301,6 +287,10 @@ define([
             });
         },
 
+
+        _bindEventListeners: function () {
+
+        },
 
 
         _unbindEventListeners: function () {

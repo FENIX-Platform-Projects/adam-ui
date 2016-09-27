@@ -20,6 +20,9 @@ define([
     var defaultOptions = {
         item_container_id: '-container',
         PROGRESS_BAR_CONTAINER: '#progress-bar-holder',
+        paths: {
+            TABLE_ITEM: 'views/analyse/partner_matrix/table-item'
+        },
         events: {
             CHANGE: 'change'
         },
@@ -137,7 +140,7 @@ define([
             // the path to the custom item is registered
             this.config.itemsRegistry = {
                 custom: {
-                    path: 'views/analyse/partner_matrix/table-item'
+                    path: defaultOptions.paths.TABLE_ITEM//'views/analyse/partner_matrix/table-item'
                 }
             };
 
@@ -258,7 +261,7 @@ define([
             // the path to the custom item is registered
             this.config.itemsRegistry = {
                 custom: {
-                    path: 'views/analyse/partner_matrix/table-item'
+                    path: defaultOptions.paths.TABLE_ITEM //'views/analyse/partner_matrix/table-item'
                 }
             };
 
