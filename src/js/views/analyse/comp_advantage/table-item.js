@@ -126,8 +126,7 @@ define([
         this.indicatortemplate = Handlebars.compile(Template);
 
         var labels = $.extend(true, i18nTableLabels, i18nLabelsComparativeAdvantage);
-
-        console.log(labels);
+        
 
         var data = $.extend(true, {data:  this.model}, labels);
         var html = this.indicatortemplate(data);
