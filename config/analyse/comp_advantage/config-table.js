@@ -34,16 +34,27 @@ define(function () {
                                 height: 700,
                                 autoSelectFirstRow: false,
                                 customRowAttribute : function(record,rn,grid){
-                                    grid.columnList[0].styleClass = 'gt-col-1_11-purposecode_en';
-                                    grid.columnList[1].styleClass = 'gt-col-1_11-year';
-                                    grid.columnList[6].styleClass = 'gt-col-1_11-ratio';
+                                    grid.autoSelectFirstRow = false;
+
+                                   // grid.columnList[0].styleClass = null;
+                                    //grid.columnList[1].styleClass = null;
+                                   // grid.columnList[6].styleClass = null;
+
 
                                     if (record[6] === 'YES'){
-                                        grid.columnList[0].styleClass = null;
-                                        grid.columnList[1].styleClass = null;
-                                        grid.columnList[6].styleClass = null;
+                                       // grid.columnList[0].styleClass = 'big-col-width';
+                                       // grid.columnList[1].styleClass = 'smaller-col-width';
+                                       // grid.columnList[6].styleClass = 'small-col-width';
+
                                         return 'style="background-color:#A4C368"'; // green
+
                                     }
+
+                                    //else {
+                                       // grid.columnList[0].styleClass = 'gt-col-1_11-purposecode_en';
+                                       // grid.columnList[1].styleClass = 'gt-col-1_11-year';
+                                       // grid.columnList[6].styleClass = 'gt-col-1_11-ratio';
+                                    //}
 
                                 },
                                 columns: [
@@ -68,7 +79,7 @@ define(function () {
                                             }
                                             return  val;
                                         }},
-                                    {id: "total_fao_delivery",  align: 'center', title: "Total FAO delivery in country &divide; Total agricultural delivery by all ODA implementing agencies in country",
+                                    {id: "total_fao_delivery",   width: 100, align: 'center', title: "Total FAO delivery in country &divide; Total agricultural delivery by all ODA implementing agencies in country",
                                         renderer: function (value, record, columnObj, grid, colNo, rowNo) {
                                             var val = value;
 
@@ -77,7 +88,7 @@ define(function () {
                                             }
                                             return  val;
                                         }},
-                                    {id: "advantage_ratio",  align: 'center', title: "FAO Delivery over Total Delivery &divide Total FAO Delivery over Total Agriculture",
+                                    {id: "advantage_ratio",  width: 100, align: 'center', title: "FAO Delivery over Total Delivery &divide Total FAO Delivery over Total Agriculture",
                                         renderer: function (value, record, columnObj, grid, colNo, rowNo) {
                                             var val = value;
                                             if(val && val > 0){
