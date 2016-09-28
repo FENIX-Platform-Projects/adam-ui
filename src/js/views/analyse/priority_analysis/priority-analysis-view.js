@@ -15,12 +15,13 @@ define([
     'config/Config',
     'config/analyse/priority_analysis/Events',
     'config/analyse/priority_analysis/config-table',
+    'config/analyse/priority_analysis/config-charts',
     'config/analyse/priority_analysis/config-priority-analysis',
     'config/analyse/priority_analysis/config-filter',
     'lib/utils',
     'amplify',
     'underscore'
-], function ($, $UI, View, TitleSubView, FilterSubView, DashboardChartsSubView, DashboardPrioritiesSubView, DashboardModel, TableModel, template, i18nLabels, Events, GeneralConfig, BasePriorityAnalysisEvents, TableConfig, BasePriorityAnalysisConfig, BaseFilterConfig, Utils, amplify, _) {
+], function ($, $UI, View, TitleSubView, FilterSubView, DashboardChartsSubView, DashboardPrioritiesSubView, DashboardModel, TableModel, template, i18nLabels, Events, GeneralConfig, BasePriorityAnalysisEvents, TableConfig, ChartsConfig, BasePriorityAnalysisConfig, BaseFilterConfig, Utils, amplify, _) {
 
     'use strict';
 
@@ -38,8 +39,7 @@ define([
             ALL: 'all'
         },
         paths: {
-          VENN_CONFIG: 'config/analyse/priority_analysis/config-venn-',
-          CHARTS_CONFIG: 'config/analyse/priority_analysis/config-charts-'
+            VENN_CONFIG: 'config/analyse/priority_analysis/config-venn-'
         }
     };
 
@@ -103,7 +103,7 @@ define([
          */
         _loadConfigurations: function () {
            // require([s.paths.CHARTS_CONFIG + this.topic, s.paths.TABLE_CONFIG + this.topic], _.bind(this._initSubViews, this));
-            require([s.paths.CHARTS_CONFIG + this.topic, s.paths.VENN_CONFIG + this.topic], _.bind(this._initSubViews, this));
+            require([s.paths.VENN_CONFIG + this.topic], _.bind(this._initSubViews, this));
         },
 
         /**
@@ -112,7 +112,7 @@ define([
          * @private
          */
 
-        _initSubViews: function (ChartsConfig, VennConfig) {
+        _initSubViews: function (VennConfig) {
 
             View.prototype.render.apply(this, arguments);
 
@@ -397,9 +397,9 @@ define([
                 this.topic = topic;
 
                 //Load new configuration files
-                require([s.paths.CHARTS_CONFIG + topic, s.paths.VENN_CONFIG + topic], function (TopicChartConfig, TopicVennConfig) {
+                require([s.paths.VENN_CONFIG + topic], function (TopicVennConfig) {
 
-                    self.chartsConfig = TopicChartConfig;
+                    self.chartsConfig = ChartsConfig;
 
 
                     var venn  =  _.find(self.prioritiesConfig.dashboard.items, function(o){
