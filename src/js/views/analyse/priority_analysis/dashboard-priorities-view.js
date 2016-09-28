@@ -507,7 +507,11 @@ define([
 
                 $('#'+values.id+'-info').val(value);
 
-                amplify.publish(BaseEvents.VENN_ON_CHANGE,{values: {purposecode: codes}});
+                if(codes.length > 0) {
+                  amplify.publish(BaseEvents.VENN_ON_CHANGE,{values: {purposecode: codes}});
+                } else {
+                  amplify.publish(BaseEvents.VENN_NO_VALUES);
+                }
 
             });
         },
