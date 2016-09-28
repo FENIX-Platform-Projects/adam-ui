@@ -86,6 +86,7 @@ define([
             // Update the language related labels in the item configurations (charts)
             for (var it in this.config.items) {
                 var item = this.config.items[it];
+
               //  this._updateChartExportTitles(this.config.items[it], i18nDashboardLabels[item.id], this.model.get('label'));
             }
 
@@ -161,6 +162,10 @@ define([
             var self = this;
 
             this.config.el = this.$el;
+
+            console.log("============== renderDashboard ==========");
+            console.log(this.config.items);
+
 
             if(this.config.items.length > 0)
                 this.config.items[0].config.topic = this.topic;

@@ -27,7 +27,7 @@ define(function () {
                             pageSize: 150,
                             autoSelectFirstRow: false,
                             columns: [
-                                {id: "recipientcode_EN", width: 200},
+                                {id: "recipientcode_EN", width: 150},
                                 {id: "purposecode_EN", width: 200},
                                 {id: "undaf_stated_priority", width: 300},
                                 {id: "cpf_stated_priority", width: 300}
