@@ -212,7 +212,7 @@ define([
             amplify.subscribe(BasePriorityAnalysisEvents.FILTER_ON_READY, this, this._filtersLoaded);
             amplify.subscribe(BasePriorityAnalysisEvents.FILTER_ON_CHANGE, this, this._filtersChanged);
             amplify.subscribe(BasePriorityAnalysisEvents.VENN_ON_CHANGE, this, this._renderChartsDashboards);
-
+            amplify.subscribe(BasePriorityAnalysisEvents.VENN_NO_VALUES, this, this._clearChartsDashboards);
         },
 
         /**
@@ -272,6 +272,14 @@ define([
             this._updateView(changedFilter, allFilterValues);
 
         },
+
+
+        _clearChartsDashboards: function () {
+            if(this.subview('chartsDashboard')) {
+                this.subview('chartsDashboard').clear();
+            }
+        },
+
 
         /**
          * Each Dashboard and Title Sub View is rebuilt/refreshed
