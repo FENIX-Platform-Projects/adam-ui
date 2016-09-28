@@ -9,6 +9,7 @@ define([
     'config/Config',
     'i18n!nls/analyse',
     'i18n!nls/analyse-priority-analysis',
+    'i18n!nls/chart',
     'config/analyse/priority_analysis/Events',
     'handlebars',
     'lib/config-utils',
@@ -16,7 +17,7 @@ define([
     'config/submodules/fx-chart/jvenn_template',
     'views/common/progress-bar',
     'amplify'
-], function ($, _, View, template, Dashboard, Utils, GeneralConfig, i18nLabels, i18nDashboardLabels, BaseEvents, Handlebars, ConfigUtils, HighchartsTemplate, JVennTemplate, ProgressBar) {
+], function ($, _, View, template, Dashboard, Utils, GeneralConfig, i18nLabels, i18nDashboardLabels, i18nChartLabels, BaseEvents, Handlebars, ConfigUtils, HighchartsTemplate, JVennTemplate, ProgressBar) {
 
     'use strict';
 
@@ -63,7 +64,7 @@ define([
             this.model.on(defaultOptions.events.CHANGE, this.render, this);
             this.dashboards = [];
 
-            this.source = $(this.template).find("[data-topic='" + this.topic + "']").prop('outerHTML');
+            this.source = $(this.template).prop('outerHTML');
 
            // console.log("INITIALIZE FOR "+this.topic);
             //console.log(this.source)
@@ -108,7 +109,7 @@ define([
             var model = this.model.toJSON();
 
             // Update the language related labels in the dashboard template
-            var data = $.extend(true, model, i18nLabels, i18nDashboardLabels);
+            var data = $.extend(true, model, i18nLabels, i18nDashboardLabels, i18nChartLabels);
 
             return this.compiledTemplate(data);
 

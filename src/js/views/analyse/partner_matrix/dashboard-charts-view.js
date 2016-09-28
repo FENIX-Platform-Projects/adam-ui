@@ -9,13 +9,14 @@ define([
     'config/Config',
     'i18n!nls/analyse',
     'i18n!nls/analyse-partner-matrix',
+    'i18n!nls/chart',
     'config/analyse/partner_matrix/Events',
     'handlebars',
     'lib/config-utils',
     'config/submodules/fx-chart/highcharts_template',
     'views/common/progress-bar',
     'amplify'
-], function ($, _, View, template, Dashboard, Utils, GeneralConfig, i18nLabels, i18nDashboardLabels, BaseEvents, Handlebars, ConfigUtils, HighchartsTemplate, ProgressBar) {
+], function ($, _, View, template, Dashboard, Utils, GeneralConfig, i18nLabels, i18nDashboardLabels, i18nChartLabels, BaseEvents, Handlebars, ConfigUtils, HighchartsTemplate, ProgressBar) {
 
     'use strict';
 
@@ -99,7 +100,7 @@ define([
             var model = this.model.toJSON();
 
             // Update the language related labels in the dashboard template
-            var data = $.extend(true, model, i18nLabels, i18nDashboardLabels);
+            var data = $.extend(true, model, i18nLabels, i18nDashboardLabels, i18nChartLabels);
 
             return this.compiledTemplate(data);
 

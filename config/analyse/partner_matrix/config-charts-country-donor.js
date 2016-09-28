@@ -24,6 +24,7 @@ define(function () {
 
                         config: {
                             chart: {
+                                marginTop: 50,
                                 events: {
                                     load: function(event) {
                                         var _that = this;
@@ -77,6 +78,9 @@ define(function () {
                                     }
 
                                 }
+                            },
+                            subtitle: {
+                                text: ''
                             }
 
                         }
@@ -507,6 +511,9 @@ define(function () {
                                         }
                                     }
                                 }
+                            },
+                            subtitle: {
+                                text: ''
                             }
                         }
 
