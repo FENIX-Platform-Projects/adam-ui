@@ -143,10 +143,24 @@ define([
 
 
             this.chartsConfig = ChartsConfig;
+            this.prioritiesConfig = TableConfig;
+
+            //Check if Venn item is in the config, if so remove it
+            var venn  =  _.find(this.prioritiesConfig.dashboard.items, function(o){
+                return o.id === BasePriorityAnalysisConfig.items.VENN_DIAGRAM;
+            });
+
+            if(venn) {
+                this.prioritiesConfig.dashboard.items.pop();
+            }
 
             // Append Venn item to table Config
-            TableConfig.dashboard.items.push(VennConfig.dashboard.items[0]);
-            this.prioritiesConfig = TableConfig;
+            this.prioritiesConfig.dashboard.items.push(VennConfig.dashboard.items[0]);
+
+            //this.prioritiesConfig = TableConfig;
+
+            console.log("======================== INIT ");
+            console.log(this.prioritiesConfig.dashboard.items);
 
             // Set TITLE Sub View
             var titleSubView = new TitleSubView({
@@ -400,9 +414,8 @@ define([
                 require([s.paths.VENN_CONFIG + topic], function (TopicVennConfig) {
 
                     self.chartsConfig = ChartsConfig;
-
-
-                    var venn  =  _.find(self.prioritiesConfig.dashboard.items, function(o){
+      
+                    var venn  =  _.find(self.prioritiesConfig.dashboard.items, function(o){                        console.log(o.id);
                         return o.id === BasePriorityAnalysisConfig.items.VENN_DIAGRAM;
                     });
 
