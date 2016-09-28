@@ -24,13 +24,16 @@ define([
     var Model;
 
     var s = {
-        TABLE_INFO: "#table-info",
-        TABLE_FILTER: "#table-filter",
-        TABLE: "#table",
-        TABLE_SIZE: "#table-size",
-        TABLE_SOURCE: "#table-source",
-        CPF: "#cpf",
-        UNDAF: "#undaf"
+        ids: {
+            TABLE: "#table",
+            TABLE_SIZE: "#table-size",
+            TABLE_SOURCE: "#table-source",
+            CPF: "#cpf",
+            UNDAF: "#undaf"
+        },
+        LINKS_BASE_URL: "http://fenix.fao.org/demo/adam-docs/cpf-undaf/",
+        CPF: "CPF",
+        UNDAF: "UNDAF"
    };
 
     var defaultOptions = {};
@@ -163,7 +166,7 @@ define([
             }
 
         } else {
-            $(this.el).find(s.TABLE_SIZE).html(0);
+            $(this.el).find(ids.TABLE_SIZE).html(0);
         }
 
     };
@@ -173,7 +176,7 @@ define([
 
 
         this.config.model = this.model;
-        this.config.el = s.TABLE;
+        this.config.el = s.ids.TABLE;
 
         for (var d in this.config.derived) {
             this.config.aggregations.push(d);
@@ -239,11 +242,38 @@ define([
             recipient = ""
         }
 
-        var cpf = recipient + ' CPF ' + cpfPeriod ;
-        var undaf = recipient + ' UNDAF ' + undafPeriod;
+        this._createLink(recipient, cpfPeriod, s.CPF);
+        this._createLink(recipient, undafPeriod, s.UNDAF);
 
-        $(this.el).find(s.TABLE_SOURCE).find(s.CPF).html("<a href='' target='_blank'>"+cpf+"</a>");
-        $(this.el).find(s.TABLE_SOURCE).find(s.UNDAF).html("<a href='' target='_blank'>"+undaf+"</a>");
+    };
+
+
+    TableItem.prototype._createLink = function (recipient, period, type) {
+
+        var self = this;
+
+        $.ajaxPrefilter(function(options){
+            if(options.crossDomain && $.support.cors) {
+                var http = (window.location.protocol === 'http:' ? 'http:' : 'https:');
+                options.url = http + '//cors-anywhere.herokuapp.com/'+options.url;
+
+            }
+        });
+
+            var text = recipient + ' '+ s[type]+' ' + period ;
+            var filename = recipient + '_'+ s[type]+'_'+period+".pdf";
+            var link = s.LINKS_BASE_URL+filename;
+
+            $.ajax({
+                url: link,
+                type: 'HEAD',
+                error: function(){
+                    $(self.el).find(s.ids.TABLE_SOURCE).find(s.ids[type]).html(text);
+                },
+                success: function(){
+                    $(self.el).find(s.ids.TABLE_SOURCE).find(s.ids[type]).html("<a href='"+link+"' target='_blank'>"+text+"</a>");
+                }
+            });
 
     };
 
@@ -291,7 +321,7 @@ define([
 
        this.olap.on('ready', function () {
             var rowSize = this.olap.model.rows.length;
-            $(self.el).find(s.TABLE_SIZE).html(rowSize);
+            $(self.el).find(s.ids.TABLE_SIZE).html(rowSize);
        });
     };
 
