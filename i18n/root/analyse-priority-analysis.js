@@ -15,5 +15,6 @@ define({
     "top-partners": "Top Resource Partners for selected priorities",
     "top-recipients": "Top Recipient Countries for selected priorities",
     "top-channels": "Top Channels of Delivery for selected priorities",
-    "financing-priorities": "Financing Priorities for selected priorities"
+    "financing-priorities-partners": "Financing Priorities by Resource Partners for selected priorities",
+    "financing-priorities-recipients": "Financing Priorities by Recipient Countries for selected priorities"
 });
