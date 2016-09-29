@@ -1,6 +1,17 @@
 /* Default Styles */
 
 
+body {
+  background-color: $fenix-light-bg;
+  font-family: "FrutigerLTW02-45Light", Arial, Helvetica, Verdana, sans-serif;
+}
+
+.fx-sandbox{
+  padding: 0 5px;
+}
+
+
+
 .container{
   background-color: white;
 
@@ -271,3 +282,85 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small, .h1 small, .h2 small
 
 
 
+
+
+/** Venn Text Area */
+#venn-diagram-info-box textarea {
+  width: 100%;
+  height: 500px;
+  padding: 10px;
+  resize: none;
+}
+
+/** Table Sort Icons */
+.gt-hd-icon.gt-hd-asc{
+  @extend .fa;
+  @extend .fa-caret-up;
+}
+
+.gt-hd-icon{
+  @extend .fa;
+  @extend .fa-sort;
+}
+
+
+.gt-hd-icon.gt-hd-desc{
+  @extend .fa;
+  @extend .fa-caret-down;
+}
+
+/** Table Header */
+.gt-hd-row td .gt-inner  {
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: none;
+}
+
+/*!** Table Highlighted Columns: Comparative Advantage Only *!
+div[data-item="comp_advantage"] .gt-col-1_11-ratio, div[data-item="comp_advantage"] .gt-col-1_11-purposecode_en, div[data-item="comp_advantage"] .gt-col-1_11-year  {
+  background-color:#eef6ff;
+}*/
+
+/** Table Cell Alignment */
+.gt-inner-left {
+  text-align: left;
+}
+
+/**  Table Page size drop-down */
+.gt-pagesize-select {
+  width: 48px
+}
+
+.big-col-width {
+  width: 246px;
+}
+
+.smaller-col-width {
+  width: 66px;
+
+}
+
+
+.small-col-width {
+  width: 96px;
+}
+
+.obj-box-info {
+  font-size: 12px;
+}
+
+//Table Header Row
+//.gt-freeze-div[id*="headDiv"] td {
+//  background-color:  #ABC8E1 !important;
+//}
+
+/*.gt-row-selected td {
+!**  background-color: #e6f1ff; **!
+
+}
+
+!* Freezed Rows *!
+.gt-freeze-div[id*="bodyDiv"] td {
+!**  background-color: #f4f4f4 !important;**!
+
+}*/
