@@ -45,7 +45,7 @@ define(function () {
         TOP_MENU_SHOW_BREADCRUMB_HOME: false,
         TOP_MENU_SHOW_FOOTER: false,
         TOP_MENU_AUTH_MODE_HIDDEN_ITEMS: ['login'],
-        TOP_MENU_PUBLIC_MODE_HIDDEN_ITEMS: ['datamgmt', 'logout'],
+        TOP_MENU_PUBLIC_MODE_HIDDEN_ITEMS: ['profiles', 'logout'],
 
         SECURITY_NOT_AUTHORIZED_REDIRECTION_LINK: "login",
 

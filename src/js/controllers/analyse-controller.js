@@ -7,8 +7,8 @@ define([
     'views/analyse/compare/compare-view',
     'views/analyse/partner_matrix/partner-matrix-view',
     'views/analyse/comp_advantage/comp-advantage-view',
-    // 'views/analyze/projects/projects-view'
-], function (Chaplin, Controller, AnalyzeView, PriorityAnalysisView, CompareView, ResourcePartnerMatrixView, ComparativeAdvantageView /**, , ProjectsView**/) {
+    'views/analyse/projects/projects-view'
+], function (Chaplin, Controller, AnalyzeView, PriorityAnalysisView, CompareView, ResourcePartnerMatrixView, ComparativeAdvantageView, ProjectsView) {
 
     'use strict';
 
@@ -53,19 +53,16 @@ define([
                 filter: route.action,
                 page: Backbone.history.fragment
             });
+        },
+
+        projects: function (params, route) {
+            this.view = new  ProjectsView({
+                region: 'main',
+                filter: route.action,
+                page: Backbone.history.fragment
+            });
         }
 
-
-
-
-
-        // projects: function (params, route) {
-        //  this.view = new ProjectsView({
-        //    region: 'main',
-        //   filter: route.action,
-        //   page: Backbone.history.fragment
-        // });
-        // }
 
     });
 

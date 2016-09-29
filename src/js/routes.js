@@ -17,10 +17,10 @@ define(function () {
         match('analyse/compare', 'analyse#compare');
         match('analyse/partner_matrix', 'analyse#partner_matrix');
         match('analyse/comp_advantage', 'analyse#comp_advantage');
+        match('analyse/projects', 'analyse#projects');
 
         match('profiles', 'profiles#show');
 
-        // match('analyse/projects', 'analyse#projects');
         match('login', 'login#show');
         //  match('analysis', 'analysis#show');
         match('*anything', '404#show');

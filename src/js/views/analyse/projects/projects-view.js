@@ -1,422 +1,333 @@
 /*global define, amplify*/
 define([
+    'jquery',
+    'jquery-ui',
     'views/base/view',
-    'fx-ds/start',
-    'fx-filter/start',
+    'views/common/title-view',
+    'views/analyse/projects/filter-view',
+    'views/analyse/projects/dashboard-table-view',
+    'models/analyse/dashboard',
+    'models/analyse/table',
     'text!templates/analyse/projects/projects.hbs',
-    'text!templates/analyse/projects/dashboard.hbs',
-    'i18n!nls/projects',
+    'i18n!nls/analyse',
     'config/Events',
     'config/Config',
-    'config/analyse/projects/Config',
-    'fx-filter/Fx-filter-configuration-creator',
-    'handlebars',
+    'config/analyse/projects/Events',
+    'config/analyse/projects/config-filter',
+    'config/analyse/projects/config-table',
     'lib/utils',
-    'q',
     'amplify',
-    'select2',
-    'jstree',
-    'highcharts-export'
-
-], function (View, Dashboard, Filter, template, projectsDashboardTemplate, i18nLabels, E, C, ProjectsConfig, FilterConfCreator, Handlebars, Utils, Q) {
+    'underscore'
+], function ($, $UI, View, TitleSubView, FilterSubView, DashboardTableSubView, DashboardModel, TableModel, template, i18nLabels, Events, GeneralConfig, BaseProjectsEvents, BaseFilterConfig, TableConfig, Utils, amplify, _) {
 
     'use strict';
 
     var s = {
         css_classes: {
-            TOPIC_CONTENT_PROJECTS: "#projects-topic-content",
-            FILTER_PROJECTS: "filter-projects",
-            FILTER_SUBMIT_PROJECTS: "#filter-submit-btn-projects",
-
-            DASHBOARD_PROJECTS_CONTAINER: '#dashboard-adam-container'
+            TITLE_BAR_ITEMS: "#analyse-projects-fx-title-items",
+            FILTER_HOLDER: "#analyse-projects-filter-holder",
+            DASHBOARD_TABLE_HOLDER: "#analyse-projects-table-content"
         },
-        events: {
-            SECTOR_LIST_CHANGE: 'fx.filter.list.change.sectorcode',
-            UID_LIST_CHANGE: 'fx.filter.list.change.uid'
+        dashboardModel: {
+            LABEL: 'label'
         },
-        datasetChanged: false,
-        datasetType: {"uid": "adam_usd_commitment"}
+        values: {
+            ALL: 'all'
+        },
+        paths: {
+            TABLE_CONFIG: 'config/analyse/projects/config-table-'
+        }
     };
 
+
+    /**
+     *
+     * Creates a new ProjectsView View
+     * Projects View comprises of a series of subviews: title view, filter view and 2 dashboard views (charts dashboard and table dashboard)
+     * @class ProjectsView
+     * @extends View
+     */
     var ProjectsView = View.extend({
 
         // Automatically render after initialize
         autoRender: true,
 
-        className: 'analysis',
+        className: 'analyse-comp-advantage',
 
         // Save the template string in a prototype property.
         // This is overwritten with the compiled template function.
         // In the end you might want to used precompiled templates.
         template: template,
 
+
         initialize: function (params) {
-            this.analyze_type = params.filter;
+            this.analyse_type = params.filter;
             this.page = params.page;
-            this.datasetChanged = s.datasetChanged;
-            this.datasetType = s.datasetType;
+            this.datasetType = GeneralConfig.DEFAULT_UID;
 
             View.prototype.initialize.call(this, arguments);
         },
 
         getTemplateData: function () {
-          return i18nLabels;
-         },
+            return i18nLabels;
+        },
 
         attach: function () {
 
             View.prototype.attach.call(this, arguments);
 
-            //update State
-            amplify.publish(E.STATE_CHANGE, {menu: 'analyse', breadcrumb: this._initMenuBreadcrumbItem()});
+            this.$el = $(this.el);
 
-            this._initVariables();
+            //update State
+            amplify.publish(Events.STATE_CHANGE, {menu: 'analyse', breadcrumb: this._createMenuBreadcrumbItem()});
 
             this._bindEventListeners();
 
-            this._showProjectsTopic(this.analyze_type);
-
         },
 
-        _initMenuBreadcrumbItem: function() {
-            var label = "";
-            var self = this;
+        render: function () {
+            View.prototype.render.apply(this, arguments);
 
-
-            if (typeof self.analyze_type !== 'undefined') {
-               label = i18nLabels[self.analyze_type];
-            }
-
-            return Utils.createMenuBreadcrumbItem(label, self.analyze_type, self.page);
-        },
-
-        _initVariables: function () {
-            this.$topicContentProjects = this.$el.find(s.css_classes.TOPIC_CONTENT_PROJECTS);
-
-            this.$filterSubmitProjects = this.$el.find(s.css_classes.FILTER_SUBMIT_PROJECTS);
-
-
-        },
-
-        _bindEventListeners: function () {
-
-            var self = this;
-
-            amplify.subscribe(s.events.SECTOR_LIST_CHANGE, this, this._onSectorChange);
-
-            amplify.subscribe(s.events.UID_LIST_CHANGE, this, this._onDatasetChange);
-
-            this.$filterSubmitProjects.on('click', function (e, data) {
-
-                var filter = {};
-                var values = self.filterProjects.getValues();
-                var sectorcodeObj = self._getObjectByValue('9999',values);
-
-                // Set Sectors to crs_sectors
-                if(!this._hasNoSelections('sectorcode', values)){
-                    values['sectorcode'].codes[0].uid = 'crs_sectors';
-                }
-                // Set Subsectors to crs_purposes
-                if(!this._hasNoSelections('purposecode', values)){
-                    values['purposecode'].codes[0].uid = 'crs_purposes';
-                }
-
-                // Update Dashboard Config and Rebuild if uid changed
-                if(self.datasetChanged) {
-                    self.dashboardConfig.uid = self.datasetType.uid;
-                    self.dashboardFAOConfig.uid = self.datasetType.uid;
-
-                    if(sectorcodeObj)   {
-                        self._updateConfigurationsWithFaoRelatedSectors2(values, sectorcodeObj);
-                        self._rebuildProjectsDashboard(self.dashboardFAOConfig, [values]);
-                    }
-                    else
-                      self._rebuildProjectsDashboard(self.dashboardConfig, [values]);
-
-                }
-                else {
-                    // Update Dashboard Config and values if FAO Related Sectors selected
-                    if(sectorcodeObj) {
-                        self._updateConfigurationsWithFaoRelatedSectors2(values, sectorcodeObj);
-                        self._rebuildProjectsDashboard(self.dashboardFAOConfig, [values]);
-                    } else {
-                        self.projectsDashboard.filter([values]);
-                    }
-                }
-
-            });
-
-        },
-
-        _updateConfigurationsWithFaoRelatedSectors2: function (values, sectorvaluesobj) {
-            // If no purposecodes have been selected
-            if(this._hasNoSelections('purposecode', values)){
-                // Get the purposecode filter component, which will contain all
-                // the purposecodes (sub-sectors) associated with the selected 'FAO-related Sectors'
-                var purposeCodeComponent = this.filterProjects.getDomain("purposecode");
-
-                if(purposeCodeComponent){
-                    var codes = [];
-
-                    //======= UPDATE VALUES CONFIG
-                    // Add purposecode to values
-                    values['purposecode'] = {};
-                    values['purposecode'].codes = [];
-                    values['purposecode'].codes[0] = $.extend(true, {}, sectorvaluesobj); // clone the codes configuration of sectorvaluesobj
-
-                    // Get the source of the purposecode component
-                    // and populate the codes array with the IDs of the source items
-                    $.each(purposeCodeComponent.options.source, function( index, sourceItem ) {
-                        codes.push(sourceItem.id);
-                    });
-
-                    values['purposecode'].codes[0].codes = codes;
-                    values['purposecode'].codes[0].uid = 'crs_purposes';
-
-                }
-            }
-
-            // Set Values sectorcode to be removed
-            values['sectorcode'] = {};
-            values['sectorcode'].removeFilter = true;
-
-        },
-
-        _resetDashboardConfiguration: function (values, sectorvaluesobj) {
-
-            //======= UPDATE DASHBOARD CONFIG
-            // Get the dashboard items which have a group filter
-            // Then either remove sectorcode from the associated 'by' array (i.e. array size > 1)
-            // Or remove the group filter entirely if the 'by' array only contains sectorcode (i.e. array size = 1)
-            $.each(this.dashboardConfig.items, function(index, dbItem) {
-                var grpFilter = _.filter(dbItem.filter, {name:'group'})[0];
-
-                if (grpFilter) {
-                    if (_.intersection(['sectorcode'], grpFilter.parameters.by).length > 0) {  // Check if sectorcode is present in the 'by' array
-
-                        if (grpFilter.parameters.by.length > 1) {
-                            var arr = grpFilter.parameters.by;
-                            var result = _.without(arr, 'sectorcode'); // Remove sectorcode from Group by array
-                            grpFilter.parameters.by = result;
-                        } else {
-                            // Remove group by filter if sectorcode was the only Group by array item
-                            var filterIdx = this.dashboardConfig.items[index].filter.indexOf(grpFilter);
-                            this.dashboardConfig.items[index].filter.splice(filterIdx, 1);
-                        }
-                    }
-                }
-            });
-
-        },
-
-        _onSectorChange: function (s) {
-            var self = this;
-
-            if(s.value){
-               var pcfilter= _.find(this.filterConfig, function(obj){
-                   return obj.components[0].name === 'purposecode';
-                });
-
-                if(pcfilter){
-                    var filter =   pcfilter.components[0].config.filter;
-                    filter.codes = [];
-                    filter.codes.push(s.value);
-                    delete filter["level"];
-
-                    pcfilter.components[0].config.filter = filter;
-
-                    Q.all([
-                        self.filterConfCreator._createCodelistHierarchyPromiseData(pcfilter)
-                    ]).spread(function(result1) {
-
-                        var result = [];
-                        var children = self._getPropByString(result1[0], "children");
-
-                        _.each(children, function (d) {
-                             result.push({"id": d.code, "text": d.title[Utils.getLocale()]});
-                        });
-
-                        result.sort(function(a, b){
-                                if (a.text < b.text)
-                                    return -1;
-                                if (a.text > b.text)
-                                    return 1;
-                                return 0;
-                        });
-
-
-                        self.filterProjects.setDomain("purposecode", result);
-
-                    });
-                }
-            }
-        },
-
-        _onDatasetChange: function (data) {
-            if(data.value){
-                if(this.dashboardConfig)  {
-                    if(data.value !== this.dashboardConfig.uid) {
-                        this.datasetChanged = true;
-                        this.datasetType.uid = data.value;
-                    }
-                    else
-                        this.datasetChanged = false;
-                }
-            }
-        },
-
-        _getObjectByValue: function (id, data){
-                var allChildren = _.flatten(_.pluck(data,'codes'));
-
-                var childHasValue = _.find(allChildren,function(child){
-                    if(child)   {
-                        if (child.codes[0] == id){
-                            return child;
-                        }
-                    }
-                });
-
-                return childHasValue;
-        },
-
-        _hasNoSelections: function (id, data){
-            if( _.has(data, id)){
-                return _.has(data[id], 'removeFilter');
-            }
-        },
-
-        _onProjectsTopicChange: function (topic) {
-            this._showProjectsTopic(topic);
+            this._initSubViews();
         },
 
 
+        /**
+         * Initializes all sub views: Title, Filter, Table Dashboard and Charts Dashboard
+         * @private
+         */
 
-        _showProjectsTopic: function (topic) {
-            var self = this;
+        _initSubViews: function () {
 
-             //Inject HTML
-           var source = $(projectsDashboardTemplate).find("[data-topic='projects']"),
-               template = Handlebars.compile(source.prop('outerHTML'));
+            View.prototype.render.apply(this, arguments);
 
-            this.$topicContentProjects.html(template);
-
-           this._renderProjectsComponents();
-
-        },
-
-
-        _renderProjectsComponents: function () {
-            var config = ProjectsConfig;
-           // var configFao = ProjectsFaoSectorsConfig[topic];
-
-
-            if (!config || !config.dashboard || !config.filter) {
-                alert(" HERE Impossible to find configuration for topic: " + topic);
+            // Filter Configuration
+            if (!BaseFilterConfig || !BaseFilterConfig.filter) {
+                alert("Impossible to find filter configuration ");
                 return;
             }
 
-           this.filterConfig = config.filter;
-
-            this.dashboardConfig = config.dashboard;
-           // this.dashboardFAOConfig = configFao.dashboard;
-
-            this._renderProjectsFilter(this.filterConfig);
-
-           this._renderProjectsDashboard(this.dashboardConfig);
-
-
-        },
-
-
-        _renderProjectsDashboard: function (config) {
-
-            if (this.projectsDashboard && this.projectsDashboard.destroy) {
-                this.projectsDashboard.destroy();
+            // Table Dashboard Configuration
+            if (!TableConfig || !TableConfig.dashboard) {
+                alert("Impossible to find TABLE dashboard configuration" );
+                return;
             }
 
+            this.tableConfig = TableConfig;
 
-            this.projectsDashboard = new Dashboard({
-
-                //Ignored if layout = injected
-                container: s.css_classes.DASHBOARD_PROJECTS_CONTAINER,
-                layout: "injected"
+            // Set TITLE Sub View
+            var titleSubView = new TitleSubView({
+                autoRender: true,
+                container: this.$el.find(s.css_classes.TITLE_BAR_ITEMS),
+                title: i18nLabels.selections
             });
+            this.subview('title', titleSubView);
 
-            this.projectsDashboard.render(config);
+            // Set FILTER Sub View
+            var filtersSubView = new FilterSubView({
+                autoRender: true,
+                container: this.$el.find(s.css_classes.FILTER_HOLDER),
+                config: BaseFilterConfig.filter
+            });
+            this.subview('filters', filtersSubView);
+
+            // Set TABLE DASHBOARD Model
+            this.tableDashboardModel = new TableModel();
+
+            // Set DASHBOARD Table Sub View
+            var dashboardTableSubView = new DashboardTableSubView({
+                autoRender: false,
+                container: this.$el.find(s.css_classes.DASHBOARD_TABLE_HOLDER),
+                model: this.tableDashboardModel
+            });
+            dashboardTableSubView.setDashboardConfig(this.tableConfig.dashboard);
+            this.subview('tableDashboard', dashboardTableSubView);
 
         },
 
-        _rebuildProjectsDashboard: function (config, filter) {
-
-            if (this.projectsDashboard && this.projectsDashboard.destroy) {
-                this.projectsDashboard.destroy();
-            }
-
-
-            this.projectsDashboard = new Dashboard({
-
-                //Ignored if layout = injected
-                container: s.css_classes.DASHBOARD_PROJECTS_CONTAINER,
-                layout: "injected"
-            });
-
-            this.projectsDashboard.rebuild(config, filter);
-
-        },
-
-        _renderProjectsFilter: function (config) {
-
+        /**
+         * Create the Menu breadcrumb item for the page
+         * @private
+         */
+        _createMenuBreadcrumbItem: function () {
+            var label = "";
             var self = this;
 
-            this.filterConfCreator = new FilterConfCreator();
+            if (typeof self.analyse_type !== 'undefined') {
+                label = i18nLabels[self.analyse_type];
+            }
 
-            this.filterConfCreator.getConfiguration(config)
-                .then(function (c) {
+            return Utils.createMenuBreadcrumbItem(label, self.analyse_type, self.page);
+        },
 
-                    self.filterProjects = new Filter();
 
-                    self.filterProjects.init({
-                        container: s.css_classes.FILTER_PROJECTS,
-                        layout: 'fluidGrid'
-                    });
+        _bindEventListeners: function () {
+            amplify.subscribe(BaseProjectsEvents.FILTER_ON_READY, this, this._filtersLoaded);
+            amplify.subscribe(BaseProjectsEvents.FILTER_ON_CHANGE, this, this._filtersChanged);
+        },
 
-                    var adapterMap = {};
+        /**
+         * When the filters have all loaded the TitleView is built using the currently selected filter values
+         * and the dashboards are rendered
+         * @param payload Selected Filter Items
+         * @private
+         */
+        _filtersLoaded: function (payload) {
 
-                    self.filterProjects.add(c, adapterMap);
+            var selectedFilterItems = payload.labels;
 
-                });
+            // Set Dashboard Properties
+            if (payload["props"]) {
+                this.subview('tableDashboard').setProperties(payload["props"]);
+            }
+
+            // Build Title View
+            this.subview('title').setLabels(selectedFilterItems);
+            this.subview('title').build();
+
+            // Update Dashboard Models (with labels - see _updateChartsDashboardModelValues)
+            this._updateTableDashboardModelValues();
+
+            // Render each Dashboard
+            this.subview('tableDashboard').renderDashboard();
 
         },
 
-       _getPropByString: function(obj, propString) {
-        if (!propString)
-            return obj;
 
-           var prop, candidate;
+        /**
+         * When a filter selection changes the view is updated
+         * @param changedFilter The filter which has changed
+         * @private
+         */
+        _filtersChanged: function (changedFilter) {
 
-           prop = propString;
-           candidate = obj[prop];
+            var allFilterValues = this.subview('filters').getFilterValues();
 
-            if (candidate) {
-                obj = candidate;
-                if(obj.hasOwnProperty(prop)) {
-                   this._getPropByString(obj, prop);
+            this._updateView(changedFilter, allFilterValues);
+
+        },
+
+        /**
+         * Each Dashboard and Title Sub View is rebuilt/refreshed
+         * @param changedFilter The filter which has changed
+         * @param allFilterValues All (selected) filter values
+         * @private
+         */
+
+        _updateView: function (changedFilter, allFilterValues) {
+
+            var filterValues = allFilterValues;
+
+            // console.log("================= filter values =============== ");
+            // console.log(filterValues);
+
+            console.log("================= selectedfilter =============== ");
+            console.log(changedFilter);
+
+            if (changedFilter) {
+
+                // If the changed filter has a value
+                if (changedFilter.values.values.length > 0) {
+
+
+                    // All is selected
+                    if (changedFilter.values.values[0] === s.values.ALL) {
+
+                        // Update the TitleView (Remove Item)
+                        amplify.publish(Events.TITLE_REMOVE_ITEM, changedFilter.id);
+
+                    } else {
+                        // Update the TitleView (Add Item)
+                        amplify.publish(Events.TITLE_ADD_ITEM, this._createTitleItem(changedFilter));
+                    }
+
+                    this._getDashboardConfiguration(filterValues);
                 }
+
             }
 
-        return obj;
-    },
-
-       _compare: function(a, b){
-            if (a.label < b.label)
-                return -1;
-             if (a.label > b.label)
-                return 1;
-           return 0;
-       }
+        },
 
 
-   });
+        /**
+         * Get the appropriate Dashboard JS configuration file via requireJS, if the topic has changed
+         * @param topic
+         * @param filterValues
+         * @private
+         */
+        _getDashboardConfiguration: function (filterValues) {
+            var self = this;
+
+            // Rebuild dashboards with existing configurations
+            self._rebuildDashboards(filterValues, self.subview('tableDashboard').getDashboardConfig());
+        },
+
+        /**
+         * Rebuild the dashboards
+         * @param filterValues
+         * @param tableDashboardConfig
+         * @private
+         */
+
+        _rebuildDashboards: function (filterValues, tableDashboardConfig) {
+
+            //console.log("================= _rebuildDashboards 1 =============== ");
+            //console.log(dashboardConfig);
+
+            // Set Dashboard Configuration
+            this.subview('tableDashboard').setDashboardConfig(tableDashboardConfig);
+
+            // Update Dashboard Models (with labels - see _updateChartsDashboardModelValues)
+            this._updateTableDashboardModelValues();
+
+
+            //console.log("================= _rebuildDashboard 3 =============== ");
+            // console.log(ovalues);
+
+            // Rebuild Dashboards
+            this.subview('tableDashboard').rebuildDashboard(filterValues);
+        },
+
+
+        /**
+         * Create the Title Item (from the filterItem's id and label)
+         * @param filterItem
+         * @private
+         */
+
+        _createTitleItem: function (filterItem) {
+
+            var titleItem = {}, labels = filterItem.values.labels;
+
+            titleItem.id = filterItem.id;
+
+            var key = Object.keys(labels)[0];
+            titleItem.label = labels[key];
+
+            return titleItem;
+        },
+
+        _unbindEventListeners: function () {
+            // Remove listeners
+            amplify.unsubscribe(BaseProjectsEvents.FILTER_ON_READY, this._filtersLoaded);
+            amplify.unsubscribe(BaseProjectsEvents.FILTER_ON_CHANGE, this._filtersChanged);
+
+        },
+
+
+        _updateTableDashboardModelValues: function () {
+            this.tableDashboardModel.set(s.dashboardModel.LABEL, this.subview('title').getTitleAsLabel());
+        },
+
+
+        dispose: function () {
+
+            this._unbindEventListeners();
+
+            View.prototype.dispose.call(this, arguments);
+        }
+
+    });
 
     return ProjectsView;
 });
