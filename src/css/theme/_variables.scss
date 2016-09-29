@@ -11,22 +11,22 @@ $host-menu-height : 40px;
 // Typography
 $small-text : 12px;
 $standard-text-size: 12px;
-$standard-text : normal normal 300 $standard-text-size/normal "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif;
-$standard-text-bold : normal normal 500 14px/normal "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif;
-$standard-text-big : normal normal 300 16px/normal "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif;
+$standard-text : normal normal 300 $standard-text-size/normal "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif; ;
+$standard-text-bold : normal normal 500 14px/normal "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif; ;
+$standard-text-big : normal normal 300 16px/normal "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif; ;
 
-$fx-text-h1: normal normal 300 18px/normal "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif;
-$fx-text-h2: normal normal 300 14px/normal "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif;
-$fx-text-h3: normal normal 500 12px/normal "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif;
-$fx-text-h4: normal normal 300 11px/normal "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif;
+$fx-text-h1: normal normal 300 18px/normal "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif; ;
+$fx-text-h2: normal normal 300 16px/normal "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif; ;
+$fx-text-h3: normal normal 500 12px/normal "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif; ;
+$fx-text-h4: normal normal 300 11px/normal "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif; ;
 
 
-$fx-text-smalltitle-normal: normal normal 400 10px/normal "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif;
-$fx-text-smalltitle-bold: normal normal 700 10px/normal "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif;
+$fx-text-smalltitle-normal: normal normal 400 10px/normal "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif; ;
+$fx-text-smalltitle-bold: normal normal 700 10px/normal "FrutigerLTW02-45Light",Arial,Helvetica,Verdana,sans-serif; ;
 
 // Fenix Colors
 $fenix-standard-blue: rgba(53, 166, 220, 1);
-$fx-cool-blue: #0f6eae;
+$fx-cool-blue: #2686ba;
 
 
 $fx-secondary-color: desaturate( $fx-cool-blue, 50% );
@@ -35,9 +35,9 @@ $fx-main-color-light: lighten($fx-cool-blue, 42%);  // Ideal for selection
 $fx-main-color-lighter: lighten($fx-cool-blue, 42%); // Ideal for hovers
 $fx-main-color-darker: darken($fx-cool-blue, 20%); // Ideal for hovers
 
+$fx-selector-focused: lighten($fx-cool-blue, 30%);
 
-
-$fenix-text: #666666;
+$fenix-text: #333333;
 $fenix-secondary-text: #999999;
 
 $fenix-light-gray: #dddddd;
@@ -50,10 +50,10 @@ $light-brown: #f3efe0;
 $box-bg: #ededed;
 $superlight-gray: #f2f2f2;
 
-$buttons: #4387bf;
+$buttons: #2ab896;
 
 $fenix-hr: #D2D0D0;
-$fenix-light-hr: #cccccc;
+$fenix-light-hr: #eeeeee;
 
 $fenix-thin-border: 1px solid $fenix-hr;
 
@@ -65,6 +65,9 @@ $black-alpha : rgba(0, 0, 0, 0.8);
 // Background
 // background: color position/size repeat origin clip attachment image|initial|inherit;
 $fx-site-bg: $fenix-light-bg;
+
+
+$light-text: #aab5b7;
 
 // Border Radius
 $fx-border-radius: 0;

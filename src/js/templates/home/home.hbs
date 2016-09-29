@@ -1,0 +1,392 @@
+<div class="row">
+
+    <div class="col-sm-8">
+
+        <!-- Container IMg-->
+        <div class="welcome-container">
+
+            <img src="images/home-image.jpg" class="img-responsive">
+
+            <div class="welcome-content">
+                <h1>Welcome to Agricultural Development Assistance Mapping (ADAM)</h1>
+                <p>ADAM gathers information from diverse databases to help users analyse Official Development Assistance (ODA) flows with a focus on Food Security, Nutrition, Agriculture and Rural Development, and determine priorities for assistance and formulate resource mobilization strategies.</p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-sm-4">
+
+        <div class="row">
+
+            <div class="col-xs-12">
+                <div class="factsheets">
+                    <h1>ADAM Factsheets</h1>
+                    <select id="factsheet-select" class="ad-home-select">
+                        <option value="">
+                            Please Select
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Afghanistan_AFG_Factsheet.pdf">
+                            Afghanistan
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Albania_ALB_Factsheet.pdf">Albania
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Algeria_DZA_Factsheet.pdf">Algeria
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Angola_AGO_Factsheet.pdf">Angola</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/AntiguaBarbuda_ATG_Factsheet.pdf">Antigua
+                            and Barbuda
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Argentina_ARG_Factsheet.pdf">Argentina
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Armenia_ARM_Factsheet.pdf">Armenia
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Azerbaijan_AZE_Factsheet.pdf">Azerbaijan
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Bahamas_BHS_Factsheet.pdf">Bahamas
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Bangladesh_BGD_Factsheet.pdf">Bangladesh
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Barbados_BRB_Factsheet.pdf">Barbados
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Belarus_BLR_Factsheet.pdf">Belarus
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Belize_BLZ_Factsheet.pdf">Belize</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Benin_BEN_Factsheet.pdf">Benin</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Bhutan_BTN_Factsheet.pdf">Bhutan</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Bolivia_BOL_Factsheet.pdf">Bolivia
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/BosniaHerzegovina_BIH_Factsheet.pdf">
+                            Bosnia and Herzegovina
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Botswana_BWA_Factsheet.pdf">Botswana
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Brazil_BRA_Factsheet.pdf">Brazil</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/BurkinaFaso_BFA_Factsheet.pdf">Burkina
+                            Faso
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Burundi_BDI_Factsheet.pdf">Burundi
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Cambodia_KHM_Factsheet.pdf">Cambodia
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Cameroon_CMR_Factsheet.pdf">Cameroon
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/CapeVerde_CPV_Factsheet.pdf">Cape Verde
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/CentralAfricanRepublic_CAF_Factsheet.pdf">
+                            Central African Republic
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Chad_TCD_Factsheet.pdf">Chad</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Chile_CHL_Factsheet.pdf">Chile</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/China_CHN_Factsheet.pdf">China</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Colombia_COL_Factsheet.pdf">Colombia
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Comoros_COM_Factsheet.pdf">Comoros
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Congo_COG_Factsheet.pdf">Congo</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/CookIslands_COK_Factsheet.pdf">Cook
+                            Islands
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/CostaRica_CRI_Factsheet.pdf">Costa Rica
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Cotedivoire_civ_factsheet.pdf">Côte d'Ivoire</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Croatia_HRV_Factsheet.pdf">Croatia
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Cuba_CUB_Factsheet.pdf">Cuba</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/DemocraticRepublicoftheCongo_COD_Factsheet.pdf">
+                            Democratic Republic of the Congo
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/DemPeoplesrepofkorea_prk_factsheet.pdf">Dem People's Rep of Korea</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Djibouti_DJI_Factsheet.pdf">Djibouti
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Dominica_DMA_Factsheet.pdf">Dominica
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/DominicanRepublic_DOM_Factsheet.pdf">
+                            Dominican Republic
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Ecuador_ECU_Factsheet.pdf">Ecuador
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Egypt_EGY_Factsheet.pdf">Egypt</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/ElSalvador_SLV_Factsheet.pdf">El
+                            Salvador
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/EquatorialGuinea_GNQ_Factsheet.pdf">
+                            Equatorial Guinea
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Eritrea_ERI_Factsheet.pdf">Eritrea
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Ethiopia_ETH_Factsheet.pdf">Ethiopia
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Fiji_FJI_Factsheet.pdf">Fiji</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Gabon_GAB_Factsheet.pdf">Gabon</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Gambia_GMB_Factsheet.pdf">Gambia</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Georgia_GEO_Factsheet.pdf">Georgia
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Ghana_GHA_Factsheet.pdf">Ghana</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Grenada_GRD_Factsheet.pdf">Grenada
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Guatemala_GTM_Factsheet.pdf">Guatemala
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Guinea_GIN_Factsheet.pdf">Guinea</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/GuineaBissau_GNB_Factsheet.pdf">
+                            Guinea-Bissau
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Guyana_GUY_Factsheet.pdf">Guyana</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Haiti_HTI_Factsheet.pdf">Haiti</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Honduras_HND_Factsheet.pdf">Honduras
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/India_IND_Factsheet.pdf">India</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Indonesia_IDN_Factsheet.pdf">Indonesia
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Iran_IRN_Factsheet.pdf">Iran (Islamic
+                            Republic of)
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Iraq_IRQ_Factsheet.pdf">Iraq</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Jamaica_JAM_Factsheet.pdf">Jamaica
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Jordan_JOR_Factsheet.pdf">Jordan</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Kazakhstan_KAZ_Factsheet.pdf">Kazakhstan
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Kenya_KEN_Factsheet.pdf">Kenya</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Kiribati_KIR_Factsheet.pdf">Kiribati
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Kyrgyzstan_KGZ_Factsheet.pdf">Kyrgyzstan
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/LaoPeoplesdemocraticrepublic_lao_factsheet.pdf">Lao People's Democratic Republic</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Lebanon_LBN_Factsheet.pdf">Lebanon
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Lesotho_LSO_Factsheet.pdf">Lesotho
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Liberia_LBR_Factsheet.pdf">Liberia
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/LibyanArabJamahiriya_LBY_Factsheet.pdf">
+                            Libyan Arab Jamahiriya
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Madagascar_MDG_Factsheet.pdf">Madagascar
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Malawi_MWI_Factsheet.pdf">Malawi</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Malaysia_MYS_Factsheet.pdf">Malaysia
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Maldives_MDV_Factsheet.pdf">Maldives
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Mali_MLI_Factsheet.pdf">Mali</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/MarshallIslands_MHL_Factsheet.pdf">
+                            Marshall Islands
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Mauritania_MRT_Factsheet.pdf">Mauritania
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Mauritius_MUS_Factsheet.pdf">Mauritius
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Mexico_MEX_Factsheet.pdf">Mexico</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Micronesia_FSM_Factsheet.pdf">Micronesia
+                            (Federated States of)
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Montenegro_MNE_Factsheet.pdf">Montenegro
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Morocco_MAR_Factsheet.pdf">Morocco
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Mozambique_MOZ_Factsheet.pdf">Mozambique
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Namibia_NAM_Factsheet.pdf">Namibia
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Nauru_NRU_Factsheet.pdf">Nauru</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Nepal_NPL_Factsheet.pdf">Nepal</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Nicaragua_NIC_Factsheet.pdf">Nicaragua
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Niger_NER_Factsheet.pdf">Niger</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Nigeria_NGA_Factsheet.pdf">Nigeria
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Niue_NIU_Factsheet.pdf">Niue</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Oman_OMN_Factsheet.pdf">Oman</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Pakistan_PAK_Factsheet.pdf">Pakistan
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Palau_PLW_Factsheet.pdf">Palau</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Panama_PAN_Factsheet.pdf">Panama</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/PapuaNewGuinea_PNG_Factsheet.pdf">Papua
+                            New Guinea
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Paraguay_PRY_Factsheet.pdf">Paraguay
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Peru_PER_Factsheet.pdf">Peru</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Philippines_PHL_Factsheet.pdf">
+                            Philippines
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/RepublicofMoldova_MDA_Factsheet.pdf">
+                            Republic of Moldova
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Rwanda_RWA_Factsheet.pdf">Rwanda</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/SaintKittsandNevis_KNA_Factsheet.pdf">
+                            Saint Kitts and Nevis
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/SaintLucia_LCA_Factsheet.pdf">Saint
+                            Lucia
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/SaintVincentandtheGrenadines_VCT_Factsheet.pdf">
+                            Saint Vincent and the Grenadines
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Samoa_WSM_Factsheet.pdf">Samoa</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/SaoTomeandPrincipe_STP_Factsheet.pdf">Sao
+                            Tome and Principe
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Senegal_SEN_Factsheet.pdf">Senegal
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Serbia_SRB_Factsheet.pdf">Serbia</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Seychelles_SYC_Factsheet.pdf">Seychelles
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/SierraLeone_SLE_Factsheet.pdf">Sierra
+                            Leone
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/SolomonIslands_SLB_Factsheet.pdf">Solomon
+                            Islands
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Somalia_SOM_Factsheet.pdf">Somalia
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/SouthAfrica_ZAF_Factsheet.pdf">South
+                            Africa
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/SriLanka_LKA_Factsheet.pdf">Sri Lanka
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Sudan_SDN_Factsheet.pdf">Sudan</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Suriname_SUR_Factsheet.pdf">Suriname
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Swaziland_SWZ_Factsheet.pdf">Swaziland
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Sweden_SWE_Factsheet.pdf">Sweden</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Switzerland_CHE_Factsheet.pdf">
+                            Switzerland
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/SyrianArabRepublic_SYR_Factsheet.pdf">
+                            Syrian Arab Republic
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Tajikistan_TJK_Factsheet.pdf">Tajikistan
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Thailand_THA_Factsheet.pdf">Thailand
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/TheformerYugoslavRepublicofMacedonia_MKD_Factsheet.pdf">
+                            The former Yugoslav Republic of Macedonia
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/TimorLeste_TLS_Factsheet.pdf">
+                            Timor-Leste
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Togo_TGO_Factsheet.pdf">Togo</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Tonga_TON_Factsheet.pdf">Tonga</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/TrinidadandTobago_TTO_Factsheet.pdf">
+                            Trinidad and Tobago
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Tunisia_TUN_Factsheet.pdf">Tunisia
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Turkey_TUR_Factsheet.pdf">Turkey</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Turkmenistan_TKM_Factsheet.pdf">
+                            Turkmenistan
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Tuvalu_TUV_Factsheet.pdf">Tuvalu</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Uganda_UGA_Factsheet.pdf">Uganda</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Ukraine_UKR_Factsheet.pdf">Ukraine
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/UnitedRepublicofTanzania_TZA_Factsheet.pdf">
+                            United Republic of Tanzania
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Uruguay_URY_Factsheet.pdf">Uruguay
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Uzbekistan_UZB_Factsheet.pdf">Uzbekistan
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Vanuatu_VUT_Factsheet.pdf">Vanuatu
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Venezuela_VEN_Factsheet.pdf">Venezuela
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/VietNam_VNM_Factsheet.pdf">Viet Nam
+                        </option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Yemen_YEM_Factsheet.pdf">Yemen</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Zambia_ZMB_Factsheet.pdf">Zambia</option>
+                        <option value="http://www.fao.org/tc/adam/data/factsheets/Zimbabwe_ZWE_Factsheet.pdf">Zimbabwe
+                        </option>
+                    </select>
+                </div>
+                </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-xs-12">
+                <div class="obj-box-header">
+                    <h1>Resources</h1>
+                </div>
+                <div class="obj-box custom-list-content">
+                    <ul>
+                        <li><a href="http://www.fao.org/tc/adam/data/adam-docs/adam_concept_note.pdf" target="_blank">ADAM Concept Note</a></li>
+                        <li><a href="http://www.fao.org/tc/adam/data/adam-docs/adam_brochure.pdf" target="_blank">ADAM Brochure</a></li>
+                        <li><a href="http://www.fao.org/tc/adam/data/adam-docs/questionnaire.html" target="_blank">Feedback Questionnaire</a></li>
+                        <li><a href="http://www.fao.org/tc/adam/data/adam-docs/DAC_codes.pdf" target="_blank">DAC Classification</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+
+                <div class="obj-box-header">
+                    <h1>Demo</h1>
+                </div>
+                <div class="obj-box custom-list-content">
+
+                    <ul>
+                        <li><a href="https://www.youtube.com/watch?v=cOApWdJtJOw" target="_blank">See the video</a></li>
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-4 home-topic-container">
+
+        <h2><a href="#browse"> Browse Data</a></h2>
+
+        <p>Find out which resource partners are operating where and when; determine the top ten resource partners in the country/region of your choice; and analyse past spending in specific OECD-DAC sectors and subsectors.</p>
+
+    </div>
+    <div class="col-sm-4 home-topic-container">
+
+        <h2>Analyse Data</h2>
+
+        <p>Analyse common priorities between FAO, national governments and resource partners; view information on
+            previously implemented projects; assess FAO's comparative advantage; and create a snapshot of resource
+            partners' past activity.</p>
+
+    </div>
+    <div class="col-sm-4 home-topic-container">
+
+        <h2>Resource Partner Profiles</h2>
+
+        <p>Gather information on a resource partner's stated priority themes, preferred geographic areas of focus,
+            spending patterns, favoured funding mechanisms and internal processes. Contacts and web links are also
+            provided.</p>
+
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div id="dashboard-content">
+            <div class="row">
+                <div class="col-sm-12" id="country-map-container"> <!-- COUNTRY MAP  -->
+                    <div class="obj-box-header"><h1>ODA Map</h1></div>
+
+                    <div class="obj-box">
+                        <div id="home-map" style="height:400px" data-item="home-map"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

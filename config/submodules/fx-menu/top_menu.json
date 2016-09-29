@@ -7,7 +7,7 @@
       },
       "target": "#home",
       "label": {
-        "EN": "Home"
+        "EN": ""
       }
     },
       {
@@ -21,41 +21,20 @@
       },
     {
       "attrs": {
-        "id": "datamgmt"
+        "id": "analyse"
       },
-      "a_attrs": {
-        "rel": "external"
-      },
-      "target": "datamgmt.html",
+      "target": "#analyse",
       "label": {
-        "EN": "Data Management"
+        "EN": "Analyse Data"
       }
     },
     {
       "attrs": {
-        "id": "analysis"
+        "id": "profiles"
       },
-      "target": "#analysis",
+      "target": "#profiles",
       "label": {
-        "EN": "Download"
-      }
-    },
-    {
-      "attrs": {
-        "id": "domains"
-      },
-      "target": "#domains",
-      "label": {
-        "EN": "Compare"
-      }
-    },
-    {
-      "attrs": {
-        "id": "methods"
-      },
-      "target": "#methods",
-      "label": {
-        "EN": "Methods and Standards"
+        "EN": "Resource Partner Profiles"
       }
     }
   ],

@@ -114,20 +114,38 @@ define([
 
             this.onMenuUpdate();
 
+            this.onMenuAddBreadcrumb();
+
             amplify.subscribe(E.MENU_UPDATE, this, this.onMenuUpdate);
+            amplify.subscribe(E.MENU_ADD_BREADCRUMB, this, this.onMenuAddBreadcrumb);
+            amplify.subscribe(E.MENU_RESET_BREADCRUMB, this, this.onMenuResetBreadcrumb);
         },
 
         onStateUpdate: function (s) {
-
             State = $.extend(true, State, s);
 
             amplify.publish(E.MENU_UPDATE);
+            amplify.publish(E.MENU_ADD_BREADCRUMB);
         },
 
         onMenuUpdate: function () {
+           this.topMenu.select(State.menu);
+        },
 
-            this.topMenu.select(State.menu);
+        onMenuAddBreadcrumb: function () {
+            if(State.breadcrumb!= null){
+                this.topMenu.appendBreadcrumbItem(State.breadcrumb, true);
+            }
+        },
+
+        onMenuResetBreadcrumb: function () {
+          //  console.log("========================= Breadcrumb reset");
+            if(State.breadcrumb!= null){
+                this.topMenu.resetBreadcrumb();
+                State.breadcrumb = null;
+            }
         }
+
     });
 
     return SiteView;

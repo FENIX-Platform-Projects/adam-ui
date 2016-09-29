@@ -1,0 +1,15 @@
+<div class="row">
+        <!-- Modules -->
+        {{#grouped_each 2 modules}}
+            {{#each this }}
+                    <a href={{isI18n link}} class="adam-entry-point">
+
+                <div class="col-sm-6 adam-entry-point-content">
+                     <h2>{{i18n header}}</h2>
+                     <p class="title">{{i18n title}}</p>
+                     <p class= 'text-justify'>{{{i18n body}}}</p>
+                </div>
+                    </a>
+            {{/each}}
+        {{/grouped_each}}
+</div>

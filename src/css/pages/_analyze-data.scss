@@ -1,0 +1,393 @@
+/* Analyze Data */
+
+
+
+
+.compare-title{
+  display: inline-block;
+
+}
+
+.analyze-compare-selectors {
+
+  .tab-content {
+
+    padding-top: 0;
+
+  }
+
+  .fx-tabs .nav-tabs > li {
+
+    margin: 0;
+
+    margin-bottom: 5px;
+  }
+
+  .first-row {
+    border-top-color: transparent;
+  }
+
+  .col-sm-height {
+    border-bottom: 1px solid $fenix-light-hr;
+    border-right-color: transparent;
+
+    &:nth-child(3) {
+      border-right-color: transparent;
+
+    }
+
+  }
+
+  [data-role="clear"] {
+    margin-bottom: 15px;
+
+  }
+
+  .col-year-container {
+    padding-bottom: 15px;
+  }
+
+}
+
+.fx-tabs {
+  .nav-tabs {
+    border-color: transparent;
+  }
+}
+
+.selector-content {
+
+  //margin-top: 34px;
+  margin-bottom: 10px;
+
+  [data-role="filter"] {
+
+    margin-bottom: 7px;
+
+  }
+
+}
+
+[data-selector="country-country"], [data-selector="country-region"], [data-selector="regional-aggregation"] {
+
+  .selector-content {
+    margin-top: 0;
+
+  }
+
+}
+
+[data-selector="delivery"], [data-selector="sector"], [data-selector="sub-sector"] {
+
+  .selector-content {
+    margin-top: 10px;
+  }
+
+}
+
+.year-select {
+  font-size: 24px;
+  position: relative;
+  top: 47px;
+  left: 10px;
+  color: $fenix-secondary-text;
+}
+
+.compare-collapse-btn {
+  color: $fenix-text;
+  cursor: pointer;
+  margin-left: 15px;
+
+
+  span {
+    font-size: 18px;
+    margin-left: 5px;
+    position: relative;
+    top: 3px;
+  }
+
+  &:hover {
+    color: $fenix-text;
+
+    text-decoration: none;
+
+  }
+
+}
+
+.collapse-bar{
+  margin-top: 20px;
+
+  .toggle-wrapper{
+    margin-top: 4px;
+  }
+
+
+
+}
+
+
+
+.compare-selector{
+
+  position: relative;
+
+  &:before{
+    content: '';
+    display: block;
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: calc(100% + 2px);
+    height: calc(100% + 2px);
+
+    border-style: solid;
+    border-width: 0;
+    border-color: $fx-selector-focused;
+    pointer-events: none;
+    //@include animate();
+  }
+
+  &.selector-focused{
+
+
+    &:before{
+      border-width: 2px;
+      //@include animate();
+    }
+
+
+  }
+
+
+}
+
+.selector-mandatory{
+
+  &:after{
+    content:'MANDATORY';
+    position: relative;
+    bottom: 33px;
+    font-size: 10px;
+    color: red;
+  }
+
+
+}
+
+//.selector-focused {
+//  position: relative;
+//  @include animate();
+//
+//  &:before{
+//    content: '';
+//    display: block;
+//    position: absolute;
+//    top: 0;
+//    left: 0;
+//    width: 100%;
+//    height: 100%;
+//    border: 2px solid $fx-cool-blue;
+//    @include animate();
+//  }
+//
+//
+//  //background-color: $fx-selector-focused;
+//}
+
+/* DANI */
+
+.fx-result {
+  position: relative;
+
+  //by default each tab content is hidden
+  [data-content] {
+    display: none;
+
+    .loading{
+      position: absolute;
+      left: 50%;
+      top: 45%;
+      @include fx-transfor-me(translate(-50%,-50%));
+
+    }
+
+    .status-label{
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      text-align: center;
+      @include fx-transfor-me(translate(-50%,-50%));
+      color: rgba(190, 190, 190, 1);
+      font-size: 16px;
+    }
+
+  }
+
+  //show only the status only correspondent tab content
+  $statuses: "ready" "error" "loading" "empty";
+
+  @each $status in $statuses {
+
+    &[data-status="#{$status}"] {
+
+      [data-content="#{$status}"] {
+        display: block;
+
+      }
+
+    }
+
+  }
+
+}
+
+[data-content="ready"]{
+
+  .tab-content{
+    height: 380px !important;
+  }
+
+
+
+
+  &:before{
+    content: "";
+    height: 1px;
+    background-color: $fenix-hr;
+    width: 100%;
+    position: absolute;
+    top: 42px;
+    left: 0px;
+  }
+
+  .tab-content{
+    margin-top: 8px;
+
+    [data-container="table"]{
+      .gt-grid{
+        height: 290px !important;
+
+
+        .gt-viewport{
+          height: 250px !important;
+
+          .gt-body-div{
+            height: 225px !important;
+          }
+
+        }
+
+
+      }
+
+
+    }
+
+    .selection-info{
+      margin-top: 10px;
+
+    }
+
+  }
+
+
+
+
+}
+
+.remove-widget-btn{
+
+}
+
+.small-icons-analysis{
+
+
+  .fx-widget-icons.icojam_download_1{
+    position: absolute;
+    top: -26px;
+    left: auto;
+    right: 15px;
+  }
+}
+
+.fx-analysis-item{
+  padding: 22px 0 0 0;
+  margin-bottom: 25px;
+}
+
+.fx-dataset-details-container{
+  right: 0;
+  width: 100%;
+
+  .fx-widget-icons{
+    position: absolute;
+    font-size: 18px;
+    right: 6px;
+    top: 1px;
+    cursor: pointer;
+  }
+
+}
+
+/* FINE DANI*/
+
+
+[data-container="chart"]{
+
+  [data-role="content"]{
+
+    height: 100%;
+
+  }
+
+}
+
+.analyze-compare-results{
+  .fx-widget{
+    &:before{
+      display: none;
+
+    }
+  }
+}
+
+
+
+
+
+
+
+/* Extra small devices (phones, less than 768px) */
+/* No media query since this is the default in Bootstrap */
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: $screen-sm-min) {
+
+  .analyze-compare-selectors {
+
+    .first-row {
+      border-top: 1px solid $fenix-light-hr;
+    }
+
+    .col-sm-height {
+      border-right: 1px solid $fenix-light-hr;
+
+      &:nth-child(3) {
+        border-right-color: transparent;
+
+      }
+
+    }
+
+  }
+
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: $screen-md-min) {
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: $screen-lg-min) {
+}
