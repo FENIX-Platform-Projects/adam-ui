@@ -48,7 +48,7 @@ define([
             amplify.publish(E.MENU_RESET_BREADCRUMB);
 
             //update State
-           // amplify.publish(E.STATE_CHANGE, {menu: 'profiles'});
+            amplify.publish(E.STATE_CHANGE, {menu: 'profiles'});
 
         },
 
