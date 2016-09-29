@@ -9,7 +9,7 @@ define(function () {
             donorcode: {
                 selector: {
                     id: "dropdown",
-                    default: ["1"], // Austria
+                    default: ["7"], // Netherlands
                     config: { //Selectize configuration
                         maxItems: 1
                     }
