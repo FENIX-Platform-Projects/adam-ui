@@ -97,11 +97,12 @@ define([
                     backdrop: 'static'
                 },
                 onLogin: _.bind(function () {
-                    Chaplin.utils.redirectTo({controller: State.menu, action: 'show'});
+                  //  console.log(State.menu);
+                    //Chaplin.utils.redirectTo({controller: State.menu, action: 'show'});
                     this.topMenu = new Menu(true ? menuConfAuth : menuConfPub);
                 }, this),
                 onLogout: _.bind(function () {
-                    Chaplin.utils.redirectTo({controller: State.menu, action: 'show'});
+                   // Chaplin.utils.redirectTo({controller: State.menu, action: 'show'});
                     this.topMenu = new Menu(false ? menuConfAuth : menuConfPub);
                 }, this)
             });
