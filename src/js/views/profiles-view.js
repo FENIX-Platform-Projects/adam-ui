@@ -6,10 +6,13 @@ define([
     'config/Events',
     'config/profiles/profiles-config',
     'i18n!nls/browse',
+    'i18n!nls/filter',
+    'fx-common/utils',
+    'lib/utils',
     'fx-filter/start',
     'config/Config',
     'amplify'
-], function ($, View, template, E, DashboardConfig, i18nLabels, Filter, BaseConfig) {
+], function ($, View, template, E, DashboardConfig, i18nLabels, i18nFilterLabels, FxUtils, Utils, Filter, BaseConfig) {
 
     'use strict';
 
@@ -45,7 +48,7 @@ define([
             amplify.publish(E.MENU_RESET_BREADCRUMB);
 
             //update State
-            amplify.publish(E.STATE_CHANGE, {menu: 'profiles'});
+           // amplify.publish(E.STATE_CHANGE, {menu: 'profiles'});
 
         },
 
@@ -63,11 +66,13 @@ define([
                 this.filter.dispose();
             }
 
+            var filterConfig = this._getUpdatedFilterConfig(DashboardConfig.filter);
+
             // instantiate filter
             this.filter = new Filter({
                 el: this.$el.find(s.css_classes.FILTER_HOLDER),
                 environment: BaseConfig.ENVIRONMENT,
-                items: DashboardConfig.filter,
+                items: filterConfig,
                 common: {
                     template: {
                         hideSwitch: true,
@@ -83,6 +88,26 @@ define([
 
             });
 
+        },
+
+        _getUpdatedFilterConfig: function (config) {
+
+            var conf = $.extend(true, {}, config),
+                values = {},
+                updatedConf = FxUtils.mergeConfigurations(conf, values);
+
+            _.each(updatedConf, _.bind(function (obj, key) {
+
+                if (!obj.template) {
+                    obj.template = {};
+                }
+                //Add i18n label
+                obj.template.title = Utils.getI18nLabel(key, i18nFilterLabels, "filter_");
+                obj.template.headerIconTooltip = Utils.getI18nLabel(key, i18nFilterLabels, "filter_tooltip_");
+
+            }, this));
+
+            return updatedConf;
         },
 
         dispose: function () {
