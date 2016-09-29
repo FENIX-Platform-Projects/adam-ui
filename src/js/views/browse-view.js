@@ -36,7 +36,7 @@ define([
             amplify.publish(E.MENU_RESET_BREADCRUMB);
 
             //update State
-            amplify.publish(E.STATE_CHANGE, {menu: 'browse'});
+          //  amplify.publish(E.STATE_CHANGE, {menu: 'browse'});
 
             //console.log("BROWSE OPTIONS =========");
             this._displayBrowseOptions() ;
