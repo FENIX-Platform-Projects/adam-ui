@@ -1,8 +1,8 @@
 /*global define, amplify*/
 define([
     'jquery',
-    'underscore',
     'loglevel',
+    'underscore',
     'lib/utils',
     'fx-common/utils',
     'views/base/view',
@@ -14,15 +14,16 @@ define([
     'config/Events',
     'config/Config',
     'config/analyse/compare/Config',
-    'fx-analysis/start',
     'fx-filter/start',
+    'fx-analysis/start',
     'amplify'
-], function ($, _, log, Utils, FxUtils, View, template, errorTemplate, i18nLabels, i18nErrors, i18nFilter, E, GC, AC, Analysis, Filter) {
+], function ($, log, _,  Utils, FxUtils, View, template, errorTemplate, i18nLabels, i18nErrors, i18nFilter, E, GC, AC, Filter, Analysis) {
 
     'use strict';
 
     var s = {
         FILTER: "#compare-filter",
+        FILTER_SUMMARY: "#compare-filter-summary",
         ANALYSIS: "#compare-analysis",
         ADD_BTN: "#add-btn"
     };
@@ -99,6 +100,8 @@ define([
 
             config.uid = FxUtils.getNestedProperty("values.oda", values)[0];
 
+            config.title = createTitle(values);
+
             process["year"] = {
                 time: [{
                     from: from,
@@ -110,20 +113,90 @@ define([
                 name: "filter",
                 parameters: {
                     rows: process,
-                    columns: ["recipientcode", "donorcode", "parentsector_code", "purposecode", "year", "value"]
+                    columns: ["donorcode", "parentsector_code", "year", "value", "unitcode"]
                 }
-            }];
+            },
+                {
+                    "name": "group",
+                    "parameters": {
+                        "by": [
+                            "year",
+                            "donorcode",
+                            "parentsector_code"
+                        ],
+                        "aggregations": [
+                            {
+                                "columns": [
+                                    "value"
+                                ],
+                                "rule": "SUM"
+                            },
+                            {
+                                "columns": [
+                                    "unitcode"
+                                ],
+                                "rule": "MAX"
+                            }
+                        ]
+                    }
+                }];
 
             return config;
+
+            function createTitle(values) {
+
+                var labels = [];
+                labels.push(getLabels("recipientcode", values));
+                labels.push(getLabels("donorcode", values));
+                labels.push(getLabels("parentsector_code", values));
+                labels.push(getLabels("purposecode", values));
+                labels.push(getLabels("year-from", values));
+                labels.push(getLabels("year-to", values));
+
+                labels = cleanArray(labels);
+
+                return labels.join(" / ");
+
+            }
+
+            function getLabels(field, values) {
+
+                var labels = [],
+                    obj = FxUtils.getNestedProperty("labels." + field, values),
+                    keys = Object.keys(obj);
+
+                for (var i = 0; i < keys.length; i++) {
+                    labels.push(obj[keys[i]]);
+                }
+
+                return labels.length > 0 ? labels.join(", ") : null;
+            }
+
+            function cleanArray(actual) {
+                var newArray = [];
+                for (var i = 0; i < actual.length; i++) {
+                    if (actual[i]) {
+                        newArray.push(actual[i]);
+                    }
+                }
+                return newArray;
+            }
         },
 
         _initComponents: function () {
 
             var filterConfig = $.extend(true, {}, AC.filter, {
-                el: this.$el.find(s.FILTER),
-                environment: GC.ENVIRONMENT,
-                cache: GC.cache,
-            });
+                    el: this.$el.find(s.FILTER),
+                    summaryEl: this.$el.find(s.FILTER_SUMMARY),
+                    environment: GC.ENVIRONMENT,
+                    cache: GC.cache
+                }),
+                analysisConfig = $.extend(true, {}, AC.analysis, {
+                    el: this.$el.find(s.ANALYSIS),
+                    environment: GC.ENVIRONMENT,
+                    catalog: false,
+                    cache: GC.cache
+                });
 
             _.each(filterConfig.items, function (value, key) {
                 if (!value.template) {
@@ -134,12 +207,7 @@ define([
 
             this.filter = new Filter(filterConfig);
 
-            this.analysis = new Analysis($.extend(true, {}, AC.analysis, {
-                el: this.$el.find(s.ANALYSIS),
-                environment: GC.ENVIRONMENT,
-                catalog: false,
-                cache: GC.cache,
-            }));
+            this.analysis = new Analysis(analysisConfig);
 
         },
 
@@ -162,7 +230,6 @@ define([
         _unbindEventListeners: function () {
 
             this.$addBnt.off();
-
         },
 
         dispose: function () {
