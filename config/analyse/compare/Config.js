@@ -15,21 +15,40 @@ define(function () {
                     chart: {
                         toolbar: {
                             template: "<div data-selector='compare'></div>",
-                            config: {
-                                compare: {
-                                    selector: {
-                                        id: "dropdown",
-                                        source: [
-                                            {value: "donorcode", label: "Resource Partner"},
-                                            {value: "parentsector_code", label: "Sector"},
-                                        ],
-                                        default: ["donorcode"],
-                                        config: {
-                                            maxItems: 1
+                            config: function (model) {
+
+                                var forbiddenId = ["value", "year", "unitcode"],
+                                    metadata = model.metadata || {},
+                                    dsd = metadata.dsd || {},
+                                    columns = dsd.columns || [],
+                                    source = [];
+
+                                for (var i = 0; i<columns.length; i++) {
+
+                                    var col = columns[i] || {};
+
+                                    if (forbiddenId.indexOf(col.id ) < 0 && !col.id.endsWith("_EN")){
+                                        var title = col.title["EN"];
+                                        source.push({
+                                            value : col.id,
+                                            label : title
+                                        })
+                                    }
+                                }
+
+                                return  {
+                                    compare: {
+                                        selector: {
+                                            id: "dropdown",
+                                            source: source,
+                                            default: ["donorcode"],
+                                            config: {
+                                                maxItems: 1
+                                            }
+                                        },
+                                        template: {
+                                            title: "Compare by"
                                         }
-                                    },
-                                    template: {
-                                        title: "Compare by"
                                     }
                                 }
                             }
@@ -53,7 +72,7 @@ define(function () {
 
                                     var compare = values.values.compare[0],
                                         index = order.indexOf(compare),
-                                        colors = ["red"],
+                                        colors = ["#F44336",  "#4CAF50", "#E91E63", "#3F51B",  "#00BCD4", "#2196F3", "#009688",  "#CDDC39", "#FFC107", "#FF9800", "#E91E63"],
                                         used = {};
 
                                     for (var ii in model.cols) {
@@ -104,10 +123,6 @@ define(function () {
                     selector: {
                         id: "tree",
                         hideSummary: true, //Hide selection summary,
-                        config: { //Selectize configuration
-                            plugins: ['remove_button'],
-                            mode: 'multi'
-                        }
                     },
                     cl: {
                         uid: "crs_recipients",
@@ -125,10 +140,6 @@ define(function () {
                         id: "tree",
                         default: ["2", "7"], // Belgium, Netherlands
                         hideSummary: true, //Hide selection summary,
-                        config: { //Selectize configuration
-                            plugins: ['remove_button'],
-                            mode: 'multi'
-                        }
                     },
                     cl: {
                         uid: "crs_donors",
@@ -144,11 +155,6 @@ define(function () {
                 parentsector_code: {
                     selector: {
                         id: "tree",
-                        config: { //Selectize configuration
-                            maxItems: 1,
-                            plugins: ['remove_button'],
-                            mode: 'multi'
-                        },
                         default : ["311", "600"],
                         hideSummary: true, //Hide selection summary,
                     },
@@ -166,10 +172,6 @@ define(function () {
                 purposecode: {
                     selector: {
                         id: "tree",
-                        config: {
-                            plugins: ['remove_button'],
-                            mode: 'multi'
-                        },
                         hideSummary: true, //Hide selection summary,
                     },
                     cl: {
