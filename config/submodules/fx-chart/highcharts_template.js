@@ -6,6 +6,7 @@ define(function () {
     return {
 
         chart: {
+            marginTop: 50,
             //spacing: [10, 10, 27, 10], // better spacing when chart exports
             spacing: [10, 10, 27, 10], // was [10, 10, 15, 10]
             events: {
@@ -168,7 +169,11 @@ define(function () {
 
                     //Reset title and subtitle
                     this.setTitle(
-                        {text: ""}, {text: "<b>Hover for values and click and drag to zoom</b>"});
+                        {text: ""}, {text: ""});
+
+
+                   // this.setTitle(
+                      //  {text: ""}, {text: "<b>Hover for values and click and drag to zoom</b>"});
 
                     //Re-show buttons and legend title
                     $chart.find('.highcharts-button').show();
@@ -364,10 +369,13 @@ define(function () {
         },
 
         subtitle: {
-            text: '<b>Hover for values and click and drag to zoom</b>',
-            align: 'left',
-            x: 10
+            text: ''
         },
+       // subtitle: {
+           // text: '<b>Hover for values and click and drag to zoom</b>',
+           // align: 'left',
+           // x: 10
+       // },
 
         yAxis: [{ //Primary Axis
             title: {
