@@ -15,13 +15,12 @@ define([
     'config/browse/Events',
     'config/browse/dashboards/indicators/config-development-indicators',
     'config/browse/display/config-by-filter-selections',
-    'config/browse/display/config-by-filter-values',
     'config/browse/config-browse',
     'lib/utils',
     'amplify',
     'bootstrap',
     'underscore'
-], function ($, $UI, View, TitleSubView, FilterSubView, DashboardOecdSubView, DashboardIndicatorsSubView, DashboardModel, template, i18nLabels, Events, GeneralConfig, BaseBrowseEvents, BrowseIndicatorsConfig, DisplayConfigByFilterSelections, DisplayConfigByFilterValues, BaseBrowseConfig, Utils) {
+], function ($, $UI, View, TitleSubView, FilterSubView, DashboardOecdSubView, DashboardIndicatorsSubView, DashboardModel, template, i18nLabels, Events, GeneralConfig, BaseBrowseEvents, BrowseIndicatorsConfig, DisplayConfigByFilterSelections, BaseBrowseConfig, Utils) {
 
     'use strict';
 
@@ -79,16 +78,8 @@ define([
             this.datasetType = GeneralConfig.DEFAULT_UID;
 
 
-             //this.topicConfig = DisplayConfigByBrowseType[this.browse_type];
-            //this.filterValuesConfig = DisplayConfigBySelectedValues;
-
-
-            // Display can be configured based on the current Browse Type filter selections: i.e. Hide/Show dashboard items based on the current Browse type
+            // Display can be configured based on the current Browse Type filter selections: i.e. Hide/Show dashboard items based on the current Browse type and/or selected filter values
             this.filterSelectionsTypeDisplayConfig = DisplayConfigByFilterSelections[this.browse_type];
-
-            // Display can be configured based on the selected filter values: i.e. Change dashboard config or Hide/Show dashboard items based on the selected Filter Values
-            //this.selectedValuesDisplayConfig = DisplayConfigByFilterValues;
-
 
             View.prototype.initialize.call(this, arguments);
         },
