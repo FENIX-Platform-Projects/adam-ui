@@ -11,6 +11,7 @@ define(function () {
                 tab : "chart",
                 hideFlipButton : true,
                 faces : ["front"],
+                hideMetadataButton : true,
                 tabConfig: {
                     chart: {
                         toolbar: {
