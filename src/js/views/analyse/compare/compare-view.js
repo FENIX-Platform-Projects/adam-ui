@@ -87,6 +87,8 @@ define([
         _onAddBtnClick: function () {
             var config = this._getBoxModelFromFilter();
 
+            log.info(config);
+
             this.analysis.add(config);
         },
 
@@ -96,9 +98,9 @@ define([
                 values = this.filter.getValues(),
                 from = FxUtils.getNestedProperty("values.year-from", values)[0],
                 to = FxUtils.getNestedProperty("values.year-to", values)[0],
-                process = this.filter.getValues("fenix", ["recipientcode", "donorcode", "parentsector_code", "purposecode"]);
+                process = this.filter.getValues("fenix", ["recipientcode", "donorcode", "parentsector_code", "purposecode", "oda"]);
 
-            config.uid = FxUtils.getNestedProperty("values.oda", values)[0];
+            config.uid = "adam_usd_aggregation_table";
 
             config.title = createTitle(values);
 
