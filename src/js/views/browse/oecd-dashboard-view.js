@@ -273,7 +273,7 @@ define([
             var self = this;
 
 
-            console.log(displayConfigForSelectedFilter);
+           // console.log(displayConfigForSelectedFilter);
 
             // Re-render the template
             if (displayConfigForSelectedFilter) {
