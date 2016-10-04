@@ -6,6 +6,7 @@ define(
         'text!templates/browse/filters.hbs',
         'i18n!nls/filter',
         'fx-filter/start',
+        'views/common/filter-validator',
         'fx-common/utils',
         'lib/utils',
         'config/Config',
@@ -14,13 +15,14 @@ define(
         'q',
         'handlebars',
         'amplify'
-    ], function ($, _, View, template, i18nLabels, Filter, FxUtils, Utils, BaseConfig, BrowseConfig, BaseEvents, Q) {
+    ], function ($, _, View, template, i18nLabels, Filter, FilterValidator, FxUtils, Utils, BaseConfig, BrowseConfig, BaseEvents, Q) {
 
         'use strict';
 
         var s = {
             css_classes: {
-                FILTER_BROWSE: "#filter-browse"
+                FILTER_BROWSE: "#filter-browse",
+                FILTER_ERRORS_HOLDER: "#filter-browse-errors-holder"
             },
             codeLists: {
                 SUB_SECTORS: {uid: 'crs_purposes', version: '2016'},
@@ -63,6 +65,7 @@ define(
             initialize: function (params) {
                 this.config = params.config;
 
+
                 View.prototype.initialize.call(this, arguments);
             },
 
@@ -83,7 +86,6 @@ define(
              */
             _buildFilters: function () {
                 var self = this;
-
 
                 var filterConfig = this._getUpdatedFilterConfig();
 
@@ -108,6 +110,11 @@ define(
                 if (this.filter && $.isFunction(this.filter.dispose)) {
                     this.filter.dispose();
                 }
+
+                // instantiate new filter validator
+                this.filterValidator = new FilterValidator({
+                    el: this.$el.find(s.css_classes.FILTER_ERRORS_HOLDER)
+                });
 
                 // instantiate new filter
                 this.filter = new Filter({
@@ -161,7 +168,7 @@ define(
 
                 this.filter.on('click', function (payload) {
 
-                    var filterItem = self.$el.find("[data-selector="+payload.id+"]")[0];
+                    var filterItem = self.$el.find("[data-selector=" + payload.id + "]")[0];
                     var selectize = $(filterItem).find("[data-role=dropdown]")[0].selectize;
                     selectize.clear(true);
 
@@ -169,60 +176,68 @@ define(
 
                 // Filter on Change: Set some base properties for Recipient and the ODA, then publish Filter On Change Event
                 this.filter.on('change', function (payload) {
-                    //console.log("========================= FilterView: ON CHANGE ==============");
+                   // console.log("========================= FilterView: ON CHANGE ==============");
                     //console.log(payload);
 
-                    var fc = self._getFilterConfigById(payload.id);
-                    var dependencies = [];
-                    if (fc && fc.dependencies) {
-                        for (var id in fc.dependencies) {
-                            dependencies.push(id);
-                        }
+                    // validate filter
+                    var valid = self.filterValidator.validateValues(self._getSelectedValues());
 
-                        payload["dependencies"] = dependencies;
-                    }
+                    if (valid === true) {
+                        self.filterValidator.hideErrorSection();
 
-                    if (payload.id === BaseConfig.SELECTORS.YEAR_TO || payload.id === BaseConfig.SELECTORS.YEAR_FROM) {
-                        var newRange = self._getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedLabels());
-                        if (newRange) {
-                            payload.id = BaseConfig.SELECTORS.YEAR;
-                            payload.values.labels = self._getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedLabels());
-                            payload.values.values = self._getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedValues());
-                        }
-
-                        amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
-                    }
-                    if (payload.id === BaseConfig.SELECTORS.ODA) {
-                        var additionalProperties = self._getPropertiesObject(BaseConfig.SELECTORS.ODA, payload.values.values[0]);
-
-                        amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": additionalProperties}));
-                    }
-                    else if (payload.id === BaseConfig.SELECTORS.RECIPIENT_COUNTRY) {
-                        var additionalProperties = self._getPropertiesObject(BaseConfig.SELECTORS.RECIPIENT_COUNTRY, payload.values.values);
-
-                        Q.all([
-                            self._onRecipientChangeGetRegionCode(payload.values.values),
-                            self._onRecipientChangeGetGaulCode(payload.values.values)
-                        ]).then(function (result) {
-                            if (result) {
-                                self._setRecipientProperties(result, additionalProperties);
+                        var fc = self._getFilterConfigById(payload.id);
+                        var dependencies = [];
+                        if (fc && fc.dependencies) {
+                            for (var id in fc.dependencies) {
+                                dependencies.push(id);
                             }
-                        }).catch(function (error) {
-                            self._regioncodeerror(error, additionalProperties)
-                        }).done(function () {
-                            //  console.log("ONCHANGE: RECIPIENT PROPS UPDATE DONE ============ ", additionalProperties);
+
+                            payload["dependencies"] = dependencies;
+                        }
+
+                        if (payload.id === BaseConfig.SELECTORS.YEAR_TO || payload.id === BaseConfig.SELECTORS.YEAR_FROM) {
+                            var newRange = self._getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedLabels());
+                            if (newRange) {
+                                payload.id = BaseConfig.SELECTORS.YEAR;
+                                payload.values.labels = self._getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedLabels());
+                                payload.values.values = self._getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedValues());
+                            }
+
+                            amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
+                        }
+                        if (payload.id === BaseConfig.SELECTORS.ODA) {
+                            var additionalProperties = self._getPropertiesObject(BaseConfig.SELECTORS.ODA, payload.values.values[0]);
 
                             amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": additionalProperties}));
-                        });
-                    }
-                    else {
-                        amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
-                    }
+                        }
+                        else if (payload.id === BaseConfig.SELECTORS.RECIPIENT_COUNTRY) {
+                            var additionalProperties = self._getPropertiesObject(BaseConfig.SELECTORS.RECIPIENT_COUNTRY, payload.values.values);
 
+                            Q.all([
+                                self._onRecipientChangeGetRegionCode(payload.values.values),
+                                self._onRecipientChangeGetGaulCode(payload.values.values)
+                            ]).then(function (result) {
+                                if (result) {
+                                    self._setRecipientProperties(result, additionalProperties);
+                                }
+                            }).catch(function (error) {
+                                self._regioncodeerror(error, additionalProperties)
+                            }).done(function () {
+                                //  console.log("ONCHANGE: RECIPIENT PROPS UPDATE DONE ============ ", additionalProperties);
+
+                                amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": additionalProperties}));
+                            });
+                        }
+                        else {
+                            amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
+                        }
+                    } else {
+                        self.filterValidator.displayErrorSection(valid);
+                     }
                 });
 
-
             },
+
             /**
              * Updates the filter configuration including setting the language related labels in the filter template
              * Returns: Updated Configuration
@@ -319,7 +334,7 @@ define(
              */
             getFilterValues: function () {
 
-                console.log("FINAL getFilterValues ============ 1");
+               // console.log("FINAL getFilterValues ============ 1");
                 var values = this._getFilterValues();
 
                 //clear uid values

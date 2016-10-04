@@ -18,7 +18,8 @@ define(
 
         var s = {
             css_classes: {
-                FILTER_ANALYSE_COMP_ADVANTAGE: "#filter-analyse-comp-advantage"
+                FILTER_ANALYSE_COMP_ADVANTAGE: "#filter-analyse-comp-advantage",
+                FILTER_ERRORS_HOLDER: "#filter-analyse-comp-advantage-errors-holder"
             },
             exclusions: {
                 ALL: 'all'
@@ -74,7 +75,6 @@ define(
             _buildFilters: function () {
                 var self = this;
 
-
                 var filterConfig = this._getUpdatedFilterConfig();
 
                 if (!_.isEmpty(filterConfig)) {
@@ -98,6 +98,11 @@ define(
                 if (this.filter && $.isFunction(this.filter.dispose)) {
                     this.filter.dispose();
                 }
+
+                // instantiate new filter validator
+                this.filterValidator = new FilterValidator({
+                    el: this.$el.find(s.css_classes.FILTER_ERRORS_HOLDER)
+                });
 
                 // instantiate new filter
                 this.filter = new Filter({
@@ -140,32 +145,39 @@ define(
                    // console.log("FILTER ALL ==========");
                    // console.log(payload.values.values);
 
-                    var fc = self._getFilterConfigById(payload.id);
-                    var dependencies = [];
-                    if (fc && fc.dependencies) {
-                        for (var id in fc.dependencies) {
-                            dependencies.push(id);
+                    // validate filter
+                    var valid = self.filterValidator.validateValues(self._getSelectedValues());
+
+                    if (valid === true) {
+                        self.filterValidator.hideErrorSection();
+
+                        var fc = self._getFilterConfigById(payload.id);
+                        var dependencies = [];
+                        if (fc && fc.dependencies) {
+                            for (var id in fc.dependencies) {
+                                dependencies.push(id);
+                            }
+
+                            payload["dependencies"] = dependencies;
                         }
 
-                        payload["dependencies"] = dependencies;
-                    }
+                        if (payload.id === BaseConfig.SELECTORS.YEAR_TO || payload.id === BaseConfig.SELECTORS.YEAR_FROM) {
+                            var newRange = self._getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedLabels());
+                            if (newRange) {
+                                payload.id = BaseConfig.SELECTORS.YEAR;
+                                payload.values.labels = self._getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedLabels());
+                                payload.values.values = self._getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedValues());
+                            }
 
-                    if (payload.id === BaseConfig.SELECTORS.YEAR_TO || payload.id === BaseConfig.SELECTORS.YEAR_FROM) {
-                        var newRange = self._getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedLabels());
-                        if (newRange) {
-                            payload.id = BaseConfig.SELECTORS.YEAR;
-                            payload.values.labels = self._getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedLabels());
-                            payload.values.values = self._getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedValues());
+
+                            amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
                         }
 
 
                         amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
+                    } else {
+                        self.filterValidator.displayErrorSection(valid);
                     }
-
-
-                     amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
-
-
                 });
 
 

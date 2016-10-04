@@ -265,8 +265,8 @@ define([
 
                 if(displayConfigForFilter) {
 
-                    console.log("========================= displayConfigForFilter ");
-                    console.log(displayConfigForFilter);
+                 //   console.log("========================= displayConfigForFilter ");
+                 //   console.log(displayConfigForFilter);
 
                     var item = this._checkConfigForValue(displayConfigForFilter, filterValue);
 
@@ -387,13 +387,13 @@ define([
 
                          if(displayConfig) {
 
-                            console.log(changedFilter.id, changedFilter.values.values[0]);
+                        //    console.log(changedFilter.id, changedFilter.values.values[0]);
 
 
                             var item = this._checkConfigForValue(displayConfig, changedFilter.values.values[0]);
 
 
-                             console.log(item);
+                           //  console.log(item);
 
 
                            /* var item = _.find(displayConfig, function (item) {
@@ -414,7 +414,7 @@ define([
                             } else{
                                 var defaultItem = this._getDefaultLayout(displayConfig);
 
-                                console.log(defaultItem);
+                              //  console.log(defaultItem);
 
                                 if(defaultItem)
                                      displayConfigForFilter = defaultItem;
