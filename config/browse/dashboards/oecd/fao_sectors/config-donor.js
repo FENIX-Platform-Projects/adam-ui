@@ -129,8 +129,7 @@ define(function () {
                     ],
                     "uid": "crs_dac",
                     "version": "2016",
-                    "level": 2,
-                    "levels": 2
+                    "levels": 3
                 },
                 template: {
                     hideSwitch: true,
