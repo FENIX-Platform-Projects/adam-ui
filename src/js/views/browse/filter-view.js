@@ -170,19 +170,28 @@ define(
 
                     var filterItem = self.$el.find("[data-selector=" + payload.id + "]")[0];
                     var selectize = $(filterItem).find("[data-role=dropdown]")[0].selectize;
-                    selectize.clear(true);
+
+                    // REMOVED THE CLEAR
+                    //selectize.$control.off('mousedown');
+                    //selectize.clear(true);
 
                 });
 
                 // Filter on Change: Set some base properties for Recipient and the ODA, then publish Filter On Change Event
                 this.filter.on('change', function (payload) {
-                   // console.log("========================= FilterView: ON CHANGE ==============");
-                    //console.log(payload);
 
                     // validate filter
                     var valid = self.filterValidator.validateValues(self._getSelectedValues());
 
-                    if (valid === true) {
+
+                   // console.log(valid);
+
+                    if (valid === true && payload.values.values[0]) {
+
+                        // set primary Payload
+                        var payloads = [];
+                        payload.primary = true;
+
                         self.filterValidator.hideErrorSection();
 
                         var fc = self._getFilterConfigById(payload.id);
@@ -195,20 +204,58 @@ define(
                             payload["dependencies"] = dependencies;
                         }
 
-                        if (payload.id === BaseConfig.SELECTORS.YEAR_TO || payload.id === BaseConfig.SELECTORS.YEAR_FROM) {
-                            var newRange = self._getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedLabels());
-                            if (newRange) {
-                                payload.id = BaseConfig.SELECTORS.YEAR;
-                                payload.values.labels = self._getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedLabels());
-                                payload.values.values = self._getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedValues());
+                        if (payload.id === BaseConfig.SELECTORS.SECTOR || payload.id === BaseConfig.SELECTORS.SUB_SECTOR) {
+
+                            // Check only for the Sub Sector payload but add the sector details to the payload.
+                            //-------------------------------------------------------------------------------
+                            // When Sector is selected, the Sub Sector is automatically re-populated and this in turn triggers its own 'on Change'.
+                            // The result is that the 'BaseEvents.FILTER_ON_CHANGE' is published twice (1 for the sector and then automatically again for the Sub Sector).
+                            // To avoid the double publish, only the last 'on Change' trigger is evaluated i.e. when payload = 'Sub Sector'
+
+                            if ( payload.id === BaseConfig.SELECTORS.SUB_SECTOR) {
+                                // Payload contains subsector and sector information
+                                var payloadsUpdated = self._processSectorSubSectorPayload(payloads, payload);
+                                amplify.publish(BaseEvents.FILTER_ON_CHANGE, payloadsUpdated);
                             }
 
-                            amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
                         }
-                        if (payload.id === BaseConfig.SELECTORS.ODA) {
-                            var additionalProperties = self._getPropertiesObject(BaseConfig.SELECTORS.ODA, payload.values.values[0]);
+                        else if (payload.id === BaseConfig.SELECTORS.YEAR_TO || payload.id === BaseConfig.SELECTORS.YEAR_FROM) {
 
-                            amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": additionalProperties}));
+
+                            var values = self._getSelectedValues();
+                            var yearTo = values[BaseConfig.SELECTORS.YEAR_TO][0];
+                            var yearFrom = values[BaseConfig.SELECTORS.YEAR_FROM][0];
+
+
+                            // Check only for the To payload.
+                            //--------------------------------
+                            // When From is selected, the To is automatically re-populated and this in turn triggers its own 'on Change'.
+                            // The result is that the 'BaseEvents.FILTER_ON_CHANGE' is published twice (1 for the From and then automatically again for the To).
+                            // To avoid the double publish, only the last 'on Change' trigger is evaluated i.e. when payload = 'To'
+
+                            if ( payload.id === BaseConfig.SELECTORS.YEAR_TO) {
+
+                                var newRange = self._getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedLabels());
+
+                                if (newRange) {
+                                    payload.id = BaseConfig.SELECTORS.YEAR;
+                                    payload.values.labels = self._getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedLabels());
+                                    payload.values.values = self._getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedValues());
+                                }
+
+                                payloads.push(payload);
+
+                                amplify.publish(BaseEvents.FILTER_ON_CHANGE, payloads);
+                            }
+
+                            //amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
+                        }
+                        else if (payload.id === BaseConfig.SELECTORS.ODA) {
+                            var additionalProperties = self._getPropertiesObject(BaseConfig.SELECTORS.ODA, payload.values.values[0]);
+                            $.extend(payload, {"props": additionalProperties});
+                            payloads.push(payload);
+
+                            amplify.publish(BaseEvents.FILTER_ON_CHANGE, payloads);
                         }
                         else if (payload.id === BaseConfig.SELECTORS.RECIPIENT_COUNTRY) {
                             var additionalProperties = self._getPropertiesObject(BaseConfig.SELECTORS.RECIPIENT_COUNTRY, payload.values.values);
@@ -225,10 +272,14 @@ define(
                             }).done(function () {
                                 //  console.log("ONCHANGE: RECIPIENT PROPS UPDATE DONE ============ ", additionalProperties);
 
-                                amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": additionalProperties}));
+                                $.extend(payload, {"props": additionalProperties});
+
+                                payloads.push(payload);
+                                amplify.publish(BaseEvents.FILTER_ON_CHANGE, payloads);
                             });
                         }
                         else {
+                            payloads.push(payload);
                             amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
                         }
                     } else {
@@ -383,6 +434,38 @@ define(
 
                 return values;
             },
+
+            /**
+             * Add the sector to payloads array and set primary payload
+             * @param payloads array
+             * @returns Array filters
+             */
+            _processSectorSubSectorPayload: function (payloads, subsectorpayload) {
+                var values = this._getSelectedValues();
+                var labels = this._getSelectedLabels();
+
+                var sector = {};
+                sector.id = BaseConfig.SELECTORS.SECTOR;
+                sector.values = {};
+                sector.values.labels =  labels[BaseConfig.SELECTORS.SECTOR];
+                sector.values.values =  values[BaseConfig.SELECTORS.SECTOR];
+
+
+                // primary indicates the selection type which takes precedence
+                if(subsectorpayload.values.values[0] === 'all'){
+                    sector.primary = true;
+                    subsectorpayload.primary = false;
+                } else {
+                    sector.primary = false;
+                    subsectorpayload.primary = true;
+                }
+
+                payloads.push(sector);
+                payloads.push(subsectorpayload);
+
+                return payloads;
+            },
+
 
             /**
              *  Process the time range so that it complies with the expected D3S format
@@ -622,7 +705,6 @@ define(
                         values[BaseConfig.SELECTORS.SUB_SECTOR].codes = [];
                         values[BaseConfig.SELECTORS.SUB_SECTOR].codes[0] = $.extend(true, {}, sectorvaluesobj); // clone the codes configuration of sectorvaluesobj
 
-                        // console.log( values['purposecode'].codes[0]);
                         // Get the source of the purposecode component
                         // and populate the codes array with the IDs of the source items
                         $.each(purposeCodeComponent.options.source, function (index, sourceItem) {
