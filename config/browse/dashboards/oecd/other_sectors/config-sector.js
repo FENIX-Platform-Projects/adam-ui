@@ -2197,6 +2197,9 @@ define(function () {
                             }
 
                         },
+
+                        filterFor: ['parentsector_code', 'purposecode', 'year', 'oda'],
+
                         filter: { //FX-filter format
                             parentsector_code: ["600"],
                             year: [{value: "2000", parent: 'from'}, {value: "2014", parent:  'to'}]
@@ -2476,6 +2479,9 @@ define(function () {
                                 }
                             }
                         },
+
+                        filterFor: ['parentsector_code', 'purposecode', 'year', 'oda'],
+
                         filter: { //FX-filter format
                             parentsector_code: ["600"],
                             year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
@@ -2549,6 +2555,8 @@ define(function () {
                                 boundaries: true
                             }
                         },
+
+                        filterFor: ['parentsector_code', 'purposecode', 'year', 'oda'],
 
                         filter: { //FX-filter format
                             parentsector_code: ["600"],

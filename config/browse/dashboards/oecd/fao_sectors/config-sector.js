@@ -2544,6 +2544,9 @@ define(function () {
                             }
 
                         },
+
+                        filterFor: ['purposecode', 'year', 'oda'],
+
                         filter: { //FX-filter format
                             purposecode: ["12240",
                                             "14030",
@@ -2926,6 +2929,8 @@ define(function () {
                                 }
                             }
                         },
+                        filterFor: ['purposecode', 'year', 'oda'],
+
                         filter: { //FX-filter format
                             purposecode: ["12240",
                                             "14030",
@@ -3051,6 +3056,8 @@ define(function () {
                                 boundaries: true
                             }
                         },
+
+                        filterFor: ['un_region_code', 'purposecode', 'year', 'oda'],
 
                         filter: { //FX-filter format
                             purposecode: ["12240",

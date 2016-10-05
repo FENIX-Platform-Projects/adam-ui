@@ -78,6 +78,7 @@ define(function () {
             purposecode: {
                 selector: {
                     id: "dropdown",
+                    default: ["all"],
                     emptyOption : {
                         enabled: true,
                         text: "All",
@@ -2097,6 +2098,9 @@ define(function () {
                         }
 
                     },
+
+                    filterFor: ['donorcode', 'recipientcode', 'purposecode', 'year', 'oda'],
+
                     filter: { //FX-filter format
                         purposecode: ["12240",
                             "14030",

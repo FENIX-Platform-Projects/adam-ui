@@ -58,6 +58,7 @@ define(function () {
             purposecode: {
                 selector: {
                     id: "dropdown",
+                    default: ["all"],
                     emptyOption : {
                         enabled: true,
                         text: "All",

@@ -338,12 +338,9 @@ define([
          * @private
          */
 
-        _updateView: function (changedFilter, allFilterValues) {
+        _updateView: function (changedFilterItems, allFilterValues) {
 
             var filterValues = allFilterValues;
-
-            var dashboardConfPath, displayConfigForFilter;
-
 
             // console.log("================= filter values =============== ");
             // console.log(filterValues);
@@ -351,128 +348,170 @@ define([
            // console.log("================= selectedfilter =============== ");
            // console.log(changedFilter);
 
-            if (changedFilter) {
+            if (changedFilterItems) {
 
-                // If selected filter has a value
-                if (changedFilter.values.values.length > 0) {
+                if($.isArray(changedFilterItems)){
+                    for(var idx in changedFilterItems){
 
-                    var displayConfig = this.filterSelectionsTypeDisplayConfig[changedFilter.id];
+                        var changedFilter = changedFilterItems[idx];
+                        if (changedFilter.values.values.length > 0) {
+                            this._setItemTitle(changedFilter);
 
-
-                    if(displayConfig) {
-                        displayConfigForFilter = this.filterSelectionsTypeDisplayConfig[changedFilter.id];
-                    }
-
-
-                    // Re-configure display (if appropriate)
-                    if (this.filterSelectionsTypeDisplayConfig) {
-
-                        // All is selected
-                        if (changedFilter.values.values[0] === s.values.ALL) {
-
-                            if(changedFilter.dependencies) {
-                                // get the display configuration for the dependency
-                                // e.g. When All Sub sectors selected, the view rebuilt with Sector (i.e. dependency) display
-                                displayConfigForFilter = this.filterSelectionsTypeDisplayConfig[changedFilter.dependencies[0]];
+                            if (changedFilter.primary) {
+                                this._processSelection(changedFilter, filterValues);
                             }
-
-
-                            // Update the TitleView (Remove Item)
-                            amplify.publish(Events.TITLE_REMOVE_ITEM, changedFilter.id);
-
-                        } else {
-                            // Update the TitleView (Add Item)
-                            amplify.publish(Events.TITLE_ADD_ITEM, this._createTitleItem(changedFilter));
-                        }
-
-                         if(displayConfig) {
-
-                        //    console.log(changedFilter.id, changedFilter.values.values[0]);
-
-
-                            var item = this._checkConfigForValue(displayConfig, changedFilter.values.values[0]);
-
-
-                           //  console.log(item);
-
-
-                           /* var item = _.find(displayConfig, function (item) {
-                                console.log(item, changedFilter.values.values[0]);
-
-                                if(item.value){
-                                    return item.value === changedFilter.values.values[0] ? item : item.value === null;
-                                }
-
-                                //return item.value === changedFilter.values.values[0] ? item : item.value === null;
-                            });*/
-
-                            if (item) {
-                                 displayConfigForFilter = item;
-
-                                 if(item.config)
-                                   dashboardConfPath = item.config.path;
-                            } else{
-                                var defaultItem = this._getDefaultLayout(displayConfig);
-
-                              //  console.log(defaultItem);
-
-                                if(defaultItem)
-                                     displayConfigForFilter = defaultItem;
-                             }
                         }
                     }
-
-                    //console.log("============== PROPS ============== ");
-                   // console.log(changedFilter.id, ": display config = ", displayConfigForFilter, " dashboard config = ", dashboardConfPath);
-
-
-                    // Update dashboard properties
-                    if (changedFilter['props']) {
-                        this.subview('oecdDashboard').setProperties(changedFilter['props']);
-                    }
-
-                    this._getDashboardConfiguration(dashboardConfPath, filterValues, displayConfigForFilter);
-
                 }
+                /* else {
+                 // If selected filter has a value
+                 if (changedFilter.values.values.length > 0) {
+
+                 var displayConfig = this.filterSelectionsTypeDisplayConfig[changedFilter.id];
+
+
+                 if(displayConfig) {
+                 displayConfigForFilter = this.filterSelectionsTypeDisplayConfig[changedFilter.id];
+                 }
+
+
+                 // Re-configure display (if appropriate)
+                 if (this.filterSelectionsTypeDisplayConfig) {
+
+                 // All is selected
+                 if (changedFilter.values.values[0] === s.values.ALL) {
+
+                 if(changedFilter.dependencies) {
+                 // get the display configuration for the dependency
+                 // e.g. When All Sub sectors selected, the view rebuilt with Sector (i.e. dependency) display
+                 displayConfigForFilter = this.filterSelectionsTypeDisplayConfig[changedFilter.dependencies[0]];
+                 }
+
+
+                 // Update the TitleView (Remove Item)
+                 amplify.publish(Events.TITLE_REMOVE_ITEM, changedFilter.id);
+
+                 } else {
+                 // Update the TitleView (Add Item)
+                 amplify.publish(Events.TITLE_ADD_ITEM, this._createTitleItem(changedFilter));
+                 }
+
+                 if(displayConfig) {
+
+                 //    console.log(changedFilter.id, changedFilter.values.values[0]);
+
+
+                 var item = this._checkConfigForValue(displayConfig, changedFilter.values.values[0]);
+
+
+                 //  console.log(item);
+
+
+                 /!* var item = _.find(displayConfig, function (item) {
+                 console.log(item, changedFilter.values.values[0]);
+
+                 if(item.value){
+                 return item.value === changedFilter.values.values[0] ? item : item.value === null;
+                 }
+
+                 //return item.value === changedFilter.values.values[0] ? item : item.value === null;
+                 });*!/
+
+                 if (item) {
+                 displayConfigForFilter = item;
+
+                 if(item.config)
+                 dashboardConfPath = item.config.path;
+                 } else{
+                 var defaultItem = this._getDefaultLayout(displayConfig);
+
+                 //  console.log(defaultItem);
+
+                 if(defaultItem)
+                 displayConfigForFilter = defaultItem;
+                 }
+                 }
+                 }
+
+                 //console.log("============== PROPS ============== ");
+                 // console.log(changedFilter.id, ": display config = ", displayConfigForFilter, " dashboard config = ", dashboardConfPath);
+
+
+                 // Update dashboard properties
+                 if (changedFilter['props']) {
+                 this.subview('oecdDashboard').setProperties(changedFilter['props']);
+                 }
+
+                 this._getDashboardConfiguration(dashboardConfPath, filterValues, displayConfigForFilter);
+
+                 }
+                 }*/
+            }
+
+        },
+
+        _setItemTitle: function (changedFilter){
+            // All is selected
+            if (changedFilter.values.values[0] === s.values.ALL) {
+
+                // Update the TitleView (Remove Item)
+                amplify.publish(Events.TITLE_REMOVE_ITEM, changedFilter.id);
+
+            } else {
+                // Update the TitleView (Add Item)
+                amplify.publish(Events.TITLE_ADD_ITEM, this._createTitleItem(changedFilter));
+            }
+        },
+
+
+        _processSelection: function (changedFilter, filterValues){
+            var dashboardConfPath, displayConfigForFilter, displayConfig = this.filterSelectionsTypeDisplayConfig[changedFilter.id];
+
+
+            if(displayConfig) {
+                displayConfigForFilter = this.filterSelectionsTypeDisplayConfig[changedFilter.id];
             }
 
 
-         /*       // Else selected filter has no value (i.e.there has been a de-selection/removal)
-                else {
+            // Re-configure display (if appropriate)
+            if (this.filterSelectionsTypeDisplayConfig) {
 
-                    //console.log("================= _updateDashboard: "+changedFilter.id+" is  0 =============== ");
+                // All is selected
+                if (changedFilter.values.values[0] === s.values.ALL) {
 
-                    // Update the TitleView (Remove Item)
-                    amplify.publish(Events.TITLE_REMOVE_ITEM, changedFilter.id);
-
-                    // Re-configure display (if appropriate)
-                    if (changedFilter.dependencies && this.browseTypeDisplayConfig) {
-                        displayConfigForSelectedFilter = this.browseTypeDisplayConfig[changedFilter.dependencies[0]];
+                    if(changedFilter.dependencies) {
+                        // get the display configuration for the dependency
+                        // e.g. When All Sub sectors selected, the view rebuilt with Sector (i.e. dependency) display
+                        displayConfigForFilter = this.filterSelectionsTypeDisplayConfig[changedFilter.dependencies[0]];
                     }
 
-                    if (this.selectedValuesDisplayConfig) {
-                        displayConfigForSelectedFilterValues = this.selectedValuesDisplayConfig[changedFilter.id];
-                        var item = _.find(displayConfigForSelectedFilterValues, function (item) {
-                            return item.value === "";
-                        });
-
-                        if (item && item.config) {
-                            confPath = item.config.path;
-
-                            if (item.display)
-                                displayConfigForSelectedFilter = item.display;
-                        }
-                    }
-
-
-                    // if (confPath || displayConfigForSelectedFilter)
-                    // this._setDashboardConfiguration(confPath, ovalues, displayConfigForSelectedFilter);
                 }
 
-                this._getDashboardConfiguration(confPath, filterValues, displayConfigForSelectedFilter);
 
-            }*/
+                if(displayConfig) {
 
+                    var item = this._checkConfigForValue(displayConfig, changedFilter.values.values[0]);
+
+                    if (item) {
+                        displayConfigForFilter = item;
+
+                        if(item.config)
+                            dashboardConfPath = item.config.path;
+                    } else{
+                        var defaultItem = this._getDefaultLayout(displayConfig);
+
+                        if(defaultItem)
+                            displayConfigForFilter = defaultItem;
+                    }
+                }
+            }
+
+            // Update dashboard properties
+            if (changedFilter['props']) {
+                this.subview('oecdDashboard').setProperties(changedFilter['props']);
+            }
+
+            this._getDashboardConfiguration(dashboardConfPath, filterValues, displayConfigForFilter);
 
         },
 
@@ -482,7 +521,6 @@ define([
 
                     if(item.value){
                         return item.value === filterValue;
-                        // return item.value === filterValue ? item : item.value === "";
                     }
                 });
         },
@@ -511,7 +549,7 @@ define([
          */
         _getDashboardConfiguration: function (dashboardConfPath, filterValues, displayConfigForSelectedFilter) {
             var self = this;
-            //console.log("================= _setDashboardConfiguration Start =============== ");
+           // console.log("================= _setDashboardConfiguration Start =============== ");
             //console.log(ovalues);
 
             if (dashboardConfPath) {
@@ -538,6 +576,7 @@ define([
 
             var key = Object.keys(labels)[0];
             titleItem.label = labels[key];
+
 
             return titleItem;
         },
@@ -575,7 +614,7 @@ define([
             this._setOdaDashboardModelValues();
 
 
-            //console.log("================= _rebuildDashboard END =============== ");
+           // console.log("================= _rebuildDashboard oecdDashboard CALLED  =============== ");
             // console.log(ovalues);
 
             // Rebuild OECD Dashboard

@@ -10,6 +10,7 @@ define(function () {
                 parentsector_code: {
                     selector: {
                         id: "dropdown",
+                        default: ["all"],
                         emptyOption : {
                             enabled: true,
                             text: "All",
@@ -37,6 +38,7 @@ define(function () {
                 purposecode: {
                     selector: {
                         id: "dropdown",
+                        default: ["all"],
                         emptyOption : {
                             enabled: true,
                             text: "All",
@@ -552,6 +554,9 @@ define(function () {
                             }
 
                         },
+
+                        filterFor: ['year', 'oda'],
+
                         filter: { //FX-filter format
                             year: [{value: "2000", parent: 'from'}, {value: "2014", parent:  'to'}]
                         },
@@ -989,6 +994,9 @@ define(function () {
                                 }
                             }
                         },
+
+                        filterFor: ['year', 'oda'],
+
                         filter: { //FX-filter format
                             year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
                         },
@@ -1061,6 +1069,8 @@ define(function () {
                                 boundaries: true
                             }
                         },
+
+                        filterFor: ['year', 'oda'],
 
                         filter: { //FX-filter format
                             year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]

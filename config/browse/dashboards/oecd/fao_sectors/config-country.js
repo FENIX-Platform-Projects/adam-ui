@@ -58,6 +58,7 @@ define(function () {
             purposecode: {
                     selector: {
                         id: "dropdown",
+                        default: ["all"],
                         emptyOption : {
                             enabled: true,
                             text: "All",
@@ -160,7 +161,6 @@ define(function () {
                 }
             },
             "year-to": {
-
                 selector: {
                     id: "dropdown",
                     from: 2000,
@@ -861,8 +861,8 @@ define(function () {
                     },
 
                     filterFor: {
-                        "filter_total_country_sector_oda": ['recipientcode', 'year', 'oda'],
-                        "filter_total_country_subsector_oda": ['recipientcode', 'purposecode', 'year', 'oda'],
+                        "filter_total_country_sector_oda": ['recipientcode', 'purposecode', 'year', 'oda'],
+                        "filter_total_country_subsector_oda": ['recipientcode', 'purposecode', 'year', 'oda']
                     },
                     postProcess:[
                         {
@@ -1288,7 +1288,7 @@ define(function () {
 
                     },
                      filterFor: {
-                         "filter_donor": ['recipientcode', 'year', 'oda']
+                         "filter_donor": ['recipientcode', 'purposecode', 'year', 'oda']
                      },
                     postProcess: [
                         {
@@ -1525,8 +1525,8 @@ define(function () {
                         }
                     },
                     filterFor: {
-                        "filter_top_10_donors_sum": ['recipientcode', 'year', 'oda'],
-                        "filter_top_all_donors_sum": ['recipientcode', 'year', 'oda']
+                        "filter_top_10_donors_sum": ['recipientcode', 'purposecode', 'year', 'oda'],
+                        "filter_top_all_donors_sum": ['recipientcode', 'purposecode', 'year', 'oda']
                     },
 
                     postProcess: [
@@ -1869,13 +1869,13 @@ define(function () {
                         }
                     ]
                 },
-                {
+              {
                     id: 'top-channel-categories', // TOP CHANNEL OF DELIVERY CATEGORIES
                     type: 'chart',
                     config: {
                         type: "column",
                         x: ["channelsubcategory_name"], //x axis
-                        series: ["flowcategory_name"], // series
+                        series: ["flowcategory_code_EN"], // series
                         y: ["value"],//Y dimension
                         aggregationFn: {"value": "sum"},
                         useDimensionLabelsIfExist: false,// || default raw else fenixtool
@@ -1900,6 +1900,9 @@ define(function () {
                         }
 
                     },
+
+                    filterFor: ['recipientcode', 'purposecode', 'year', 'oda'],
+
                     filter: { //FX-filter format
                         purposecode: [
                                 "12240",
@@ -1975,7 +1978,7 @@ define(function () {
                                         "rule": "first"
                                     },
                                     {
-                                        "columns": ["flowcategory_name"],
+                                        "columns": ["flowcategory_code"],
                                         "rule": "first"
                                     }
                                 ]
@@ -2000,11 +2003,8 @@ define(function () {
                     type: 'chart',
                     config: {
                         type: "column",
-                      //  x: ["parentsector_name"], //x axis
-                      //  series: ["flowcategory_name"], // series
                         x: ["parentsector_code_EN"], //x axis
                         series: ["flowcategory_code_EN"], // series
-
                         y: ["value"],//Y dimension
                         aggregationFn: {"value": "sum"},
                         useDimensionLabelsIfExist: false,// || default raw else fenixtool
@@ -2030,7 +2030,7 @@ define(function () {
                     },
 
                     filterFor: {
-                        "filter_top_sectors": ['recipientcode', 'year', 'oda']
+                        "filter_sectors": ['recipientcode', 'year', 'oda']
                     },
 
                     postProcess: [
@@ -2043,11 +2043,6 @@ define(function () {
                             ],
                             "parameters": {
                                 "rows": {
-                                    "oda": {
-                                        "enumeration": [
-                                            "usd_commitment"
-                                        ]
-                                    },
                                     "recipientcode": {
                                         "codes": [
                                             {
@@ -2066,10 +2061,15 @@ define(function () {
                                                 "to": "2014"
                                             }
                                         ]
+                                    },
+                                    "oda":{
+                                        "enumeration":[
+                                            "usd_commitment"
+                                        ]
                                     }
                                 }
                             },
-                            "rid":{"uid":"filter_top_sectors"}
+                            "rid":{"uid":"filter_sectors"}
                         },
                         {
                             "name": "group",

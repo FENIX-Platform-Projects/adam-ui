@@ -50,6 +50,7 @@ define(function () {
             parentsector_code: {
                 selector: {
                     id: "dropdown",
+                    default: ["all"],
                     emptyOption : {
                         enabled: true,
                         text: "All",
@@ -77,6 +78,7 @@ define(function () {
             purposecode: {
                 selector: {
                     id: "dropdown",
+                    default: ["all"],
                     emptyOption : {
                         enabled: true,
                         text: "All",
@@ -1811,6 +1813,9 @@ define(function () {
                         }
 
                     },
+
+                    filterFor: ['recipientcode', 'donorcode', 'parentsector_code', 'purposecode', 'year', 'oda'],
+
                     filter: { //FX-filter format
                         recipientcode: ["625"],
                         donorcode: ["1"],
@@ -2597,7 +2602,7 @@ define(function () {
                         }
                     },
 
-                    filterFor: ['un_region_code', 'donorcode', 'purposecode', 'year', 'oda'],
+                    filterFor: ['un_region_code', 'donorcode', 'parentsector_code', 'purposecode', 'year', 'oda'],
 
                     filter: { //FX-filter format
                         purposecode: [

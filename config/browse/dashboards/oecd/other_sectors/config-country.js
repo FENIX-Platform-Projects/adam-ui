@@ -30,6 +30,7 @@ define(function () {
             parentsector_code: {
                 selector: {
                     id: "dropdown",
+                    default: ["all"],
                     emptyOption : {
                         enabled: true,
                         text: "All",
@@ -57,6 +58,7 @@ define(function () {
             purposecode: {
                 selector: {
                     id: "dropdown",
+                    default: ["all"],
                     emptyOption : {
                         enabled: true,
                         text: "All",
@@ -106,7 +108,6 @@ define(function () {
                 }
             },
             "year-to": {
-
                 selector: {
                     id: "dropdown",
                     from: 2000,
@@ -159,7 +160,7 @@ define(function () {
             uid: "adam_usd_commitment",
 
             items: [
-                {
+            {
                     id: "tot-oda", //ref [data-item=':id']
                     type: "chart", //chart || map || olap,
                     config: {
@@ -755,11 +756,9 @@ define(function () {
                         }
                     },
 
-                    //filterFor: ['un_region_code', 'parentsector_code', 'purposecode', 'year', 'oda'],
-
                     filterFor: {
                         "filter_total_country_sector_oda": ['recipientcode', 'parentsector_code', 'year', 'oda'],
-                        "filter_total_country_subsector_oda": ['recipientcode', 'parentsector_code', 'purposecode', 'year', 'oda'],
+                        "filter_total_country_subsector_oda": ['recipientcode', 'parentsector_code', 'purposecode', 'year', 'oda']
                     },
                     postProcess:[
                         {
@@ -1146,7 +1145,7 @@ define(function () {
                     },
 
                      filterFor: {
-                         "filter_donor": ['recipientcode', 'parentsector_code', 'year', 'oda']
+                         "filter_donor": ['recipientcode', 'parentsector_code', 'purposecode', 'year', 'oda']
                      },
 
                      postProcess: [
@@ -1230,44 +1229,6 @@ define(function () {
                          }
 
                      ]
-
-
-                   /* postProcess: [
-                        {
-                            "name": "group",
-                            "parameters": {
-                                "by": [
-                                    "donorname"
-                                ],
-                                "aggregations": [
-                                    {
-                                        "columns": ["value"],
-                                        "rule": "SUM"
-                                    },
-                                    {
-                                        "columns": ["unitcode"],
-                                        "rule": "first"
-                                    },
-                                    {
-                                        "columns": ["flowcategory_name"],
-                                        "rule": "first"
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "name": "order",
-                            "parameters": {
-                                "value": "DESC"
-                            }
-                        },
-                        {
-                            "name": "page",
-                            "parameters": {
-                                "perPage": 10,  //top 10
-                                "page": 1
-                            }
-                        }]*/
                 },
                 {
                     id: 'top-partners-others', // TOP DONORS Vs OTHER DONORS
@@ -1360,8 +1321,8 @@ define(function () {
                         }
                     },
                     filterFor: {
-                        "filter_top_10_donors_sum": ['parentsector_code', 'recipientcode', 'year', 'oda'],
-                        "filter_top_all_donors_sum": ['parentsector_code', 'recipientcode', 'year', 'oda']
+                        "filter_top_10_donors_sum": ['parentsector_code', 'purposecode', 'recipientcode', 'year', 'oda'],
+                        "filter_top_all_donors_sum": ['parentsector_code', 'purposecode', 'recipientcode', 'year', 'oda']
                     },
 
                     postProcess: [
@@ -1659,7 +1620,7 @@ define(function () {
                     config: {
                         type: "column",
                         x: ["channelsubcategory_name"], //x axis
-                        series: ["flowcategory_name"], // series
+                        series: ["flowcategory_code_EN"], // series
                         y: ["value"],//Y dimension
                         aggregationFn: {"value": "sum"},
                         useDimensionLabelsIfExist: false,// || default raw else fenixtool
@@ -1684,6 +1645,9 @@ define(function () {
                         }
 
                     },
+
+                    filterFor: ['recipientcode', 'parentsector_code', 'purposecode', 'year', 'oda'],
+
                     filter: { //FX-filter format
                         parentsector_code: ["600"],
                         recipientcode: ["625"],
@@ -1706,7 +1670,7 @@ define(function () {
                                         "rule": "first"
                                     },
                                     {
-                                        "columns": ["flowcategory_name"],
+                                        "columns": ["flowcategory_code"],
                                         "rule": "first"
                                     }
                                 ]
@@ -1756,7 +1720,6 @@ define(function () {
                         }
 
                     },
-
 
                     filterFor: {
                         "filter_sectors": ['recipientcode', 'year', 'oda']
@@ -1841,7 +1804,6 @@ define(function () {
                                 "page": 1
                             }
                         }
-
                     ]
                 },
                 {
@@ -2407,7 +2369,7 @@ define(function () {
                             labels: true,
                             boundaries: true,
 
-                            zoomToCountry: [1],
+                            zoomToCountry: [1]
 
                             //highlight service NOT WORK FOR NOW
                             //highlightCountry : [1], // GAUL Afghanistan
