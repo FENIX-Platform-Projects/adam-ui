@@ -319,16 +319,6 @@ define([
 
             this._updateView(changedFilter, allFilterValues);
 
-
-            // console.log("================= _updateDashboard =============== ");
-           // console.log(this.subview('filters'));
-
-          //  var ovalues = this.subview('filters').getFilterValues(), confPath, displayConfigForSelectedFilter, displayConfigForSelectedFilterValues, dashboardConfigChanged;
-
-            //console.log("================= _updateDashboard =============== ");
-            //console.log(ovalues);
-
-
         },
 
         /**
@@ -343,130 +333,46 @@ define([
             var filterValues = allFilterValues;
 
             // console.log("================= filter values =============== ");
-            // console.log(filterValues);
-
-           // console.log("================= selectedfilter =============== ");
-           // console.log(changedFilter);
+            // console.log(" filter values: ", filterValues, " changedfilter values: ", changedFilter);
 
             if (changedFilterItems) {
 
                 if($.isArray(changedFilterItems)){
-                    for(var idx in changedFilterItems){
 
+                    this._setItemTitle(changedFilterItems);
+
+                    for(var idx in changedFilterItems){
                         var changedFilter = changedFilterItems[idx];
                         if (changedFilter.values.values.length > 0) {
-                            this._setItemTitle(changedFilter);
-
                             if (changedFilter.primary) {
                                 this._processSelection(changedFilter, filterValues);
                             }
                         }
                     }
                 }
-                /* else {
-                 // If selected filter has a value
-                 if (changedFilter.values.values.length > 0) {
-
-                 var displayConfig = this.filterSelectionsTypeDisplayConfig[changedFilter.id];
-
-
-                 if(displayConfig) {
-                 displayConfigForFilter = this.filterSelectionsTypeDisplayConfig[changedFilter.id];
-                 }
-
-
-                 // Re-configure display (if appropriate)
-                 if (this.filterSelectionsTypeDisplayConfig) {
-
-                 // All is selected
-                 if (changedFilter.values.values[0] === s.values.ALL) {
-
-                 if(changedFilter.dependencies) {
-                 // get the display configuration for the dependency
-                 // e.g. When All Sub sectors selected, the view rebuilt with Sector (i.e. dependency) display
-                 displayConfigForFilter = this.filterSelectionsTypeDisplayConfig[changedFilter.dependencies[0]];
-                 }
-
-
-                 // Update the TitleView (Remove Item)
-                 amplify.publish(Events.TITLE_REMOVE_ITEM, changedFilter.id);
-
-                 } else {
-                 // Update the TitleView (Add Item)
-                 amplify.publish(Events.TITLE_ADD_ITEM, this._createTitleItem(changedFilter));
-                 }
-
-                 if(displayConfig) {
-
-                 //    console.log(changedFilter.id, changedFilter.values.values[0]);
-
-
-                 var item = this._checkConfigForValue(displayConfig, changedFilter.values.values[0]);
-
-
-                 //  console.log(item);
-
-
-                 /!* var item = _.find(displayConfig, function (item) {
-                 console.log(item, changedFilter.values.values[0]);
-
-                 if(item.value){
-                 return item.value === changedFilter.values.values[0] ? item : item.value === null;
-                 }
-
-                 //return item.value === changedFilter.values.values[0] ? item : item.value === null;
-                 });*!/
-
-                 if (item) {
-                 displayConfigForFilter = item;
-
-                 if(item.config)
-                 dashboardConfPath = item.config.path;
-                 } else{
-                 var defaultItem = this._getDefaultLayout(displayConfig);
-
-                 //  console.log(defaultItem);
-
-                 if(defaultItem)
-                 displayConfigForFilter = defaultItem;
-                 }
-                 }
-                 }
-
-                 //console.log("============== PROPS ============== ");
-                 // console.log(changedFilter.id, ": display config = ", displayConfigForFilter, " dashboard config = ", dashboardConfPath);
-
-
-                 // Update dashboard properties
-                 if (changedFilter['props']) {
-                 this.subview('oecdDashboard').setProperties(changedFilter['props']);
-                 }
-
-                 this._getDashboardConfiguration(dashboardConfPath, filterValues, displayConfigForFilter);
-
-                 }
-                 }*/
-            }
-
-        },
-
-        _setItemTitle: function (changedFilter){
-            // All is selected
-            if (changedFilter.values.values[0] === s.values.ALL) {
-
-                // Update the TitleView (Remove Item)
-                amplify.publish(Events.TITLE_REMOVE_ITEM, changedFilter.id);
-
-            } else {
-                // Update the TitleView (Add Item)
-                amplify.publish(Events.TITLE_ADD_ITEM, this._createTitleItem(changedFilter));
             }
         },
 
+        _setItemTitle: function (changedFilterItems){
+            for(var idx in changedFilterItems){
+                var changedFilter = changedFilterItems[idx];
+                if (changedFilter.values.values.length > 0) {
+                    // All is selected
+                    if (changedFilter.values.values[0] === s.values.ALL) {
+                        // Update the TitleView (Remove Item)
+                        amplify.publish(Events.TITLE_REMOVE_ITEM, changedFilter.id);
+                    } else {
+                        // Update the TitleView (Add Item)
+                        amplify.publish(Events.TITLE_ADD_ITEM, this._createTitleItem(changedFilter));
+                    }
+                }
+            }
+        },
 
         _processSelection: function (changedFilter, filterValues){
             var dashboardConfPath, displayConfigForFilter, displayConfig = this.filterSelectionsTypeDisplayConfig[changedFilter.id];
 
+            console.log("=============== _processSelection =============");
 
             if(displayConfig) {
                 displayConfigForFilter = this.filterSelectionsTypeDisplayConfig[changedFilter.id];
