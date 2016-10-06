@@ -6,7 +6,7 @@ define(function () {
     return {
 
         chart: {
-            marginTop: 50,
+            marginTop: 60,
             //spacing: [10, 10, 27, 10], // better spacing when chart exports
             spacing: [10, 10, 27, 10], // was [10, 10, 15, 10]
             events: {
