@@ -47,7 +47,7 @@ define([
      * Collapse/Hide the Error section by adding the 'collapse' CSS class
      * @private
      */
-    FilterValidator.prototype.hideErrorSection = function (itemId) {
+    FilterValidator.prototype.hideErrorSection = function () {
         this.$el.find(s.ERRORS).addClass(s.COLLAPSE);
     };
 
