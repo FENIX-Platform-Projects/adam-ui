@@ -233,7 +233,7 @@ define(function () {
             uid: "adam_usd_commitment",
 
             items: [
-     {
+                {
                     id: "tot-oda", //ref [data-item=':id']
                     type: "chart", //chart || map || olap,
                     config: {

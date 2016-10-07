@@ -73,7 +73,7 @@ define(function () {
                 },
                 className: "col-sm-4",
                 cl: {
-                   // codes: ["60010", "60020", "60030", "60040", "60061", "60062", "60063"],
+                    // codes: ["60010", "60020", "60030", "60040", "60061", "60062", "60063"],
                     "uid": "crs_dac",
                     "version": "2016",
                     "level": 2,
@@ -160,7 +160,7 @@ define(function () {
             uid: "adam_usd_commitment",
 
             items: [
-            {
+                {
                     id: "tot-oda", //ref [data-item=':id']
                     type: "chart", //chart || map || olap,
                     config: {
@@ -685,7 +685,7 @@ define(function () {
                         } // (3vi) PERCENTAGE CALCULATION: Add Column
                     ]
                 },
-                 {
+                {
                     id: "tot-oda-subsector", //ref [data-item=':id']
                     type: "chart", //chart || map || olap,
                     config: {
@@ -1113,7 +1113,7 @@ define(function () {
                         } // (3vi) PERCENTAGE CALCULATION: Add Column
                     ]
                 },
-                 {
+                {
                     id: 'top-partners', // TOP DONORS
                     type: 'chart',
                     config: {
@@ -1144,91 +1144,91 @@ define(function () {
 
                     },
 
-                     filterFor: {
-                         "filter_donor": ['recipientcode', 'parentsector_code', 'purposecode', 'year', 'oda']
-                     },
+                    filterFor: {
+                        "filter_donor": ['recipientcode', 'parentsector_code', 'purposecode', 'year', 'oda']
+                    },
 
-                     postProcess: [
-                         {
-                             "name": "filter",
-                             "sid": [
-                                 {
-                                     "uid": "adam_usd_aggregation_table"
-                                 }
-                             ],
-                             "parameters": {
-                                 "rows": {
-                                     "recipientcode": {
-                                         "codes": [
-                                             {
-                                                 "uid": "crs_recipients",
-                                                 "version": "2016",
-                                                 "codes": [
-                                                     "625"
-                                                 ]
-                                             }
-                                         ]
-                                     },
-                                     "year": {
-                                         "time": [
-                                             {
-                                                 "from": "2000",
-                                                 "to": "2014"
-                                             }
-                                         ]
-                                     },
-                                     "oda":{
-                                         "enumeration":[
-                                             "usd_commitment"
-                                         ]
-                                     }
-                                 }
-                             },
-                             "rid":{"uid":"filter_donor"}
-                         },
-                         {
-                             "name": "group",
-                             "parameters": {
-                                 "by": [
-                                     "donorcode"
-                                 ],
-                                 "aggregations": [
-                                     {
-                                         "columns": [
-                                             "value"
-                                         ],
-                                         "rule": "SUM"
-                                     },
-                                     {
-                                         "columns": [
-                                             "unitcode"
-                                         ],
-                                         "rule": "first"
-                                     },
-                                     {
-                                         "columns": [
-                                             "flowcategory_code"
-                                         ],
-                                         "rule": "first"
-                                     }
-                                 ]
-                             }
-                         },
-                         {
-                             "name": "order",
-                             "parameters": {
-                                 "value": "DESC"
-                             }
-                         },
-                         {
-                             "name": "page",
-                             "parameters": {
-                                 "perPage": 10,
-                                 "page": 1
-                             }
-                         }
+                    postProcess: [
+                        {
+                            "name": "filter",
+                            "sid": [
+                                {
+                                    "uid": "adam_usd_aggregation_table"
+                                }
+                            ],
+                            "parameters": {
+                                "rows": {
+                                    "recipientcode": {
+                                        "codes": [
+                                            {
+                                                "uid": "crs_recipients",
+                                                "version": "2016",
+                                                "codes": [
+                                                    "625"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "year": {
+                                        "time": [
+                                            {
+                                                "from": "2000",
+                                                "to": "2014"
+                                            }
+                                        ]
+                                    },
+                                    "oda":{
+                                        "enumeration":[
+                                            "usd_commitment"
+                                        ]
+                                    }
+                                }
+                            },
+                            "rid":{"uid":"filter_donor"}
+                        },
+                        {
+                            "name": "group",
+                            "parameters": {
+                                "by": [
+                                    "donorcode"
+                                ],
+                                "aggregations": [
+                                    {
+                                        "columns": [
+                                            "value"
+                                        ],
+                                        "rule": "SUM"
+                                    },
+                                    {
+                                        "columns": [
+                                            "unitcode"
+                                        ],
+                                        "rule": "first"
+                                    },
+                                    {
+                                        "columns": [
+                                            "flowcategory_code"
+                                        ],
+                                        "rule": "first"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "order",
+                            "parameters": {
+                                "value": "DESC"
+                            }
+                        },
+                        {
+                            "name": "page",
+                            "parameters": {
+                                "perPage": 10,
+                                "page": 1
+                            }
+                        }
 
-                     ]
+                    ]
                 },
                 {
                     id: 'top-partners-others', // TOP DONORS Vs OTHER DONORS
@@ -2417,5 +2417,5 @@ define(function () {
                 }
             ]
         }
-        }
-    });
+    }
+});
