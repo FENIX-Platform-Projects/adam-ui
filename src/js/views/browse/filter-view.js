@@ -212,6 +212,8 @@ define(
                             // The result is that the 'BaseEvents.FILTER_ON_CHANGE' is published twice (1 for the sector and then automatically again for the Sub Sector).
                             // To avoid the double publish, only the last 'on Change' trigger is evaluated i.e. when payload = 'Sub Sector'
 
+                          //  console.log("FILTER VIEW: ON CHANGE id: ", payload.id, " value: ", payload.values.values[0]);
+
                             if ( payload.id === BaseConfig.SELECTORS.SUB_SECTOR) {
                                 // Payload contains subsector and sector information
                                 var payloadsUpdated = self._processSectorSubSectorPayload(payloads, payload);
@@ -223,8 +225,8 @@ define(
 
 
                             var values = self._getSelectedValues();
-                            var yearTo = values[BaseConfig.SELECTORS.YEAR_TO][0];
-                            var yearFrom = values[BaseConfig.SELECTORS.YEAR_FROM][0];
+                           // var yearTo = values[BaseConfig.SELECTORS.YEAR_TO][0];
+                           // var yearFrom = values[BaseConfig.SELECTORS.YEAR_FROM][0];
 
 
                             // Check only for the To payload.
@@ -280,7 +282,7 @@ define(
                         }
                         else {
                             payloads.push(payload);
-                            amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
+                            amplify.publish(BaseEvents.FILTER_ON_CHANGE, payloads);
                         }
                     } else {
                         self.filterValidator.displayErrorSection(valid);
@@ -476,13 +478,16 @@ define(
 
                 var year_from = filter.values[BaseConfig.SELECTORS.YEAR_FROM], year_to = filter.values[BaseConfig.SELECTORS.YEAR_TO];
 
-                //reformat to and from years
-                filter.values.year[0].value = year_from[0];
-                filter.values.year[1].value = year_to[0];
+                if(year_from && year_to){
+                    //reformat to and from years
+                    filter.values.year[0].value = year_from[0];
+                    filter.values.year[1].value = year_to[0];
 
-                filter.labels.year.range = year_from[0] + '-' + year_to[0];
-                filter.labels[BaseConfig.SELECTORS.YEAR_FROM] = [];
-                filter.labels[BaseConfig.SELECTORS.YEAR_TO] = [];
+
+                    filter.labels.year.range = year_from[0] + '-' + year_to[0];
+                    filter.labels[BaseConfig.SELECTORS.YEAR_FROM] = [];
+                    filter.labels[BaseConfig.SELECTORS.YEAR_TO] = [];
+                }
 
                 return filter;
             },
