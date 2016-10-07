@@ -82,6 +82,21 @@ define([
     };
 
 
+    /**
+     *  Process the ODA so that it complies with the expected format
+     * @param filter
+     * @returns {Object} filter
+     */
+    FilterUtils.prototype.removeODAPrefix = function (filter) {
+
+        var oda = filter.values[BaseConfig.SELECTORS.ODA];
+
+        var prefix = 'adam_';
+        oda.forEach(function(v,i){ oda[i] = v.slice(prefix.length); });
+
+        return filter;
+    };
+
 
     FilterUtils.prototype.getPropertiesObject = function (id, value) {
         var additionalProperties = {};
