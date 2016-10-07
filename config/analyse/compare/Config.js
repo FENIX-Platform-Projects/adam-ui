@@ -46,7 +46,7 @@ define([
                                             selector: {
                                                 id: "dropdown",
                                                 source: source,
-                                                default: ["donorcode"],
+                                                default: source.length > 0 ? source[0].value : "",
                                                 config: {
                                                     maxItems: 1
                                                 }
@@ -60,7 +60,13 @@ define([
                             },
                             config: function (model, values) {
 
-                                var order = ["donorcode", "parentsector_code", "recipientcode", "purposecode"];
+                                var order = model.metadata.dsd.columns
+                                    .filter(function (c) {
+                                        return !c.id.endsWith("_EN") && c.subject !== "value" && c.id !== 'year'
+                                    })
+                                    .map(function (c) {
+                                        return c.id;
+                                    });
 
                                 var config = {
                                     aggregationFn: {"value": "sum", "Value": "sum", "VALUE": "sum"},

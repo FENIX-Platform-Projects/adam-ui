@@ -17,7 +17,7 @@ define([
     'fx-filter/start',
     'fx-analysis/start',
     'amplify'
-], function ($, log, _,  Utils, FxUtils, View, template, errorTemplate, i18nLabels, i18nErrors, i18nFilter, E, GC, AC, Filter, Analysis) {
+], function ($, log, _, Utils, FxUtils, View, template, errorTemplate, i18nLabels, i18nErrors, i18nFilter, E, GC, AC, Filter, Analysis) {
 
     'use strict';
 
@@ -98,7 +98,14 @@ define([
                 values = this.filter.getValues(),
                 from = FxUtils.getNestedProperty("values.year-from", values)[0],
                 to = FxUtils.getNestedProperty("values.year-to", values)[0],
-                process = this.filter.getValues("fenix", ["recipientcode", "donorcode", "parentsector_code", "purposecode", "oda"]);
+                process = this.filter.getValues("fenix", ["recipientcode", "donorcode", "parentsector_code", "purposecode", "oda"]),
+                columns = ["year", "value", "unitcode"],
+                groupBy = ["year"];
+
+            addToProcess(values,"donorcode");
+            addToProcess(values, "recipientcode");
+            addToProcess(values, "parentsector_code");
+            addToProcess(values, "purposecode");
 
             config.uid = "adam_usd_aggregation_table";
 
@@ -115,17 +122,13 @@ define([
                 name: "filter",
                 parameters: {
                     rows: process,
-                    columns: ["donorcode", "parentsector_code", "year", "value", "unitcode"]
+                    columns: columns
                 }
             },
                 {
                     "name": "group",
                     "parameters": {
-                        "by": [
-                            "year",
-                            "donorcode",
-                            "parentsector_code"
-                        ],
+                        "by": groupBy,
                         "aggregations": [
                             {
                                 "columns": [
@@ -144,6 +147,17 @@ define([
                 }];
 
             return config;
+
+            function addToProcess(values, dimension) {
+
+                var includeIt = !!FxUtils.getNestedProperty("values." + dimension, values)[0];
+
+                if (includeIt) {
+                    columns.push(dimension);
+                    groupBy.push(dimension)
+
+                }
+            }
 
             function createTitle(values) {
 
