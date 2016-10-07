@@ -76,8 +76,7 @@ define(function () {
                     // codes: ["60010", "60020", "60030", "60040", "60061", "60062", "60063"],
                     "uid": "crs_dac",
                     "version": "2016",
-                    "level": 2,
-                    "levels": 2
+                    "levels": 3
                 },
                 template: {
                     hideSwitch: true,
@@ -2377,13 +2376,58 @@ define(function () {
                     },
 
 
-                    filterFor: ['un_region_code', 'parentsector_code', 'purposecode', 'year', 'oda'],
+                    filterFor: { "filter_region": ['parentsector_code', 'purposecode', 'year', 'oda']},
 
-                    filter: { //FX-filter format
+
+
+                   /* filter: { //FX-filter format
                         un_region_code: ["034"], // Region = 'Southern Asia'
                         year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
-                    },
+                    },*/
                     postProcess: [
+                        {
+                            "name": "filter",
+                            "sid": [
+                                {
+                                    "uid": "adam_usd_commitment"
+                                }
+                            ],
+                            "parameters": {
+                                "rows": {
+                                    "!gaul0": {
+                                        "codes": [
+                                            {
+                                                "uid": "GAUL0",
+                                                "version": "2014",
+                                                "codes": [
+                                                    "NA"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "un_region_code": {
+                                        "codes": [
+                                            {
+                                                "uid": "crs_un_regions_recipients",
+                                                "version": "2016",
+                                                "codes": [
+                                                    "034"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "year": {
+                                        "time": [
+                                            {
+                                                "from": "2000",
+                                                "to": "2014"
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "rid":{"uid":"filter_region"}
+                        },
                         {
                             "name": "group",
                             "parameters": {
@@ -2404,13 +2448,6 @@ define(function () {
                                         "rule": "first"
                                     }
                                 ]
-                            }
-                        },
-                        {
-                            "name": "select",
-                            "parameters": {
-                                "query": "WHERE gaul0<>?",
-                                "queryParameters": [{"value": "NA"}]
                             }
                         }
                     ]//

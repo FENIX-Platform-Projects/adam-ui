@@ -96,8 +96,7 @@ define(function () {
                     // codes: ["60010", "60020", "60030", "60040", "60061", "60062", "60063"],
                     "uid": "crs_dac",
                     "version": "2016",
-                    "level": 2,
-                    "levels": 2
+                    "levels": 3
                 },
                 template: {
                     hideSwitch: true,

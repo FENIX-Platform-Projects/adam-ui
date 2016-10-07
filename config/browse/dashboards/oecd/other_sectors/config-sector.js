@@ -56,8 +56,7 @@ define(function () {
                     codes: ["60010", "60020", "60030", "60040", "60061", "60062", "60063"],
                     "uid": "crs_dac",
                     "version": "2016",
-                    "level": 2,
-                    "levels": 2
+                    "levels": 3
                 },
                 template: {
                     hideSwitch: true,
@@ -1901,6 +1900,17 @@ define(function () {
                                     "unitcode"
                                 ],
                                 "rows": {
+                                    "!recipientcode": {
+                                        "codes": [
+                                            {
+                                                "uid": "crs_recipients", // skipping regional recipient countries (e.g. "Africa, regional"; "North of Sahara, regional")
+                                                "version": "2016",
+                                                "codes": [
+                                                    "298", "498", "798", "89", "589", "889", "189", "289","389", "380", "489", "789","689", "619", "679"
+                                                ]
+                                            }
+                                        ]
+                                    },
                                     "oda": {
                                         "enumeration": [
                                             "usd_commitment"
@@ -1951,7 +1961,7 @@ define(function () {
                                 ]
                             }
                         },
-                        {
+                       /* {
                             "name": "select",
                             "parameters": {
                                 "query": "WHERE recipientcode NOT IN (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", // skipping regional recipient countries (e.g. "Africa, regional"; "North of Sahara, regional")
@@ -1962,7 +1972,7 @@ define(function () {
                                     {"value": '689'}, {"value": '619'}, {"value": '679'}
                                 ]
                             }
-                        },
+                        },*/
                         {
                             "name": "order",
                             "parameters": {
@@ -2556,13 +2566,58 @@ define(function () {
                         }
                     },
 
-                    filterFor: ['parentsector_code', 'purposecode', 'year', 'oda'],
+                    filterFor: { "filter_region": ['parentsector_code', 'purposecode', 'year', 'oda']},
 
-                    filter: { //FX-filter format
-                        parentsector_code: ["600"],
-                        year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
-                    },
+                    /*  filterFor: ['parentsector_code', 'purposecode', 'year', 'oda'],
+
+                      filter: { //FX-filter format
+                          parentsector_code: ["600"],
+                          year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
+                      },*/
                     postProcess: [
+                        {
+                            "name": "filter",
+                            "sid": [
+                                {
+                                    "uid": "adam_usd_commitment"
+                                }
+                            ],
+                            "parameters": {
+                                "rows": {
+                                    "!gaul0": {
+                                        "codes": [
+                                            {
+                                                "uid": "GAUL0",
+                                                "version": "2014",
+                                                "codes": [
+                                                    "NA"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "parentsector_code": {
+                                        "codes": [
+                                            {
+                                                "uid": "crs_dac",
+                                                "version": "2016",
+                                                "codes": [
+                                                    "600"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "year": {
+                                        "time": [
+                                            {
+                                                "from": "2000",
+                                                "to": "2014"
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "rid":{"uid":"filter_region"}
+                        },
                         {
                             "name": "group",
                             "parameters": {
@@ -2584,14 +2639,14 @@ define(function () {
                                     }
                                 ]
                             }
-                        },
+                        }/*,
                         {
                             "name": "select",
                             "parameters": {
                                 "query": "WHERE gaul0<>?",
                                 "queryParameters": [{"value": "NA"}]
                             }
-                        }
+                        }*/
                     ]
                 }
             ]

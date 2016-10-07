@@ -1916,6 +1916,17 @@ define(function () {
                                     "unitcode"
                                 ],
                                 "rows": {
+                                    "!recipientcode": {
+                                        "codes": [
+                                            {
+                                                "uid": "crs_recipients", // skipping regional recipient countries (e.g. "Africa, regional"; "North of Sahara, regional")
+                                                "version": "2016",
+                                                "codes": [
+                                                    "298", "498", "798", "89", "589", "889", "189", "289","389", "380", "489", "789","689", "619", "679"
+                                                ]
+                                            }
+                                        ]
+                                    },
                                     "oda": {
                                         "enumeration": [
                                             "usd_commitment"
@@ -1960,7 +1971,7 @@ define(function () {
                                 ]
                             }
                         },
-                        {
+                       /** {
                             "name": "select",
                             "parameters": {
                                 "query": "WHERE recipientcode NOT IN (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", // skipping regional recipient countries (e.g. "Africa, regional"; "North of Sahara, regional")
@@ -1971,7 +1982,7 @@ define(function () {
                                     {"value": '689'}, {"value": '619'}, {"value": '679'}
                                 ]
                             }
-                        },
+                        },**/
                         {
                             "name": "order",
                             "parameters": {
@@ -2662,9 +2673,11 @@ define(function () {
                         }
                     },
 
-                    filterFor: ['un_region_code', 'purposecode', 'year', 'oda'],
+                    //filterFor: ['un_region_code', 'purposecode', 'year', 'oda'],
 
-                    filter: { //FX-filter format
+                    filterFor: { "filter_region": ['parentsector_code', 'purposecode', 'year', 'oda']},
+
+                    /**   filter: { //FX-filter format
                         purposecode: ["12240",
                             "14030",
                             "14031",
@@ -2719,8 +2732,102 @@ define(function () {
                             "74010"
                         ],
                         year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
-                    },
+                    },**/
                     postProcess: [
+                        {
+                            "name": "filter",
+                            "sid": [
+                                {
+                                    "uid": "adam_usd_commitment"
+                                }
+                            ],
+                            "parameters": {
+                                "rows": {
+                                    "!gaul0": {
+                                        "codes": [
+                                            {
+                                                "uid": "GAUL0",
+                                                "version": "2014",
+                                                "codes": [
+                                                    "NA"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "purposecode": { // FAO Related purposecodes
+                                        "codes": [
+                                            {
+                                                "uid": "crs_purposes",
+                                                "version": "2016",
+                                                "codes": [
+                                                    "12240",
+                                                    "14030",
+                                                    "14031",
+                                                    "15170",
+                                                    "16062",
+                                                    "23070",
+                                                    "31110",
+                                                    "31120",
+                                                    "31130",
+                                                    "31140",
+                                                    "31150",
+                                                    "31161",
+                                                    "31162",
+                                                    "31163",
+                                                    "31164",
+                                                    "31165",
+                                                    "31166",
+                                                    "31181",
+                                                    "31182",
+                                                    "31191",
+                                                    "31192",
+                                                    "31193",
+                                                    "31194",
+                                                    "31195",
+                                                    "31210",
+                                                    "31220",
+                                                    "31261",
+                                                    "31281",
+                                                    "31282",
+                                                    "31291",
+                                                    "31310",
+                                                    "31320",
+                                                    "31381",
+                                                    "31382",
+                                                    "31391",
+                                                    "32161",
+                                                    "32162",
+                                                    "32163",
+                                                    "32165",
+                                                    "32267",
+                                                    "41010",
+                                                    "41020",
+                                                    "41030",
+                                                    "41040",
+                                                    "41050",
+                                                    "41081",
+                                                    "41082",
+                                                    "43040",
+                                                    "43050",
+                                                    "52010",
+                                                    "72040",
+                                                    "74010"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "year": {
+                                        "time": [
+                                            {
+                                                "from": "2000",
+                                                "to": "2014"
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "rid":{"uid":"filter_region"}
+                        },
                         {
                             "name": "group",
                             "parameters": {
@@ -2742,14 +2849,14 @@ define(function () {
                                     }
                                 ]
                             }
-                        },
+                        }/*,
                         {
                             "name": "select",
                             "parameters": {
                                 "query": "WHERE gaul0<>?",
                                 "queryParameters": [{"value": "NA"}]
                             }
-                        }
+                        }*/
                     ]
                 }
             ]
