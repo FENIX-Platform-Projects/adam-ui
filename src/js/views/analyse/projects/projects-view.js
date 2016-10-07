@@ -12,13 +12,15 @@ define([
     'i18n!nls/analyse',
     'config/Events',
     'config/Config',
+    'config/analyse/projects/config-projects',
     'config/analyse/projects/Events',
     'config/analyse/projects/config-filter',
-    'config/analyse/projects/config-table',
+    'config/analyse/projects/config-table-other-sectors',
+    'config/analyse/projects/config-table-fao-sectors',
     'lib/utils',
     'amplify',
     'underscore'
-], function ($, $UI, View, TitleSubView, FilterSubView, DashboardTableSubView, DashboardModel, TableModel, template, i18nLabels, Events, GeneralConfig, BaseProjectsEvents, BaseFilterConfig, TableConfig, Utils, amplify, _) {
+], function ($, $UI, View, TitleSubView, FilterSubView, DashboardTableSubView, DashboardModel, TableModel, template, i18nLabels, Events, GeneralConfig, BaseProjectsConfig, BaseProjectsEvents, BaseFilterConfig, TableConfigOtherSectors, TableConfigFAOSectors, Utils, amplify, _) {
 
     'use strict';
 
@@ -33,9 +35,6 @@ define([
         },
         values: {
             ALL: 'all'
-        },
-        paths: {
-            TABLE_CONFIG: 'config/analyse/projects/config-table-'
         }
     };
 
@@ -107,13 +106,25 @@ define([
                 return;
             }
 
-            // Table Dashboard Configuration
-            if (!TableConfig || !TableConfig.dashboard) {
-                alert("Impossible to find TABLE dashboard configuration" );
+            // Table Dashboard Configuration for Other Sectors
+            if (!TableConfigOtherSectors || !TableConfigOtherSectors.dashboard) {
+                alert("Impossible to find Other Sectors TABLE dashboard configuration" );
                 return;
             }
 
-            this.tableConfig = TableConfig;
+            // Table Dashboard Configuration for FAO Sectors
+            if (!TableConfigFAOSectors || !TableConfigFAOSectors.dashboard) {
+                alert("Impossible to find FAO Sectors TABLE dashboard configuration" );
+                return;
+            }
+
+
+            //Set default dashboard configuration
+            if (TableConfigOtherSectors.id === BaseProjectsConfig.dashboard.DEFAULT_CONFIG) {
+                this.tableConfig = TableConfigOtherSectors;
+            } else if (TableConfigFAOSectors.id === BaseProjectsConfig.dashboard.DEFAULT_CONFIG) {
+                this.tableConfig = TableConfigFAOSectors;
+            }
 
             // Set TITLE Sub View
             var titleSubView = new TitleSubView({
@@ -214,17 +225,49 @@ define([
          * @private
          */
 
-        _updateView: function (changedFilter, allFilterValues) {
+        _updateView: function (changedFilterItems, allFilterValues) {
 
             var filterValues = allFilterValues;
 
             // console.log("================= filter values =============== ");
-            // console.log(filterValues);
+            // console.log(" filter values: ", filterValues, " changedfilter values: ", changedFilter);
 
-            console.log("================= selectedfilter =============== ");
-            console.log(changedFilter);
+            if (changedFilterItems) {
 
-            if (changedFilter) {
+                if($.isArray(changedFilterItems)){
+
+                    this._setItemTitle(changedFilterItems);
+
+                    var dashboardConfig = this.subview('tableDashboard').getDashboardConfig();
+                    var config = this.tableConfig;
+
+                    // check filter values contains 9999
+                    for(var idx in changedFilterItems){
+                        var changedFilter = changedFilterItems[idx];
+                        if (changedFilter.values.values.length > 0) {
+                            if (changedFilter.id === GeneralConfig.SELECTORS.SECTOR) {
+                               if(changedFilter.values.values[0] === '9999'){
+                                   console.log("============== FAO ", config);
+                                   config = TableConfigFAOSectors;
+                                   dashboardConfig = TableConfigFAOSectors.dashboard;
+                               } else {
+                                   console.log("============== OTHER ", config);
+                                   config = TableConfigOtherSectors;
+                                   dashboardConfig = TableConfigOtherSectors.dashboard;
+                               }
+                               break;
+                            }
+                        }
+                    }
+
+
+                    console.log("============== CONFIG ", dashboardConfig.items[0]);
+
+                    this._getDashboardConfiguration(filterValues, dashboardConfig);
+                }
+            }
+
+          /*  if (changedFilter) {
 
                 // If the changed filter has a value
                 if (changedFilter.values.values.length > 0) {
@@ -244,10 +287,25 @@ define([
                     this._getDashboardConfiguration(filterValues);
                 }
 
-            }
+            }*/
 
         },
 
+        _setItemTitle: function (changedFilterItems){
+            for(var idx in changedFilterItems){
+                var changedFilter = changedFilterItems[idx];
+                if (changedFilter.values.values.length > 0) {
+                    // All is selected
+                    if (changedFilter.values.values[0] === s.values.ALL) {
+                        // Update the TitleView (Remove Item)
+                        amplify.publish(Events.TITLE_REMOVE_ITEM, changedFilter.id);
+                    } else {
+                        // Update the TitleView (Add Item)
+                        amplify.publish(Events.TITLE_ADD_ITEM, this._createTitleItem(changedFilter));
+                    }
+                }
+            }
+        },
 
         /**
          * Get the appropriate Dashboard JS configuration file via requireJS, if the topic has changed
@@ -255,11 +313,12 @@ define([
          * @param filterValues
          * @private
          */
-        _getDashboardConfiguration: function (filterValues) {
+        _getDashboardConfiguration: function (filterValues, tableConfig) {
             var self = this;
 
             // Rebuild dashboards with existing configurations
-            self._rebuildDashboards(filterValues, self.subview('tableDashboard').getDashboardConfig());
+            //self._rebuildDashboards(filterValues, self.subview('tableDashboard').getDashboardConfig());
+            self._rebuildDashboards(filterValues, tableConfig);
         },
 
         /**
