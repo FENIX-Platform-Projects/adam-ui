@@ -349,12 +349,11 @@ define(
 
                 updatedValuesWithYear = this.filterUtils.processTimeRange(extendedValues);
 
-                updatedValuesWithODA = this.filterUtils.processODA(updatedValuesWithYear);
+                updatedValuesWithODA = this.filterUtils.removeODAPrefix(updatedValuesWithYear);
 
                 return updatedValuesWithODA;
 
             },
-
 
 
             /**
@@ -390,19 +389,6 @@ define(
 
 
             /**
-             *  Process and get the filter values relevant to the OECD/ODA Dashboard
-             * @returns {Object} values
-             */
-
-            getOECDValues: function () {
-
-                var values = this._getSelectedValues();
-
-                return this._updateValues(values);
-            },
-
-
-            /**
              * Get the selected filter values
              * @returns {Object} values
              * @private
@@ -421,19 +407,8 @@ define(
                 return this._getFilterValues().labels;
             },
 
-            /**
-             *
-             * @param values
-             * @returns {*}
-             * @private
-             */
-            _updateValues: function (values) {
-                return values;
-            },
-
 
             _unbindEventListeners: function () {
-
             },
 
             dispose: function () {
