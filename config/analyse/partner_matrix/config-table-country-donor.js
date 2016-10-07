@@ -8,7 +8,7 @@ define(function () {
             dashboard: {
 
                 //default dataset id
-                uid: "adam_usd_commitment",
+                uid: "adam_resource_matrix_oda",
 
                 items: [
                     {

@@ -9,7 +9,7 @@ define(function () {
 
         dashboard: {
             //default dataset id
-            uid: "adam_usd_commitment",
+            uid: "adam_resource_matrix_oda",
 
             items: [
               {
@@ -896,7 +896,7 @@ define(function () {
                       }
                   ]*/
                 }, // FAO SECTORS and TOTAL ODA by TOP 10 RESOURCE PARTNERS
-               {
+           /*    {
                     id: 'top-channel-categories',
                     type: 'chart',
                     config: {
@@ -1009,7 +1009,7 @@ define(function () {
                                 "page": 1
                             }
                         }]
-                }, // TOP CHANNELS
+                }, // TOP CHANNELS*/
                 {
                     id: "top-partners", //ref [data-item=':id']
                     type: "chart", //chart || map || olap,
@@ -1044,8 +1044,8 @@ define(function () {
                     },
 
                     filterFor: { //FX-filter format
-                        filter_top_5: ["year", "oda", "recipientcode"],
-                        filter_2: ["year", "oda", "recipientcode"]
+                        filter_top_partners: ['year', 'oda', 'recipientcode'],
+                        filter_partners: ['year', 'oda', 'recipientcode']
                     },
                     postProcess: [
                         {
@@ -1088,7 +1088,7 @@ define(function () {
 
                                 }
                             },
-                            "rid":{"uid":"filter_top_5"}
+                            "rid":{"uid":"filter_top_partners"}
                         },
                         {
                             "name": "group",
@@ -1173,7 +1173,7 @@ define(function () {
 
                                 }
                             },
-                            "rid":{"uid":"filter_2"}
+                            "rid":{"uid":"filter_partners"}
                         }
                     ]
                 }, // TOTAL ODA from TOP 5 RESOURCE PARTNERS
@@ -1212,8 +1212,8 @@ define(function () {
                     },
 
                     filterFor: { //FX-filter format
-                        filter_top_5: ["year", "oda", "recipientcode"],
-                        filter_2: ["year", "oda", "recipientcode"]
+                        filter_top_5: ['year', 'oda', 'recipientcode'],
+                        filter_2: ['year', 'oda', 'recipientcode']
                     },
                     postProcess: [
                         {
