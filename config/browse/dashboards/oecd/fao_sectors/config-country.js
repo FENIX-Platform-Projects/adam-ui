@@ -536,7 +536,12 @@ define(function () {
                                             "usd_commitment"
                                         ]
                                     },
-                                    "purposecode": { // FAO Related purposecodes
+                                    "fao_sector": {
+                                        "enumeration": [
+                                            "1"
+                                        ]
+                                    },
+                                    /*"purposecode": { // FAO Related purposecodes
                                         "codes": [
                                             {
                                                 "uid": "crs_purposes",
@@ -597,7 +602,7 @@ define(function () {
                                                 ]
                                             }
                                         ]
-                                    },
+                                    },*/
                                     "recipientcode": {
                                         "codes": [
                                             {
@@ -913,7 +918,12 @@ define(function () {
                                             }
                                         ]
                                     },
-                                    "purposecode": { // FAO Related purposecodes
+                                    "fao_sector": {
+                                        "enumeration": [
+                                            "1"
+                                        ]
+                                    },
+                                   /* "purposecode": { // FAO Related purposecodes
                                         "codes": [
                                             {
                                                 "uid": "crs_purposes",
@@ -974,7 +984,7 @@ define(function () {
                                                 ]
                                             }
                                         ]
-                                    },
+                                    },*/
                                     "year": {
                                         "time": [
                                             {
@@ -1299,7 +1309,12 @@ define(function () {
                             ],
                             "parameters": {
                                 "rows": {
-                                    "purposecode": {
+                                    "fao_sector": {
+                                        "enumeration": [
+                                            "1"
+                                        ]
+                                    },
+                                   /* "purposecode": {
                                         "codes": [
                                             {
                                                 "uid": "crs_purposes",
@@ -1360,7 +1375,7 @@ define(function () {
                                                 ]
                                             }
                                         ]
-                                    },
+                                    },*/
                                     "recipientcode": {
                                         "codes": [
                                             {
@@ -1574,7 +1589,12 @@ define(function () {
                                             }
                                         ]
                                     },
-                                    "purposecode": { // FAO Related purposecodes
+                                    "fao_sector": {
+                                        "enumeration": [
+                                            "1"
+                                        ]
+                                    },
+                                   /* "purposecode": { // FAO Related purposecodes
                                         "codes": [
                                             {
                                                 "uid": "crs_purposes",
@@ -1635,7 +1655,7 @@ define(function () {
                                                 ]
                                             }
                                         ]
-                                    },
+                                    },*/
                                     "year": {
                                         "time": [
                                             {
@@ -2587,7 +2607,12 @@ define(function () {
                                             "usd_commitment"
                                         ]
                                     },
-                                    "purposecode": {
+                                    "fao_sector": {
+                                        "enumeration": [
+                                            "1"
+                                        ]
+                                    },
+                                  /*  "purposecode": {
                                         "codes": [
                                             {
                                                 "uid": "crs_purposes",
@@ -2648,7 +2673,7 @@ define(function () {
                                                 ]
                                             }
                                         ]
-                                    },
+                                    },*/
                                     "year": {
                                         "time": [
                                             {
