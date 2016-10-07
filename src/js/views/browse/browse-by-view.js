@@ -332,8 +332,8 @@ define([
 
             var filterValues = allFilterValues;
 
-            // console.log("================= filter values =============== ");
-            // console.log(" filter values: ", filterValues, " changedfilter values: ", changedFilter);
+            // console.log("================= _updateView values =============== ");
+             //console.log(" filter values: ", filterValues, " changedfilter values: ", changedFilterItems);
 
             if (changedFilterItems) {
 
@@ -372,7 +372,7 @@ define([
         _processSelection: function (changedFilter, filterValues){
             var dashboardConfPath, displayConfigForFilter, displayConfig = this.filterSelectionsTypeDisplayConfig[changedFilter.id];
 
-            console.log("=============== _processSelection =============");
+           // console.log("=============== _processSelection =============");
 
             if(displayConfig) {
                 displayConfigForFilter = this.filterSelectionsTypeDisplayConfig[changedFilter.id];

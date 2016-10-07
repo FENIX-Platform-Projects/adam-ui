@@ -55,8 +55,7 @@ define(function () {
                 cl: {
                     "uid": "crs_dac",
                     "version": "2016",
-                    "level": 2,
-                    "levels": 2
+                    "levels": 3
                 },
                 template: {
                     hideSwitch: true,
@@ -137,7 +136,7 @@ define(function () {
             uid: "adam_usd_commitment",
 
             items: [
-                {
+            {
                     id: "tot-oda", //ref [data-item=':id']
                     type: "chart", //chart || map || olap,
                     config: {
@@ -1070,12 +1069,46 @@ define(function () {
                         }
                     },
 
-                    filterFor: ['year', 'oda'],
+                   // filterFor: ['year', 'oda'],
 
-                    filter: { //FX-filter format
+                    filterFor: { "filter_region": ['year', 'oda']},
+
+                   /* filter: { //FX-filter format
                         year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
-                    },
+                    },*/
                     postProcess: [
+                        {
+                            "name": "filter",
+                            "sid": [
+                                {
+                                    "uid": "adam_usd_commitment"
+                                }
+                            ],
+                            "parameters": {
+                                "rows": {
+                                    "!gaul0": {
+                                        "codes": [
+                                            {
+                                                "uid": "GAUL0",
+                                                "version": "2014",
+                                                "codes": [
+                                                    "NA"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "year": {
+                                        "time": [
+                                            {
+                                                "from": "2000",
+                                                "to": "2014"
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "rid":{"uid":"filter_region"}
+                        },
                         {
                             "name": "group",
                             "parameters": {
@@ -1097,20 +1130,17 @@ define(function () {
                                     }
                                 ]
                             }
-                        },
+                        }/*,
                         {
                             "name": "select",
                             "parameters": {
                                 "query": "WHERE gaul0<>?",
                                 "queryParameters": [{"value": "NA"}]
                             }
-                        }
+                        }*/
                     ]
                 }
             ]
         }
     }
-
-
-
 });
