@@ -5,8 +5,6 @@ define({
     "text" : "Change me in 118n/root/projects.js",
     "filter_btn" : "Update",
     "compare": "Compare Data",
-    "projects": "Project Analysis ",
-    "priorities": "Priority Analysis",
-    "donor_matrix": "Donor Matrix",
-    "agencies": "Implementing Agencies"
+    "projects": "Project Analysis",
+    "current_prices": "OECD CRS ODA Current Prices"
 });

@@ -35,11 +35,11 @@ define(function () {
                                 /*  {id: "recipientcode_EN", width: 150},
                                  {id: "donorcode_EN", width: 150},*/
                                 {id: "projecttitle", width: 350},
-                                {id: "year", width: 70,  align: 'center'},
+                                {id: "year", width: 70,  align: 'center', sortOrder: 'desc'},
                                 {id: "parentsector_code_EN", width: 150},
                                 {id: "purposecode_EN", width: 150},
-                                {id: "oda", header: "USD Commitment", width: 100,  align: 'center'},
-                                {id: "oda", header: "USD Disbursement", width: 100,  align: 'center'}
+                                {id: "oda", header: "USD Commitment", width: 110,  align: 'center'},
+                                {id: "oda", header: "USD Disbursement", width: 110,  align: 'center'}
                             ]
                         }
                     },
