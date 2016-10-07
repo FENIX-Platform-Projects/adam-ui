@@ -9,11 +9,6 @@ define(function () {
                 selector: {
                     id: "dropdown",
                     default: ["625"], // afghanistan,
-                    emptyOption : {
-                        enabled: true,
-                        text: "All",
-                        value: "all"
-                    },
                     config: { //Selectize configuration
                         maxItems: 1,
                         // placeholder: "All",
@@ -36,12 +31,7 @@ define(function () {
             donorcode: {
                 selector: {
                     id: "dropdown",
-                    default: ["all"], // All,
-                    emptyOption : {
-                        enabled: true,
-                        text: "All",
-                        value: "all"
-                    },
+                    default: ["1"], // Austria,
                     config: { //Selectize configuration
                         maxItems: 1,
                         // placeholder: "All",
@@ -92,6 +82,7 @@ define(function () {
             purposecode: {
                 selector: {
                     id: "dropdown",
+                    default: ["all"],
                     emptyOption : {
                         enabled: true,
                         text: "All",

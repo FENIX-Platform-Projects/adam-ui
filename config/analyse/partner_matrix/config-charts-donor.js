@@ -9,7 +9,7 @@ define(function () {
         dashboard: {
 
             //default dataset id
-            uid: "adam_usd_commitment",
+            uid: "adam_resource_matrix_oda",
 
             items: [
                 {
@@ -473,7 +473,7 @@ define(function () {
                       }
                   ]
                 }, // FAO SECTORS and TOTAL ODA by TOP 10 RESOURCE PARTNERS
-                {
+            /*    {
                     id: 'top-channel-categories',
                     type: 'chart',
                     config: {
@@ -586,7 +586,7 @@ define(function () {
                                 "page": 1
                             }
                         }]
-                }, // TOP CHANNELS
+                }, // TOP CHANNELS*/
                 {
                     id: "top-recipients", //ref [data-item=':id']
                     type: "chart", //chart || map || olap,

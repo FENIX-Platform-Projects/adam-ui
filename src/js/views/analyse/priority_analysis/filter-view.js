@@ -4,21 +4,21 @@ define(
         'underscore',
         'views/base/view',
         'text!templates/analyse/priority_analysis/filters.hbs',
-        'i18n!nls/filter',
         'fx-filter/start',
-        'fx-common/utils',
-        'lib/utils',
+        'views/common/filter-validator',
+        'lib/filter-utils',
         'config/Config',
         'config/analyse/priority_analysis/config-priority-analysis',
         'config/analyse/partner_matrix/Events',
         'amplify'
-    ], function ($, _, View, template, i18nLabels, Filter, FxUtils, Utils, BaseConfig, PriorityAnalysisConfig, BaseEvents, amplify) {
+    ], function ($, _, View, template, Filter, FilterValidator, FilterUtils, BaseConfig, PriorityAnalysisConfig, BaseEvents, amplify) {
 
         'use strict';
 
         var s = {
             css_classes: {
-                FILTER_ANALYSE_PRIORITY_ANALYSIS: "#filter-analyse-priority-analysis"
+                FILTER_ANALYSE_PRIORITY_ANALYSIS: "#filter-analyse-priority-analysis",
+                FILTER_ERRORS_HOLDER: "#filter-analyse-priority-errors-holder"
             },
             exclusions: {
                 ALL: 'all'
@@ -53,6 +53,8 @@ define(
             initialize: function (params) {
                 this.config = params.config;
 
+                this.filterUtils = new FilterUtils();
+
                 View.prototype.initialize.call(this, arguments);
             },
 
@@ -74,8 +76,7 @@ define(
             _buildFilters: function () {
                 var self = this;
 
-
-                var filterConfig = this._getUpdatedFilterConfig();
+                var filterConfig = this.filterUtils.getUpdatedFilterConfig(this.config);
 
                 if (!_.isEmpty(filterConfig)) {
                     this.$el.find(s.css_classes.FILTER_ANALYSE_PRIORITY_ANALYSIS).show();
@@ -99,6 +100,11 @@ define(
                     this.filter.dispose();
                 }
 
+                // instantiate new filter validator
+                this.filterValidator = new FilterValidator({
+                    el: this.$el.find(s.css_classes.FILTER_ERRORS_HOLDER)
+                });
+
                 // instantiate new filter
                 this.filter = new Filter({
                     el: this.$el.find(s.css_classes.FILTER_ANALYSE_PRIORITY_ANALYSIS),
@@ -111,8 +117,6 @@ define(
                         }
                     }
                 });
-
-
 
                 // Set filter event handlers
                 // Filter on Ready: Set some additional properties based on the current selections then publish Filter Ready Event
@@ -135,15 +139,15 @@ define(
                                 // --> All partners + All recipients
                                 selections = [];
                                 topic = PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED;
-                                selections.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED, PriorityAnalysisConfig.selections.ALL));
-                                selections.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, PriorityAnalysisConfig.selections.ALL));
+                                selections.push(self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED, PriorityAnalysisConfig.selections.ALL));
+                                selections.push(self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, PriorityAnalysisConfig.selections.ALL));
                             }
                             // FROM FILTER: 1 resource partner selected
                             else {
                                 // --> 1 partner + All recipients
                                 topic = PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED;
-                                selections.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED, self._getLabel(BaseConfig.SELECTORS.RESOURCE_PARTNER_SELECTED)));
-                                selections.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, PriorityAnalysisConfig.selections.ALL));
+                                selections.push(self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED, self._getLabel(BaseConfig.SELECTORS.RESOURCE_PARTNER_SELECTED)));
+                                selections.push(self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, PriorityAnalysisConfig.selections.ALL));
                             }
                         }
                         // FROM FILTER: 1 Recipient Country selected
@@ -154,86 +158,36 @@ define(
                             if (partnerValue === 'all') {
                                 // --> All partner + 1 recipient
                                 topic = PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED;
-                                selections.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED, PriorityAnalysisConfig.selections.ALL));
-                                selections.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, self._getLabel(BaseConfig.SELECTORS.RECIPIENT_COUNTRY)));
+                                selections.push(self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED, PriorityAnalysisConfig.selections.ALL));
+                                selections.push(self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, self._getLabel(BaseConfig.SELECTORS.RECIPIENT_COUNTRY)));
                             }
                             // 1 resource partners selected
                             else {
                                 // --> 1 partner + 1 recipient
                                 topic = PriorityAnalysisConfig.topic.RECIPIENT_AND_PARTNER_SELECTED;
-                                selections.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED, self._getLabel(BaseConfig.SELECTORS.RESOURCE_PARTNER)));
-                                selections.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, self._getLabel(BaseConfig.SELECTORS.RECIPIENT_COUNTRY)));
+                                selections.push(self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED, self._getLabel(BaseConfig.SELECTORS.RESOURCE_PARTNER)));
+                                selections.push(self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, self._getLabel(BaseConfig.SELECTORS.RECIPIENT_COUNTRY)));
                             }
                         }
 
-                        topicProps = self._getPropertiesObject(PriorityAnalysisConfig.topic.SELECTED_TOPIC, topic);
+                        topicProps = self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.SELECTED_TOPIC, topic);
                         properties = [topicProps, {selections: selections}];
 
                         amplify.publish(BaseEvents.FILTER_ON_READY, $.extend(self._getFilterValues(), {"props": properties}));
                     }
                     // For ODA set its value to the props object
                     else if (self._getFilterValues().values[BaseConfig.SELECTORS.ODA]) {
-                        var additionalProperties = self._getPropertiesObject(BaseConfig.SELECTORS.ODA, self._getFilterValues().values[BaseConfig.SELECTORS.ODA].enumeration[0]);
+                        var additionalProperties = self.filterUtils.getPropertiesObject(BaseConfig.SELECTORS.ODA, self._getFilterValues().values[BaseConfig.SELECTORS.ODA].enumeration[0]);
                         amplify.publish(BaseEvents.FILTER_ON_READY, $.extend(self._getFilterValues(), {"props": additionalProperties}));
                     }
 
-
-                   /* //===================================================================================
-
-                    // For the Recipient Country, set the topic as RECIPIENT_COUNTRY_SELECTED
-                    if (self._getFilterValues().values[BaseConfig.SELECTORS.RECIPIENT_COUNTRY]) {
-                        var selected = [];
-                        selected.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, self._getLabel(BaseConfig.SELECTORS.RECIPIENT_COUNTRY)));
-                        var selectedTopic = self._getPropertiesObject(PriorityAnalysisConfig.topic.SELECTED_TOPIC, PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED);
-
-                        // If both the Recipient Country and Resource Partner selected, set the topic as RECIPIENT_AND_PARTNER_SELECTED
-                        if (self._getFilterValues().values[BaseConfig.SELECTORS.RESOURCE_PARTNER]) {
-                            selectedTopic = self._getPropertiesObject(PriorityAnalysisConfig.topic.SELECTED_TOPIC, PriorityAnalysisConfig.topic.RECIPIENT_AND_PARTNER_SELECTED);
-                            selected.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED, self._getLabel(BaseConfig.SELECTORS.RESOURCE_PARTNER)));
-                        }
-
-                        var additionalProps = [selectedTopic, {selections: selected}];
-                        amplify.publish(BaseEvents.FILTER_ON_READY, $.extend(self._getFilterValues(), {"props": additionalProps}));
-
-                    }
-                    // If Resource Partner selected, set the topic as RESOURCE_PARTNER_SELECTED
-                    else if (self._getFilterValues().values[BaseConfig.SELECTORS.RESOURCE_PARTNER]) {
-
-                        var selected = [];
-                        selected.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED, self._getLabel(BaseConfig.SELECTORS.RESOURCE_PARTNER)));
-                        var selectedTopic = self._getPropertiesObject(PriorityAnalysisConfig.topic.SELECTED_TOPIC, PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED);
-
-                        // If both the Recipient Country and Resource Partner selected, set the topic as RECIPIENT_AND_PARTNER_SELECTED
-                        if (self._getFilterValues().values[BaseConfig.SELECTORS.RECIPIENT_COUNTRY]) {
-                            selectedTopic = self._getPropertiesObject(PriorityAnalysisConfig.topic.SELECTED_TOPIC, PriorityAnalysisConfig.topic.RECIPIENT_AND_PARTNER_SELECTED);
-                            selected.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, self._getLabel(BaseConfig.SELECTORS.RECIPIENT_COUNTRY)));
-
-                        }
-
-                        var additionalProps = [selectedTopic, {selections: selected}];
-
-                        amplify.publish(BaseEvents.FILTER_ON_READY, $.extend(self._getFilterValues(), {"props": additionalProperties}));
-
-                    }
-                    // For ODA set its value to the props object
-                    else if (self._getFilterValues().values[BaseConfig.SELECTORS.ODA]) {
-                        var additionalProperties = self._getPropertiesObject(BaseConfig.SELECTORS.ODA, self._getFilterValues().values[BaseConfig.SELECTORS.ODA].enumeration[0]);
-
-                        amplify.publish(BaseEvents.FILTER_ON_READY, $.extend(self._getFilterValues(), {"props": additionalProperties}));
-                    }
-                    else {
-                       amplify.publish(BaseEvents.FILTER_ON_READY, self._getFilterValues());
-                    }
-*/
                 });
 
 
 
                 this.filter.on('click', function (payload) {
 
-                    var filterItem = self.$el.find("[data-selector="+payload.id+"]")[0];
-                    var selectize = $(filterItem).find("[data-role=dropdown]")[0].selectize;
-                    selectize.clear(true);
+                   // self.filterUtils.clearSelectize(self.$el, payload.id);
 
                 });
 
@@ -244,178 +198,174 @@ define(
                     //console.log("FILTER ALL ==========");
                     //console.log(payload.values.values);
 
-                    var topic, selections = [], topicProps, properties;
+                    // validate filter
+                    var valid = self.filterValidator.validateValues(self._getSelectedValues());
 
-                    var fc = self._getFilterConfigById(payload.id);
-                    var dependencies = [];
-                    if (fc && fc.dependencies) {
-                        for (var id in fc.dependencies) {
-                            dependencies.push(id);
-                        }
+                    if (valid === true) {
+                        self.filterValidator.hideErrorSection();
 
-                        payload["dependencies"] = dependencies;
-                    }
+                        var topic, selections = [], topicProps, properties;
 
-                    if (payload.id === BaseConfig.SELECTORS.YEAR_TO || payload.id === BaseConfig.SELECTORS.YEAR_FROM) {
-                        var newRange = self._getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedLabels());
-                        if (newRange) {
-                            payload.id = BaseConfig.SELECTORS.YEAR;
-                            payload.values.labels = self._getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedLabels());
-                            payload.values.values = self._getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedValues());
-                        }
+                        var fc = self.filterUtils.getFilterConfigById(self.config, payload.id);
 
-
-                        amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
-                    }
-                    else if (payload.id === BaseConfig.SELECTORS.ODA) {
-                        var additionalProperties = self._getPropertiesObject(BaseConfig.SELECTORS.ODA, payload.values.values[0]);
-
-                        amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": additionalProperties}));
-                    }
-                    else if (payload.id === BaseConfig.SELECTORS.RECIPIENT_COUNTRY) {
-                        if(payload.values.values.length > 0) {
-
-                            var partnerValue = self._getFilterValues().values[BaseConfig.SELECTORS.RESOURCE_PARTNER][0];
-                            var payloadRecipientValue = payload.values.values[0];
-
-                            // FROM FILTER VALUES: ALL Resource Partners selected
-                            if (partnerValue === 'all') {
-                                selections = [];
-
-                                // FROM PAYLOAD: ALL recipients are selected
-                                if (payloadRecipientValue === 'all') {
-                                    // --> All recipient + All partners
-                                    topic = PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED;
-                                    selections.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, PriorityAnalysisConfig.selections.ALL));
-                                    selections.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED,  PriorityAnalysisConfig.selections.ALL));
-
-                                }
-                                // FROM PAYLOAD: 1 recipients selected
-                                else {
-                                    // --> 1 recipient + All partners
-                                    topic = PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED;
-                                    selections.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, self._getLabel(BaseConfig.SELECTORS.RECIPIENT_COUNTRY)));
-                                    selections.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED,  PriorityAnalysisConfig.selections.ALL));
-                                }
-                            }
-                            // FROM FILTER VALUES: 1 Resource Partner selected
-                            else {
-                                selections = [];
-
-                                // FROM PAYLOAD: All recipients are selected
-                                if (payloadRecipientValue === 'all') {
-                                    // --> All recipient + 1 partner
-                                    topic = PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED;
-                                    selections.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, PriorityAnalysisConfig.selections.ALL));
-                                    selections.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED,  self._getLabel(BaseConfig.SELECTORS.RESOURCE_PARTNER)));
-
-                                }
-                                // FROM PAYLOAD: 1 recipient selected
-                                else {
-                                    // --> 1 recipient + 1 partner
-                                    topic = PriorityAnalysisConfig.topic.RECIPIENT_AND_PARTNER_SELECTED;
-                                    selections.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, self._getLabel(BaseConfig.SELECTORS.RECIPIENT_COUNTRY)));
-                                    selections.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED,  self._getLabel(BaseConfig.SELECTORS.RESOURCE_PARTNER)));
-                                }
+                        var dependencies = [];
+                        if (fc && fc.dependencies) {
+                            for (var id in fc.dependencies) {
+                                dependencies.push(id);
                             }
 
-                            topicProps = self._getPropertiesObject(PriorityAnalysisConfig.topic.SELECTED_TOPIC, topic);
-                            properties = [topicProps, {selections: selections}];
-
-                            //console.log("========================= FilterView: ON CHANGE COUNTRY ============== " + topic);
-                            amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": properties}));
+                            payload["dependencies"] = dependencies;
                         }
 
-                    }
-                    else if (payload.id === BaseConfig.SELECTORS.RESOURCE_PARTNER) {
+                        if (payload.id === BaseConfig.SELECTORS.YEAR_TO || payload.id === BaseConfig.SELECTORS.YEAR_FROM) {
 
-                        if(payload.values.values.length > 0) {
+                            // Check only for the To payload.
+                            //--------------------------------
+                            // When From is selected, the To is automatically re-populated and this in turn triggers its own 'on Change'.
+                            // The result is that the 'BaseEvents.FILTER_ON_CHANGE' is published twice (1 for the From and then automatically again for the To).
+                            // To avoid the double publish, only the last 'on Change' trigger is evaluated i.e. when payload = 'To'
 
-                            var recipientValue = self._getFilterValues().values[BaseConfig.SELECTORS.RECIPIENT_COUNTRY][0];
-                            var payloadPartnerValue = payload.values.values[0];
+                            if ( payload.id === BaseConfig.SELECTORS.YEAR_TO) {
 
-                            // FROM FILTER: ALL Recipients selected
-                            if (recipientValue === 'all') {
-                                selections = [];
+                                var newRange = self.filterUtils.getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedLabels());
 
-                                // FROM PAYLOAD: ALL resource partners selected
-                                if (payloadPartnerValue === 'all') {
-                                    // --> All partners + All recipients
+                                if (newRange) {
+                                    payload.id = BaseConfig.SELECTORS.YEAR;
+                                    payload.values.labels = self.filterUtils.getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedLabels());
+                                    payload.values.values = self.filterUtils.getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedValues());
+                                }
+
+                                amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
+                            }
+
+                        }
+                        else if (payload.id === BaseConfig.SELECTORS.ODA) {
+                            var additionalProperties = self.filterUtils.getPropertiesObject(BaseConfig.SELECTORS.ODA, payload.values.values[0]);
+
+                            amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": additionalProperties}));
+                        }
+                        else if (payload.id === BaseConfig.SELECTORS.RECIPIENT_COUNTRY) {
+                            if(payload.values.values.length > 0) {
+
+                                var partnerValue = self._getFilterValues().values[BaseConfig.SELECTORS.RESOURCE_PARTNER][0];
+                                var payloadRecipientValue = payload.values.values[0];
+
+                                // FROM FILTER VALUES: ALL Resource Partners selected
+                                if (partnerValue === 'all') {
                                     selections = [];
-                                    topic = PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED;
-                                    selections.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED,  PriorityAnalysisConfig.selections.ALL));
-                                    selections.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, PriorityAnalysisConfig.selections.ALL));
+
+                                    // FROM PAYLOAD: ALL recipients are selected
+                                    if (payloadRecipientValue === 'all') {
+                                        // --> All recipient + All partners
+                                        topic = PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED;
+                                        selections.push(self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, PriorityAnalysisConfig.selections.ALL));
+                                        selections.push(self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED,  PriorityAnalysisConfig.selections.ALL));
+
+                                    }
+                                    // FROM PAYLOAD: 1 recipients selected
+                                    else {
+                                        // --> 1 recipient + All partners
+                                        topic = PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED;
+                                        selections.push(self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, self._getLabel(BaseConfig.SELECTORS.RECIPIENT_COUNTRY)));
+                                        selections.push(self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED,  PriorityAnalysisConfig.selections.ALL));
+                                    }
                                 }
-                                // FROM PAYLOAD: 1 resource partner selected
+                                // FROM FILTER VALUES: 1 Resource Partner selected
                                 else {
-                                    // --> 1 partner + All recipients
-                                    topic = PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED;
-                                    selections.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED, self._getLabel(BaseConfig.SELECTORS.RESOURCE_PARTNER)));
-                                    selections.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, PriorityAnalysisConfig.selections.ALL));
+                                    selections = [];
+
+                                    // FROM PAYLOAD: All recipients are selected
+                                    if (payloadRecipientValue === 'all') {
+                                        // --> All recipient + 1 partner
+                                        topic = PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED;
+                                        selections.push(self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, PriorityAnalysisConfig.selections.ALL));
+                                        selections.push(self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED,  self._getLabel(BaseConfig.SELECTORS.RESOURCE_PARTNER)));
+
+                                    }
+                                    // FROM PAYLOAD: 1 recipient selected
+                                    else {
+                                        // --> 1 recipient + 1 partner
+                                        topic = PriorityAnalysisConfig.topic.RECIPIENT_AND_PARTNER_SELECTED;
+                                        selections.push(self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, self._getLabel(BaseConfig.SELECTORS.RECIPIENT_COUNTRY)));
+                                        selections.push(self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED,  self._getLabel(BaseConfig.SELECTORS.RESOURCE_PARTNER)));
+                                    }
                                 }
+
+                                topicProps = self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.SELECTED_TOPIC, topic);
+                                properties = [topicProps, {selections: selections}];
+
+                                //console.log("========================= FilterView: ON CHANGE COUNTRY ============== " + topic);
+                                amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": properties}));
                             }
-                            // FROM FILTER: 1 Recipient Country selected
-                            else {
-                                selections = [];
-
-                                // All resource partners selected
-                                if (payloadPartnerValue === 'all') {
-                                    // --> All partner + 1 recipient
-                                    topic = PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED;
-                                    selections.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED,  PriorityAnalysisConfig.selections.ALL));
-                                    selections.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, self._getLabel(BaseConfig.SELECTORS.RECIPIENT_COUNTRY)));
-                                }
-                                // 1 resource partners selected
-                                else {
-                                    // --> 1 partner + 1 recipient
-                                    topic = PriorityAnalysisConfig.topic.RECIPIENT_AND_PARTNER_SELECTED;
-                                    selections.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED,  self._getLabel(BaseConfig.SELECTORS.RESOURCE_PARTNER)));
-                                    selections.push(self._getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, self._getLabel(BaseConfig.SELECTORS.RECIPIENT_COUNTRY)));
-                                }
-                            }
-
-                            topicProps = self._getPropertiesObject(PriorityAnalysisConfig.topic.SELECTED_TOPIC, topic);
-                            properties = [topicProps, {selections: selections}];
-
-                            //console.log("========================= FilterView: ON PARTNER ============== " + topic);
-                            amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": properties}));
 
                         }
+                        else if (payload.id === BaseConfig.SELECTORS.RESOURCE_PARTNER) {
 
-                    }
-                    else {
-                        //console.log("========================= FilterView: ELSE ============== "+topic);
-                        amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
+                            if(payload.values.values.length > 0) {
+
+                                var recipientValue = self._getFilterValues().values[BaseConfig.SELECTORS.RECIPIENT_COUNTRY][0];
+                                var payloadPartnerValue = payload.values.values[0];
+
+                                // FROM FILTER: ALL Recipients selected
+                                if (recipientValue === 'all') {
+                                    selections = [];
+
+                                    // FROM PAYLOAD: ALL resource partners selected
+                                    if (payloadPartnerValue === 'all') {
+                                        // --> All partners + All recipients
+                                        selections = [];
+                                        topic = PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED;
+                                        selections.push(self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED,  PriorityAnalysisConfig.selections.ALL));
+                                        selections.push(self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, PriorityAnalysisConfig.selections.ALL));
+                                    }
+                                    // FROM PAYLOAD: 1 resource partner selected
+                                    else {
+                                        // --> 1 partner + All recipients
+                                        topic = PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED;
+                                        selections.push(self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED, self._getLabel(BaseConfig.SELECTORS.RESOURCE_PARTNER)));
+                                        selections.push(self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, PriorityAnalysisConfig.selections.ALL));
+                                    }
+                                }
+                                // FROM FILTER: 1 Recipient Country selected
+                                else {
+                                    selections = [];
+
+                                    // All resource partners selected
+                                    if (payloadPartnerValue === 'all') {
+                                        // --> All partner + 1 recipient
+                                        topic = PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED;
+                                        selections.push(self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED,  PriorityAnalysisConfig.selections.ALL));
+                                        selections.push(self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, self._getLabel(BaseConfig.SELECTORS.RECIPIENT_COUNTRY)));
+                                    }
+                                    // 1 resource partners selected
+                                    else {
+                                        // --> 1 partner + 1 recipient
+                                        topic = PriorityAnalysisConfig.topic.RECIPIENT_AND_PARTNER_SELECTED;
+                                        selections.push(self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.RESOURCE_PARTNER_SELECTED,  self._getLabel(BaseConfig.SELECTORS.RESOURCE_PARTNER)));
+                                        selections.push(self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.RECIPIENT_COUNTRY_SELECTED, self._getLabel(BaseConfig.SELECTORS.RECIPIENT_COUNTRY)));
+                                    }
+                                }
+
+                                topicProps = self.filterUtils.getPropertiesObject(PriorityAnalysisConfig.topic.SELECTED_TOPIC, topic);
+                                properties = [topicProps, {selections: selections}];
+
+                                //console.log("========================= FilterView: ON PARTNER ============== " + topic);
+                                amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": properties}));
+
+                            }
+
+                        }
+                        else {
+                            //console.log("========================= FilterView: ELSE ============== "+topic);
+                            amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
+                        }
+                    } else {
+                        self.filterValidator.displayErrorSection(valid);
                     }
 
                 });
 
 
-            },
-            /**
-             * Updates the filter configuration including setting the language related labels in the filter template
-             * Returns: Updated Configuration
-             * @returns {Object} updatedConf
-             * @private
-             */
-            _getUpdatedFilterConfig: function () {
-
-                var conf = $.extend(true, {}, this.config),
-                    values = {},
-                    updatedConf = FxUtils.mergeConfigurations(conf, values);
-
-                _.each(updatedConf, _.bind(function (obj, key) {
-
-                    if (!obj.template) {
-                        obj.template = {};
-                    }
-                    //Add i18n label
-                    obj.template.title = Utils.getI18nLabel(key, i18nLabels, "filter_");
-                    obj.template.headerIconTooltip = Utils.getI18nLabel(key, i18nLabels, "filter_tooltip_");
-
-                }, this));
-
-                return updatedConf;
             },
 
             /**
@@ -425,7 +375,6 @@ define(
              */
 
 
-
             _getFilterValues: function () {
 
                 var timerange = {
@@ -433,55 +382,14 @@ define(
                     labels: {year: {range: ''}}
                 };
 
-                var updatedValuesWithYear = {}, updatedValuesWithODA = {}, extendedValues = $.extend(true, {}, this.filter.getValues(), timerange);
+                var updatedValuesWithYear = {}, extendedValues = $.extend(true, {}, this.filter.getValues(), timerange);
 
-                updatedValuesWithYear = this._processTimeRange(extendedValues);
-
-                //updatedValuesWithODA = this._processODA(updatedValuesWithYear);
+                updatedValuesWithYear = this.filterUtils.processTimeRange(extendedValues);
 
                 return updatedValuesWithYear;
 
             },
 
-            /**
-             * Get the selected filter values
-             * @returns {Object} values
-             * @private
-             */
-
-            _getSelectedValues: function () {
-                return this._getFilterValues().values;
-            },
-
-
-            /**
-             *  Get the selected filter labels
-             * @returns {Object} labels
-             * @private
-             */
-            _getSelectedLabels: function () {
-                return this._getFilterValues().labels;
-            },
-
-
-            /**
-             *  Get the filter configuration associated to the ID
-             * @param id
-             * @returns {Object} values
-             * @private
-             */
-
-            _getFilterConfigById: function (id) {
-                var filter;
-
-                $.each(this.config, function (key, obj) {
-                    if (key === id) {
-                        return filter = obj;
-                    }
-                });
-
-                return filter;
-            },
 
             /**
              *  Get the full filter values object (consists of labels and values)
@@ -518,208 +426,25 @@ define(
                 return values;
             },
 
+
             /**
-             *  Clear Values for the filter id
-             * @param filterid
-             * @param values
+             * Get the selected filter values
              * @returns {Object} values
-             */
-
-            clearFilterValue: function (filterid, values) {
-
-                if (values.values[filterid]) {
-                    values.values[filterid] = [];
-                }
-
-                return values;
-            },
-
-            /**
-             *  Process the time range so that it complies with the expected D3S format
-             * @param filter
-             * @returns {Object} filter
-             */
-            _processTimeRange: function (filter) {
-
-                var year_from = filter.values[BaseConfig.SELECTORS.YEAR_FROM], year_to = filter.values[BaseConfig.SELECTORS.YEAR_TO];
-
-                //reformat to and from years
-                filter.values.year[0].value = year_from[0];
-                filter.values.year[1].value = year_to[0];
-
-                filter.labels.year.range = year_from[0] + '-' + year_to[0];
-                filter.labels[BaseConfig.SELECTORS.YEAR_FROM] = [];
-                filter.labels[BaseConfig.SELECTORS.YEAR_TO] = [];
-
-                return filter;
-            },
-
-
-            /**
-             *  Process the ODA so that it complies with the expected D3S format
-             * @param filter
-             * @returns {Object} filter
-             */
-            _processODA: function (filter) {
-
-                var enumeration = [], oda = filter.values[BaseConfig.SELECTORS.ODA][0];
-                enumeration.push(oda);
-
-                filter.values[BaseConfig.SELECTORS.ODA] = {};
-                filter.values[BaseConfig.SELECTORS.ODA].enumeration = enumeration;
-
-
-                return filter;
-            },
-
-
-            /**
-             *  Process and get the filter values relevant to the OECD/ODA Dashboard
-             * @returns {Object} values
-             */
-
-            getOECDValues: function () {
-
-                var values = this._getSelectedValues();
-
-                return this._updateValues(values);
-            },
-
-
-            /**
-             *  Check if values exist for the filter id
-             *  @param filterid
-             * @returns {boolean}
-             */
-
-            hasValues: function (filterid) {
-                var values = this._getSelectedValues();
-                return this._hasSelections(filterid, values);
-            },
-
-
-            /**
-             *  Get the values for the filter id
-             * @returns {Object} values
-             */
-            getSelectedValues: function (filterId) {
-                var values = this._getSelectedValues();
-
-                var selectedValues = {};
-                var itemSelected = this._hasSelections(filterId, values);
-
-                if (itemSelected) {
-                    selectedValues = values[filterId];
-                    //var filterObj = this._getObject(filterId, values);
-                    //selectedValues = this._getSelected(filterObj);
-                }
-
-                return selectedValues;
-            },
-
-
-            /**
-             * Check if a filter has selections
-             * @param id
-             * @returns {*|boolean}
-             */
-            isFilterSelected: function (id) {
-                var values = this._getSelectedValues();
-
-
-                return this._hasSelections(id, values);
-            },
-
-
-
-            /**
-             *
-             * @param values
-             * @returns {*}
              * @private
              */
-            _updateValues: function (values) {
 
-                return values;
+            _getSelectedValues: function () {
+                return this._getFilterValues().values;
             },
 
             /**
-             * Check if filter id has selections
-             * @param id
-             * @param data
-             * @returns {boolean}
+             *  Get the selected filter labels
+             * @returns {Object} labels
              * @private
              */
-            _hasSelections: function (id, data) {
-                //console.log(id);
-                if (_.has(data, id)) {
-                    if (data[id].length > 0) {
-                        // if (_.has(data[id], 'codes')) {
-                        return true;
-                    }
-                }
+            _getSelectedLabels: function () {
+                return this._getFilterValues().labels;
             },
-            /**
-             * Get the Object from the data based on the id (key)
-             * @param id
-             * @param data
-             * @returns {*}
-             * @private
-             */
-            _getObject: function (id, data) {
-                if (_.has(data, id)) {
-                    if (data[id].length > 0 || !_.isEmpty(data[id])) {
-                        // if (_.has(data[id], 'codes')) {
-                        return data[id];
-                    }
-                }
-            },
-
-
-            _getFilterConfig: function (id) {
-                //console.log(this.config);
-
-                var filter = _.find(this.config, function (obj, key) {
-
-                    return key === id;
-                    // return obj.components[0].id === id;
-                });
-
-
-                return filter;
-            },
-
-            _hasProp: function (filter, prop) {
-                var hasProp = _.find(filter, function (obj) {
-                    if (filter[prop]) {
-                        return true;
-                    }
-                });
-                return hasProp;
-            },
-
-            getConfigPropValue: function (id, prop) {
-
-                // console.log("===============getConfigPropValue "+id + ' | '+prop);
-                var filterValue;
-                var filterItem = this._getFilterConfig(id);
-
-                // console.log(filterItem);
-
-                if (this._hasProp(filterItem, prop))
-                    filterValue = filterItem[prop];
-
-                // console.log(filterValue);
-                return filterValue;
-            },
-
-            _getPropertiesObject: function (id, value) {
-                var additionalProperties = {};
-                additionalProperties[id] = value;
-
-                return additionalProperties;
-            },
-
 
             _getLabel: function (filterid) {
 
@@ -731,7 +456,6 @@ define(
 
 
             _unbindEventListeners: function () {
-
             },
 
             dispose: function () {

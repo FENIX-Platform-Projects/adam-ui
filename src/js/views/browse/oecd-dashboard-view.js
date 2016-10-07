@@ -3,19 +3,20 @@ define([
     'jquery',
     'underscore',
     'views/base/view',
-    'text!templates/browse/oda-dashboard.hbs',
+    'text!templates/browse/oecd-dashboard.hbs',
     'config/browse/config-browse',
     'fx-dashboard/start',
     'lib/utils',
     'config/Config',
     'i18n!nls/browse',
     'i18n!nls/browse-dashboard',
+    'i18n!nls/chart',
     'handlebars',
     'lib/config-utils',
     'config/submodules/fx-chart/highcharts_template',
     'views/common/progress-bar',
     'amplify'
-], function ($, _, View, template, BaseBrowseConfig, Dashboard, Utils, GeneralConfig, i18nLabels, i18nDashboardLabels, Handlebars, ConfigUtils, HighchartsTemplate, ProgressBar) {
+], function ($, _, View, template, BaseBrowseConfig, Dashboard, Utils, GeneralConfig, i18nLabels, i18nDashboardLabels, i18nChartLabels, Handlebars, ConfigUtils, HighchartsTemplate, ProgressBar) {
 
     'use strict';
 
@@ -84,6 +85,7 @@ define([
                 this._updateChartExportTitles(this.config.items[it], i18nDashboardLabels[item.id], this.model.get('label'));
             }
 
+
             $(this.el).html(this.getTemplateFunction());
         },
 
@@ -102,7 +104,7 @@ define([
 
             var model = this.model.toJSON();
 
-            var data = $.extend(true, model, i18nLabels, i18nDashboardLabels);
+            var data = $.extend(true, model, i18nLabels, i18nDashboardLabels, i18nChartLabels);
 
             return this.compiledTemplate(data);
 
@@ -267,8 +269,16 @@ define([
             }
         },
 
-        rebuildDashboard: function (filter) {
+        rebuildDashboard: function (filter, displayConfigForSelectedFilter) {
             var self = this;
+
+
+           // console.log(displayConfigForSelectedFilter);
+
+            // Re-render the template
+            if (displayConfigForSelectedFilter) {
+               this.render();
+            }
 
             this._disposeDashboards();
 

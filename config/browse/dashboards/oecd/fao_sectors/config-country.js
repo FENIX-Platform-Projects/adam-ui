@@ -10,7 +10,7 @@ define(function () {
             recipientcode: {
                 selector: {
                     id: "dropdown",
-                    default: ["625"], // afghanistan
+                    default: ["625"],
                     config: { //Selectize configuration
                         maxItems: 1
                     }
@@ -27,35 +27,20 @@ define(function () {
                     hideRemoveButton: true
                 }
             },
-            donorcode: {
-                selector: {
-                    id: "dropdown",
-                    default: ["1"], // Austria
-                    config: { //Selectize configuration
-                        maxItems: 1
-                    }
-                },
-                className: "col-sm-3",
-                cl: {
-                    uid: "crs_donors",
-                    version: "2016",
-                    level: 1,
-                    levels: 1
-                },
-                template: {
-                    hideSwitch: true,
-                    hideRemoveButton: true
-                }
-            },
             parentsector_code: {
                 selector: {
                     id: "dropdown",
+                    default: ["9999"],
+                    emptyOption : {
+                        enabled: true,
+                        text: "All",
+                        value: "all"
+                    },
                     config: { //Selectize configuration
-                        default: ["9999"],
-                        maxItems: 1,
-                        placeholder: "All",
-                        plugins: ['remove_button'],
-                        mode: 'multi'
+                        maxItems: 1
+                        // placeholder: "All",
+                        // plugins: ['remove_button'],
+                        // mode: 'multi'
                     }
                 },
                 className: "col-sm-3",
@@ -73,11 +58,17 @@ define(function () {
             purposecode: {
                 selector: {
                     id: "dropdown",
-                    config: {
-                        maxItems: 1,
-                        placeholder: "All",
-                        plugins: ['remove_button'],
-                        mode: 'multi'
+                    default: ["all"],
+                    emptyOption : {
+                        enabled: true,
+                        text: "All",
+                        value: "all"
+                    },
+                    config: { //Selectize configuration
+                        maxItems: 1
+                        // placeholder: "All",
+                        // plugins: ['remove_button'],
+                        // mode: 'multi'
                     }
                 },
                 className: "col-sm-4",
@@ -138,8 +129,7 @@ define(function () {
                     ],
                     "uid": "crs_dac",
                     "version": "2016",
-                    "level": 2,
-                    "levels": 2
+                    "levels": 3
                 },
                 template: {
                     hideSwitch: true,
@@ -170,7 +160,6 @@ define(function () {
                 }
             },
             "year-to": {
-
                 selector: {
                     id: "dropdown",
                     from: 2000,
@@ -215,7 +204,6 @@ define(function () {
                     hideRemoveButton: true
                 }
             }
-
         },
 
 
@@ -243,7 +231,7 @@ define(function () {
                     },
 
                     filterFor: {
-                        "filter_total_ODA": ['donorcode', 'recipientcode', 'year', 'oda']
+                        "filter_total_ODA": ['recipientcode', 'year', 'oda']
                     },
 
                     postProcess: [
@@ -266,13 +254,13 @@ define(function () {
                                             "usd_commitment"
                                         ]
                                     },
-                                    "donorcode": {
+                                    "recipientcode": {
                                         "codes": [
                                             {
-                                                "uid": "crs_donors",
+                                                "uid": "crs_recipients",
                                                 "version": "2016",
                                                 "codes": [
-                                                    "1"
+                                                    "625"
                                                 ]
                                             }
                                         ]
@@ -284,20 +272,10 @@ define(function () {
                                                 "to": 2014
                                             }
                                         ]
-                                    },
-                                    "recipientcode": {
-                                        "codes": [
-                                            {
-                                                "uid": "crs_recipients",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "625"
-                                                ]
-                                            }
-                                        ]
                                     }
                                 }
-                            }
+                            },
+                            "rid":{"uid":"filter_total_ODA"}
                         },
                         {
                             "name": "group",
@@ -320,8 +298,9 @@ define(function () {
                                     }
                                 ]
                             },
-                            "rid":{"uid":"total_ODA"}
-
+                            "rid": {
+                                "uid": "total_oda"
+                            }
                         },
                         {
                             "name": "addcolumn",
@@ -344,10 +323,7 @@ define(function () {
                                     },
                                     "subject": null
                                 },
-                                "value": "Total ODA from Resource Partner"
-                            },
-                            "rid": {
-                                "uid": "total_donor_oda"
+                                "value": "ODA"
                             }
                         }
                     ]
@@ -371,9 +347,9 @@ define(function () {
                                         var hasSubSector = false;
 
                                         var isVisible = $.each(_that.series, function (i, serie) {
-                                            if(serie.name == '% Sector/ODA'){
+                                            if(serie.name == '% Sector/Total'){
                                                 serie.update({
-                                                    yAxis: 'sector-axis',
+                                                    yAxis: 'subsector-axis',
                                                     dashStyle: 'shortdot',
                                                     marker: {
                                                         radius: 3
@@ -404,7 +380,7 @@ define(function () {
                             },
                             yAxis: [{ //Primary Axis in default template
                             }, { // Secondary Axis
-                                id: 'sector-axis',
+                                id: 'subsector-axis',
                                 gridLineWidth: 0,
                                 title: {
                                     text: '%'
@@ -424,36 +400,30 @@ define(function () {
                     },
 
                     filterFor: {
-                        "filter_total_donor_recipient_oda": ['donorcode', 'recipientcode', 'year', 'oda'],
-                        "filter_total_donor_recipient_sector_oda": ['donorcode', 'recipientcode', 'year', 'oda'],
-
-                        "filter_total_oda_dac_members_by_year": ['year', 'oda'],
-                        "filter_dac_members_by_donor_year": ['recipientcode', 'year', 'oda']
+                        "filter_total_country_ODA": ['recipientcode', 'year', 'oda'],
+                        "filter_total_sector_country_oda": ['recipientcode', 'year', 'oda']
                     },
 
                     postProcess: [
-
                         {
                             "name": "union",
                             "sid": [
                                 {
-                                    "uid": "total_donor_recipient_oda" // RESULT OF PART 1: TOTAL ODA FROM DONOR TO RECIPIENT
+                                    "uid": "total_country_oda" // RESULT OF PART 1: TOTAL ODA FOR THE COUNTRY
                                 },
                                 {
-                                    "uid": "total_donor_recipient_sector_oda" // RESULT OF PART 2: TOTAL ODA FOR DONOR (ALL RECIPIENTS)
+                                    "uid": "total_sector_country_oda" // RESULT OF PART 2: TOTAL ODA FOR SECTOR IN COUNTRY
                                 },
                                 {
-                                    "uid":"percentage_ODA" // RESULT OF PART 3: PERCENTAGE CALCULATION (ODA FROM DONOR TO RECIPIENT / TOTAL ODA FROM DONOR x 100)
-                                },
-                                {
-                                    "uid":"OECD_AVG" // RESULT OF PART 4: OECD DONORS (DAC MEMBERS) AVERAGE ODA IN SELECTED SECTOR
+                                    "uid":"percentage_ODA" // RESULT OF PART 3: PERCENTAGE CALCULATION (TOTAL ODA FOR SECTOR IN COUNTRY / TOTAL ODA FOR COUNTRY  x 100)
                                 }
+
                             ],
                             "parameters": {
                             },
                             "rid":{"uid":"union_process"}
 
-                        }, // PART 5: UNION is the FINAL PART IN THE PROCESS
+                        },  // PART 4: UNION is the FINAL PART IN THE PROCESS
                         {
                             "name": "filter",
                             "sid": [
@@ -473,138 +443,6 @@ define(function () {
                                             "usd_commitment"
                                         ]
                                     },
-                                    "donorcode": {
-                                        "codes": [
-                                            {
-                                                "uid": "crs_donors",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "1"
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    "year": {
-                                        "time": [
-                                            {
-                                                "from": 2000,
-                                                "to": 2014
-                                            }
-                                        ]
-                                    },
-                                    "recipientcode": {
-                                        "codes": [
-                                            {
-                                                "uid": "crs_recipients",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "625"
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            },
-                            "rid": {
-                                "uid": "filter_total_donor_recipient_oda"
-                            }
-                        }, // PART 1: TOTAL ODA FROM DONOR TO RECIPIENT: (1i) Filter
-                        {
-                            "name": "group",
-                            "parameters": {
-                                "by": [
-                                    "year"
-                                ],
-                                "aggregations": [
-                                    {
-                                        "columns": [
-                                            "value"
-                                        ],
-                                        "rule": "SUM"
-                                    },
-                                    {
-                                        "columns": [
-                                            "unitcode"
-                                        ],
-                                        "rule": "first"
-                                    }
-                                ]
-                            },
-                            "rid": {
-                                "uid": "tt"
-                            }
-                        }, // (1ii): TOTAL ODA FROM DONOR TO RECIPIENT: Group by
-                        {
-                            "name": "addcolumn",
-                            "sid": [
-                                {
-                                    "uid": "tt"
-                                }
-                            ],
-                            "parameters": {
-                                "column": {
-                                    "dataType": "text",
-                                    "id": "indicator",
-                                    "title": {
-                                        "EN": "Indicator"
-                                    },
-                                    "domain": {
-                                        "codes": [
-                                            {
-                                                "extendedName": {
-                                                    "EN": "Adam Processes"
-                                                },
-                                                "idCodeList": "adam_processes"
-                                            }
-                                        ]
-                                    },
-                                    "subject": null
-                                },
-                                "value": "Total ODA from Resource Partner to Recipient Country" // PART 1 FINAL INDICATOR NAME
-                            },
-                            "rid": {
-                                "uid": "total_donor_recipient_oda"
-                            }
-                        }, // (1iii): TOTAL ODA FROM DONOR TO RECIPIENT: Add Column
-
-                        {
-                            "name": "filter",
-                            "sid": [
-                                {
-                                    "uid": "adam_usd_aggregation_table"
-                                }
-                            ],
-                            "parameters": {
-                                "columns": [
-                                    "year",
-                                    "value",
-                                    "unitcode"
-                                ],
-                                "rows": {
-                                    "oda": {
-                                        "enumeration": [
-                                            "usd_commitment"
-                                        ]
-                                    },
-                                    "donorcode": {
-                                        "codes": [
-                                            {
-                                                "uid": "crs_donors",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "1"
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    "year": {
-                                        "time": [
-                                            {
-                                                "from": 2000,
-                                                "to": 2014
-                                            }
-                                        ]
-                                    },
                                     "recipientcode": {
                                         "codes": [
                                             {
@@ -616,74 +454,18 @@ define(function () {
                                             }
                                         ]
                                     },
-                                    "purposecode": { // FAO Related purposecodes
-                                        "codes": [
+                                    "year": {
+                                        "time": [
                                             {
-                                                "uid": "crs_purposes",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "12240",
-                                                    "14030",
-                                                    "14031",
-                                                    "15170",
-                                                    "16062",
-                                                    "23070",
-                                                    "31110",
-                                                    "31120",
-                                                    "31130",
-                                                    "31140",
-                                                    "31150",
-                                                    "31161",
-                                                    "31162",
-                                                    "31163",
-                                                    "31164",
-                                                    "31165",
-                                                    "31166",
-                                                    "31181",
-                                                    "31182",
-                                                    "31191",
-                                                    "31192",
-                                                    "31193",
-                                                    "31194",
-                                                    "31195",
-                                                    "31210",
-                                                    "31220",
-                                                    "31261",
-                                                    "31281",
-                                                    "31282",
-                                                    "31291",
-                                                    "31310",
-                                                    "31320",
-                                                    "31381",
-                                                    "31382",
-                                                    "31391",
-                                                    "32161",
-                                                    "32162",
-                                                    "32163",
-                                                    "32165",
-                                                    "32267",
-                                                    "41010",
-                                                    "41020",
-                                                    "41030",
-                                                    "41040",
-                                                    "41050",
-                                                    "41081",
-                                                    "41082",
-                                                    "43040",
-                                                    "43050",
-                                                    "52010",
-                                                    "72040",
-                                                    "74010"
-                                                ]
+                                                "from": 2000,
+                                                "to": 2014
                                             }
                                         ]
                                     }
                                 }
                             },
-                            "rid": {
-                                "uid": "filter_total_donor_recipient_sector_oda"
-                            }
-                        },  // PART 2: TOTAL ODA FROM DONOR TO RECIPIENT FOR SECTOR : (2i) Filter
+                            "rid":{"uid":"filter_total_country_ODA"}
+                        }, // PART 1: TOTAL ODA FOR THE COUNTRY: (1i) Filter
                         {
                             "name": "group",
                             "parameters": {
@@ -706,7 +488,8 @@ define(function () {
                                 ]
                             },
                             "rid":{"uid":"total_ODA"}
-                        }, // (2ii): TOTAL ODA FROM DONOR TO RECIPIENT FOR SECTOR : Group by
+
+                        }, // (1ii): TOTAL ODA FOR THE COUNTRY: Group by
                         {
                             "name": "addcolumn",
                             "parameters": {
@@ -728,21 +511,179 @@ define(function () {
                                     },
                                     "subject": null
                                 },
-                                "value": "Total ODA of Sector from Resource Partner in that Recipient Country" // PART 2 FINAL INDICATOR NAME
+                                "value": "Total ODA in the Country" // PART 1 FINAL INDICATOR NAME
                             },
                             "rid": {
-                                "uid": "total_donor_recipient_sector_oda"
+                                "uid": "total_country_oda"
                             }
-                        }, // (2iii): TOTAL ODA FROM DONOR TO RECIPIENT FOR SECTOR : Add Column
+                        }, // (1iii): TOTAL ODA FOR THE COUNTRY: Add Column
+                        {
+                            "name": "filter",
+                            "sid": [
+                                {
+                                    "uid": "adam_usd_aggregation_table"
+                                }
+                            ],
+                            "parameters": {
+                                "columns": [
+                                    "year",
+                                    "value",
+                                    "unitcode"
+                                ],
+                                "rows": {
+                                    "oda": {
+                                        "enumeration": [
+                                            "usd_commitment"
+                                        ]
+                                    },
+                                    "fao_sector": {
+                                        "enumeration": [
+                                            "1"
+                                        ]
+                                    },
+                                    /*"purposecode": { // FAO Related purposecodes
+                                     "codes": [
+                                     {
+                                     "uid": "crs_purposes",
+                                     "version": "2016",
+                                     "codes": [
+                                     "12240",
+                                     "14030",
+                                     "14031",
+                                     "15170",
+                                     "16062",
+                                     "23070",
+                                     "31110",
+                                     "31120",
+                                     "31130",
+                                     "31140",
+                                     "31150",
+                                     "31161",
+                                     "31162",
+                                     "31163",
+                                     "31164",
+                                     "31165",
+                                     "31166",
+                                     "31181",
+                                     "31182",
+                                     "31191",
+                                     "31192",
+                                     "31193",
+                                     "31194",
+                                     "31195",
+                                     "31210",
+                                     "31220",
+                                     "31261",
+                                     "31281",
+                                     "31282",
+                                     "31291",
+                                     "31310",
+                                     "31320",
+                                     "31381",
+                                     "31382",
+                                     "31391",
+                                     "32161",
+                                     "32162",
+                                     "32163",
+                                     "32165",
+                                     "32267",
+                                     "41010",
+                                     "41020",
+                                     "41030",
+                                     "41040",
+                                     "41050",
+                                     "41081",
+                                     "41082",
+                                     "43040",
+                                     "43050",
+                                     "52010",
+                                     "72040",
+                                     "74010"
+                                     ]
+                                     }
+                                     ]
+                                     },*/
+                                    "recipientcode": {
+                                        "codes": [
+                                            {
+                                                "uid": "crs_recipients",
+                                                "version": "2016",
+                                                "codes": [
+                                                    "625"
+                                                ]
+                                            }
+                                        ]
+                                    },
 
+                                    "year": {
+                                        "time": [
+                                            {
+                                                "from": 2000,
+                                                "to": 2014
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "rid":{"uid":"filter_total_sector_country_oda"}
+
+                        }, // PART 2: TOTAL ODA for SECTOR in COUNTRY: (2i) Filter
+                        {
+                            "name": "group",
+                            "parameters": {
+                                "by": [
+                                    "year"
+                                ],
+                                "aggregations": [
+                                    {
+                                        "columns": [
+                                            "value"
+                                        ],
+                                        "rule": "SUM"
+                                    },
+                                    {
+                                        "columns": [
+                                            "unitcode"
+                                        ],
+                                        "rule": "first"
+                                    }
+                                ]
+                            }
+
+                        }, // (2ii): TOTAL ODA for SECTOR in COUNTRY: Group by
+                        {
+                            "name": "addcolumn",
+                            "parameters": {
+                                "column": {
+                                    "dataType": "text",
+                                    "id": "indicator",
+                                    "title": {
+                                        "EN": "Indicator"
+                                    },
+                                    "domain": {
+                                        "codes": [
+                                            {
+                                                "extendedName": {
+                                                    "EN": "Adam Processes"
+                                                },
+                                                "idCodeList": "adam_processes"
+                                            }
+                                        ]
+                                    },
+                                    "subject": null
+                                },
+                                "value": "ODA in the Sector for the Country" // PART 2 FINAL INDICATOR NAME
+                            },
+                            "rid":{"uid":"total_sector_country_oda"}
+                        }, // (2iii): TOTAL ODA for SECTOR in COUNTRY: Add Column
                         {
                             "name": "join",
                             "sid": [
                                 {
-                                    "uid": "total_donor_recipient_oda"
+                                    "uid": "total_country_oda"
                                 },
                                 {
-                                    "uid": "total_donor_recipient_sector_oda"
+                                    "uid": "total_sector_country_oda"
                                 }
                             ],
                             "parameters": {
@@ -781,9 +722,12 @@ define(function () {
                                 },
                                 "value": {
                                     "keys":  ["1 = 1"],
-                                    "values":[" ( total_donor_recipient_sector_oda_value / total_donor_recipient_oda_value )*100"]
+                                    "values":[" ( total_sector_country_oda_value / total_country_oda_value )*100"]
 
                                 }
+                            },
+                            "rid": {
+                                "uid": "percentage_Value"
                             }
                         }, // (3ii) PERCENTAGE CALCULATION: Add Column
                         {
@@ -817,7 +761,7 @@ define(function () {
                                     "dataType": "code",
                                     "subject": "um"
                                 },
-                                "value": "percentage"
+                                "value": "% SECTOR/TOTAL"
                             }
                         }, // (3iv) PERCENTAGE CALCULATION: Add Column (Measurement Unit Code)
                         {
@@ -841,390 +785,12 @@ define(function () {
                                     },
                                     "subject": null
                                 },
-                                "value": "% Sector/ODA" // PART 3 FINAL INDICATOR NAME
+                                "value": "% Sector/Total" // PART 3 FINAL INDICATOR NAME
                             },
                             "rid": {
                                 "uid": "percentage_ODA"
                             }
-                        }, // (3vi) PERCENTAGE CALCULATION: Add Column
-
-                        {
-                            "name": "filter",
-                            "sid": [
-                                {
-                                    "uid": "adam_usd_aggregation_table"
-                                }
-                            ],
-                            "parameters": {
-                                "columns": [
-                                    "year",
-                                    "donorcode"
-                                ],
-                                "rows": {
-                                    "oda": {
-                                        "enumeration": [
-                                            "usd_commitment"
-                                        ]
-                                    },
-                                    "dac_member": {
-                                        "enumeration": [
-                                            "t"
-                                        ]
-                                    },
-                                    "purposecode": { // FAO Related purposecodes
-                                        "codes": [
-                                            {
-                                                "uid": "crs_purposes",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "12240",
-                                                    "14030",
-                                                    "14031",
-                                                    "15170",
-                                                    "16062",
-                                                    "23070",
-                                                    "31110",
-                                                    "31120",
-                                                    "31130",
-                                                    "31140",
-                                                    "31150",
-                                                    "31161",
-                                                    "31162",
-                                                    "31163",
-                                                    "31164",
-                                                    "31165",
-                                                    "31166",
-                                                    "31181",
-                                                    "31182",
-                                                    "31191",
-                                                    "31192",
-                                                    "31193",
-                                                    "31194",
-                                                    "31195",
-                                                    "31210",
-                                                    "31220",
-                                                    "31261",
-                                                    "31281",
-                                                    "31282",
-                                                    "31291",
-                                                    "31310",
-                                                    "31320",
-                                                    "31381",
-                                                    "31382",
-                                                    "31391",
-                                                    "32161",
-                                                    "32162",
-                                                    "32163",
-                                                    "32165",
-                                                    "32267",
-                                                    "41010",
-                                                    "41020",
-                                                    "41030",
-                                                    "41040",
-                                                    "41050",
-                                                    "41081",
-                                                    "41082",
-                                                    "43040",
-                                                    "43050",
-                                                    "52010",
-                                                    "72040",
-                                                    "74010"
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    "year": {
-                                        "time": [
-                                            {
-                                                "from": 2000,
-                                                "to": 2014
-                                            }
-                                        ]
-                                    }
-                                }
-                            },
-                            "rid": {
-                                "uid": "filter_total_oda_dac_members_by_year"
-                            }
-                        }, // PART 4 OECD DONORS (DAC MEMBERS) AVERAGE ODA: (4i) Filter
-                        {
-                            "name": "group",
-                            "parameters": {
-                                "by": [
-                                    "donorcode",
-                                    "year"
-
-
-                                ],
-                                "aggregations": [
-                                ]
-                            },
-                            "rid": {
-                                "uid": "sd"
-                            }
-                        }, // (4ii): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Group by
-                        {
-                            "name": "addcolumn",
-                            "parameters": {
-                                "column": {
-                                    "dataType": "number",
-                                    "id": "value_count",
-                                    "title": {
-                                        "EN": "Value"
-                                    },
-                                    "subject": null
-                                },
-                                "value": 1
-                            },
-                            "rid": {
-                                "uid": "percentage_Value"
-                            }
-                        },
-                        {
-                            "name": "group",
-                            "parameters": {
-                                "by": [
-                                    "year"
-                                ],
-                                "aggregations": [
-                                    {
-                                        "columns": [
-                                            "value_count"
-                                        ],
-                                        "rule": "SUM"
-                                    }
-                                ]
-                            },
-                            "rid": {
-                                "uid": "count_dac_members"
-                            }
-                        },
-
-
-                        {
-                            "name": "filter",
-                            "sid": [
-                                {
-                                    "uid": "adam_usd_aggregation_table"
-                                }
-                            ],
-                            "parameters": {
-                                "columns": [
-                                    "year",
-                                    "value",
-                                    "unitcode"
-                                ],
-                                "rows": {
-                                    "oda": {
-                                        "enumeration": [
-                                            "usd_commitment"
-                                        ]
-                                    },
-                                    "dac_member": {
-                                        "enumeration": [
-                                            "t"
-                                        ]
-                                    },
-                                    "purposecode": { // FAO Related purposecodes
-                                        "codes": [
-                                            {
-                                                "uid": "crs_purposes",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "12240",
-                                                    "14030",
-                                                    "14031",
-                                                    "15170",
-                                                    "16062",
-                                                    "23070",
-                                                    "31110",
-                                                    "31120",
-                                                    "31130",
-                                                    "31140",
-                                                    "31150",
-                                                    "31161",
-                                                    "31162",
-                                                    "31163",
-                                                    "31164",
-                                                    "31165",
-                                                    "31166",
-                                                    "31181",
-                                                    "31182",
-                                                    "31191",
-                                                    "31192",
-                                                    "31193",
-                                                    "31194",
-                                                    "31195",
-                                                    "31210",
-                                                    "31220",
-                                                    "31261",
-                                                    "31281",
-                                                    "31282",
-                                                    "31291",
-                                                    "31310",
-                                                    "31320",
-                                                    "31381",
-                                                    "31382",
-                                                    "31391",
-                                                    "32161",
-                                                    "32162",
-                                                    "32163",
-                                                    "32165",
-                                                    "32267",
-                                                    "41010",
-                                                    "41020",
-                                                    "41030",
-                                                    "41040",
-                                                    "41050",
-                                                    "41081",
-                                                    "41082",
-                                                    "43040",
-                                                    "43050",
-                                                    "52010",
-                                                    "72040",
-                                                    "74010"
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    "recipientcode": {
-                                        "codes": [
-                                            {
-                                                "uid": "crs_recipients",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "625"
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    "year": {
-                                        "time": [
-                                            {
-                                                "from": 2000,
-                                                "to": 2014
-                                            }
-                                        ]
-                                    }
-                                }
-                            },
-                            "rid":{"uid":"filter_dac_members_by_donor_year"}
-
-                        }, // (4iii): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Filter
-                        {
-                            "name": "group",
-                            "parameters": {
-                                "by": [
-                                    "year"
-                                ],
-                                "aggregations": [
-                                    {
-                                        "columns": [
-                                            "value"
-                                        ],
-                                        "rule": "SUM"
-                                    },
-                                    {
-                                        "columns": [
-                                            "unitcode"
-                                        ],
-                                        "rule": "first"
-                                    }
-                                ]
-                            },
-                            "rid":{"uid":"aggregated_oecd"}
-                        }, // (4v): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Add Column
-
-                        {
-                            "name": "join",
-                            "sid": [
-                                {
-                                    "uid": "count_dac_members"
-                                },
-                                {
-                                    "uid": "aggregated_oecd"
-                                }
-                            ],
-                            "parameters": {
-                                "joins": [
-                                    [
-
-                                        {
-                                            "type": "id",
-                                            "value": "year"
-                                        }
-                                    ],
-                                    [
-                                        {
-                                            "type": "id",
-                                            "value": "year"
-                                        }
-
-                                    ]
-                                ],
-                                "values": [
-                                ]
-                            }
-                        }, // (4vii): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Join
-                        {
-                            "name": "addcolumn",
-                            "parameters": {
-                                "column": {
-                                    "dataType": "number",
-                                    "id": "value",
-                                    "title": {
-                                        "EN": "Value"
-                                    },
-                                    "subject": null
-                                },
-                                "value": {
-                                    "keys":  ["1 = 1"],
-                                    "values":[" ( aggregated_oecd_value / count_dac_members_value_count )"]
-                                }
-                            },
-                            "rid": {
-                                "uid": "avg_value"
-                            }
-                        }, // (4viii): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Add Column
-                        {
-                            "name": "filter",
-                            "parameters": {
-                                "columns": [
-                                    "year",
-                                    "value",
-                                    "aggregated_oecd_unitcode"
-                                ],
-                                "rows": {
-                                }
-                            }
-                        }, // (4ix): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Filter
-                        {
-                            "name": "addcolumn",
-                            "parameters": {
-                                "column": {
-                                    "dataType": "text",
-                                    "id": "indicator",
-                                    "title": {
-                                        "EN": "Indicator"
-                                    },
-                                    "domain": {
-                                        "codes": [
-                                            {
-                                                "extendedName": {
-                                                    "EN": "Adam Processes"
-                                                },
-                                                "idCodeList": "adam_processes"
-                                            }
-                                        ]
-                                    },
-                                    "subject": null
-                                },
-                                "value": "OECD Average of ODA in that Sector in that Recipient Country" // PART 4 FINAL INDICATOR NAME
-                            },
-                            "rid": {
-                                "uid": "OECD_AVG"
-                            }
-                        } // (4x): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Add Column
+                        } // (3vi) PERCENTAGE CALCULATION: Add Column
                     ]
                 },
                 {
@@ -1248,7 +814,7 @@ define(function () {
                                         var isVisible = $.each(_that.series, function (i, serie) {
                                             if(serie.name == '% Sub Sector/Sector'){
                                                 serie.update({
-                                                    yAxis: 'sector-axis',
+                                                    yAxis: 'subsector-axis',
                                                     dashStyle: 'shortdot',
                                                     marker: {
                                                         radius: 3
@@ -1279,7 +845,7 @@ define(function () {
                             },
                             yAxis: [{ //Primary Axis in default template
                             }, { // Secondary Axis
-                                id: 'sector-axis',
+                                id: 'subsector-axis',
                                 gridLineWidth: 0,
                                 title: {
                                     text: '%'
@@ -1299,37 +865,29 @@ define(function () {
                     },
 
                     filterFor: {
-
-                        "filter_total_donor_recipient_subsector_oda": ['donorcode',  'recipientcode', 'purposecode', 'year', 'oda'],
-                        "filter_total_donor_recipient_sector_oda": ['donorcode', 'recipientcode', 'year', 'oda'],
-
-                        "filter_total_oda_dac_members_by_year": ['year', 'oda'],
-                        "filter_dac_members_by_donor_year": ['recipientcode', 'purposecode', 'year', 'oda']
+                        "filter_total_country_sector_oda": ['recipientcode', 'purposecode', 'year', 'oda'],
+                        "filter_total_country_subsector_oda": ['recipientcode', 'purposecode', 'year', 'oda']
                     },
-
-                    postProcess: [
-
+                    postProcess:[
                         {
                             "name": "union",
                             "sid": [
                                 {
-                                    "uid": "subsector_donor_oda"
+                                    "uid": "total_country_sector_oda" // RESULT OF PART 1: TOTAL ODA FOR SECTOR IN COUNTRY
                                 },
                                 {
-                                    "uid": "sector_donor_oda"
+                                    "uid": "total_country_subsector_oda" // RESULT OF PART 2: TOTAL ODA FOR SUB SECTOR IN COUNTRY
                                 },
                                 {
-                                    "uid": "percentage_ODA"
-                                },
-                                {
-                                    "uid": "OECD_AVG"
-
+                                    "uid":"percentage_ODA" // RESULT OF PART 3: PERCENTAGE CALCULATION (TOTAL ODA FOR SECTOR IN COUNTRY / TOTAL ODA FOR COUNTRY  x 100)
                                 }
+
                             ],
                             "parameters": {
-                            }
+                            },
+                            "rid":{"uid":"union_process"}
 
-                        }, // PART 5: UNION is the FINAL PART IN THE PROCESS
+                        },  // PART 4: UNION is the FINAL PART IN THE PROCESS
                         {
                             "name": "filter",
                             "sid": [
@@ -1349,25 +907,6 @@ define(function () {
                                             "usd_commitment"
                                         ]
                                     },
-                                    "donorcode": {
-                                        "codes": [
-                                            {
-                                                "uid": "crs_donors",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "1"
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    "year": {
-                                        "time": [
-                                            {
-                                                "from": 2000,
-                                                "to": 2014
-                                            }
-                                        ]
-                                    },
                                     "recipientcode": {
                                         "codes": [
                                             {
@@ -1377,6 +916,154 @@ define(function () {
                                                     "625"
                                                 ]
                                             }
+                                        ]
+                                    },
+                                    "fao_sector": {
+                                        "enumeration": [
+                                            "1"
+                                        ]
+                                    },
+                                    /* "purposecode": { // FAO Related purposecodes
+                                     "codes": [
+                                     {
+                                     "uid": "crs_purposes",
+                                     "version": "2016",
+                                     "codes": [
+                                     "12240",
+                                     "14030",
+                                     "14031",
+                                     "15170",
+                                     "16062",
+                                     "23070",
+                                     "31110",
+                                     "31120",
+                                     "31130",
+                                     "31140",
+                                     "31150",
+                                     "31161",
+                                     "31162",
+                                     "31163",
+                                     "31164",
+                                     "31165",
+                                     "31166",
+                                     "31181",
+                                     "31182",
+                                     "31191",
+                                     "31192",
+                                     "31193",
+                                     "31194",
+                                     "31195",
+                                     "31210",
+                                     "31220",
+                                     "31261",
+                                     "31281",
+                                     "31282",
+                                     "31291",
+                                     "31310",
+                                     "31320",
+                                     "31381",
+                                     "31382",
+                                     "31391",
+                                     "32161",
+                                     "32162",
+                                     "32163",
+                                     "32165",
+                                     "32267",
+                                     "41010",
+                                     "41020",
+                                     "41030",
+                                     "41040",
+                                     "41050",
+                                     "41081",
+                                     "41082",
+                                     "43040",
+                                     "43050",
+                                     "52010",
+                                     "72040",
+                                     "74010"
+                                     ]
+                                     }
+                                     ]
+                                     },*/
+                                    "year": {
+                                        "time": [
+                                            {
+                                                "from": 2000,
+                                                "to": 2014
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "rid":
+                            {"uid":"filter_total_country_sector_oda"}
+                        }, // PART 1: TOTAL ODA FOR THE SECTOR IN COUNTRY: (1i) Filter
+                        {
+                            "name": "group",
+                            "parameters": {
+                                "by": [
+                                    "year"
+                                ],
+                                "aggregations": [
+                                    {
+                                        "columns": [
+                                            "value"
+                                        ],
+                                        "rule": "SUM"
+                                    },
+                                    {
+                                        "columns": [
+                                            "unitcode"
+                                        ],
+                                        "rule": "first"
+                                    }
+                                ]
+                            }
+                        }, // (1ii): TOTAL ODA FOR THE SECTOR IN COUNTRY: Group by
+                        {
+                            "name": "addcolumn",
+                            "parameters": {
+                                "column": {
+                                    "dataType": "text",
+                                    "id": "indicator",
+                                    "title": {
+                                        "EN": "Indicator"
+                                    },
+                                    "domain": {
+                                        "codes": [
+                                            {
+                                                "extendedName": {
+                                                    "EN": "Adam Processes"
+                                                },
+                                                "idCodeList": "adam_processes"
+                                            }
+                                        ]
+                                    },
+                                    "subject": null
+                                },
+                                "value": "ODA in the Sector for the Country" // PART 1 FINAL INDICATOR NAME
+                            },
+                            "rid": {
+                                "uid": "total_country_sector_oda"
+                            }
+                        }, // (1iii): TOTAL ODA FOR THE SECTOR IN COUNTRY: Add Column
+                        {
+                            "name": "filter",
+                            "sid": [
+                                {
+                                    "uid": "adam_usd_aggregation_table"
+                                }
+                            ],
+                            "parameters": {
+                                "columns": [
+                                    "year",
+                                    "value",
+                                    "unitcode"
+                                ],
+                                "rows": {
+                                    "oda": {
+                                        "enumeration": [
+                                            "usd_commitment"
                                         ]
                                     },
                                     "purposecode": {
@@ -1385,165 +1072,8 @@ define(function () {
                                                 "uid": "crs_purposes",
                                                 "version": "2016",
                                                 "codes": [
-                                                    "74010"
+                                                    "12240"
                                                 ]
-                                            }
-                                        ]
-                                    }
-
-                                }
-                            },
-                            "rid": {
-                                "uid": "filter_total_donor_recipient_subsector_oda"
-                            }
-                        }, // PART 1: TOTAL ODA FROM DONOR TO RECIPIENT FOR SUB SECTOR: (1i) Filter
-                        {
-                            "name": "group",
-                            "parameters": {
-                                "by": [
-                                    "year"
-                                ],
-                                "aggregations": [
-                                    {
-                                        "columns": [
-                                            "value"
-                                        ],
-                                        "rule": "SUM"
-                                    },
-                                    {
-                                        "columns": [
-                                            "unitcode"
-                                        ],
-                                        "rule": "first"
-                                    }
-                                ]
-                            }
-                        }, // (1ii): TOTAL ODA FROM DONOR TO RECIPIENT FOR SUB SECTOR: Group by
-                        {
-                            "name": "addcolumn",
-                            "parameters": {
-                                "column": {
-                                    "dataType": "text",
-                                    "id": "indicator",
-                                    "title": {
-                                        "EN": "Indicator"
-                                    },
-                                    "domain": {
-                                        "codes": [
-                                            {
-                                                "extendedName": {
-                                                    "EN": "Adam Processes"
-                                                },
-                                                "idCodeList": "adam_processes"
-                                            }
-                                        ]
-                                    },
-                                    "subject": null
-                                },
-                                "value": "ODA of Sub Sector from Resource Partner in that Country"
-                            },
-                            "rid": {
-                                "uid": "subsector_donor_oda"
-                            }
-                        }, // (1iii): TOTAL ODA FROM DONOR TO RECIPIENT FOR SUB SECTOR: Add Column
-
-                        {
-                            "name": "filter",
-                            "sid": [
-                                {
-                                    "uid": "adam_usd_aggregation_table"
-                                }
-                            ],
-                            "parameters": {
-                                "columns": [
-                                    "year",
-                                    "value",
-                                    "unitcode"
-                                ],
-                                "rows": {
-                                    "oda": {
-                                        "enumeration": [
-                                            "usd_commitment"
-                                        ]
-                                    },
-                                    "purposecode": { // FAO Related purposecodes
-                                        "codes": [
-                                            {
-                                                "uid": "crs_purposes",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "12240",
-                                                    "14030",
-                                                    "14031",
-                                                    "15170",
-                                                    "16062",
-                                                    "23070",
-                                                    "31110",
-                                                    "31120",
-                                                    "31130",
-                                                    "31140",
-                                                    "31150",
-                                                    "31161",
-                                                    "31162",
-                                                    "31163",
-                                                    "31164",
-                                                    "31165",
-                                                    "31166",
-                                                    "31181",
-                                                    "31182",
-                                                    "31191",
-                                                    "31192",
-                                                    "31193",
-                                                    "31194",
-                                                    "31195",
-                                                    "31210",
-                                                    "31220",
-                                                    "31261",
-                                                    "31281",
-                                                    "31282",
-                                                    "31291",
-                                                    "31310",
-                                                    "31320",
-                                                    "31381",
-                                                    "31382",
-                                                    "31391",
-                                                    "32161",
-                                                    "32162",
-                                                    "32163",
-                                                    "32165",
-                                                    "32267",
-                                                    "41010",
-                                                    "41020",
-                                                    "41030",
-                                                    "41040",
-                                                    "41050",
-                                                    "41081",
-                                                    "41082",
-                                                    "43040",
-                                                    "43050",
-                                                    "52010",
-                                                    "72040",
-                                                    "74010"
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    "donorcode": {
-                                        "codes": [
-                                            {
-                                                "uid": "crs_donors",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "1"
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    "year": {
-                                        "time": [
-                                            {
-                                                "from": 2000,
-                                                "to": 2014
                                             }
                                         ]
                                     },
@@ -1557,13 +1087,20 @@ define(function () {
                                                 ]
                                             }
                                         ]
+                                    },
+                                    "year": {
+                                        "time": [
+                                            {
+                                                "from": 2000,
+                                                "to": 2014
+                                            }
+                                        ]
                                     }
                                 }
                             },
-                            "rid": {
-                                "uid": "filter_total_donor_recipient_sector_oda"
-                            }
-                        },  // PART 2: TOTAL ODA FROM DONOR TO RECIPIENT FOR SECTOR : (2i) Filter
+                            "rid":{"uid":"filter_total_country_subsector_oda"}
+
+                        }, // PART 2: TOTAL ODA for SUBSECTOR in COUNTRY: (2i) Filter
                         {
                             "name": "group",
                             "parameters": {
@@ -1584,9 +1121,9 @@ define(function () {
                                         "rule": "first"
                                     }
                                 ]
-                            },
-                            "rid":{"uid":"sector_ODA"}
-                        }, // (2ii): TOTAL ODA FROM DONOR TO RECIPIENT FOR SECTOR : Group by
+                            }
+
+                        }, // (2ii): TOTAL ODA for SUBSECTOR in COUNTRY: Group by
                         {
                             "name": "addcolumn",
                             "parameters": {
@@ -1608,21 +1145,18 @@ define(function () {
                                     },
                                     "subject": null
                                 },
-                                "value": "ODA of Sector from Resource Partner in that Country"
+                                "value": "ODA in the Sub Sector for the Country" // PART 2 FINAL INDICATOR NAME
                             },
-                            "rid": {
-                                "uid": "sector_donor_oda"
-                            }
-                        }, // (2iii): TOTAL ODA FROM DONOR TO RECIPIENT FOR SECTOR : Add Column
-
+                            "rid":{"uid":"total_country_subsector_oda"}
+                        }, // (2iii): TOTAL ODA for SUB SECTOR in COUNTRY: Add Column
                         {
                             "name": "join",
                             "sid": [
                                 {
-                                    "uid": "subsector_donor_oda"
+                                    "uid": "total_country_sector_oda"
                                 },
                                 {
-                                    "uid": "sector_donor_oda"
+                                    "uid": "total_country_subsector_oda"
                                 }
                             ],
                             "parameters": {
@@ -1661,9 +1195,12 @@ define(function () {
                                 },
                                 "value": {
                                     "keys":  ["1 = 1"],
-                                    "values":[" ( subsector_donor_oda_value  / sector_donor_oda_value )*100"]
+                                    "values":[" ( total_country_subsector_oda_value / total_country_sector_oda_value )*100"]
 
                                 }
+                            },
+                            "rid": {
+                                "uid": "percentage_Value"
                             }
                         }, // (3ii) PERCENTAGE CALCULATION: Add Column
                         {
@@ -1726,161 +1263,43 @@ define(function () {
                             "rid": {
                                 "uid": "percentage_ODA"
                             }
-                        }, // (3vi) PERCENTAGE CALCULATION: Add Column
-
-                        {
-                            "name": "filter",
-                            "sid": [
-                                {
-                                    "uid": "adam_usd_aggregation_table"
+                        } // (3vi) PERCENTAGE CALCULATION: Add Column
+                    ]
+                },
+                {
+                    id: 'top-partners', // TOP DONORS
+                    type: 'chart',
+                    config: {
+                        type: "column",
+                        x: ["donorcode_EN"], //x axis
+                        series: ["flowcategory_code_EN"], // series
+                        y: ["value"],//Y dimension
+                        aggregationFn: {"value": "sum"},
+                        useDimensionLabelsIfExist: false,// || default raw else fenixtool
+                        config: {
+                            colors: ['#008080'],
+                            legend: {
+                                title: {
+                                    text: null
                                 }
-                            ],
-                            "parameters": {
-                                "columns": [
-                                    "year",
-                                    "donorcode"
-                                ],
-                                "rows": {
-                                    "oda": {
-                                        "enumeration": [
-                                            "usd_commitment"
-                                        ]
-                                    },
-                                    "dac_member": {
-                                        "enumeration": [
-                                            "t"
-                                        ]
-                                    },
-                                    "purposecode": { // FAO Related purposecodes
-                                        "codes": [
-                                            {
-                                                "uid": "crs_purposes",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "12240",
-                                                    "14030",
-                                                    "14031",
-                                                    "15170",
-                                                    "16062",
-                                                    "23070",
-                                                    "31110",
-                                                    "31120",
-                                                    "31130",
-                                                    "31140",
-                                                    "31150",
-                                                    "31161",
-                                                    "31162",
-                                                    "31163",
-                                                    "31164",
-                                                    "31165",
-                                                    "31166",
-                                                    "31181",
-                                                    "31182",
-                                                    "31191",
-                                                    "31192",
-                                                    "31193",
-                                                    "31194",
-                                                    "31195",
-                                                    "31210",
-                                                    "31220",
-                                                    "31261",
-                                                    "31281",
-                                                    "31282",
-                                                    "31291",
-                                                    "31310",
-                                                    "31320",
-                                                    "31381",
-                                                    "31382",
-                                                    "31391",
-                                                    "32161",
-                                                    "32162",
-                                                    "32163",
-                                                    "32165",
-                                                    "32267",
-                                                    "41010",
-                                                    "41020",
-                                                    "41030",
-                                                    "41040",
-                                                    "41050",
-                                                    "41081",
-                                                    "41082",
-                                                    "43040",
-                                                    "43050",
-                                                    "52010",
-                                                    "72040",
-                                                    "74010"
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    "year": {
-                                        "time": [
-                                            {
-                                                "from": 2000,
-                                                "to": 2014
-                                            }
-                                        ]
+                            },
+                            plotOptions: {
+                                column: {
+                                    events: {
+                                        legendItemClick: function () {
+                                            return false;
+                                        }
                                     }
-                                }
-                            },
-                            "rid": {
-                                "uid": "filter_total_oda_dac_members_by_year"
-                            }
-                        }, // PART 4 OECD DONORS (DAC MEMBERS) AVERAGE ODA: (4i) Filter
-                        {
-                            "name": "group",
-                            "parameters": {
-                                "by": [
-                                    "donorcode",
-                                    "year"
-
-
-                                ],
-                                "aggregations": [
-                                ]
-                            },
-                            "rid": {
-                                "uid": "sd"
-                            }
-                        }, // (4ii): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Group by
-                        {
-                            "name": "addcolumn",
-                            "parameters": {
-                                "column": {
-                                    "dataType": "number",
-                                    "id": "value_count",
-                                    "title": {
-                                        "EN": "Value"
-                                    },
-                                    "subject": null
                                 },
-                                "value": 1
-                            },
-                            "rid": {
-                                "uid": "percentage_Value"
+                                allowPointSelect: false
                             }
-                        },
-                        {
-                            "name": "group",
-                            "parameters": {
-                                "by": [
-                                    "year"
-                                ],
-                                "aggregations": [
-                                    {
-                                        "columns": [
-                                            "value_count"
-                                        ],
-                                        "rule": "SUM"
-                                    }
-                                ]
-                            },
-                            "rid": {
-                                "uid": "count_dac_members"
-                            }
-                        },
+                        }
 
-
+                    },
+                    filterFor: {
+                        "filter_donor": ['recipientcode', 'purposecode', 'year', 'oda']
+                    },
+                    postProcess: [
                         {
                             "name": "filter",
                             "sid": [
@@ -1889,33 +1308,74 @@ define(function () {
                                 }
                             ],
                             "parameters": {
-                                "columns": [
-                                    "year",
-                                    "value",
-                                    "unitcode"
-                                ],
                                 "rows": {
-                                    "oda": {
+                                    "fao_sector": {
                                         "enumeration": [
-                                            "usd_commitment"
+                                            "1"
                                         ]
                                     },
-                                    "dac_member": {
-                                        "enumeration": [
-                                            "t"
-                                        ]
-                                    },
-                                    "purposecode": {
-                                        "codes": [
-                                            {
-                                                "uid": "crs_purposes",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "74010"
-                                                ]
-                                            }
-                                        ]
-                                    },
+                                    /* "purposecode": {
+                                     "codes": [
+                                     {
+                                     "uid": "crs_purposes",
+                                     "version": "2016",
+                                     "codes": [
+                                     "12240",
+                                     "14030",
+                                     "14031",
+                                     "15170",
+                                     "16062",
+                                     "23070",
+                                     "31110",
+                                     "31120",
+                                     "31130",
+                                     "31140",
+                                     "31150",
+                                     "31161",
+                                     "31162",
+                                     "31163",
+                                     "31164",
+                                     "31165",
+                                     "31166",
+                                     "31181",
+                                     "31182",
+                                     "31191",
+                                     "31192",
+                                     "31193",
+                                     "31194",
+                                     "31195",
+                                     "31210",
+                                     "31220",
+                                     "31261",
+                                     "31281",
+                                     "31282",
+                                     "31291",
+                                     "31310",
+                                     "31320",
+                                     "31381",
+                                     "31382",
+                                     "31391",
+                                     "32161",
+                                     "32162",
+                                     "32163",
+                                     "32165",
+                                     "32267",
+                                     "41010",
+                                     "41020",
+                                     "41030",
+                                     "41040",
+                                     "41050",
+                                     "41081",
+                                     "41082",
+                                     "43040",
+                                     "43050",
+                                     "52010",
+                                     "72040",
+                                     "74010"
+                                     ]
+                                     }
+                                     ]
+                                     },*/
                                     "recipientcode": {
                                         "codes": [
                                             {
@@ -1930,6 +1390,275 @@ define(function () {
                                     "year": {
                                         "time": [
                                             {
+                                                "from": "2000",
+                                                "to": "2014"
+                                            }
+                                        ]
+                                    },
+                                    "oda":{
+                                        "enumeration":[
+                                            "usd_commitment"
+                                        ]
+                                    }
+                                }
+                            },
+                            "rid":{"uid":"filter_donor"}
+                        },
+                        {
+                            "name": "group",
+                            "parameters": {
+                                "by": [
+                                    "donorcode"
+                                ],
+                                "aggregations": [
+                                    {
+                                        "columns": [
+                                            "value"
+                                        ],
+                                        "rule": "SUM"
+                                    },
+                                    {
+                                        "columns": [
+                                            "unitcode"
+                                        ],
+                                        "rule": "first"
+                                    },
+                                    {
+                                        "columns": [
+                                            "flowcategory_code"
+                                        ],
+                                        "rule": "first"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "order",
+                            "parameters": {
+                                "value": "DESC"
+                            }
+                        },
+                        {
+                            "name": "page",
+                            "parameters": {
+                                "perPage": 10,
+                                "page": 1
+                            }
+                        }
+
+                    ]
+                },
+                {
+                    id: 'top-partners-others', // TOP DONORS Vs OTHER DONORS
+                    type: 'chart',
+                    config: {
+                        type: "pieold",
+                        x: ["indicator"], //x axis and series
+                        series: ["unitname"], // series
+                        y: ["value"],//Y dimension
+                        aggregationFn: {"value": "sum"},
+                        useDimensionLabelsIfExist: false,// || default raw else fenixtool
+
+                        config: {
+                            colors: ['#008080'],
+                            legend: {
+                                title: {
+                                    text: null
+                                }
+                            },
+                            plotOptions: {
+                                pie: {
+                                    showInLegend: true
+                                },
+                                series: {
+                                    point: {
+                                        events: {
+                                            legendItemClick: function () {
+                                                return false; // <== returning false will cancel the default action
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            chart: {
+                                events: {
+                                    load: function (event) {
+                                        if (this.options.chart.forExport) {
+                                            Highcharts.each(this.series, function (series) {
+                                                series.update({
+                                                    dataLabels: {
+                                                        enabled: false
+                                                    }
+                                                }, false);
+                                            });
+                                            this.redraw();
+                                        }
+                                    }
+                                }
+
+                            },
+                            tooltip: {
+                                style: {width: '200px', whiteSpace: 'normal'},
+                                formatter: function () {
+                                    var val = this.y;
+                                    if (val.toFixed(0) < 1) {
+                                        val = (val * 1000).toFixed(2) + ' K'
+                                    } else {
+                                        val = val.toFixed(2) + ' USD Mil'
+                                    }
+
+                                    return '<b>' + this.percentage.toFixed(2) + '% (' + val + ')</b>';
+                                }
+                            },
+                            exporting: {
+                                buttons: {
+                                    toggleDataLabelsButton: {
+                                        enabled: false
+                                    }
+                                },
+                                chartOptions: {
+                                    legend: {
+                                        title: '',
+                                        enabled: true,
+                                        align: 'center',
+                                        layout: 'vertical',
+                                        useHTML: true,
+                                        labelFormatter: function () {
+                                            var val = this.y;
+                                            if (val.toFixed(0) < 1) {
+                                                val = (val * 1000).toFixed(2) + ' K'
+                                            } else {
+                                                val = val.toFixed(2) + ' USD Mil'
+                                            }
+
+                                            return '<div style="width:200px"><span style="float:left;  font-size:9px">' + this.name.trim() + ': ' + this.percentage.toFixed(2) + '% (' + val + ')</span></div>';
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    filterFor: {
+                        "filter_top_10_donors_sum": ['recipientcode', 'purposecode', 'year', 'oda'],
+                        "filter_top_all_donors_sum": ['recipientcode', 'purposecode', 'year', 'oda']
+                    },
+
+                    postProcess: [
+                        {
+                            "name": "union",
+                            "sid": [
+                                {
+                                    "uid": "top_10_donors_sum"
+                                },
+                                {
+                                    "uid": "others"
+                                }
+                            ],
+                            "parameters": {},
+                            "rid": {
+                                "uid": "union_process"
+                            }
+                        },
+                        {
+                            "name": "filter",
+                            "sid": [
+                                {
+                                    "uid": "adam_usd_aggregation_table"
+                                }
+                            ],
+                            "parameters": {
+                                "columns": [
+                                    "donorcode",
+                                    "value",
+                                    "unitcode"
+                                ],
+                                "rows": {
+                                    "oda": {
+                                        "enumeration": [
+                                            "usd_commitment"
+                                        ]
+                                    },
+                                    "recipientcode": {
+                                        "codes": [
+                                            {
+                                                "uid": "crs_recipients",
+                                                "version": "2016",
+                                                "codes": [
+                                                    "625"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "fao_sector": {
+                                        "enumeration": [
+                                            "1"
+                                        ]
+                                    },
+                                    /* "purposecode": { // FAO Related purposecodes
+                                     "codes": [
+                                     {
+                                     "uid": "crs_purposes",
+                                     "version": "2016",
+                                     "codes": [
+                                     "12240",
+                                     "14030",
+                                     "14031",
+                                     "15170",
+                                     "16062",
+                                     "23070",
+                                     "31110",
+                                     "31120",
+                                     "31130",
+                                     "31140",
+                                     "31150",
+                                     "31161",
+                                     "31162",
+                                     "31163",
+                                     "31164",
+                                     "31165",
+                                     "31166",
+                                     "31181",
+                                     "31182",
+                                     "31191",
+                                     "31192",
+                                     "31193",
+                                     "31194",
+                                     "31195",
+                                     "31210",
+                                     "31220",
+                                     "31261",
+                                     "31281",
+                                     "31282",
+                                     "31291",
+                                     "31310",
+                                     "31320",
+                                     "31381",
+                                     "31382",
+                                     "31391",
+                                     "32161",
+                                     "32162",
+                                     "32163",
+                                     "32165",
+                                     "32267",
+                                     "41010",
+                                     "41020",
+                                     "41030",
+                                     "41040",
+                                     "41050",
+                                     "41081",
+                                     "41082",
+                                     "43040",
+                                     "43050",
+                                     "52010",
+                                     "72040",
+                                     "74010"
+                                     ]
+                                     }
+                                     ]
+                                     },*/
+                                    "year": {
+                                        "time": [
+                                            {
                                                 "from": 2000,
                                                 "to": 2014
                                             }
@@ -1937,14 +1666,15 @@ define(function () {
                                     }
                                 }
                             },
-                            "rid":{"uid":"filter_dac_members_by_donor_year"}
-
-                        }, // (4iii): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Filter
+                            "rid": {
+                                "uid": "filter_top_10_donors_sum"
+                            }
+                        },
                         {
                             "name": "group",
                             "parameters": {
                                 "by": [
-                                    "year"
+                                    "donorcode"
                                 ],
                                 "aggregations": [
                                     {
@@ -1960,73 +1690,38 @@ define(function () {
                                         "rule": "first"
                                     }
                                 ]
-                            },
-                            "rid":{"uid":"aggregated_oecd"}
-                        }, // (4v): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Add Column
-
+                            }
+                        },
                         {
-                            "name": "join",
-                            "sid": [
-                                {
-                                    "uid": "count_dac_members"
-                                },
-                                {
-                                    "uid": "aggregated_oecd"
-                                }
-                            ],
+                            "name": "order",
                             "parameters": {
-                                "joins": [
-                                    [
-
-                                        {
-                                            "type": "id",
-                                            "value": "year"
-                                        }
-                                    ],
-                                    [
-                                        {
-                                            "type": "id",
-                                            "value": "year"
-                                        }
-
-                                    ]
+                                "value": "DESC"
+                            },
+                            "rid":{"uid":"filtered_dataset"}
+                        },
+                        {
+                            "name": "page",
+                            "parameters": {
+                                "perPage": 10,
+                                "page": 1
+                            }
+                        },
+                        {
+                            "name": "group",
+                            "parameters": {
+                                "by": [
+                                    "unitcode"
                                 ],
-                                "values": [
+                                "aggregations": [
+                                    {
+                                        "columns": [
+                                            "value"
+                                        ],
+                                        "rule": "SUM"
+                                    }
                                 ]
                             }
-                        }, // (4vii): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Join
-                        {
-                            "name": "addcolumn",
-                            "parameters": {
-                                "column": {
-                                    "dataType": "number",
-                                    "id": "value",
-                                    "title": {
-                                        "EN": "Value"
-                                    },
-                                    "subject": null
-                                },
-                                "value": {
-                                    "keys":  ["1 = 1"],
-                                    "values":[" ( aggregated_oecd_value / count_dac_members_value_count )"]
-                                }
-                            },
-                            "rid": {
-                                "uid": "avg_value"
-                            }
-                        }, // (4viii): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Add Column
-                        {
-                            "name": "filter",
-                            "parameters": {
-                                "columns": [
-                                    "year",
-                                    "value",
-                                    "aggregated_oecd_unitcode"
-                                ],
-                                "rows": {
-                                }
-                            }
-                        }, // (4ix): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Filter
+                        },
                         {
                             "name": "addcolumn",
                             "parameters": {
@@ -2048,12 +1743,149 @@ define(function () {
                                     },
                                     "subject": null
                                 },
-                                "value": "OECD Average of ODA in that Sub Sector in that Country"
+                                "value": "Top Resource Partners"
                             },
                             "rid": {
-                                "uid": "OECD_AVG"
+                                "uid": "top_10_donors_sum"
                             }
-                        } // (4x): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Add Column
+                        },
+                        {
+                            "name": "group",
+                            "sid":[{"uid":"filtered_dataset"}],
+                            "parameters": {
+                                "by": [
+                                    "unitcode"
+                                ],
+                                "aggregations": [
+                                    {
+                                        "columns": [
+                                            "value"
+                                        ],
+                                        "rule": "SUM"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "addcolumn",
+                            "parameters": {
+                                "column": {
+                                    "dataType": "text",
+                                    "id": "indicator",
+                                    "title": {
+                                        "EN": "Indicator"
+                                    },
+                                    "domain": {
+                                        "codes": [
+                                            {
+                                                "extendedName": {
+                                                    "EN": "Adam Processes"
+                                                },
+                                                "idCodeList": "adam_processes"
+                                            }
+                                        ]
+                                    },
+                                    "subject": null
+                                },
+                                "value": "sum of all donors"
+                            },
+                            "rid": {
+                                "uid": "top_all_donors_sum"
+                            }
+                        },
+                        {
+                            "name": "join",
+                            "sid": [
+                                {
+                                    "uid": "top_all_donors_sum"
+                                },
+                                {
+                                    "uid": "top_10_donors_sum"
+                                }
+                            ],
+                            "parameters": {
+                                "joins": [
+                                    [
+                                        {
+                                            "type": "id",
+                                            "value": "unitcode"
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "type": "id",
+                                            "value": "unitcode"
+                                        }
+                                    ]
+                                ],
+                                "values": []
+                            },
+                            "rid": {
+                                "uid": "join_process_total_donors"
+                            }
+                        },
+                        {
+                            "name": "addcolumn",
+                            "sid": [
+                                {
+                                    "uid": "join_process_total_donors"
+                                }
+                            ],
+                            "parameters": {
+                                "column": {
+                                    "dataType": "number",
+                                    "id": "value",
+                                    "title": {
+                                        "EN": "Value"
+                                    },
+                                    "subject": null
+                                },
+                                "value": {
+                                    "keys": [
+                                        "1 = 1"
+                                    ],
+                                    "values": [
+                                        "top_all_donors_sum_value - top_10_donors_sum_value"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "name": "filter",
+                            "parameters": {
+                                "columns": [
+                                    "value",
+                                    "unitcode"
+                                ]
+                            }
+                        },
+                        {
+                            "name": "addcolumn",
+                            "parameters": {
+                                "column": {
+                                    "dataType": "text",
+                                    "id": "indicator",
+                                    "title": {
+                                        "EN": "Indicator"
+                                    },
+                                    "domain": {
+                                        "codes": [
+                                            {
+                                                "extendedName": {
+                                                    "EN": "Adam Processes"
+                                                },
+                                                "idCodeList": "adam_processes"
+                                            }
+                                        ]
+                                    },
+                                    "subject": null
+                                },
+                                "value": "Other Resource Partners"
+                            },
+                            "rid": {
+                                "uid": "others"
+                            }
+                        }
                     ]
                 },
                 {
@@ -2062,7 +1894,7 @@ define(function () {
                     config: {
                         type: "column",
                         x: ["channelsubcategory_name"], //x axis
-                        series: ["flowcategory_name"], // series
+                        series: ["flowcategory_code_EN"], // series
                         y: ["value"],//Y dimension
                         aggregationFn: {"value": "sum"},
                         useDimensionLabelsIfExist: false,// || default raw else fenixtool
@@ -2087,8 +1919,12 @@ define(function () {
                         }
 
                     },
+
+                    filterFor: ['recipientcode', 'purposecode', 'year', 'oda'],
+
                     filter: { //FX-filter format
-                        purposecode: ["12240",
+                        purposecode: [
+                            "12240",
                             "14030",
                             "14031",
                             "15170",
@@ -2142,7 +1978,6 @@ define(function () {
                             "74010"
                         ],
                         recipientcode: ["625"],
-                        donorcode: ["1"],
                         year: [{value: "2000", parent: 'from'}, {value: "2014", parent:  'to'}]
                     },
                     postProcess: [
@@ -2162,7 +1997,7 @@ define(function () {
                                         "rule": "first"
                                     },
                                     {
-                                        "columns": ["flowcategory_name"],
+                                        "columns": ["flowcategory_code"],
                                         "rule": "first"
                                     }
                                 ]
@@ -2187,13 +2022,13 @@ define(function () {
                     type: 'chart',
                     config: {
                         type: "column",
-                        x: ["parentsector_name"], //x axis
-                        series: ["flowcategory_name"], // series
+                        x: ["parentsector_code_EN"], //x axis
+                        series: ["flowcategory_code_EN"], // series
                         y: ["value"],//Y dimension
                         aggregationFn: {"value": "sum"},
                         useDimensionLabelsIfExist: false,// || default raw else fenixtool
                         config: {
-                            colors: ['#5DA58D'],
+                            colors: ['#008080'],
                             legend: {
                                 title: {
                                     text: null
@@ -2212,29 +2047,72 @@ define(function () {
                         }
 
                     },
-                    filter: { //FX-filter format
-                        recipientcode: ["625"],
-                        donorcode: ["1"],
-                        year: [{value: "2000", parent: 'from'}, {value: "2014", parent:  'to'}]
+
+                    filterFor: {
+                        "filter_sectors": ['recipientcode', 'year', 'oda']
                     },
+
                     postProcess: [
+                        {
+                            "name": "filter",
+                            "sid": [
+                                {
+                                    "uid": "adam_usd_aggregation_table"
+                                }
+                            ],
+                            "parameters": {
+                                "rows": {
+                                    "recipientcode": {
+                                        "codes": [
+                                            {
+                                                "uid": "crs_recipients",
+                                                "version": "2016",
+                                                "codes": [
+                                                    "625"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "year": {
+                                        "time": [
+                                            {
+                                                "from": "2000",
+                                                "to": "2014"
+                                            }
+                                        ]
+                                    },
+                                    "oda":{
+                                        "enumeration":[
+                                            "usd_commitment"
+                                        ]
+                                    }
+                                }
+                            },
+                            "rid":{"uid":"filter_sectors"}
+                        },
                         {
                             "name": "group",
                             "parameters": {
                                 "by": [
-                                    "parentsector_name", "parentsector_code"
+                                    "parentsector_code"
                                 ],
                                 "aggregations": [
                                     {
-                                        "columns": ["value"],
+                                        "columns": [
+                                            "value"
+                                        ],
                                         "rule": "SUM"
                                     },
                                     {
-                                        "columns": ["unitcode"],
+                                        "columns": [
+                                            "unitcode"
+                                        ],
                                         "rule": "first"
                                     },
                                     {
-                                        "columns": ["flowcategory_name"],
+                                        "columns": [
+                                            "flowcategory_code"
+                                        ],
                                         "rule": "first"
                                     }
                                 ]
@@ -2249,10 +2127,11 @@ define(function () {
                         {
                             "name": "page",
                             "parameters": {
-                                "perPage": 10,  //top 10
+                                "perPage": 10,
                                 "page": 1
                             }
-                        }]
+                        }
+                    ]
                 },
                 {
                     id: 'top-sectors-others', // TOP SECTORS Vs OTHER SECTORS
@@ -2301,6 +2180,7 @@ define(function () {
                                         }
                                     }
                                 }
+
                             },
                             tooltip: {
                                 style: {width: '200px', whiteSpace: 'normal'},
@@ -2343,10 +2223,9 @@ define(function () {
                             }
                         }
                     },
-
                     filterFor: {
-                        "filter_top_10_sectors_sum": ['recipientcode', 'donorocode', 'year', 'oda'],
-                        "filter_all_sectors_sum": ['recipientcode', 'donorocode', 'year', 'oda']
+                        "filter_top_10_sectors_sum": ['recipientcode', 'year', 'oda'],
+                        "filter_top_all_sectors_sum": ['recipientcode', 'year', 'oda']
                     },
 
                     postProcess: [
@@ -2355,11 +2234,9 @@ define(function () {
                             "sid": [
                                 {
                                     "uid": "top_10_sectors_sum"
-                                    // RESULT OF PART 1: TOTAL ODA for TOP 10 SECTORS
                                 },
                                 {
                                     "uid": "others"
-                                    // RESULT OF PART 3: TOTAL ODA OTHERS CALCULATION (TOTAL ODA ALL SECTORS (PART 2) - TOTAL ODA FOR TOP 10 Sectors)
                                 }
                             ],
                             "parameters": {},
@@ -2367,8 +2244,6 @@ define(function () {
                                 "uid": "union_process"
                             }
                         },
-                        // PART 4: UNION is the FINAL PART IN THE PROCESS
-
                         {
                             "name": "filter",
                             "sid": [
@@ -2399,17 +2274,6 @@ define(function () {
                                             }
                                         ]
                                     },
-                                    "donorcode": {
-                                        "codes": [
-                                            {
-                                                "uid": "crs_donors",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "1"
-                                                ]
-                                            }
-                                        ]
-                                    },
                                     "year": {
                                         "time": [
                                             {
@@ -2424,7 +2288,6 @@ define(function () {
                                 "uid": "filter_top_10_sectors_sum"
                             }
                         },
-                        // PART 1: TOTAL ODA for TOP 10 SECTORS: (1i) Filter
                         {
                             "name": "group",
                             "parameters": {
@@ -2447,7 +2310,6 @@ define(function () {
                                 ]
                             }
                         },
-                        // (1ii): TOTAL ODA for TOP 10 SECTORS: Group by
                         {
                             "name": "order",
                             "parameters": {
@@ -2455,7 +2317,6 @@ define(function () {
                             },
                             "rid":{"uid":"filtered_dataset"}
                         },
-                        // (1iii): TOTAL ODA for TOP 10 SECTORS: Order by
                         {
                             "name": "page",
                             "parameters": {
@@ -2463,7 +2324,6 @@ define(function () {
                                 "page": 1
                             }
                         },
-                        // (1iv): TOTAL ODA for TOP 10 SECTORS: Limit
                         {
                             "name": "group",
                             "parameters": {
@@ -2480,7 +2340,6 @@ define(function () {
                                 ]
                             }
                         },
-                        // (1vi): TOTAL ODA for TOP 10 SECTORS: Group by
                         {
                             "name": "addcolumn",
                             "parameters": {
@@ -2503,13 +2362,11 @@ define(function () {
                                     "subject": null
                                 },
                                 "value": "Top Sectors"
-                                // PART 1 FINAL INDICATOR NAME
                             },
                             "rid": {
                                 "uid": "top_10_sectors_sum"
                             }
                         },
-                        // (1vii): TOTAL ODA for TOP 10 PARTNERS: Add Column
                         {
                             "name": "group",
                             "sid":[{"uid":"filtered_dataset"}],
@@ -2527,7 +2384,6 @@ define(function () {
                                 ]
                             }
                         },
-                        // PART 2i: TOTAL ODA for ALL SECTORS: Group by
                         {
                             "name": "addcolumn",
                             "parameters": {
@@ -2550,13 +2406,11 @@ define(function () {
                                     "subject": null
                                 },
                                 "value": "sum of all sectors"
-                                // PART 2 FINAL INDICATOR NAME
                             },
                             "rid": {
                                 "uid": "top_all_sectors_sum"
                             }
                         },
-                        // (2ii): TOTAL ODA for ALL SECTORS : Add Column
                         {
                             "name": "join",
                             "sid": [
@@ -2588,7 +2442,6 @@ define(function () {
                                 "uid": "join_process_total_sectors"
                             }
                         },
-                        // PART 3: TOTAL ODA OTHERS CALCULATION: (3i) Join
                         {
                             "name": "addcolumn",
                             "sid": [
@@ -2615,7 +2468,6 @@ define(function () {
                                 }
                             }
                         },
-                        // (3ii): TOTAL ODA OTHERS CALCULATION: Add Column
                         {
                             "name": "filter",
                             "parameters": {
@@ -2625,7 +2477,6 @@ define(function () {
                                 ]
                             }
                         },
-                        // (3iii): TOTAL ODA OTHERS CALCULATION: Filter (filter out what is not needed)
                         {
                             "name": "addcolumn",
                             "parameters": {
@@ -2648,13 +2499,11 @@ define(function () {
                                     "subject": null
                                 },
                                 "value": "Other Sectors"
-                                // PART 3 FINAL INDICATOR NAME
                             },
                             "rid": {
                                 "uid": "others"
                             }
                         }
-                        // (3iv): TOTAL ODA OTHERS CALCULATION: Add Column
                     ]
                 },
                 {
@@ -2662,12 +2511,11 @@ define(function () {
                     type: 'chart',
                     config: {
                         type: "pieold",
-                        x: ["purposename"], //x axis and series
-                        series: ["flowcategory_name"], // series
+                        x: ["purposecode_EN"], //x axis and series
+                        series: ["flowcategory_code_EN"], // series
                         y: ["value"],//Y dimension
                         aggregationFn: {"value": "sum"},
                         useDimensionLabelsIfExist: false,// || default raw else fenixtool
-
                         config: {
                             chart: {
                                 events: {
@@ -2728,8 +2576,205 @@ define(function () {
                         }
 
                     },
+
+                    filterFor: {
+                        "filter_top_10_subsectors": ['recipientcode', 'year', 'oda']
+                    },
+
+                    postProcess: [
+                        {
+                            "name": "filter",
+                            "sid": [
+                                {
+                                    "uid": "adam_usd_aggregation_table"
+                                }
+                            ],
+                            "parameters": {
+                                "rows": {
+                                    "recipientcode": {
+                                        "codes": [
+                                            {
+                                                "uid": "crs_recipients",
+                                                "version": "2016",
+                                                "codes": [
+                                                    "625"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "oda": {
+                                        "enumeration": [
+                                            "usd_commitment"
+                                        ]
+                                    },
+                                    "fao_sector": {
+                                        "enumeration": [
+                                            "1"
+                                        ]
+                                    },
+                                    /*  "purposecode": {
+                                     "codes": [
+                                     {
+                                     "uid": "crs_purposes",
+                                     "version": "2016",
+                                     "codes": [
+                                     "12240",
+                                     "14030",
+                                     "14031",
+                                     "15170",
+                                     "16062",
+                                     "23070",
+                                     "31110",
+                                     "31120",
+                                     "31130",
+                                     "31140",
+                                     "31150",
+                                     "31161",
+                                     "31162",
+                                     "31163",
+                                     "31164",
+                                     "31165",
+                                     "31166",
+                                     "31181",
+                                     "31182",
+                                     "31191",
+                                     "31192",
+                                     "31193",
+                                     "31194",
+                                     "31195",
+                                     "31210",
+                                     "31220",
+                                     "31261",
+                                     "31281",
+                                     "31282",
+                                     "31291",
+                                     "31310",
+                                     "31320",
+                                     "31381",
+                                     "31382",
+                                     "31391",
+                                     "32161",
+                                     "32162",
+                                     "32163",
+                                     "32165",
+                                     "32267",
+                                     "41010",
+                                     "41020",
+                                     "41030",
+                                     "41040",
+                                     "41050",
+                                     "41081",
+                                     "41082",
+                                     "43040",
+                                     "43050",
+                                     "52010",
+                                     "72040",
+                                     "74010"
+                                     ]
+                                     }
+                                     ]
+                                     },*/
+                                    "year": {
+                                        "time": [
+                                            {
+                                                "from": "2000",
+                                                "to": "2014"
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "rid":{"uid":"filter_top_10_subsectors"}
+                        },
+                        {
+                            "name": "group",
+                            "parameters": {
+                                "by": [
+                                    "purposecode"
+                                ],
+                                "aggregations": [
+                                    {
+                                        "columns": [
+                                            "value"
+                                        ],
+                                        "rule": "SUM"
+                                    },
+                                    {
+                                        "columns": [
+                                            "unitcode"
+                                        ],
+                                        "rule": "first"
+                                    },
+                                    {
+                                        "columns": [
+                                            "flowcategory_code"
+                                        ],
+                                        "rule": "first"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "order",
+                            "parameters": {
+                                "value": "DESC"
+                            }
+                        },
+                        {
+                            "name": "page",
+                            "parameters": {
+                                "perPage": 10,
+                                "page": 1
+                            }
+                        }
+                    ]
+
+                },
+                {
+                    id: 'regional-map',
+                    type: 'map',
+                    config: {
+                        geoSubject: 'gaul0',
+                        colorRamp: 'GnBu',  //Blues, Greens,
+                        //colorRamp values: http://fenixrepo.fao.org/cdn/fenix/fenix-ui-map-datasets/colorramp.png
+
+                        legendtitle: 'ODA',
+
+                        fenix_ui_map: {
+
+                            plugins: {
+                                fullscreen: false,
+                                disclaimerfao: false
+                            },
+                            guiController: {
+                                overlay: false,
+                                baselayer: false,
+                                wmsLoader: false
+                            },
+
+                            baselayers: {
+                                "cartodb": {
+                                    title_en: "Baselayer",
+                                    url: 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+                                    subdomains: 'abcd',
+                                    maxZoom: 19
+                                }
+                            },
+                            labels: true,
+                            boundaries: true,
+
+                            zoomToCountry: [1]
+
+                            //highlight service NOT WORK FOR NOW
+                            //highlightCountry : [1], // GAUL Afghanistan
+                        }
+                    },
+
+                    filterFor: ['un_region_code', 'purposecode', 'year', 'oda'],
+
                     filter: { //FX-filter format
-                        purposecode: ["12240",
+                        purposecode: [
+                            "12240",
                             "14030",
                             "14031",
                             "15170",
@@ -2782,16 +2827,15 @@ define(function () {
                             "72040",
                             "74010"
                         ],
-                        recipientcode: ["625"],
-                        donorcode: ["1"],
-                        year: [{value: "2000", parent: 'from'}, {value: "2014", parent: 'to'}]
+                        un_region_code: ["034"], // Region = 'Southern Asia'
+                        year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
                     },
                     postProcess: [
                         {
                             "name": "group",
                             "parameters": {
                                 "by": [
-                                    "purposename"
+                                    "gaul0"
                                 ],
                                 "aggregations": [
                                     {
@@ -2803,25 +2847,20 @@ define(function () {
                                         "rule": "first"
                                     },
                                     {
-                                        "columns": ["flowcategory_name"],
+                                        "columns": ["unitname"],
                                         "rule": "first"
                                     }
                                 ]
                             }
                         },
                         {
-                            "name": "order",
+                            "name": "select",
                             "parameters": {
-                                "value": "DESC"
+                                "query": "WHERE gaul0<>?",
+                                "queryParameters": [{"value": "NA"}]
                             }
-                        },
-                        {
-                            "name": "page",
-                            "parameters": {
-                                "perPage": 10,  //top 10
-                                "page": 1
-                            }
-                        }]
+                        }
+                    ]//
                 }
             ]
         }

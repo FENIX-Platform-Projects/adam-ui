@@ -4,21 +4,21 @@ define(
         'underscore',
         'views/base/view',
         'text!templates/analyse/partner_matrix/filters.hbs',
-        'i18n!nls/filter',
         'fx-filter/start',
-        'fx-common/utils',
-        'lib/utils',
+        'views/common/filter-validator',
+        'lib/filter-utils',
         'config/Config',
         'config/analyse/partner_matrix/config-partner-matrix',
         'config/analyse/partner_matrix/Events',
         'amplify'
-    ], function ($, _, View, template, i18nLabels, Filter, FxUtils, Utils, BaseConfig, PartnerMatrixConfig, BaseEvents, amplify) {
+    ], function ($, _, View, template, Filter, FilterValidator, FilterUtils, BaseConfig, PartnerMatrixConfig, BaseEvents, amplify) {
 
         'use strict';
 
         var s = {
             css_classes: {
-                FILTER_ANALYSE_PARTNER_MATRIX: "#filter-analyse-partner-matrix"
+                FILTER_ANALYSE_PARTNER_MATRIX: "#filter-analyse-partner-matrix",
+                FILTER_ERRORS_HOLDER: "#filter-analyse-partner-matrix-errors-holder"
             },
             exclusions: {
                 ALL: 'all'
@@ -53,6 +53,8 @@ define(
             initialize: function (params) {
                 this.config = params.config;
 
+                this.filterUtils = new FilterUtils();
+
                 View.prototype.initialize.call(this, arguments);
             },
 
@@ -74,8 +76,7 @@ define(
             _buildFilters: function () {
                 var self = this;
 
-
-                var filterConfig = this._getUpdatedFilterConfig();
+                var filterConfig = this.filterUtils.getUpdatedFilterConfig(this.config);
 
                 if (!_.isEmpty(filterConfig)) {
                     this.$el.find(s.css_classes.FILTER_ANALYSE_PARTNER_MATRIX).show();
@@ -99,6 +100,11 @@ define(
                     this.filter.dispose();
                 }
 
+                // instantiate new filter validator
+                this.filterValidator = new FilterValidator({
+                    el: this.$el.find(s.css_classes.FILTER_ERRORS_HOLDER)
+                });
+
                 // instantiate new filter
                 this.filter = new Filter({
                     el: this.$el.find(s.css_classes.FILTER_ANALYSE_PARTNER_MATRIX),
@@ -111,8 +117,6 @@ define(
                         }
                     }
                 });
-
-
 
                 // Set filter event handlers
                 // Filter on Ready: Set some additional properties based on the current selections then publish Filter Ready Event
@@ -156,7 +160,7 @@ define(
                             }
                         }
 
-                        var additionalProperties = self._getPropertiesObject(PartnerMatrixConfig.topic.SELECTED_TOPIC, topic);
+                        var additionalProperties = self.filterUtils.getPropertiesObject(PartnerMatrixConfig.topic.SELECTED_TOPIC, topic);
 
 
                         amplify.publish(BaseEvents.FILTER_ON_READY, $.extend(self._getFilterValues(), {"props": additionalProperties}));
@@ -165,7 +169,7 @@ define(
 
                     // For ODA set its value to the props object
                     else if (self._getFilterValues().values[BaseConfig.SELECTORS.ODA]) {
-                        var additionalProperties = self._getPropertiesObject(BaseConfig.SELECTORS.ODA, self._getFilterValues().values[BaseConfig.SELECTORS.ODA].enumeration[0]);
+                        var additionalProperties = self.filterUtils.getPropertiesObject(BaseConfig.SELECTORS.ODA, self._getFilterValues().values[BaseConfig.SELECTORS.ODA].enumeration[0]);
 
                         amplify.publish(BaseEvents.FILTER_ON_READY, $.extend(self._getFilterValues(), {"props": additionalProperties}));
                     }
@@ -178,9 +182,7 @@ define(
 
                 this.filter.on('click', function (payload) {
 
-                    var filterItem = self.$el.find("[data-selector="+payload.id+"]")[0];
-                    var selectize = $(filterItem).find("[data-role=dropdown]")[0].selectize;
-                    selectize.clear(true);
+                   // self.filterUtils.clearSelectize(self.$el, payload.id);
 
                 });
 
@@ -189,151 +191,144 @@ define(
                 this.filter.on('change', function (payload) {
 
                    // console.log("FILTER ALL ==========");
-                   // console.log(payload.values.values);
+                  //  console.log(payload.values.values);
 
-                    var fc = self._getFilterConfigById(payload.id);
-                    var dependencies = [];
-                    if (fc && fc.dependencies) {
-                        for (var id in fc.dependencies) {
-                            dependencies.push(id);
-                        }
+                    // validate filter
+                    var valid = self.filterValidator.validateValues(self._getSelectedValues());
 
-                        payload["dependencies"] = dependencies;
-                    }
+                    if (valid === true) {
+                        self.filterValidator.hideErrorSection();
 
-                    if (payload.id === BaseConfig.SELECTORS.YEAR_TO || payload.id === BaseConfig.SELECTORS.YEAR_FROM) {
-                        var newRange = self._getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedLabels());
-                        if (newRange) {
-                            payload.id = BaseConfig.SELECTORS.YEAR;
-                            payload.values.labels = self._getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedLabels());
-                            payload.values.values = self._getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedValues());
-                        }
+                        var fc = self.filterUtils.getFilterConfigById(self.config, payload.id);
 
-
-                        amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
-                    }
-                    else if (payload.id === BaseConfig.SELECTORS.ODA) {
-                        var additionalProperties = self._getPropertiesObject(BaseConfig.SELECTORS.ODA, payload.values.values[0]);
-
-                        amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": additionalProperties}));
-                    }
-                    else if (payload.id === BaseConfig.SELECTORS.RECIPIENT_COUNTRY) {
-
-                        if(payload.values.values.length > 0) {
-
-                            var recipientPayloadValue = payload.values.values[0];
-                            var partnerValues = self._getFilterValues().values[BaseConfig.SELECTORS.RESOURCE_PARTNER][0];
-                            var topic;
-                            //FROM FILTER: All Resource Partners selected
-                            if (partnerValues === 'all') {
-                                // FROM PAYLOAD: All recipients are selected
-                                // --> All Recipients + All Partners
-                                if (recipientPayloadValue === 'all') {
-                                    topic = PartnerMatrixConfig.topic.RECIPIENT_COUNTRY_SELECTED;
-                                }
-                                // FROM PAYLOAD: 1 recipients selected
-                                // --> 1 Recipient + All Partners
-                                else {
-                                    topic = PartnerMatrixConfig.topic.RECIPIENT_COUNTRY_SELECTED;
-                                }
-                            }
-                            //FROM FILTER: 1 Resource Partners selected
-                            else {
-                                // FROM PAYLOAD: All recipients are selected
-                                // --> All Recipients + 1 Partner
-                                if (recipientPayloadValue === 'all') {
-                                    topic = PartnerMatrixConfig.topic.RESOURCE_PARTNER_SELECTED;
-                                }
-                                // FROM PAYLOAD: 1 recipients selected
-                                // --> 1 Recipients + 1 Partner
-                                else {
-                                    topic = PartnerMatrixConfig.topic.RECIPIENT_AND_PARTNER_SELECTED;
-                                }
+                        var dependencies = [];
+                        if (fc && fc.dependencies) {
+                            for (var id in fc.dependencies) {
+                                dependencies.push(id);
                             }
 
-                            var additionalProperties = self._getPropertiesObject(PartnerMatrixConfig.topic.SELECTED_TOPIC, topic);
+                            payload["dependencies"] = dependencies;
+                        }
 
-                            //console.log("========================= FilterView: ON CHANGE COUNTRY ============== " + topic);
+                        if (payload.id === BaseConfig.SELECTORS.YEAR_TO || payload.id === BaseConfig.SELECTORS.YEAR_FROM) {
+
+                            // Check only for the To payload.
+                            //--------------------------------
+                            // When From is selected, the To is automatically re-populated and this in turn triggers its own 'on Change'.
+                            // The result is that the 'BaseEvents.FILTER_ON_CHANGE' is published twice (1 for the From and then automatically again for the To).
+                            // To avoid the double publish, only the last 'on Change' trigger is evaluated i.e. when payload = 'To'
+
+                            if ( payload.id === BaseConfig.SELECTORS.YEAR_TO) {
+
+                                var newRange = self.filterUtils.getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedLabels());
+
+                                if (newRange) {
+                                    payload.id = BaseConfig.SELECTORS.YEAR;
+                                    payload.values.labels = self.filterUtils.getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedLabels());
+                                    payload.values.values = self.filterUtils.getObject(BaseConfig.SELECTORS.YEAR, self._getSelectedValues());
+                                }
+
+                                amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
+                            }
+
+                        }
+                        else if (payload.id === BaseConfig.SELECTORS.ODA) {
+                            var additionalProperties = self.filterUtils.getPropertiesObject(BaseConfig.SELECTORS.ODA, payload.values.values[0]);
+
                             amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": additionalProperties}));
                         }
+                        else if (payload.id === BaseConfig.SELECTORS.RECIPIENT_COUNTRY) {
 
-                    }
-                    else if (payload.id === BaseConfig.SELECTORS.RESOURCE_PARTNER) {
+                            if(payload.values.values.length > 0) {
 
-                        if(payload.values.values.length > 0) {
-
-                            var partnerPayloadValue = payload.values.values[0];
-                            var recipientValues = self._getFilterValues().values[BaseConfig.SELECTORS.RECIPIENT_COUNTRY][0];
-                            var selectedTopic;
-
-                            //FROM FILTER: All Recipients selected
-                            if (recipientValues === 'all') {
-                                // FROM PAYLOAD: All partners are selected
-                                // --> All Partners + All Recipients
-                                if (partnerPayloadValue === 'all') {
-                                    selectedTopic = PartnerMatrixConfig.topic.RECIPIENT_COUNTRY_SELECTED;
+                                var recipientPayloadValue = payload.values.values[0];
+                                var partnerValues = self._getFilterValues().values[BaseConfig.SELECTORS.RESOURCE_PARTNER][0];
+                                var topic;
+                                //FROM FILTER: All Resource Partners selected
+                                if (partnerValues === 'all') {
+                                    // FROM PAYLOAD: All recipients are selected
+                                    // --> All Recipients + All Partners
+                                    if (recipientPayloadValue === 'all') {
+                                        topic = PartnerMatrixConfig.topic.RECIPIENT_COUNTRY_SELECTED;
+                                    }
+                                    // FROM PAYLOAD: 1 recipients selected
+                                    // --> 1 Recipient + All Partners
+                                    else {
+                                        topic = PartnerMatrixConfig.topic.RECIPIENT_COUNTRY_SELECTED;
+                                    }
                                 }
-                                // FROM PAYLOAD: 1 partner selected
-                                // --> 1 Partner + All Recipients
+                                //FROM FILTER: 1 Resource Partners selected
                                 else {
-                                    selectedTopic = PartnerMatrixConfig.topic.RESOURCE_PARTNER_SELECTED;
+                                    // FROM PAYLOAD: All recipients are selected
+                                    // --> All Recipients + 1 Partner
+                                    if (recipientPayloadValue === 'all') {
+                                        topic = PartnerMatrixConfig.topic.RESOURCE_PARTNER_SELECTED;
+                                    }
+                                    // FROM PAYLOAD: 1 recipients selected
+                                    // --> 1 Recipients + 1 Partner
+                                    else {
+                                        topic = PartnerMatrixConfig.topic.RECIPIENT_AND_PARTNER_SELECTED;
+                                    }
                                 }
-                            }
-                            //FROM FILTER: 1 Recipient selected
-                            else {
-                                // FROM PAYLOAD: All partners are selected
-                                // --> All Partners + 1 Recipient
-                                if (partnerPayloadValue === 'all') {
-                                    selectedTopic = PartnerMatrixConfig.topic.RECIPIENT_COUNTRY_SELECTED;
-                                }
-                                // FROM PAYLOAD: 1 partner selected
-                                // --> 1 Partner + 1 Recipient
-                                else {
-                                    selectedTopic = PartnerMatrixConfig.topic.RECIPIENT_AND_PARTNER_SELECTED;
-                                }
-                            }
 
-                            var additionalProperties = self._getPropertiesObject(PartnerMatrixConfig.topic.SELECTED_TOPIC, selectedTopic);
+                                var additionalProperties = self.filterUtils.getPropertiesObject(PartnerMatrixConfig.topic.SELECTED_TOPIC, topic);
 
-                            //console.log("========================= FilterView: ON PARTNER ============== " + selectedTopic);
-                            amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": additionalProperties}));
+                                //console.log("========================= FilterView: ON CHANGE COUNTRY ============== " + topic);
+                                amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": additionalProperties}));
+                            }
 
                         }
+                        else if (payload.id === BaseConfig.SELECTORS.RESOURCE_PARTNER) {
 
-                    }
-                    else {
-                        console.log("========================= FilterView: ELSE ============== "+selectedTopic);
-                        amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
-                    }
+                            if(payload.values.values.length > 0) {
 
+                                var partnerPayloadValue = payload.values.values[0];
+                                var recipientValues = self._getFilterValues().values[BaseConfig.SELECTORS.RECIPIENT_COUNTRY][0];
+                                var selectedTopic;
+
+                                //FROM FILTER: All Recipients selected
+                                if (recipientValues === 'all') {
+                                    // FROM PAYLOAD: All partners are selected
+                                    // --> All Partners + All Recipients
+                                    if (partnerPayloadValue === 'all') {
+                                        selectedTopic = PartnerMatrixConfig.topic.RECIPIENT_COUNTRY_SELECTED;
+                                    }
+                                    // FROM PAYLOAD: 1 partner selected
+                                    // --> 1 Partner + All Recipients
+                                    else {
+                                        selectedTopic = PartnerMatrixConfig.topic.RESOURCE_PARTNER_SELECTED;
+                                    }
+                                }
+                                //FROM FILTER: 1 Recipient selected
+                                else {
+                                    // FROM PAYLOAD: All partners are selected
+                                    // --> All Partners + 1 Recipient
+                                    if (partnerPayloadValue === 'all') {
+                                        selectedTopic = PartnerMatrixConfig.topic.RECIPIENT_COUNTRY_SELECTED;
+                                    }
+                                    // FROM PAYLOAD: 1 partner selected
+                                    // --> 1 Partner + 1 Recipient
+                                    else {
+                                        selectedTopic = PartnerMatrixConfig.topic.RECIPIENT_AND_PARTNER_SELECTED;
+                                    }
+                                }
+
+                                var additionalProperties = self.filterUtils.getPropertiesObject(PartnerMatrixConfig.topic.SELECTED_TOPIC, selectedTopic);
+
+                                amplify.publish(BaseEvents.FILTER_ON_CHANGE, $.extend(payload, {"props": additionalProperties}));
+
+                            }
+
+                        }
+                        else {
+                            amplify.publish(BaseEvents.FILTER_ON_CHANGE, payload);
+                        }
+                    } else {
+                        self.filterValidator.displayErrorSection(valid);
+                    }
                 });
 
 
-            },
-            /**
-             * Updates the filter configuration including setting the language related labels in the filter template
-             * Returns: Updated Configuration
-             * @returns {Object} updatedConf
-             * @private
-             */
-            _getUpdatedFilterConfig: function () {
-
-                var conf = $.extend(true, {}, this.config),
-                    values = {},
-                    updatedConf = FxUtils.mergeConfigurations(conf, values);
-
-                _.each(updatedConf, _.bind(function (obj, key) {
-
-                    if (!obj.template) {
-                        obj.template = {};
-                    }
-                    //Add i18n label
-                    obj.template.title = Utils.getI18nLabel(key, i18nLabels, "filter_");
-                    obj.template.headerIconTooltip = Utils.getI18nLabel(key, i18nLabels, "filter_tooltip_");
-
-                }, this));
-
-                return updatedConf;
             },
 
             /**
@@ -352,62 +347,20 @@ define(
 
                 var updatedValuesWithYear = {}, updatedValuesWithODA = {}, extendedValues = $.extend(true, {}, this.filter.getValues(), timerange);
 
-                updatedValuesWithYear = this._processTimeRange(extendedValues);
+                updatedValuesWithYear = this.filterUtils.processTimeRange(extendedValues);
 
-                updatedValuesWithODA = this._processODA(updatedValuesWithYear);
+                updatedValuesWithODA = this.filterUtils.removeODAPrefix(updatedValuesWithYear);
 
                 return updatedValuesWithODA;
 
             },
 
-            /**
-             * Get the selected filter values
-             * @returns {Object} values
-             * @private
-             */
-
-            _getSelectedValues: function () {
-                return this._getFilterValues().values;
-            },
-
-
-            /**
-             *  Get the selected filter labels
-             * @returns {Object} labels
-             * @private
-             */
-            _getSelectedLabels: function () {
-                return this._getFilterValues().labels;
-            },
-
-
-            /**
-             *  Get the filter configuration associated to the ID
-             * @param id
-             * @returns {Object} values
-             * @private
-             */
-
-            _getFilterConfigById: function (id) {
-                var filter;
-
-                $.each(this.config, function (key, obj) {
-                    if (key === id) {
-                        return filter = obj;
-                    }
-                });
-
-                return filter;
-            },
 
             /**
              *  Get the full filter values object (consists of labels and values)
              * @returns {Object} filterValues
              */
             getFilterValues: function () {
-
-                 console.log("FINAL getFilterValues ============ 1");
-
 
                 var values = this._getFilterValues();
 
@@ -429,215 +382,33 @@ define(
                     values.values[BaseConfig.SELECTORS.RESOURCE_PARTNER] = [];
                 }
 
-                console.log("FINAL getFilterValues ============ END");
-                console.log(values);
+                //console.log("FINAL getFilterValues ============ END");
+                //console.log(values);
                 return values;
             },
 
+
             /**
-             *  Clear Values for the filter id
-             * @param filterid
-             * @param values
+             * Get the selected filter values
              * @returns {Object} values
-             */
-
-            clearFilterValue: function (filterid, values) {
-
-                if (values.values[filterid]) {
-                    values.values[filterid] = [];
-                }
-
-                return values;
-            },
-
-            /**
-             *  Process the time range so that it complies with the expected D3S format
-             * @param filter
-             * @returns {Object} filter
-             */
-            _processTimeRange: function (filter) {
-
-                var year_from = filter.values[BaseConfig.SELECTORS.YEAR_FROM], year_to = filter.values[BaseConfig.SELECTORS.YEAR_TO];
-
-                //reformat to and from years
-                filter.values.year[0].value = year_from[0];
-                filter.values.year[1].value = year_to[0];
-
-                filter.labels.year.range = year_from[0] + '-' + year_to[0];
-                filter.labels[BaseConfig.SELECTORS.YEAR_FROM] = [];
-                filter.labels[BaseConfig.SELECTORS.YEAR_TO] = [];
-
-                return filter;
-            },
-
-
-            /**
-             *  Process the ODA so that it complies with the expected D3S format
-             * @param filter
-             * @returns {Object} filter
-             */
-            _processODA: function (filter) {
-
-                var enumeration = [], oda = filter.values[BaseConfig.SELECTORS.ODA][0];
-                enumeration.push(oda);
-
-                filter.values[BaseConfig.SELECTORS.ODA] = {};
-                filter.values[BaseConfig.SELECTORS.ODA].enumeration = enumeration;
-
-
-                return filter;
-            },
-
-
-            /**
-             *  Process and get the filter values relevant to the OECD/ODA Dashboard
-             * @returns {Object} values
-             */
-
-            getOECDValues: function () {
-
-                var values = this._getSelectedValues();
-
-                return this._updateValues(values);
-            },
-
-
-            /**
-             *  Check if values exist for the filter id
-             *  @param filterid
-             * @returns {boolean}
-             */
-
-            hasValues: function (filterid) {
-                var values = this._getSelectedValues();
-                return this._hasSelections(filterid, values);
-            },
-
-
-            /**
-             *  Get the values for the filter id
-             * @returns {Object} values
-             */
-            getSelectedValues: function (filterId) {
-                var values = this._getSelectedValues();
-
-                var selectedValues = {};
-                var itemSelected = this._hasSelections(filterId, values);
-
-                if (itemSelected) {
-                    selectedValues = values[filterId];
-                    //var filterObj = this._getObject(filterId, values);
-                    //selectedValues = this._getSelected(filterObj);
-                }
-
-                return selectedValues;
-            },
-
-
-            /**
-             * Check if a filter has selections
-             * @param id
-             * @returns {*|boolean}
-             */
-            isFilterSelected: function (id) {
-                var values = this._getSelectedValues();
-
-
-                return this._hasSelections(id, values);
-            },
-
-
-
-            /**
-             *
-             * @param values
-             * @returns {*}
              * @private
              */
-            _updateValues: function (values) {
 
-                return values;
+            _getSelectedValues: function () {
+                return this._getFilterValues().values;
             },
 
             /**
-             * Check if filter id has selections
-             * @param id
-             * @param data
-             * @returns {boolean}
+             *  Get the selected filter labels
+             * @returns {Object} labels
              * @private
              */
-            _hasSelections: function (id, data) {
-                //console.log(id);
-                if (_.has(data, id)) {
-                    if (data[id].length > 0) {
-                        // if (_.has(data[id], 'codes')) {
-                        return true;
-                    }
-                }
-            },
-            /**
-             * Get the Object from the data based on the id (key)
-             * @param id
-             * @param data
-             * @returns {*}
-             * @private
-             */
-            _getObject: function (id, data) {
-                if (_.has(data, id)) {
-                    if (data[id].length > 0 || !_.isEmpty(data[id])) {
-                        // if (_.has(data[id], 'codes')) {
-                        return data[id];
-                    }
-                }
+            _getSelectedLabels: function () {
+                return this._getFilterValues().labels;
             },
 
-
-            _getFilterConfig: function (id) {
-                //console.log(this.config);
-
-                var filter = _.find(this.config, function (obj, key) {
-
-                    return key === id;
-                    // return obj.components[0].id === id;
-                });
-
-
-                return filter;
-            },
-
-            _hasProp: function (filter, prop) {
-                var hasProp = _.find(filter, function (obj) {
-                    if (filter[prop]) {
-                        return true;
-                    }
-                });
-                return hasProp;
-            },
-
-            getConfigPropValue: function (id, prop) {
-
-                // console.log("===============getConfigPropValue "+id + ' | '+prop);
-                var filterValue;
-                var filterItem = this._getFilterConfig(id);
-
-                // console.log(filterItem);
-
-                if (this._hasProp(filterItem, prop))
-                    filterValue = filterItem[prop];
-
-                // console.log(filterValue);
-                return filterValue;
-            },
-
-            _getPropertiesObject: function (id, value) {
-                var additionalProperties = {};
-                additionalProperties[id] = value;
-
-                return additionalProperties;
-            },
 
             _unbindEventListeners: function () {
-
             },
 
             dispose: function () {

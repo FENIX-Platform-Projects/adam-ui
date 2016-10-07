@@ -5,7 +5,7 @@ define(function () {
     'use strict';
 
     return {
-            id: 'OTHER_SECTORS',
+        id: 'FAO_SECTOR',
         filter: {
             donorcode: {
                 selector: {
@@ -30,11 +30,17 @@ define(function () {
             parentsector_code: {
                 selector: {
                     id: "dropdown",
+                    default: ["9999"],
+                    emptyOption : {
+                        enabled: true,
+                        text: "All",
+                        value: "all"
+                    },
                     config: { //Selectize configuration
-                        maxItems: 1,
-                        placeholder: "All",
-                        plugins: ['remove_button'],
-                        mode: 'multi'
+                        maxItems: 1
+                        // placeholder: "All",
+                        // plugins: ['remove_button'],
+                        // mode: 'multi'
                     }
                 },
                 className: "col-sm-3",
@@ -52,26 +58,85 @@ define(function () {
             purposecode: {
                 selector: {
                     id: "dropdown",
-                    config: {
-                        maxItems: 1,
-                        placeholder: "All",
-                        plugins: ['remove_button'],
-                        mode: 'multi'
+                    default: ["all"],
+                    emptyOption : {
+                        enabled: true,
+                        text: "All",
+                        value: "all"
+                    },
+                    config: { //Selectize configuration
+                        maxItems: 1
+                        // placeholder: "All",
+                        // plugins: ['remove_button'],
+                        // mode: 'multi'
                     }
                 },
                 className: "col-sm-4",
                 cl: {
-                     "uid": "crs_dac",
+                    "codes": [
+                        "12240",
+                        "14030",
+                        "14031",
+                        "15170",
+                        "16062",
+                        "23070",
+                        "31110",
+                        "31120",
+                        "31130",
+                        "31140",
+                        "31150",
+                        "31161",
+                        "31162",
+                        "31163",
+                        "31164",
+                        "31165",
+                        "31166",
+                        "31181",
+                        "31182",
+                        "31191",
+                        "31192",
+                        "31193",
+                        "31194",
+                        "31195",
+                        "31210",
+                        "31220",
+                        "31261",
+                        "31281",
+                        "31282",
+                        "31291",
+                        "31310",
+                        "31320",
+                        "31381",
+                        "31382",
+                        "31391",
+                        "32161",
+                        "32162",
+                        "32163",
+                        "32165",
+                        "32267",
+                        "41010",
+                        "41020",
+                        "41030",
+                        "41040",
+                        "41050",
+                        "41081",
+                        "41082",
+                        "43040",
+                        "43050",
+                        "52010",
+                        "72040",
+                        "74010"
+                    ],
+                    "uid": "crs_dac",
                     "version": "2016",
-                    "level": 2,
-                    "levels": 2
+                    "levels": 3
                 },
                 template: {
                     hideSwitch: true,
                     hideRemoveButton: true
                 },
                 dependencies: {
-                    "parentsector_code": {id: "parent", event: "select"} //obj or array of obj
+                    "parentsector_code": {id: "parent", event: "select"}
                 }
             },
             "year-from": {
@@ -337,11 +402,11 @@ define(function () {
                     },
 
                     filterFor: {
-                        "filter_donor_sector_oda": ['donorcode', 'parentsector_code', 'year', 'oda'],
+                        "filter_donor_sector_oda": ['donorcode', 'year', 'oda'],
                         "filter_total_donor_oda": ['donorcode', 'year', 'oda'],
 
-                        "filter_total_oda_dac_members_by_year": ['parentsector_code', 'year', 'oda'],
-                        "filter_dac_members_by_donor_year": ['parentsector_code', 'year', 'oda']
+                        "filter_total_oda_dac_members_by_year": ['year', 'oda'],
+                        "filter_dac_members_by_donor_year": ['year', 'oda']
                     },
 
                     postProcess: [
@@ -386,15 +451,9 @@ define(function () {
                                             "usd_commitment"
                                         ]
                                     },
-                                    "parentsector_code": {
-                                        "codes": [
-                                            {
-                                                "uid": "crs_dac",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "600"
-                                                ]
-                                            }
+                                    "fao_sector": {
+                                        "enumeration": [
+                                            "1"
                                         ]
                                     },
 
@@ -715,15 +774,9 @@ define(function () {
                                             "t"
                                         ]
                                     },
-                                    "parentsector_code": {
-                                        "codes": [
-                                            {
-                                                "uid": "crs_dac",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "600"
-                                                ]
-                                            }
+                                    "fao_sector": {
+                                        "enumeration": [
+                                            "1"
                                         ]
                                     },
                                     "year": {
@@ -787,15 +840,9 @@ define(function () {
                                             "t"
                                         ]
                                     },
-                                    "parentsector_code": {
-                                        "codes": [
-                                            {
-                                                "uid": "crs_dac",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "600"
-                                                ]
-                                            }
+                                    "fao_sector": {
+                                        "enumeration": [
+                                            "1"
                                         ]
                                     },
                                     "year": {
@@ -1023,58 +1070,58 @@ define(function () {
                             }
 
                         }
-                       /* config: {
-                            xAxis: {
-                                type: 'datetime'
-                            },
-                            yAxis: [{ //Primary Axis in default template
-                            }, { // Secondary Axis
-                                gridLineWidth: 0,
-                                title: {
-                                    text: '%'
-                                },
-                                opposite: true
-                            }],
+                        /* config: {
+                         xAxis: {
+                         type: 'datetime'
+                         },
+                         yAxis: [{ //Primary Axis in default template
+                         }, { // Secondary Axis
+                         gridLineWidth: 0,
+                         title: {
+                         text: '%'
+                         },
+                         opposite: true
+                         }],
 
-                            series: [{
-                                name: '% Sub Sector/Total',
-                                yAxis: 1,
-                                dashStyle: 'shortdot',
-                                marker: {
-                                    radius: 3
-                                }
-                            }//,
+                         series: [{
+                         name: '% Sub Sector/Total',
+                         yAxis: 1,
+                         dashStyle: 'shortdot',
+                         marker: {
+                         radius: 3
+                         }
+                         }//,
 
-                                //   {
-                                //     name: 'ODA from Resource Partner in Sector'//,
-                                // type: 'column'
-                                // },
-                                // {
-                                // name: 'Total ODA from Resource Partner'//,
-                                //   // type: 'column'
-                                //},
-                                // {
-                                //name: 'OECD Average of ODA in that Sector'//,
-                                // type: 'column'
-                                //}
-                            ],
-                            exporting: {
-                                chartOptions: {
-                                    legend: {
-                                        enabled: true
-                                    }
-                                }
-                            }
+                         //   {
+                         //     name: 'ODA from Resource Partner in Sector'//,
+                         // type: 'column'
+                         // },
+                         // {
+                         // name: 'Total ODA from Resource Partner'//,
+                         //   // type: 'column'
+                         //},
+                         // {
+                         //name: 'OECD Average of ODA in that Sector'//,
+                         // type: 'column'
+                         //}
+                         ],
+                         exporting: {
+                         chartOptions: {
+                         legend: {
+                         enabled: true
+                         }
+                         }
+                         }
 
-                        }*/
+                         }*/
                     },
 
                     filterFor: {
-                        "filter_donor_sector_oda": ['donorcode', 'parentsector_code', 'year', 'oda'],
-                        "filter_donor_subsector_oda": ['donorcode', 'parentsector_code', 'purposecode', 'year', 'oda'],
+                        "filter_donor_sector_oda": ['donorcode', 'year', 'oda'],
+                        "filter_donor_subsector_oda": ['donorcode', 'purposecode', 'year', 'oda'],
 
-                        "filter_total_oda_dac_members_by_year": ['parentsector_code', 'purposecode', 'year', 'oda'],
-                        "filter_dac_members_by_donor_year": ['parentsector_code', 'year', 'oda']
+                        "filter_total_oda_dac_members_by_year": ['purposecode', 'year', 'oda'],
+                        "filter_dac_members_by_donor_year": ['year', 'oda']
                     },
 
                     postProcess: [
@@ -1119,15 +1166,9 @@ define(function () {
                                             "usd_commitment"
                                         ]
                                     },
-                                    "parentsector_code": {
-                                        "codes": [
-                                            {
-                                                "uid": "crs_dac",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "600"
-                                                ]
-                                            }
+                                    "fao_sector": {
+                                        "enumeration": [
+                                            "1"
                                         ]
                                     },
 
@@ -1226,15 +1267,9 @@ define(function () {
                                             "usd_commitment"
                                         ]
                                     },
-                                    "parentsector_code": {
-                                        "codes": [
-                                            {
-                                                "uid": "crs_dac",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "600"
-                                                ]
-                                            }
+                                    "fao_sector": {
+                                        "enumeration": [
+                                            "1"
                                         ]
                                     },
                                     "purposecode": {
@@ -1467,15 +1502,9 @@ define(function () {
                                             "t"
                                         ]
                                     },
-                                    "parentsector_code": {
-                                        "codes": [
-                                            {
-                                                "uid": "crs_dac",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "600"
-                                                ]
-                                            }
+                                    "fao_sector": {
+                                        "enumeration": [
+                                            "1"
                                         ]
                                     },
                                     "purposecode": {
@@ -1550,15 +1579,9 @@ define(function () {
                                             "t"
                                         ]
                                     },
-                                    "parentsector_code": {
-                                        "codes": [
-                                            {
-                                                "uid": "crs_dac",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "600"
-                                                ]
-                                            }
+                                    "fao_sector": {
+                                        "enumeration": [
+                                            "1"
                                         ]
                                     },
                                     "year": {
@@ -1805,45 +1828,45 @@ define(function () {
                             }
 
                         }/*,
-                        config: {
-                            xAxis: {
-                                type: 'datetime'
-                            },
-                            yAxis: [{ //Primary Axis in default template
-                            }, { // Secondary Axis
-                                gridLineWidth: 0,
-                                title: {
-                                    text: '%'
-                                },
-                                opposite: true
-                            }],
-                            series: [{
-                                name: '% ODA/GNI',
-                                yAxis: 1,
-                                dashStyle: 'shortdot',
-                                marker: {
-                                    radius: 3
-                                }
-                            },
-                                {
-                                    name: '% OECD Average of ODA/GNI',
-                                    yAxis: 1,
-                                    dashStyle: 'shortdot',
-                                    marker: {
-                                        radius: 3
-                                    }
-                                }
-                            ],
-                            exporting: {
-                                chartOptions: {
-                                    legend: {
-                                        enabled: true
-                                    }
+                         config: {
+                         xAxis: {
+                         type: 'datetime'
+                         },
+                         yAxis: [{ //Primary Axis in default template
+                         }, { // Secondary Axis
+                         gridLineWidth: 0,
+                         title: {
+                         text: '%'
+                         },
+                         opposite: true
+                         }],
+                         series: [{
+                         name: '% ODA/GNI',
+                         yAxis: 1,
+                         dashStyle: 'shortdot',
+                         marker: {
+                         radius: 3
+                         }
+                         },
+                         {
+                         name: '% OECD Average of ODA/GNI',
+                         yAxis: 1,
+                         dashStyle: 'shortdot',
+                         marker: {
+                         radius: 3
+                         }
+                         }
+                         ],
+                         exporting: {
+                         chartOptions: {
+                         legend: {
+                         enabled: true
+                         }
 
-                                }
-                            }
+                         }
+                         }
 
-                        }*/
+                         }*/
                     },
 
 
@@ -1851,10 +1874,9 @@ define(function () {
                         "filter_total_ODA": ['donorcode', 'year', 'oda'],
                         "filter_gni_donor_oda": ['donorcode', 'year'],
 
-                        "all_subsectors_sum": ['year', 'oda'],
-                        "filter_GNI_sum": ['year']
+                        "filter_total_oda_dac_members_by_year": ['year', 'oda'],
+                        "filter_dac_members_by_donor_year": ['year', 'oda']
                     },
-
 
                     postProcess: [
 
@@ -2427,687 +2449,687 @@ define(function () {
                     ]
                     /*postProcess: [
 
-                        {
-                            "name": "union",
-                            "sid": [
-                                {
-                                    "uid": "total_donor_oda" // RESULT OF PART 1: TOTAL ODA FOR DONOR (ALL SECTORS)
-                                },
-                                {
-                                    "uid": "gni_donor_oda" // RESULT OF PART 2: GNI OF DONOR
-                                },
-                                {
-                                    "uid":"percentage_ODA_GNI" // RESULT OF PART 3: PERCENTAGE CALCULATION (TOTAL ODA FOR DONOR / GNI FOR DONOR x 100)
-                                },
-                                {
-                                    "uid":"percentage_OECD_AVG_GNI" // RESULT OF PART 5 (PART 4 used to calculated OECD_AVG): PERCENTAGE CALCULATION (OECD DONORS AVERAGE ODA / GNI FOR DONOR x 100)
-                                }
-                            ],
-                            "parameters": {
-                            },
-                            "rid":{"uid":"union_process"}
+                     {
+                     "name": "union",
+                     "sid": [
+                     {
+                     "uid": "total_donor_oda" // RESULT OF PART 1: TOTAL ODA FOR DONOR (ALL SECTORS)
+                     },
+                     {
+                     "uid": "gni_donor_oda" // RESULT OF PART 2: GNI OF DONOR
+                     },
+                     {
+                     "uid":"percentage_ODA_GNI" // RESULT OF PART 3: PERCENTAGE CALCULATION (TOTAL ODA FOR DONOR / GNI FOR DONOR x 100)
+                     },
+                     {
+                     "uid":"percentage_OECD_AVG_GNI" // RESULT OF PART 5 (PART 4 used to calculated OECD_AVG): PERCENTAGE CALCULATION (OECD DONORS AVERAGE ODA / GNI FOR DONOR x 100)
+                     }
+                     ],
+                     "parameters": {
+                     },
+                     "rid":{"uid":"union_process"}
 
-                        }, // PART 6: UNION is the FINAL PART IN THE PROCESS
+                     }, // PART 6: UNION is the FINAL PART IN THE PROCESS
 
-                        {
-                            "name": "filter",
-                            "sid": [
-                                {
-                                    "uid": "adam_usd_aggregation_table"
-                                }
-                            ],
-                            "parameters": {
-                                "columns": [
-                                    "year",
-                                    "value",
-                                    "unitcode"
-                                ],
-                                "rows": {
-                                    "oda": {
-                                        "enumeration": [
-                                            "usd_commitment"
-                                        ]
-                                    },
-                                    "donorcode": {
-                                        "codes": [
-                                            {
-                                                "uid": "crs_donors",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "1"
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    "year": {
-                                        "time": [
-                                            {
-                                                "from": 2000,
-                                                "to": 2014
-                                            }
-                                        ]
-                                    }
-                                }
-                            },
-                            "rid":{"uid":"filter_total_ODA"}
-                        }, // PART 1: TOTAL ODA FOR DONOR (ALL SECTORS): (1i) Filter
-                        {
-                            "name": "group",
-                            "parameters": {
-                                "by": [
-                                    "year"
-                                ],
-                                "aggregations": [
-                                    {
-                                        "columns": [
-                                            "value"
-                                        ],
-                                        "rule": "SUM"
-                                    },
-                                    {
-                                        "columns": [
-                                            "unitcode"
-                                        ],
-                                        "rule": "first"
-                                    }
-                                ]
-                            },
-                            "rid":{"uid":"total_ODA"}
+                     {
+                     "name": "filter",
+                     "sid": [
+                     {
+                     "uid": "adam_usd_aggregation_table"
+                     }
+                     ],
+                     "parameters": {
+                     "columns": [
+                     "year",
+                     "value",
+                     "unitcode"
+                     ],
+                     "rows": {
+                     "oda": {
+                     "enumeration": [
+                     "usd_commitment"
+                     ]
+                     },
+                     "donorcode": {
+                     "codes": [
+                     {
+                     "uid": "crs_donors",
+                     "version": "2016",
+                     "codes": [
+                     "1"
+                     ]
+                     }
+                     ]
+                     },
+                     "year": {
+                     "time": [
+                     {
+                     "from": 2000,
+                     "to": 2014
+                     }
+                     ]
+                     }
+                     }
+                     },
+                     "rid":{"uid":"filter_total_ODA"}
+                     }, // PART 1: TOTAL ODA FOR DONOR (ALL SECTORS): (1i) Filter
+                     {
+                     "name": "group",
+                     "parameters": {
+                     "by": [
+                     "year"
+                     ],
+                     "aggregations": [
+                     {
+                     "columns": [
+                     "value"
+                     ],
+                     "rule": "SUM"
+                     },
+                     {
+                     "columns": [
+                     "unitcode"
+                     ],
+                     "rule": "first"
+                     }
+                     ]
+                     },
+                     "rid":{"uid":"total_ODA"}
 
-                        }, // (1ii): TOTAL ODA FOR DONOR (ALL SECTORS): Group by
-                        {
-                            "name": "addcolumn",
-                            "parameters": {
-                                "column": {
-                                    "dataType": "text",
-                                    "id": "indicator",
-                                    "title": {
-                                        "EN": "Indicator"
-                                    },
-                                    "domain": {
-                                        "codes": [
-                                            {
-                                                "extendedName": {
-                                                    "EN": "Adam Processes"
-                                                },
-                                                "idCodeList": "adam_processes"
-                                            }
-                                        ]
-                                    },
-                                    "subject": null
-                                },
-                                "value": "Total ODA from Resource Partner"
-                            },
-                            "rid": {
-                                "uid": "total_donor_oda"
-                            }
-                        }, // (1iii): TOTAL ODA FOR DONOR (ALL SECTORS): Add Column
+                     }, // (1ii): TOTAL ODA FOR DONOR (ALL SECTORS): Group by
+                     {
+                     "name": "addcolumn",
+                     "parameters": {
+                     "column": {
+                     "dataType": "text",
+                     "id": "indicator",
+                     "title": {
+                     "EN": "Indicator"
+                     },
+                     "domain": {
+                     "codes": [
+                     {
+                     "extendedName": {
+                     "EN": "Adam Processes"
+                     },
+                     "idCodeList": "adam_processes"
+                     }
+                     ]
+                     },
+                     "subject": null
+                     },
+                     "value": "Total ODA from Resource Partner"
+                     },
+                     "rid": {
+                     "uid": "total_donor_oda"
+                     }
+                     }, // (1iii): TOTAL ODA FOR DONOR (ALL SECTORS): Add Column
 
-                        {
-                            "name": "filter",
-                            "sid": [
-                                {
-                                    "uid": "adam_donors_gni"
-                                }
-                            ],
-                            "parameters": {
-                                "columns": [
-                                    "year",
-                                    "value",
-                                    "unitcode"
-                                ],
-                                "rows": {
-                                    "donorcode": {
-                                        "codes": [
-                                            {
-                                                "uid": "crs_donors",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "1"
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    "year": {
-                                        "time": [
-                                            {
-                                                "from": 2000,
-                                                "to": 2014
-                                            }
-                                        ]
-                                    }
-                                }
-                            },
-                            "rid": {
-                                "uid": "filter_gni_donor_oda"
-                            }
-                        }, // PART 2: GNI OF DONOR: (2i) Filter
-                        {
-                            "name": "group",
-                            "parameters": {
-                                "by": [
-                                    "year"
-                                ],
-                                "aggregations": [
-                                    {
-                                        "columns": [
-                                            "value"
-                                        ],
-                                        "rule": "SUM"
-                                    },
-                                    {
-                                        "columns": [
-                                            "unitcode"
-                                        ],
-                                        "rule": "first"
-                                    }
-                                ]
-                            }
-                        }, // (2ii): GNI OF DONOR: Group by
-                        {
-                            "name": "addcolumn",
-                            "parameters": {
-                                "column": {
-                                    "dataType": "text",
-                                    "id": "indicator",
-                                    "title": {
-                                        "EN": "Indicator"
-                                    },
-                                    "domain": {
-                                        "codes": [
-                                            {
-                                                "extendedName": {
-                                                    "EN": "Adam Processes"
-                                                },
-                                                "idCodeList": "adam_processes"
-                                            }
-                                        ]
-                                    },
-                                    "subject": null
-                                },
-                                "value": "Resource Partner GNI"
-                            },
-                            "rid": {
-                                "uid": "gni_donor_oda"
-                            }
-                        }, // (2iii): GNI OF DONOR: Add Column
+                     {
+                     "name": "filter",
+                     "sid": [
+                     {
+                     "uid": "adam_donors_gni"
+                     }
+                     ],
+                     "parameters": {
+                     "columns": [
+                     "year",
+                     "value",
+                     "unitcode"
+                     ],
+                     "rows": {
+                     "donorcode": {
+                     "codes": [
+                     {
+                     "uid": "crs_donors",
+                     "version": "2016",
+                     "codes": [
+                     "1"
+                     ]
+                     }
+                     ]
+                     },
+                     "year": {
+                     "time": [
+                     {
+                     "from": 2000,
+                     "to": 2014
+                     }
+                     ]
+                     }
+                     }
+                     },
+                     "rid": {
+                     "uid": "filter_gni_donor_oda"
+                     }
+                     }, // PART 2: GNI OF DONOR: (2i) Filter
+                     {
+                     "name": "group",
+                     "parameters": {
+                     "by": [
+                     "year"
+                     ],
+                     "aggregations": [
+                     {
+                     "columns": [
+                     "value"
+                     ],
+                     "rule": "SUM"
+                     },
+                     {
+                     "columns": [
+                     "unitcode"
+                     ],
+                     "rule": "first"
+                     }
+                     ]
+                     }
+                     }, // (2ii): GNI OF DONOR: Group by
+                     {
+                     "name": "addcolumn",
+                     "parameters": {
+                     "column": {
+                     "dataType": "text",
+                     "id": "indicator",
+                     "title": {
+                     "EN": "Indicator"
+                     },
+                     "domain": {
+                     "codes": [
+                     {
+                     "extendedName": {
+                     "EN": "Adam Processes"
+                     },
+                     "idCodeList": "adam_processes"
+                     }
+                     ]
+                     },
+                     "subject": null
+                     },
+                     "value": "Resource Partner GNI"
+                     },
+                     "rid": {
+                     "uid": "gni_donor_oda"
+                     }
+                     }, // (2iii): GNI OF DONOR: Add Column
 
-                        {
-                            "name": "join",
-                            "sid": [
-                                {
-                                    "uid": "gni_donor_oda"
-                                },
-                                {
-                                    "uid": "total_donor_oda"
-                                }
-                            ],
-                            "parameters": {
-                                "joins": [
-                                    [
+                     {
+                     "name": "join",
+                     "sid": [
+                     {
+                     "uid": "gni_donor_oda"
+                     },
+                     {
+                     "uid": "total_donor_oda"
+                     }
+                     ],
+                     "parameters": {
+                     "joins": [
+                     [
 
-                                        {
-                                            "type": "id",
-                                            "value": "year"
-                                        }
-                                    ],
-                                    [
-                                        {
-                                            "type": "id",
-                                            "value": "year"
-                                        }
+                     {
+                     "type": "id",
+                     "value": "year"
+                     }
+                     ],
+                     [
+                     {
+                     "type": "id",
+                     "value": "year"
+                     }
 
-                                    ]
-                                ],
-                                "values": [
-                                ]
-                            },
-                            "rid":{"uid":"join_process_oda_gni"}
-                        },  // PART 3 PERCENTAGE CALCULATION: (3i) Join
-                        {
-                            "name": "addcolumn",
-                            "sid":[{"uid":"join_process_oda_gni"}],
-                            "parameters": {
-                                "column": {
-                                    "dataType": "number",
-                                    "id": "value",
-                                    "title": {
-                                        "EN": "Value"
-                                    },
-                                    "subject": null
-                                },
-                                "value": {
-                                    "keys":  ["1 = 1"],
-                                    "values":[" ( total_donor_oda_value / gni_donor_oda_value)*100"]
-                                }
-                            }
-                        }, // (3ii) PERCENTAGE CALCULATION: Add Column
-                        {
-                            "name": "filter",
-                            "parameters": {
-                                "columns": [
-                                    "year",
-                                    "value"
-                                ],
-                                "rows": {}
-                            }
-                        },  // (3iii) PERCENTAGE CALCULATION: filter (filter out what is not needed)
-                        {
-                            "name": "addcolumn",
-                            "parameters": {
-                                "column": {
-                                    "id": "unitcode",
-                                    "title": {
-                                        "EN": "Measurement Unit"
-                                    },
-                                    "domain": {
-                                        "codes": [{
-                                            "idCodeList": "crs_units",
-                                            "version": "2016",
-                                            "level": 1
-                                        }]
-                                    },
-                                    "dataType": "code",
-                                    "subject": "um"
-                                },
-                                "value": "percentage"
-                            }
-                        }, // (3iv) PERCENTAGE CALCULATION: Add Column (Measurement Unit Code)
-                        {
-                            "name": "addcolumn",
-                            "parameters": {
-                                "column": {
-                                    "dataType": "text",
-                                    "id": "indicator",
-                                    "title": {
-                                        "EN": "Indicator"
-                                    },
-                                    "domain": {
-                                        "codes": [
-                                            {
-                                                "extendedName": {
-                                                    "EN": "Adam Processes"
-                                                },
-                                                "idCodeList": "adam_processes"
-                                            }
-                                        ]
-                                    },
-                                    "subject": null
-                                },
-                                "value": "% ODA/GNI"
-                            },
-                            "rid": {
-                                "uid": "percentage_ODA_GNI"
-                            }
-                        }, // (3vi) PERCENTAGE CALCULATION: Add Column
+                     ]
+                     ],
+                     "values": [
+                     ]
+                     },
+                     "rid":{"uid":"join_process_oda_gni"}
+                     },  // PART 3 PERCENTAGE CALCULATION: (3i) Join
+                     {
+                     "name": "addcolumn",
+                     "sid":[{"uid":"join_process_oda_gni"}],
+                     "parameters": {
+                     "column": {
+                     "dataType": "number",
+                     "id": "value",
+                     "title": {
+                     "EN": "Value"
+                     },
+                     "subject": null
+                     },
+                     "value": {
+                     "keys":  ["1 = 1"],
+                     "values":[" ( total_donor_oda_value / gni_donor_oda_value)*100"]
+                     }
+                     }
+                     }, // (3ii) PERCENTAGE CALCULATION: Add Column
+                     {
+                     "name": "filter",
+                     "parameters": {
+                     "columns": [
+                     "year",
+                     "value"
+                     ],
+                     "rows": {}
+                     }
+                     },  // (3iii) PERCENTAGE CALCULATION: filter (filter out what is not needed)
+                     {
+                     "name": "addcolumn",
+                     "parameters": {
+                     "column": {
+                     "id": "unitcode",
+                     "title": {
+                     "EN": "Measurement Unit"
+                     },
+                     "domain": {
+                     "codes": [{
+                     "idCodeList": "crs_units",
+                     "version": "2016",
+                     "level": 1
+                     }]
+                     },
+                     "dataType": "code",
+                     "subject": "um"
+                     },
+                     "value": "percentage"
+                     }
+                     }, // (3iv) PERCENTAGE CALCULATION: Add Column (Measurement Unit Code)
+                     {
+                     "name": "addcolumn",
+                     "parameters": {
+                     "column": {
+                     "dataType": "text",
+                     "id": "indicator",
+                     "title": {
+                     "EN": "Indicator"
+                     },
+                     "domain": {
+                     "codes": [
+                     {
+                     "extendedName": {
+                     "EN": "Adam Processes"
+                     },
+                     "idCodeList": "adam_processes"
+                     }
+                     ]
+                     },
+                     "subject": null
+                     },
+                     "value": "% ODA/GNI"
+                     },
+                     "rid": {
+                     "uid": "percentage_ODA_GNI"
+                     }
+                     }, // (3vi) PERCENTAGE CALCULATION: Add Column
 
-                        {
-                            "name": "filter",
-                            "sid": [
-                                {
-                                    "uid": "adam_usd_aggregation_table"
-                                }
-                            ],
-                            "parameters": {
-                                "columns": [
-                                    "year",
-                                    "value",
-                                    "unitcode"
-                                ],
-                                "rows": {
-                                    "oda": {
-                                        "enumeration": [
-                                            "usd_commitment"
-                                        ]
-                                    },
-                                    "dac_member": {
-                                        "enumeration": [
-                                            "t"
-                                        ]
-                                    },
-                                    "year": {
-                                        "time": [
-                                            {
-                                                "from": 2000,
-                                                "to": 2014
-                                            }
-                                        ]
-                                    }
-                                }
-                            },
-                            "rid": {
-                                "uid": "filter_total_oda_dac_members_by_year"
-                            }
-                        }, // PART 4 OECD DONORS (DAC MEMBERS) AVERAGE ODA: (4i) Filter
-                        {
-                            "name": "group",
-                            "parameters": {
-                                "by": [
-                                    "year"
-                                ],
-                                "aggregations": [
-                                    {
-                                        "columns": [
-                                            "value"
-                                        ],
-                                        "rule": "SUM"
-                                    },
-                                    {
-                                        "columns": [
-                                            "unitcode"
-                                        ],
-                                        "rule": "first"
-                                    }
-                                ]
-                            },
-                            "rid":{"uid":"aggregated_oecd"}
-                        }, // (4ii): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Group by
-                        {
-                            "name": "filter",
-                            "sid": [
-                                {
-                                    "uid": "adam_usd_aggregation_table"
-                                }
-                            ],
-                            "parameters": {
-                                "columns": [
-                                    "year",
-                                    "donorcode"
-                                ],
-                                "rows": {
-                                    "oda": {
-                                        "enumeration": [
-                                            "usd_commitment"
-                                        ]
-                                    },
-                                    "dac_member": {
-                                        "enumeration": [
-                                            "t"
-                                        ]
-                                    },
-                                    /!*"parentsector_code": {
-                                        "codes": [
-                                            {
-                                                "uid": "crs_dac",
-                                                "version": "2016",
-                                                "codes": [
-                                                    "600"
-                                                ]
-                                            }
-                                        ]
-                                    },*!/
-                                    "year": {
-                                        "time": [
-                                            {
-                                                "from": 2000,
-                                                "to": 2014
-                                            }
-                                        ]
-                                    }
-                                }
-                            },
-                            "rid":{"uid":"filter_dac_members_by_donor_year"}
+                     {
+                     "name": "filter",
+                     "sid": [
+                     {
+                     "uid": "adam_usd_aggregation_table"
+                     }
+                     ],
+                     "parameters": {
+                     "columns": [
+                     "year",
+                     "value",
+                     "unitcode"
+                     ],
+                     "rows": {
+                     "oda": {
+                     "enumeration": [
+                     "usd_commitment"
+                     ]
+                     },
+                     "dac_member": {
+                     "enumeration": [
+                     "t"
+                     ]
+                     },
+                     "year": {
+                     "time": [
+                     {
+                     "from": 2000,
+                     "to": 2014
+                     }
+                     ]
+                     }
+                     }
+                     },
+                     "rid": {
+                     "uid": "filter_total_oda_dac_members_by_year"
+                     }
+                     }, // PART 4 OECD DONORS (DAC MEMBERS) AVERAGE ODA: (4i) Filter
+                     {
+                     "name": "group",
+                     "parameters": {
+                     "by": [
+                     "year"
+                     ],
+                     "aggregations": [
+                     {
+                     "columns": [
+                     "value"
+                     ],
+                     "rule": "SUM"
+                     },
+                     {
+                     "columns": [
+                     "unitcode"
+                     ],
+                     "rule": "first"
+                     }
+                     ]
+                     },
+                     "rid":{"uid":"aggregated_oecd"}
+                     }, // (4ii): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Group by
+                     {
+                     "name": "filter",
+                     "sid": [
+                     {
+                     "uid": "adam_usd_aggregation_table"
+                     }
+                     ],
+                     "parameters": {
+                     "columns": [
+                     "year",
+                     "donorcode"
+                     ],
+                     "rows": {
+                     "oda": {
+                     "enumeration": [
+                     "usd_commitment"
+                     ]
+                     },
+                     "dac_member": {
+                     "enumeration": [
+                     "t"
+                     ]
+                     },
+                     /!*"parentsector_code": {
+                     "codes": [
+                     {
+                     "uid": "crs_dac",
+                     "version": "2016",
+                     "codes": [
+                     "600"
+                     ]
+                     }
+                     ]
+                     },*!/
+                     "year": {
+                     "time": [
+                     {
+                     "from": 2000,
+                     "to": 2014
+                     }
+                     ]
+                     }
+                     }
+                     },
+                     "rid":{"uid":"filter_dac_members_by_donor_year"}
 
-                        }, // (4iii): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Filter
-                        {
-                            "name": "group",
-                            "parameters": {
-                                "by": [
-                                    "donorcode",
-                                    "year"
-                                ],
-                                "aggregations": [
-                                ]
-                            },
-                            "rid": {
-                                "uid": "sd"
-                            }
-                        }, // (4iv): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Group by
-                        {
-                            "name": "addcolumn",
-                            "parameters": {
-                                "column": {
-                                    "dataType": "number",
-                                    "id": "value_count",
-                                    "title": {
-                                        "EN": "Value"
-                                    },
-                                    "subject": null
-                                },
-                                "value": 1
-                            },
-                            "rid": {
-                                "uid": "percentage_Value"
-                            }
-                        }, // (4v): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Add Column
-                        {
-                            "name": "group",
-                            "parameters": {
-                                "by": [
-                                    "year"
-                                ],
-                                "aggregations": [
-                                    {
-                                        "columns": [
-                                            "value_count"
-                                        ],
-                                        "rule": "SUM"
-                                    }
-                                ]
-                            },
-                            "rid": {
-                                "uid": "count_dac_members"
-                            }
-                        }, // (4vi): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Group by
+                     }, // (4iii): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Filter
+                     {
+                     "name": "group",
+                     "parameters": {
+                     "by": [
+                     "donorcode",
+                     "year"
+                     ],
+                     "aggregations": [
+                     ]
+                     },
+                     "rid": {
+                     "uid": "sd"
+                     }
+                     }, // (4iv): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Group by
+                     {
+                     "name": "addcolumn",
+                     "parameters": {
+                     "column": {
+                     "dataType": "number",
+                     "id": "value_count",
+                     "title": {
+                     "EN": "Value"
+                     },
+                     "subject": null
+                     },
+                     "value": 1
+                     },
+                     "rid": {
+                     "uid": "percentage_Value"
+                     }
+                     }, // (4v): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Add Column
+                     {
+                     "name": "group",
+                     "parameters": {
+                     "by": [
+                     "year"
+                     ],
+                     "aggregations": [
+                     {
+                     "columns": [
+                     "value_count"
+                     ],
+                     "rule": "SUM"
+                     }
+                     ]
+                     },
+                     "rid": {
+                     "uid": "count_dac_members"
+                     }
+                     }, // (4vi): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Group by
 
-                        {
-                            "name": "join",
-                            "sid": [
-                                {
-                                    "uid": "count_dac_members"
-                                },
-                                {
-                                    "uid": "aggregated_oecd"
-                                }
-                            ],
-                            "parameters": {
-                                "joins": [
-                                    [
+                     {
+                     "name": "join",
+                     "sid": [
+                     {
+                     "uid": "count_dac_members"
+                     },
+                     {
+                     "uid": "aggregated_oecd"
+                     }
+                     ],
+                     "parameters": {
+                     "joins": [
+                     [
 
-                                        {
-                                            "type": "id",
-                                            "value": "year"
-                                        }
-                                    ],
-                                    [
-                                        {
-                                            "type": "id",
-                                            "value": "year"
-                                        }
+                     {
+                     "type": "id",
+                     "value": "year"
+                     }
+                     ],
+                     [
+                     {
+                     "type": "id",
+                     "value": "year"
+                     }
 
-                                    ]
-                                ],
-                                "values": [
-                                ]
-                            }
-                        }, // (4vii): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Join
-                        {
-                            "name": "addcolumn",
-                            "parameters": {
-                                "column": {
-                                    "dataType": "number",
-                                    "id": "value",
-                                    "title": {
-                                        "EN": "Value"
-                                    },
-                                    "subject": null
-                                },
-                                "value": {
-                                    "keys":  ["1 = 1"],
-                                    "values":[" ( aggregated_oecd_value / count_dac_members_value_count )"]
-                                }
-                            },
-                            "rid": {
-                                "uid": "avg_value"
-                            }
-                        }, // (4viii): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Add Column
-                        {
-                            "name": "filter",
-                            "parameters": {
-                                "columns": [
-                                    "year",
-                                    "value",
-                                    "aggregated_oecd_unitcode"
-                                ],
-                                "rows": {
-                                }
-                            }
-                        }, // (4ix): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Filter
-                        {
-                            "name": "addcolumn",
-                            "parameters": {
-                                "column": {
-                                    "dataType": "text",
-                                    "id": "indicator",
-                                    "title": {
-                                        "EN": "Indicator"
-                                    },
-                                    "domain": {
-                                        "codes": [
-                                            {
-                                                "extendedName": {
-                                                    "EN": "Adam Processes"
-                                                },
-                                                "idCodeList": "adam_processes"
-                                            }
-                                        ]
-                                    },
-                                    "subject": null
-                                },
-                                "value": "OECD Average of ODA" // PART 4 FINAL INDICATOR NAME
-                            },
-                            "rid": {
-                                "uid": "OECD_AVG"
-                            }
-                        }, // (4x): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Add Column
+                     ]
+                     ],
+                     "values": [
+                     ]
+                     }
+                     }, // (4vii): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Join
+                     {
+                     "name": "addcolumn",
+                     "parameters": {
+                     "column": {
+                     "dataType": "number",
+                     "id": "value",
+                     "title": {
+                     "EN": "Value"
+                     },
+                     "subject": null
+                     },
+                     "value": {
+                     "keys":  ["1 = 1"],
+                     "values":[" ( aggregated_oecd_value / count_dac_members_value_count )"]
+                     }
+                     },
+                     "rid": {
+                     "uid": "avg_value"
+                     }
+                     }, // (4viii): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Add Column
+                     {
+                     "name": "filter",
+                     "parameters": {
+                     "columns": [
+                     "year",
+                     "value",
+                     "aggregated_oecd_unitcode"
+                     ],
+                     "rows": {
+                     }
+                     }
+                     }, // (4ix): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Filter
+                     {
+                     "name": "addcolumn",
+                     "parameters": {
+                     "column": {
+                     "dataType": "text",
+                     "id": "indicator",
+                     "title": {
+                     "EN": "Indicator"
+                     },
+                     "domain": {
+                     "codes": [
+                     {
+                     "extendedName": {
+                     "EN": "Adam Processes"
+                     },
+                     "idCodeList": "adam_processes"
+                     }
+                     ]
+                     },
+                     "subject": null
+                     },
+                     "value": "OECD Average of ODA" // PART 4 FINAL INDICATOR NAME
+                     },
+                     "rid": {
+                     "uid": "OECD_AVG"
+                     }
+                     }, // (4x): OECD DONORS (DAC MEMBERS) AVERAGE ODA: Add Column
 
-                        {
-                            "name": "join",
-                            "sid": [
-                                {
-                                    "uid": "OECD_AVG"
-                                },
-                                {
-                                    "uid": "gni_donor_oda"
-                                }
-                            ],
-                            "parameters": {
-                                "joins": [
-                                    [
+                     {
+                     "name": "join",
+                     "sid": [
+                     {
+                     "uid": "OECD_AVG"
+                     },
+                     {
+                     "uid": "gni_donor_oda"
+                     }
+                     ],
+                     "parameters": {
+                     "joins": [
+                     [
 
-                                        {
-                                            "type": "id",
-                                            "value": "year"
-                                        }
-                                    ],
-                                    [
-                                        {
-                                            "type": "id",
-                                            "value": "year"
-                                        }
+                     {
+                     "type": "id",
+                     "value": "year"
+                     }
+                     ],
+                     [
+                     {
+                     "type": "id",
+                     "value": "year"
+                     }
 
-                                    ]
-                                ],
-                                "values": [
-                                ]
-                            },
-                            "rid":{"uid":"join_process_oecd_avg_gni"}
-                        },  // PART 5 PERCENTAGE CALCULATION [OECD AVG/GNI]: (5i) Join
-                        {
-                            "name": "addcolumn",
-                            "sid":[{"uid":"join_process_oecd_avg_gni"}],
-                            "parameters": {
-                                "column": {
-                                    "dataType": "number",
-                                    "id": "value",
-                                    "title": {
-                                        "EN": "Value"
-                                    },
-                                    "subject": null
-                                },
-                                "value": {
-                                    "keys":  ["1 = 1"],
-                                    "values":[" ( OECD_AVG_value / gni_donor_oda_value)*100"]
-                                }
-                            }
-                        }, // (5ii) PERCENTAGE CALCULATION [OECD AVG/GNI]: Add Column
-                        {
-                            "name": "filter",
-                            "parameters": {
-                                "columns": [
-                                    "year",
-                                    "value"
-                                ],
-                                "rows": {}
-                            }
-                        },  // (5iii) PERCENTAGE CALCULATION [OECD AVG/GNI]: filter (filter out what is not needed)
-                        {
-                            "name": "addcolumn",
-                            "parameters": {
-                                "column": {
-                                    "id": "unitcode",
-                                    "title": {
-                                        "EN": "Measurement Unit"
-                                    },
-                                    "domain": {
-                                        "codes": [{
-                                            "idCodeList": "crs_units",
-                                            "version": "2016",
-                                            "level": 1
-                                        }]
-                                    },
-                                    "dataType": "code",
-                                    "subject": "um"
-                                },
-                                "value": "percentage"
-                            }
-                        }, // (5iv) PERCENTAGE CALCULATION [OECD AVG/GNI]: Add Column (Measurement Unit Code)
-                        {
-                            "name": "addcolumn",
-                            "parameters": {
-                                "column": {
-                                    "dataType": "text",
-                                    "id": "indicator",
-                                    "title": {
-                                        "EN": "Indicator"
-                                    },
-                                    "domain": {
-                                        "codes": [
-                                            {
-                                                "extendedName": {
-                                                    "EN": "Adam Processes"
-                                                },
-                                                "idCodeList": "adam_processes"
-                                            }
-                                        ]
-                                    },
-                                    "subject": null
-                                },
-                                "value": "% OECD Average of ODA/GNI"
-                            },
-                            "rid": {
-                                "uid": "percentage_OECD_AVG_GNI"
-                            }
-                        } // (5vi) PERCENTAGE CALCULATION [OECD AVG/GNI]: Add Column
-                    ]*/
+                     ]
+                     ],
+                     "values": [
+                     ]
+                     },
+                     "rid":{"uid":"join_process_oecd_avg_gni"}
+                     },  // PART 5 PERCENTAGE CALCULATION [OECD AVG/GNI]: (5i) Join
+                     {
+                     "name": "addcolumn",
+                     "sid":[{"uid":"join_process_oecd_avg_gni"}],
+                     "parameters": {
+                     "column": {
+                     "dataType": "number",
+                     "id": "value",
+                     "title": {
+                     "EN": "Value"
+                     },
+                     "subject": null
+                     },
+                     "value": {
+                     "keys":  ["1 = 1"],
+                     "values":[" ( OECD_AVG_value / gni_donor_oda_value)*100"]
+                     }
+                     }
+                     }, // (5ii) PERCENTAGE CALCULATION [OECD AVG/GNI]: Add Column
+                     {
+                     "name": "filter",
+                     "parameters": {
+                     "columns": [
+                     "year",
+                     "value"
+                     ],
+                     "rows": {}
+                     }
+                     },  // (5iii) PERCENTAGE CALCULATION [OECD AVG/GNI]: filter (filter out what is not needed)
+                     {
+                     "name": "addcolumn",
+                     "parameters": {
+                     "column": {
+                     "id": "unitcode",
+                     "title": {
+                     "EN": "Measurement Unit"
+                     },
+                     "domain": {
+                     "codes": [{
+                     "idCodeList": "crs_units",
+                     "version": "2016",
+                     "level": 1
+                     }]
+                     },
+                     "dataType": "code",
+                     "subject": "um"
+                     },
+                     "value": "percentage"
+                     }
+                     }, // (5iv) PERCENTAGE CALCULATION [OECD AVG/GNI]: Add Column (Measurement Unit Code)
+                     {
+                     "name": "addcolumn",
+                     "parameters": {
+                     "column": {
+                     "dataType": "text",
+                     "id": "indicator",
+                     "title": {
+                     "EN": "Indicator"
+                     },
+                     "domain": {
+                     "codes": [
+                     {
+                     "extendedName": {
+                     "EN": "Adam Processes"
+                     },
+                     "idCodeList": "adam_processes"
+                     }
+                     ]
+                     },
+                     "subject": null
+                     },
+                     "value": "% OECD Average of ODA/GNI"
+                     },
+                     "rid": {
+                     "uid": "percentage_OECD_AVG_GNI"
+                     }
+                     } // (5vi) PERCENTAGE CALCULATION [OECD AVG/GNI]: Add Column
+                     ]*/
                 },
                 {
                     id: 'top-recipients', // TOP RECIPIENTS
                     type: 'chart',
                     config: {
                         type: "column",
-                        x: ["recipientname"], //x axis
-                        series: ["flowcategory_name"], // series
+                        x: ["recipientcode_EN"], //x axis
+                        series: ["flowcategory_code_EN"], // series
                         y: ["value"],//Y dimension
                         aggregationFn: {"value": "sum"},
                         useDimensionLabelsIfExist: false,// || default raw else fenixtool
@@ -3132,44 +3154,80 @@ define(function () {
 
                     },
 
-                    filterFor: ['donorcode', 'parentsector_code', 'purposecode', 'year', 'oda'],
 
-                    filter: { //FX-filter format
-                        donorcode: ["1"],
-                        year: [{value: "2000", parent: 'from'}, {value: "2014", parent:  'to'}]
+                    filterFor: {
+                        "filter_recipients": ['donorcode', 'year', 'oda']
                     },
+
+
                     postProcess: [
+                        {
+                            "name": "filter",
+                            "sid": [
+                                {
+                                    "uid": "adam_usd_aggregation_table"
+                                }
+                            ],
+                            "parameters": {
+                                "rows": {
+                                    "fao_sector": {
+                                        "enumeration": [
+                                            "1"
+                                        ]
+                                    },
+                                    "donorcode": {
+                                        "codes": [
+                                            {
+                                                "uid": "crs_donors",
+                                                "version": "2016",
+                                                "codes": [
+                                                    "1"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "year": {
+                                        "time": [
+                                            {
+                                                "from": "2000",
+                                                "to": "2014"
+                                            }
+                                        ]
+                                    },
+                                    "oda":{
+                                        "enumeration":[
+                                            "usd_commitment"
+                                        ]
+                                    }
+                                }
+                            },
+                            "rid":{"uid":"filter_recipients"}
+                        },
                         {
                             "name": "group",
                             "parameters": {
                                 "by": [
-                                    "recipientname", "recipientcode"
+                                    "recipientcode"
                                 ],
                                 "aggregations": [
                                     {
-                                        "columns": ["value"],
+                                        "columns": [
+                                            "value"
+                                        ],
                                         "rule": "SUM"
                                     },
                                     {
-                                        "columns": ["unitcode"],
+                                        "columns": [
+                                            "unitcode"
+                                        ],
                                         "rule": "first"
                                     },
                                     {
-                                        "columns": ["flowcategory_name"],
+                                        "columns": [
+                                            "flowcategory_code"
+                                        ],
                                         "rule": "first"
                                     }
-                                ]
-                            }
-                        },
-                        {
-                            "name": "select",
-                            "parameters": {
-                                "query": "WHERE recipientcode NOT IN (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", // skipping regional recipient countries (e.g. "Africa, regional"; "North of Sahara, regional")
-                                "queryParameters": [
-                                    {"value": '298'}, {"value": '498'}, {"value": '798'}, {"value": '89'},
-                                    {"value": '589'}, {"value": '889'}, {"value": '189'}, {"value": '289'},
-                                    {"value": '389'}, {"value": '380'}, {"value": '489'}, {"value": '789'},
-                                    {"value": '689'}, {"value": '619'}, {"value": '679'}
                                 ]
                             }
                         },
@@ -3182,10 +3240,12 @@ define(function () {
                         {
                             "name": "page",
                             "parameters": {
-                                "perPage": 10,  //top 10
+                                "perPage": 10,
                                 "page": 1
                             }
-                        }]
+                        }
+
+                    ]
                 },
                 {
                     id: 'top-recipients-others', // TOP RECIPIENTS Vs OTHER RECIPIENTS
@@ -3277,8 +3337,8 @@ define(function () {
                         }
                     },
                     filterFor: {
-                        "filter_top_10_recipients_sum": ['donorcode', 'parentsector_code', 'purposecode', 'year', 'oda'],
-                        "filter_all_recipients_sum": ['donorcode', 'parentsector_code', 'purposecode', 'year', 'oda']
+                        "filter_top_10_recipients_sum": ['donorcode', 'purposecode', 'year', 'oda'],
+                        "filter_all_recipients_sum": ['donorcode', 'purposecode', 'year', 'oda']
                     },
 
                     postProcess: [
@@ -3325,6 +3385,11 @@ define(function () {
                                                     "1"
                                                 ]
                                             }
+                                        ]
+                                    },
+                                    "fao_sector": {
+                                        "enumeration": [
+                                            "1"
                                         ]
                                     },
                                     "year": {
@@ -3581,8 +3646,8 @@ define(function () {
                     type: 'chart',
                     config: {
                         type: "column",
-                        x: ["parentsector_name"], //x axis
-                        series: ["flowcategory_name"], // series
+                        x: ["parentsector_code_EN"], //x axis
+                        series: ["flowcategory_code_EN"], // series
                         y: ["value"],//Y dimension
                         aggregationFn: {"value": "sum"},
                         useDimensionLabelsIfExist: false,// || default raw else fenixtool
@@ -3607,30 +3672,77 @@ define(function () {
 
                     },
 
-                    filterFor: ['donorcode', 'year', 'oda'],
-
-                    filter: { //FX-filter format
-                        donorcode: ["1"],
-                        year: [{value: "2000", parent: 'from'}, {value: "2014", parent:  'to'}]
+                    filterFor: {
+                        "filter_sectors": ['donorcode', 'year', 'oda']
                     },
+
+
                     postProcess: [
+                        {
+                            "name": "filter",
+                            "sid": [
+                                {
+                                    "uid": "adam_usd_aggregation_table"
+                                }
+                            ],
+                            "parameters": {
+                                "rows": {
+                                    "fao_sector": {
+                                        "enumeration": [
+                                            "1"
+                                        ]
+                                    },
+                                    "donorcode": {
+                                        "codes": [
+                                            {
+                                                "uid": "crs_donors",
+                                                "version": "2016",
+                                                "codes": [
+                                                    "1"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "year": {
+                                        "time": [
+                                            {
+                                                "from": "2000",
+                                                "to": "2014"
+                                            }
+                                        ]
+                                    },
+                                    "oda": {
+                                        "enumeration": [
+                                            "usd_commitment"
+                                        ]
+                                    }
+                                }
+                            },
+                            "rid": {"uid": "filter_sectors"}
+                        },
                         {
                             "name": "group",
                             "parameters": {
                                 "by": [
-                                    "parentsector_name"
+                                    "parentsector_code"
                                 ],
                                 "aggregations": [
                                     {
-                                        "columns": ["value"],
+                                        "columns": [
+                                            "value"
+                                        ],
                                         "rule": "SUM"
                                     },
                                     {
-                                        "columns": ["unitcode"],
+                                        "columns": [
+                                            "unitcode"
+                                        ],
                                         "rule": "first"
                                     },
                                     {
-                                        "columns": ["flowcategory_name"],
+                                        "columns": [
+                                            "flowcategory_code"
+                                        ],
                                         "rule": "first"
                                     }
                                 ]
@@ -3645,10 +3757,13 @@ define(function () {
                         {
                             "name": "page",
                             "parameters": {
-                                "perPage": 10,  //top 10
+                                "perPage": 10,
                                 "page": 1
                             }
-                        }]
+                        }
+
+                    ]
+
                 },
                 {
                     id: 'top-sectors-others', // TOP SECTORS Vs OTHER SECTORS
@@ -4055,10 +4170,64 @@ define(function () {
 
                     },
 
-                    filterFor: ['donorcode', 'year', 'parentsector_code', 'purposecode', 'oda'],
+                    filterFor: ['donorcode', 'year', 'purposecode', 'oda'],
 
                     filter: { //FX-filter format
                         donorcode: ["1"],
+                        purposecode: [
+                            "12240",
+                            "14030",
+                            "14031",
+                            "15170",
+                            "16062",
+                            "23070",
+                            "31110",
+                            "31120",
+                            "31130",
+                            "31140",
+                            "31150",
+                            "31161",
+                            "31162",
+                            "31163",
+                            "31164",
+                            "31165",
+                            "31166",
+                            "31181",
+                            "31182",
+                            "31191",
+                            "31192",
+                            "31193",
+                            "31194",
+                            "31195",
+                            "31210",
+                            "31220",
+                            "31261",
+                            "31281",
+                            "31282",
+                            "31291",
+                            "31310",
+                            "31320",
+                            "31381",
+                            "31382",
+                            "31391",
+                            "32161",
+                            "32162",
+                            "32163",
+                            "32165",
+                            "32267",
+                            "41010",
+                            "41020",
+                            "41030",
+                            "41040",
+                            "41050",
+                            "41081",
+                            "41082",
+                            "43040",
+                            "43050",
+                            "52010",
+                            "72040",
+                            "74010"
+                        ],
                         year: [{value: "2000", parent: 'from'}, {value: "2014", parent:  'to'}]
                     },
                     postProcess: [
@@ -4103,8 +4272,8 @@ define(function () {
                     type: 'chart',
                     config: {
                         type: "pieold",
-                        x: ["purposename"], //x axis and series
-                        series: ["flowcategory_name"], // series
+                        x: ["purposecode_EN"], //x axis and series
+                        series: ["flowcategory_code_EN"], // series
                         y: ["value"],//Y dimension
                         aggregationFn: {"value": "sum"},
                         useDimensionLabelsIfExist: false,// || default raw else fenixtool
@@ -4170,30 +4339,78 @@ define(function () {
 
                     },
 
-                    filterFor: ['donorcode', 'year', 'parentsector_code', 'oda'],
 
-                    filter: { //FX-filter format
-                        donorcode: ["1"],
-                        year: [{value: "2000", parent: 'from'}, {value: "2014", parent: 'to'}]
+                    filterFor: {
+                        "filter_subsectors": ['donorcode', 'year', 'oda']
                     },
+
+
                     postProcess: [
+                        {
+                            "name": "filter",
+                            "sid": [
+                                {
+                                    "uid": "adam_usd_aggregation_table"
+                                }
+                            ],
+                            "parameters": {
+                                "rows": {
+                                    "fao_sector": {
+                                        "enumeration": [
+                                            "1"
+                                        ]
+                                    },
+                                    "donorcode": {
+                                        "codes": [
+                                            {
+                                                "uid": "crs_donors",
+                                                "version": "2016",
+                                                "codes": [
+                                                    "1"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "year": {
+                                        "time": [
+                                            {
+                                                "from": "2000",
+                                                "to": "2014"
+                                            }
+                                        ]
+                                    },
+                                    "oda": {
+                                        "enumeration": [
+                                            "usd_commitment"
+                                        ]
+                                    }
+                                }
+                            },
+                            "rid": {"uid": "filter_subsectors"}
+                        },
                         {
                             "name": "group",
                             "parameters": {
                                 "by": [
-                                    "purposename"
+                                    "purposecode"
                                 ],
                                 "aggregations": [
                                     {
-                                        "columns": ["value"],
+                                        "columns": [
+                                            "value"
+                                        ],
                                         "rule": "SUM"
                                     },
                                     {
-                                        "columns": ["unitcode"],
+                                        "columns": [
+                                            "unitcode"
+                                        ],
                                         "rule": "first"
                                     },
                                     {
-                                        "columns": ["flowcategory_name"],
+                                        "columns": [
+                                            "flowcategory_code"
+                                        ],
                                         "rule": "first"
                                     }
                                 ]
@@ -4208,10 +4425,14 @@ define(function () {
                         {
                             "name": "page",
                             "parameters": {
-                                "perPage": 10,  //top 10
+                                "perPage": 10,
                                 "page": 1
                             }
-                        }]
+                        }
+
+                    ]
+
+
                 },
                 {
                     id: 'oda-regional', // REGIONAL DISTRIBUTION
@@ -4294,10 +4515,64 @@ define(function () {
                         }
                     },
 
-                    filterFor: ['donorcode', 'year', 'parentsector_code', 'purposecode', 'oda'],
+                    filterFor: ['donorcode', 'year', 'purposecode', 'oda'],
 
                     filter: { //FX-filter format
                         donorcode: ["1"],
+                        purposecode: [
+                            "12240",
+                            "14030",
+                            "14031",
+                            "15170",
+                            "16062",
+                            "23070",
+                            "31110",
+                            "31120",
+                            "31130",
+                            "31140",
+                            "31150",
+                            "31161",
+                            "31162",
+                            "31163",
+                            "31164",
+                            "31165",
+                            "31166",
+                            "31181",
+                            "31182",
+                            "31191",
+                            "31192",
+                            "31193",
+                            "31194",
+                            "31195",
+                            "31210",
+                            "31220",
+                            "31261",
+                            "31281",
+                            "31282",
+                            "31291",
+                            "31310",
+                            "31320",
+                            "31381",
+                            "31382",
+                            "31391",
+                            "32161",
+                            "32162",
+                            "32163",
+                            "32165",
+                            "32267",
+                            "41010",
+                            "41020",
+                            "41030",
+                            "41040",
+                            "41050",
+                            "41081",
+                            "41082",
+                            "43040",
+                            "43050",
+                            "52010",
+                            "72040",
+                            "74010"
+                        ],
                         year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
                     },
 
@@ -4370,10 +4645,64 @@ define(function () {
                         }
                     },
 
-                    filterFor: ['donorcode', 'year', 'parentsector_code', 'purposecode', 'oda'],
+                    filterFor: ['donorcode', 'year', 'purposecode', 'oda'],
 
                     filter: { //FX-filter format
                         donorcode: ["1"],
+                        purposecode: [
+                            "12240",
+                            "14030",
+                            "14031",
+                            "15170",
+                            "16062",
+                            "23070",
+                            "31110",
+                            "31120",
+                            "31130",
+                            "31140",
+                            "31150",
+                            "31161",
+                            "31162",
+                            "31163",
+                            "31164",
+                            "31165",
+                            "31166",
+                            "31181",
+                            "31182",
+                            "31191",
+                            "31192",
+                            "31193",
+                            "31194",
+                            "31195",
+                            "31210",
+                            "31220",
+                            "31261",
+                            "31281",
+                            "31282",
+                            "31291",
+                            "31310",
+                            "31320",
+                            "31381",
+                            "31382",
+                            "31391",
+                            "32161",
+                            "32162",
+                            "32163",
+                            "32165",
+                            "32267",
+                            "41010",
+                            "41020",
+                            "41030",
+                            "41040",
+                            "41050",
+                            "41081",
+                            "41082",
+                            "43040",
+                            "43050",
+                            "52010",
+                            "72040",
+                            "74010"
+                        ],
                         year: [{value: 2000, parent: 'from'}, {value: 2014, parent:  'to'}]
                     },
                     postProcess: [
@@ -4410,5 +4739,5 @@ define(function () {
                 }
             ]
         }
-        }
-    });
+    }
+});
