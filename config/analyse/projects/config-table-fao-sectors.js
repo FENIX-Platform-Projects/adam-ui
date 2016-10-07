@@ -112,10 +112,10 @@ define(function () {
                         {
                             "name": "order",
                             "parameters": {
-                                "year": "ASC"
+                                "year": "DESC"
                             }
                         }
-                    ],
+                    ]
                 }
             ]
         }

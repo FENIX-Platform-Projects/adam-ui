@@ -101,13 +101,13 @@ define(function () {
                                         ]
                                     }
                                 }
-                            },
-                            "rid":{"uid":"filter_projects"}
+                            }//,
+                           // "rid":{"uid":"filter_projects"}
                         },
                         {
                             "name": "order",
                             "parameters": {
-                                "year": "ASC"
+                                "year": "DESC"
                             }
                         }
                     ]/*,
