@@ -255,8 +255,8 @@ define([
         $.ajaxPrefilter(function(options){
             if(options.crossDomain && $.support.cors) {
                 var http = (window.location.protocol === 'http:' ? 'http:' : 'https:');
-                options.url = http + '//cors-anywhere.herokuapp.com/'+options.url;
-
+                if(options.type.toUpperCase() === "HEAD")
+                    options.url = http + '//cors-anywhere.herokuapp.com/'+options.url;
             }
         });
 
