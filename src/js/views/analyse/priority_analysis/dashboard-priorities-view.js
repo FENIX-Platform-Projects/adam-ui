@@ -163,8 +163,8 @@ define([
 
             this.config.el = this.$el;
 
-            console.log("============== renderDashboard ==========");
-            console.log(this.config.items);
+            //console.log("============== renderDashboard ==========");
+           // console.log(this.config.items);
 
 
             if(this.config.items.length > 0)

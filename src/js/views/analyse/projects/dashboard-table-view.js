@@ -282,7 +282,7 @@ define([
 
 
             this.dashboard.on('ready.item', function () {
-                console.log(' ==== ready.item  ==== ');
+                //console.log(' ==== ready.item  ==== ');
 
                 increment = increment + percent;
                 self.progressBar.update(increment);

@@ -223,8 +223,8 @@ define([
             // console.log("================= filter values =============== ");
             // console.log(filterValues);
 
-            console.log("================= selectedfilter =============== ");
-            console.log(changedFilter);
+            //console.log("================= selectedfilter =============== ");
+           // console.log(changedFilter);
 
             if (changedFilter) {
 
