@@ -38,8 +38,12 @@ define(function () {
                                 {id: "year", width: 70,  align: 'center', sortOrder: 'desc'},
                                 {id: "parentsector_code_EN", width: 150},
                                 {id: "purposecode_EN", width: 150},
-                                {id: "oda", header: "USD Commitment", width: 110,  align: 'center'},
-                                {id: "oda", header: "USD Disbursement", width: 110,  align: 'center'}
+                                {id: "oda", width: 110, align: 'center', getSortValue : function(value , record){
+                                    return Number(value);
+                                }},
+                                {id: "oda", width: 110, align: 'center', getSortValue : function(value , record){
+                                    return Number(value);
+                                }}
                             ]
                         }
                     },

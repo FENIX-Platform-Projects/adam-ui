@@ -33,9 +33,15 @@ define(function () {
                                 columns: [
                                     {id: "donorcode_EN", width: 150},
                                     {id: "recipientcode_EN", width: 200},
-                                    {id: "indicator", width: 150},
-                                    {id: "indicator", width: 200},
-                                    {id: "indicator", width: 200}
+                                    {id: "indicator", width: 150, getSortValue : function(value , record){
+                                        return Number(value);
+                                    }},
+                                    {id: "indicator", width: 200, getSortValue : function(value , record){
+                                        return Number(value);
+                                    }},
+                                    {id: "indicator", width: 200, getSortValue : function(value , record){
+                                        return Number(value);
+                                    }}
                                 ]
                             }
                         },
