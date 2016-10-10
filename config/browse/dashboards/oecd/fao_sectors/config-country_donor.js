@@ -2140,8 +2140,8 @@ define(function () {
                     },
 
                     filterFor: {
-                        "filter_top_10_sectors_sum": ['recipientcode', 'donorocode', 'year', 'oda'],
-                        "filter_all_sectors_sum": ['recipientcode', 'donorocode', 'year', 'oda']
+                        "filter_top_10_sectors_sum": ['recipientcode', 'donorcode', 'year', 'oda'],
+                        "filter_all_sectors_sum": ['recipientcode', 'donorcode', 'year', 'oda']
                     },
 
                     postProcess: [
@@ -2526,7 +2526,7 @@ define(function () {
 
 
                     filterFor: {
-                        "filter_top_subsectors": ['recipientcode', 'donorocode', 'year', 'oda'],
+                        "filter_top_subsectors": ['recipientcode', 'donorcode', 'year', 'oda']
                     },
 
                     postProcess: [
