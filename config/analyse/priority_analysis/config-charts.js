@@ -13,7 +13,7 @@ define(function () {
             context: "BY_PARTNER",
 
             items: [
-                {
+            {
                     id: "top-partners", // TOP 10 RECIPIENTS
                     type: 'chart',
                     config: {
@@ -55,17 +55,6 @@ define(function () {
                                     "unitcode"
                                 ],
                                 "rows": {
-                                    /* "recipientcode": {
-                                     "codes": [
-                                     {
-                                     "uid": "crs_recipients",
-                                     "version": "2016",
-                                     "codes": [
-                                     "625"
-                                     ]
-                                     }
-                                     ]
-                                     },*/
                                     "purposecode": {
                                         "codes": [
                                             {
@@ -160,7 +149,7 @@ define(function () {
                     type: 'chart',
                     config: {
                         type: "column",
-                        x: ["donorcode_EN"], //x axis
+                        x: ["recipientcode_EN"], //x axis
                         series: ["indicator"], // series
                         y: ["value"],//Y dimension
                         aggregationFn: {"value": "sum"},
@@ -178,8 +167,7 @@ define(function () {
                     },
 
                     filterFor: {
-                        //  "filter_top_10": ['year', 'purposecode', 'recipientcode']
-                        "filter_top_10": ['year', 'purposecode']
+                        "filter_top_10_recipients": ['year', 'purposecode']
                     },
 
                     postProcess: [
@@ -192,22 +180,11 @@ define(function () {
                             ],
                             "parameters": {
                                 "columns": [
-                                    "donorcode",
+                                    "recipientcode",
                                     "value",
                                     "unitcode"
                                 ],
                                 "rows": {
-                                    /* "recipientcode": {
-                                     "codes": [
-                                     {
-                                     "uid": "crs_recipients",
-                                     "version": "2016",
-                                     "codes": [
-                                     "625"
-                                     ]
-                                     }
-                                     ]
-                                     },*/
                                     "purposecode": {
                                         "codes": [
                                             {
@@ -229,13 +206,13 @@ define(function () {
                                     }
                                 }
                             },
-                            "rid": {"uid": "filter_top_10"}
+                            "rid": {"uid": "filter_top_10_recipients"}
                         },
                         {
                             "name": "group",
                             "parameters": {
                                 "by": [
-                                    "donorcode"
+                                    "recipientcode"
                                 ],
                                 "aggregations": [
                                     {
@@ -297,13 +274,14 @@ define(function () {
 
                     ]
                 }, // TOP 10 RECIPIENTS
+
                 {
                     id: "financing-priorities-partners",
                     type: 'chart',
                     config: {
                         type: "column",
                         x: ["purposecode_EN"], //x axis
-                        series: ["donorcode_EN"], // series
+                        series: ["filter_top_10_purposes_donors_donorcode_EN"], // series
                         y: ["value"],//Y dimension
                         aggregationFn: {"value": "sum"},
                         useDimensionLabelsIfExist: false,// || default raw else fenixtool
@@ -340,8 +318,8 @@ define(function () {
                     },
 
                     filterFor: {
-                        //"filter_top_10": ['year', 'purposecode', 'recipientcode']
-                        "filter_top_10": ['year', 'purposecode']
+                        "filter_top_10": ['year', 'purposecode'],
+                        "filter_top_10_purposes": ['year']
                     },
 
                     postProcess: [
@@ -354,51 +332,42 @@ define(function () {
                             ],
                             "parameters": {
                                 "columns": [
-                                    "donorcode",
                                     "purposecode",
-                                    "value",
-                                    "unitcode"
+                                    "value"
                                 ],
                                 "rows": {
                                     "year": {
                                         "time": [
                                             {
-                                                "from": 2000,
-                                                "to": 2014
+                                                "from": "2000",
+                                                "to": "2014"
                                             }
                                         ]
                                     },
-                                    /*"recipientcode": {
-                                     "codes": [
-                                     {
-                                     "uid": "crs_recipients",
-                                     "version": "2016",
-                                     "codes": [
-                                     "625"
-                                     ]
-                                     }
-                                     ]
-                                     },*/
                                     "purposecode": {
                                         "codes": [
                                             {
                                                 "uid": "crs_purposes",
                                                 "version": "2016",
                                                 "codes": [
-                                                    "99820"
+                                                    "31120",
+                                                    "31130",
+                                                    "41010",
+                                                    "52010"
                                                 ]
                                             }
                                         ]
                                     }
                                 }
                             },
-                            "rid": {"uid": "filter_top_10"}
+                            "rid": {
+                                "uid": "filter_top_10"
+                            }
                         },
                         {
                             "name": "group",
                             "parameters": {
                                 "by": [
-                                    "donorcode",
                                     "purposecode"
                                 ],
                                 "aggregations": [
@@ -407,12 +376,6 @@ define(function () {
                                             "value"
                                         ],
                                         "rule": "SUM"
-                                    },
-                                    {
-                                        "columns": [
-                                            "unitcode"
-                                        ],
-                                        "rule": "first"
                                     }
                                 ]
                             }
@@ -422,14 +385,177 @@ define(function () {
                             "parameters": {
                                 "value": "DESC"
                             }
-                        }//,
-                        // {
-                        //   "name": "page",
-                        //  "parameters": {
-                        //    "perPage": 10,
-                        //    "page": 1
-                        // }
-                        // },
+                        },
+                        {
+                            "name": "page",
+                            "parameters": {
+                                "perPage": 10,
+                                "page": 1
+                            },
+                            "rid": {
+                                "uid": "top_10_purposes"
+                            }
+                        },
+                        {
+                            "name": "filter",
+                            "sid": [
+                                {
+                                    "uid": "adam_priority_analysis"
+                                },
+                                {
+                                    "uid": "top_10_purposes"
+                                }
+                            ],
+                            "parameters": {
+                                "columns": [
+                                    "purposecode",
+                                    "donorcode",
+                                    "value",
+                                    "unitcode"
+                                ],
+                                "rows": {
+                                    "purposecode": {
+                                        "tables": [
+                                            {
+                                                "uid": "top_10_purposes",
+                                                "column": "purposecode"
+                                            }
+                                        ]
+                                    },
+                                    "year": {
+                                        "time": [
+                                            {
+                                                "from": "2000",
+                                                "to": "2014"
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "rid": {
+                                "uid": "filter_top_10_purposes"
+                            }
+                        },
+                        {
+                            "name": "group",
+                            "parameters": {
+                                "by": [
+                                    "purposecode",
+                                    "donorcode"
+                                ],
+                                "aggregations": [
+                                    {
+                                        "columns": [
+                                            "value"
+                                        ],
+                                        "rule": "SUM"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "addcolumn",
+                            "parameters": {
+                                "column": {
+                                    "dataType": "number",
+                                    "id": "rank",
+                                    "title": {
+                                        "EN": "Rank"
+                                    },
+                                    "subject": null
+                                },
+                                "value": "rank() over (partition by purposecode order by value DESC)"
+                            }
+                        },
+                        {
+                            "name": "filter",
+                            "parameters": {
+                                "columns": [
+                                    "purposecode",
+                                    "donorcode",
+                                    "value",
+                                    "rank",
+                                    "unitcode"
+                                ],
+                                "rows": {
+                                    "rank": {
+                                        "number": [
+                                            {
+                                                "from": 1,
+                                                "to": 10
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "rid": {
+                                "uid": "filter_top_10_purposes_donors"
+                            }
+                        },
+                        {
+                            "name": "join",
+                            "sid": [
+                                {
+                                    "uid": "filter_top_10_purposes_donors"
+                                },
+                                {
+                                    "uid": "top_10_purposes"
+                                }
+                            ],
+                            "parameters": {
+                                "joins": [
+                                    [
+                                        {
+                                            "type": "id",
+                                            "value": "purposecode"
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "type": "id",
+                                            "value": "purposecode"
+                                        }
+                                    ]
+                                ],
+                                "values": [
+                                ]
+                            }
+                        },
+                        {
+                            "name": "addcolumn",
+                            "parameters": {
+                                "column": {
+                                    "dataType": "number",
+                                    "id": "value",
+                                    "title": {
+                                        "EN": "Value"
+                                    },
+                                    "subject": "value"
+                                },
+                                "value": "filter_top_10_purposes_donors_value"
+                            }
+                        },
+
+                        {
+                            "name": "order",
+                            "parameters": {
+                                "top_10_purposes_value":"DESC",
+                                "value": "DESC"
+                            }
+                        },
+                        {
+                            "name": "filter",
+                            "parameters": {
+                                "columns": [
+                                    "purposecode",
+                                    "filter_top_10_purposes_donors_donorcode",
+                                    "value",
+                                    "unitcode"
+                                ],
+                                "rows": {
+                                }
+                            }
+                        }
                     ]
                 }, // BY TOP 10 RESOURCE PARTNERS
                 {
@@ -438,7 +564,7 @@ define(function () {
                     config: {
                         type: "column",
                         x: ["purposecode_EN"], //x axis
-                        series: ["donorcode_EN"], // series
+                        series: ["filter_top_10_purposes_recipients_recipientcode_EN"], // series
                         y: ["value"],//Y dimension
                         aggregationFn: {"value": "sum"},
                         useDimensionLabelsIfExist: false,// || default raw else fenixtool
@@ -475,8 +601,8 @@ define(function () {
                     },
 
                     filterFor: {
-                        //"filter_top_10": ['year', 'purposecode', 'recipientcode']
-                        "filter_top_10": ['year', 'purposecode']
+                        "filter_top_10": ['year', 'purposecode'],
+                        "filter_top_10_purposes": ['year']
                     },
 
                     postProcess: [
@@ -489,51 +615,42 @@ define(function () {
                             ],
                             "parameters": {
                                 "columns": [
-                                    "donorcode",
                                     "purposecode",
-                                    "value",
-                                    "unitcode"
+                                    "value"
                                 ],
                                 "rows": {
                                     "year": {
                                         "time": [
                                             {
-                                                "from": 2000,
-                                                "to": 2014
+                                                "from": "2000",
+                                                "to": "2014"
                                             }
                                         ]
                                     },
-                                    /*"recipientcode": {
-                                     "codes": [
-                                     {
-                                     "uid": "crs_recipients",
-                                     "version": "2016",
-                                     "codes": [
-                                     "625"
-                                     ]
-                                     }
-                                     ]
-                                     },*/
                                     "purposecode": {
                                         "codes": [
                                             {
                                                 "uid": "crs_purposes",
                                                 "version": "2016",
                                                 "codes": [
-                                                    "99820"
+                                                    "31120",
+                                                    "31130",
+                                                    "41010",
+                                                    "52010"
                                                 ]
                                             }
                                         ]
                                     }
                                 }
                             },
-                            "rid": {"uid": "filter_top_10"}
+                            "rid": {
+                                "uid": "filter_top_10"
+                            }
                         },
                         {
                             "name": "group",
                             "parameters": {
                                 "by": [
-                                    "donorcode",
                                     "purposecode"
                                 ],
                                 "aggregations": [
@@ -542,12 +659,6 @@ define(function () {
                                             "value"
                                         ],
                                         "rule": "SUM"
-                                    },
-                                    {
-                                        "columns": [
-                                            "unitcode"
-                                        ],
-                                        "rule": "first"
                                     }
                                 ]
                             }
@@ -557,17 +668,179 @@ define(function () {
                             "parameters": {
                                 "value": "DESC"
                             }
-                        }//,
-                        // {
-                        //   "name": "page",
-                        //  "parameters": {
-                        //    "perPage": 10,
-                        //    "page": 1
-                        // }
-                        // },
-                    ]
-                } // BY TOP 10 RECIPIENTS
+                        },
+                        {
+                            "name": "page",
+                            "parameters": {
+                                "perPage": 10,
+                                "page": 1
+                            },
+                            "rid": {
+                                "uid": "top_10_purposes"
+                            }
+                        },
+                        {
+                            "name": "filter",
+                            "sid": [
+                                {
+                                    "uid": "adam_priority_analysis"
+                                },
+                                {
+                                    "uid": "top_10_purposes"
+                                }
+                            ],
+                            "parameters": {
+                                "columns": [
+                                    "purposecode",
+                                    "recipientcode",
+                                    "value",
+                                    "unitcode"
+                                ],
+                                "rows": {
+                                    "purposecode": {
+                                        "tables": [
+                                            {
+                                                "uid": "top_10_purposes",
+                                                "column": "purposecode"
+                                            }
+                                        ]
+                                    },
+                                    "year": {
+                                        "time": [
+                                            {
+                                                "from": "2000",
+                                                "to": "2014"
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "rid": {
+                                "uid": "filter_top_10_purposes"
+                            }
+                        },
+                        {
+                            "name": "group",
+                            "parameters": {
+                                "by": [
+                                    "purposecode",
+                                    "recipientcode"
+                                ],
+                                "aggregations": [
+                                    {
+                                        "columns": [
+                                            "value"
+                                        ],
+                                        "rule": "SUM"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "addcolumn",
+                            "parameters": {
+                                "column": {
+                                    "dataType": "number",
+                                    "id": "rank",
+                                    "title": {
+                                        "EN": "Rank"
+                                    },
+                                    "subject": null
+                                },
+                                "value": "rank() over (partition by purposecode order by value DESC)"
+                            }
+                        },
+                        {
+                            "name": "filter",
+                            "parameters": {
+                                "columns": [
+                                    "purposecode",
+                                    "recipientcode",
+                                    "value",
+                                    "rank",
+                                    "unitcode"
+                                ],
+                                "rows": {
+                                    "rank": {
+                                        "number": [
+                                            {
+                                                "from": 1,
+                                                "to": 10
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "rid": {
+                                "uid": "filter_top_10_purposes_recipients"
+                            }
+                        },
+                        {
+                            "name": "join",
+                            "sid": [
+                                {
+                                    "uid": "filter_top_10_purposes_recipients"
+                                },
+                                {
+                                    "uid": "top_10_purposes"
+                                }
+                            ],
+                            "parameters": {
+                                "joins": [
+                                    [
+                                        {
+                                            "type": "id",
+                                            "value": "purposecode"
+                                        }
+                                    ],
+                                    [
+                                        {
+                                            "type": "id",
+                                            "value": "purposecode"
+                                        }
+                                    ]
+                                ],
+                                "values": [
+                                ]
+                            }
+                        },
+                        {
+                            "name": "addcolumn",
+                            "parameters": {
+                                "column": {
+                                    "dataType": "number",
+                                    "id": "value",
+                                    "title": {
+                                        "EN": "Value"
+                                    },
+                                    "subject": "value"
+                                },
+                                "value": "filter_top_10_purposes_recipients_value"
+                            }
+                        },
 
+                        {
+                            "name": "order",
+                            "parameters": {
+                                "top_10_purposes_value":"DESC",
+                                "value": "DESC"
+                            }
+                        },
+                        {
+                            "name": "filter",
+                            "parameters": {
+                                "columns": [
+                                    "purposecode",
+                                    "filter_top_10_purposes_recipients_recipientcode",
+                                    "value",
+                                    "unitcode"
+                                ],
+                                "rows": {
+                                }
+                            }
+                        }
+                    ]
+                }
             ]
         }
     }
