@@ -865,7 +865,7 @@ define(function () {
                     },
 
                     filterFor: {
-                        "filter_total_country_sector_oda": ['recipientcode', 'purposecode', 'year', 'oda'],
+                        "filter_total_country_sector_oda": ['recipientcode', 'year', 'oda'],
                         "filter_total_country_subsector_oda": ['recipientcode', 'purposecode', 'year', 'oda']
                     },
                     postProcess:[
