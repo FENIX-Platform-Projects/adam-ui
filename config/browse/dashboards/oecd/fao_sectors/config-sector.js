@@ -1218,7 +1218,7 @@ define(function () {
                     },
 
                     filterFor: {
-                        "filter_donor": ['year', 'oda']
+                        "filter_donor": ['year', 'oda', 'purposecode']
                     },
                     postProcess: [
                         {
@@ -1714,7 +1714,7 @@ define(function () {
                     },
 
                     filterFor: {
-                        "filter_recipients": ['year', 'oda']
+                        "filter_recipients": ['year', 'oda', 'purposecode']
                     },
                     postProcess: [
                         {
