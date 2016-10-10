@@ -247,11 +247,11 @@ define([
                         if (changedFilter.values.values.length > 0) {
                             if (changedFilter.id === GeneralConfig.SELECTORS.SECTOR) {
                                if(changedFilter.values.values[0] === '9999'){
-                                   console.log("============== FAO ", config);
+                                   //console.log("============== FAO ", config);
                                    config = TableConfigFAOSectors;
                                    dashboardConfig = TableConfigFAOSectors.dashboard;
                                } else {
-                                   console.log("============== OTHER ", config);
+                                   //console.log("============== OTHER ", config);
                                    config = TableConfigOtherSectors;
                                    dashboardConfig = TableConfigOtherSectors.dashboard;
                                }
@@ -261,7 +261,7 @@ define([
                     }
 
 
-                    console.log("============== CONFIG ", dashboardConfig.items[0]);
+                   // console.log("============== CONFIG ", dashboardConfig.items[0]);
 
                     this._getDashboardConfiguration(filterValues, dashboardConfig);
                 }

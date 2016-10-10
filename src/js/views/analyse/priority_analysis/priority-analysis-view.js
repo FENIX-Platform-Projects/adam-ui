@@ -159,8 +159,8 @@ define([
 
             //this.prioritiesConfig = TableConfig;
 
-            console.log("======================== INIT ");
-            console.log(this.prioritiesConfig.dashboard.items);
+            //console.log("======================== INIT ");
+            //console.log(this.prioritiesConfig.dashboard.items);
 
             // Set TITLE Sub View
             var titleSubView = new TitleSubView({
@@ -415,7 +415,8 @@ define([
 
                     self.chartsConfig = ChartsConfig;
       
-                    var venn  =  _.find(self.prioritiesConfig.dashboard.items, function(o){                        console.log(o.id);
+                    var venn  =  _.find(self.prioritiesConfig.dashboard.items, function(o){
+                        //console.log(o.id);
                         return o.id === BasePriorityAnalysisConfig.items.VENN_DIAGRAM;
                     });
 
