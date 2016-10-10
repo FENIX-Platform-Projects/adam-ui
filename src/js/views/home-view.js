@@ -89,7 +89,7 @@ define([
 
             var conf = DashboardConfig;
 
-            console.log(conf);
+            //console.log(conf);
             if (conf && !_.isEmpty(conf) &&  conf.dashboard) {
 
             this._disposeDashboards();
@@ -117,7 +117,7 @@ define([
 
          _createMap: function() {
 
-            console.log('DashboardTestData', DashboardTestData);
+            //console.log('DashboardTestData', DashboardTestData);
 
             var countries = [];
             
