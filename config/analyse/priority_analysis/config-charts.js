@@ -467,6 +467,8 @@ define(function () {
                                 "value": "rank() over (partition by purposecode order by value DESC)"
                             }
                         },
+
+
                         {
                             "name": "filter",
                             "parameters": {
@@ -493,13 +495,34 @@ define(function () {
                             }
                         },
                         {
+                            "name": "group",
+                            "sid":[{"uid":"filter_top_10_purposes_donors"}],
+                            "parameters": {
+                                "by": [
+                                    "purposecode"
+
+                                ],
+                                "aggregations": [
+                                    {
+                                        "columns": [
+                                            "value"
+                                        ],
+                                        "rule": "SUM"
+                                    }
+                                ]
+                            },
+                            "rid": {
+                                "uid": "filter_aggregated_top10"
+                            }
+                        },
+                        {
                             "name": "join",
                             "sid": [
                                 {
                                     "uid": "filter_top_10_purposes_donors"
                                 },
                                 {
-                                    "uid": "top_10_purposes"
+                                    "uid": "filter_aggregated_top10"
                                 }
                             ],
                             "parameters": {
@@ -509,18 +532,22 @@ define(function () {
                                             "type": "id",
                                             "value": "purposecode"
                                         }
+
                                     ],
                                     [
                                         {
                                             "type": "id",
                                             "value": "purposecode"
                                         }
+
                                     ]
                                 ],
                                 "values": [
                                 ]
                             }
                         },
+
+
                         {
                             "name": "addcolumn",
                             "parameters": {
@@ -530,7 +557,9 @@ define(function () {
                                     "title": {
                                         "EN": "Value"
                                     },
-                                    "subject": "value"
+                                    "subject":"value"
+
+
                                 },
                                 "value": "filter_top_10_purposes_donors_value"
                             }
@@ -539,7 +568,8 @@ define(function () {
                         {
                             "name": "order",
                             "parameters": {
-                                "top_10_purposes_value":"DESC",
+                                "filter_aggregated_top10_value":"DESC",
+                                "purposecode":"DESC",
                                 "value": "DESC"
                             }
                         },
@@ -556,6 +586,7 @@ define(function () {
                                 }
                             }
                         }
+
                     ]
                 }, // BY TOP 10 RESOURCE PARTNERS
                 {
@@ -750,6 +781,8 @@ define(function () {
                                 "value": "rank() over (partition by purposecode order by value DESC)"
                             }
                         },
+
+
                         {
                             "name": "filter",
                             "parameters": {
@@ -776,13 +809,34 @@ define(function () {
                             }
                         },
                         {
+                            "name": "group",
+                            "sid":[{"uid":"filter_top_10_purposes_recipients"}],
+                            "parameters": {
+                                "by": [
+                                    "purposecode"
+
+                                ],
+                                "aggregations": [
+                                    {
+                                        "columns": [
+                                            "value"
+                                        ],
+                                        "rule": "SUM"
+                                    }
+                                ]
+                            },
+                            "rid": {
+                                "uid": "filter_aggregated_top10"
+                            }
+                        },
+                        {
                             "name": "join",
                             "sid": [
                                 {
                                     "uid": "filter_top_10_purposes_recipients"
                                 },
                                 {
-                                    "uid": "top_10_purposes"
+                                    "uid": "filter_aggregated_top10"
                                 }
                             ],
                             "parameters": {
@@ -792,18 +846,22 @@ define(function () {
                                             "type": "id",
                                             "value": "purposecode"
                                         }
+
                                     ],
                                     [
                                         {
                                             "type": "id",
                                             "value": "purposecode"
                                         }
+
                                     ]
                                 ],
                                 "values": [
                                 ]
                             }
                         },
+
+
                         {
                             "name": "addcolumn",
                             "parameters": {
@@ -813,7 +871,9 @@ define(function () {
                                     "title": {
                                         "EN": "Value"
                                     },
-                                    "subject": "value"
+                                    "subject":"value"
+
+
                                 },
                                 "value": "filter_top_10_purposes_recipients_value"
                             }
@@ -822,7 +882,8 @@ define(function () {
                         {
                             "name": "order",
                             "parameters": {
-                                "top_10_purposes_value":"DESC",
+                                "filter_aggregated_top10_value":"DESC",
+                                "purposecode":"DESC",
                                 "value": "DESC"
                             }
                         },
@@ -839,6 +900,7 @@ define(function () {
                                 }
                             }
                         }
+
                     ]
                 }
             ]
