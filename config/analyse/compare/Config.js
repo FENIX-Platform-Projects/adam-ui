@@ -16,6 +16,118 @@ define([
                     hideFlipButton: true,
                     faces: ["front"],
                     hideMetadataButton: true,
+                    nls: {
+                        tooltip_toolbar_button: "Compare by",
+                    },
+                    menu: [
+                        //Download
+                        {
+                            label: "Download",
+                            url: "",
+                            parent_id: "root",
+                            id: "download",
+                            a_attrs: {
+                                "data-id": "download",
+                                "class": "hidden"
+                            }
+                        },
+                        {
+                            label: "Data",
+                            url: "",
+                            parent_id: "download",
+                            id: "download-data",
+                            a_attrs: {
+                                "data-action": "download",
+                                "data-id": "download",
+                                "data-target": "data"
+                            }
+                        },
+                        //Visualize as
+                        {
+                            label: "Visualize as",
+                            url: "",
+                            parent_id: "root",
+                            id: "visualize_as"
+                        },
+                        //Chart
+                        {
+                            label: "Chart",
+                            url: "",
+                            parent_id: "visualize_as",
+                            id: "visualize_as_chart",
+                            a_attrs: {
+                                "data-action": "tab",
+                                "data-tab": "chart",
+                                "data-id": "chart",
+                                "class": "hidden"
+                            }
+                        },
+                        {
+                            label: "Line",
+                            url: "",
+                            parent_id: "visualize_as_chart",
+                            id: "chart_line",
+                            a_attrs: {
+                                "data-action": "tab",
+                                "data-tab": "chart",
+                                "data-id": "chart",
+                                "data-type": "line"
+                            }
+                        },
+                        //Map
+                        {
+                            label: "Map",
+                            url: "",
+                            parent_id: "visualize_as",
+                            id: "visualize_as_map",
+                            a_attrs: {
+                                "data-action": "tab",
+                                "data-tab": "map",
+                                "data-id": "map",
+                                "class": "hidden"
+                            }
+                        },
+                        //Table
+                        {
+                            label: "Table",
+                            url: "",
+                            parent_id: "visualize_as",
+                            id: "visualize_as_table",
+                            a_attrs: {
+                                "data-action": "tab",
+                                "data-tab": "table",
+                                "data-id": "table",
+                                "class": "hidden"
+                            }
+                        },
+                        //Layout
+                        {
+                            label: "Set size",
+                            url: "",
+                            parent_id: "root",
+                            id: "size"
+                        },
+                        {
+                            label: "Full",
+                            url: "",
+                            parent_id: "size",
+                            id: "full",
+                            a_attrs: {
+                                "data-action": "resize",
+                                "data-size": "full"
+                            }
+                        },
+                        {
+                            label: "Half",
+                            url: "",
+                            parent_id: "size",
+                            id: "half",
+                            a_attrs: {
+                                "data-action": "resize",
+                                "data-size": "half"
+                            }
+                        },
+                    ],
                     tabConfig: {
                         chart: {
                             toolbar: {
@@ -58,15 +170,16 @@ define([
                                     }
                                 }
                             },
-                            config: function (model, values) {
+                            config: function (model, filterSelection) {
 
-                                var order = model.metadata.dsd.columns
-                                    .filter(function (c) {
-                                        return !c.id.endsWith("_EN") && c.subject !== "value" && c.id !== 'year'
-                                    })
-                                    .map(function (c) {
-                                        return c.id;
-                                    });
+                                var tab = this,
+                                    order = model.metadata.dsd.columns
+                                        .filter(function (c) {
+                                            return !c.id.endsWith("_EN") && c.subject !== "value" && c.id !== 'year' && c.id !== 'unitcode'
+                                        })
+                                        .map(function (c) {
+                                            return c.id;
+                                        });
 
                                 var config = {
                                     aggregationFn: {"value": "sum", "Value": "sum", "VALUE": "sum"},
@@ -81,10 +194,13 @@ define([
                                     type: "line",
                                     createConfiguration: function (model, config) {
 
-                                        var compare = values.values.compare[0],
-                                            index = order.indexOf(compare),
+                                        var compareBy = filterSelection.values.compare[0],
+                                            index = order.indexOf(compareBy),
                                             colors = ["#F44336", "#00BCD4", "#4CAF50", "#E91E63", "#3F51B", "#2196F3", "#009688", "#CDDC39", "#FFC107", "#FF9800", "#E91E63"],
-                                            used = {};
+                                            used = {},
+                                            result;
+
+                                        tab._trigger("title.change", createTitle(compareBy, filterSelection));
 
                                         for (var ii in model.cols) {
 
@@ -96,19 +212,20 @@ define([
 
                                         for (var i in model.rows) {
 
-                                            var name = model.rows[i],
-                                                compareByValue = name[index];
+                                            var row = model.rows[i],
+                                                compareByValue = row[index];
 
                                             var s = {
-                                                name: name.join(" / "),
+                                                name: row.join(" / "),
                                                 data: model.data[i]
                                             };
 
                                             var color = used[compareByValue];
 
                                             if (!color) {
+
                                                 used[compareByValue] = colors.shift();
-                                                color = used[compareByValue]
+                                                color = used[compareByValue];
                                             }
 
                                             s.color = color;
@@ -117,7 +234,21 @@ define([
 
                                         }
 
-                                        return $.extend(true, {}, config, highchartsTemplate);
+                                        result = $.extend(true, {}, config, highchartsTemplate);
+                                        result.subtitle = {
+                                            text: '<b>Hover for values and click and drag to zoom</b>',
+                                            align: 'left',
+                                            x: 10
+                                        };
+                                        return result;
+
+                                        function createTitle(c, v) {
+
+                                            var label = v.labels.compare[c];
+
+                                            return "Compare by " + label;
+
+                                        }
                                     }
                                 };
 
@@ -125,6 +256,12 @@ define([
                             }
                         }
                     }
+                },
+                nls: {
+                    courtesy_intro: "",
+                    courtesy_intro_title: "",
+
+
                 }
             },
 
@@ -250,30 +387,28 @@ define([
                             hideRemoveButton: true
                         }
                     },
+
                     oda: {
                         selector: {
                             id: "dropdown",
-                            source: [
-                                {value: "usd_commitment", label: "USD Commitment"},
-                                {value: "usd_commitment_defl", label: "USD Commitment Deflated"},
-                                {value: "usd_disbursement", label: "USD Disbursement"},
-                                {value: "usd_disbursement_defl", label: "USD Disbursement Deflated"}
-                            ],
-                            default: ['usd_commitment'],
-                            config: {
+                            default: ['adam_usd_commitment'],
+                            config: { //Selectize configuration
                                 maxItems: 1
-                            },
-                            hideSummary: true
+                            }
                         },
-
-                        format: {
-                            output: "enumeration"
+                        className: "col-sm-4",
+                        cl: {
+                            uid: "crs_flow_amounts",
+                            version: "2016"
                         },
-
                         template: {
                             hideHeaderIcon: false,
+                            headerIconClassName: 'glyphicon glyphicon-info-sign',
                             hideSwitch: true,
                             hideRemoveButton: true
+                        },
+                        format: {
+                            output: "enumeration"
                         }
                     }
                 }

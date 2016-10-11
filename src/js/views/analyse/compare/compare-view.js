@@ -98,14 +98,25 @@ define([
                 values = this.filter.getValues(),
                 from = FxUtils.getNestedProperty("values.year-from", values)[0],
                 to = FxUtils.getNestedProperty("values.year-to", values)[0],
+                faoSectorSelected = _.contains(FxUtils.getNestedProperty("values.parentsector_code", values), "9999"),
                 process = this.filter.getValues("fenix", ["recipientcode", "donorcode", "parentsector_code", "purposecode", "oda"]),
                 columns = ["year", "value", "unitcode"],
                 groupBy = ["year"];
 
-            addToProcess(values,"donorcode");
+            addToProcess(values, "donorcode");
             addToProcess(values, "recipientcode");
             addToProcess(values, "parentsector_code");
             addToProcess(values, "purposecode");
+
+            //parse oda selection
+            var v = process.oda.enumeration[0].substring(5);
+            process.oda.enumeration = [v];
+
+            //parse parent sector code
+            if (faoSectorSelected) {
+                var codes =  process.parentsector_code.codes[0].codes;
+                process.parentsector_code.codes[0].codes = _.without(codes, "9999");
+            }
 
             config.uid = "adam_usd_aggregation_table";
 
@@ -121,7 +132,14 @@ define([
             config.process = [{
                 name: "filter",
                 parameters: {
-                    rows: process,
+                    rows: $.extend(faoSectorSelected ? {
+                            "fao_sector": {
+                                "enumeration": [
+                                    "1"
+                                ]
+                            }
+                        } : null, process
+                    ),
                     columns: columns
                 }
             },
@@ -219,6 +237,7 @@ define([
                     value.template = {};
                 }
                 value.template.title = i18nFilter["filter_" + key];
+                value.template.headerIconTooltip = i18nFilter["filter_tooltip_" + key];
             });
 
             this.filter = new Filter(filterConfig);
