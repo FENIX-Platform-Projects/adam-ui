@@ -23,7 +23,7 @@ define(function () {
                         "pageSize": "150",
                         "showRowHeaders":true,
                         "columns":["oda"],
-                        "rows":[/*"recipientcode_EN", "donorcode_EN", */"projecttitle", "year", "parentsector_code_EN", "purposecode_EN" ],
+                        "rows":["recipientcode_EN", "donorcode_EN", "projecttitle", "year", "parentsector_code_EN", "purposecode_EN" ],
                         "aggregations":[],
                         "values":["value"],
 
@@ -32,9 +32,9 @@ define(function () {
                             height: 700,
                             autoSelectFirstRow: false,
                             columns: [
-                                /*  {id: "recipientcode_EN", width: 150},
-                                 {id: "donorcode_EN", width: 150},*/
-                                {id: "projecttitle", width: 350},
+                                {id: "recipientcode_EN", width: 150},
+                                 {id: "donorcode_EN", width: 150},
+                                {id: "projecttitle", width: 200},
                                 {id: "year", width: 70,  align: 'center', sortOrder: 'desc'},
                                 {id: "parentsector_code_EN", width: 150},
                                 {id: "purposecode_EN", width: 150},
