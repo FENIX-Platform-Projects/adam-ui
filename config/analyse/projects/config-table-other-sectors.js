@@ -105,8 +105,8 @@ define(function () {
                                         ]
                                     }
                                 }
-                            }//,
-                           // "rid":{"uid":"filter_projects"}
+                            },
+                           "rid":{"uid":"filter_projects"}
                         },
                         {
                             "name": "order",

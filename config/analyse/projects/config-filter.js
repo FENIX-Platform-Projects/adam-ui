@@ -9,6 +9,11 @@ define(function () {
                 selector: {
                     id: "dropdown",
                     default: ["625"], // afghanistan,
+                    emptyOption : {
+                        enabled: true,
+                        text: "All",
+                        value: "all"
+                    },
                     config: { //Selectize configuration
                         maxItems: 1,
                         // placeholder: "All",
@@ -32,6 +37,11 @@ define(function () {
                 selector: {
                     id: "dropdown",
                     default: ["1"], // Austria,
+                    emptyOption : {
+                        enabled: true,
+                        text: "All",
+                        value: "all"
+                    },
                     config: { //Selectize configuration
                         maxItems: 1,
                         // placeholder: "All",
